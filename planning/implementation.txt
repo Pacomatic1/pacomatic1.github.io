@@ -14,33 +14,50 @@ _________________________________________________________________
 // Comments start with '//'s. I'm using them here but to be fair they could probably be implemented in the parser too (technically ignored but you get it). They are single-line comments.
 // In this XML, order of everything is VERY VERY important. DON'T FORGET THAT.
 // Unless a tag specifically tells you that it's optional, don't skip it.
+// Also this has the fun benefit or being a template. Kind of. Everything is put in order, so you can always refer to this.
+
+<page_title>This is the name of the title for the tab. If this is blank, it runs on a fallback set by the HTML page.</page_title>
+<favicon>Favicon override, which is a path to the favicon image WITHOUT QUOTATION MARKS. If this is blank, it runs on a fallback set by the HTML page.</favicon>
 
 // All backgrounds have an image or video at the back and sometimes interactivity to go along with it.
 // The background types are: image & video.
 // image is a plain image. video is a plain video.
 // I plan on adding more stuff, maybe cool effects or interactivity. I don't feel it right now though, so that's it for now.
-<background_type>This is an enumerator. Don't leave it empty, problems will occur.</background type>
-<background_image>This is a path to the background image, WITHOUT QUOATION MARKS. If the type is video then this should point to, well, a video.</background_image>
-// The following tabs apply to image and video. If skipped, the default is 
-<background_strech_to_fit/>
+<background_type>This is, in practice, an enumerator. Don't leave it empty, problems will occur.</background type>
+<background_image>This is a path to the background image, WITHOUT QUOATION MARKS. If the type is video then this should point to a video.</background_image>
 
-<page_title>This is the name of the title for the tab. Plain string. If this is blank, just run on a fallback set by the HTML page</page_title>
-<favicon>Favicon override, which is a path to the favicon image WITHOUT QUOTATION MARKS. If this is blank, just run on a fallback set by the HTML page.</favicon>
+// The following tags apply to image and video. If any are skipped, they will have a default value... usually. These are also directly injected into CSS.
+// Exmaple is the first one: background-repeat: [stuff]; [stuff] would be replaced with whatever's in these tags for their respective properties. Won't list them all, it's quite obvious innit?
+<background_repeat>By default this is no-repeat</background_repeat>
+<background_attachment>By default this is fixed</background_attachment>
+// background-size can go multiple times while still having an effect, once for numbers and once for keywords. So we have two now. Yay.
+<background_size_number>Numbers only! By default this is 100% 100%</background_size_number>
+<background_size_number>Keywords only! By default this is cover</background_size_keyword>
 
+<dont_include_footer/> // This does what you think it does and is optional. If you don't use it then the footer will be included. 
 
 <page_body>
 
+Alright! We're now in the hardest part: The actual page. You know, the reason we're here? The reason I'm doing any of this? Yeah, that!
+This is basically a limited version of HTML; we don't include certain things because we don't want to include them, to make style consistent and whatnot.
+I'm gonna do this by only having support for specific tags and specific attributes of said tags, as well as custom tags. Although you're able to use any HTML you want, the parser won't be programmed to handle it and can cause fatal errors.
 
+All tags support the class and id attributes. The style attrbute dies but you have <style> so no worries.
+A piece of advice though: If your ids and classes happen to be similar to that of the HTML page (there is stuff happening separately from the parser, lest you forget) then there could be conflicts. How do we solve this? Well, everything in the master HTML page has a class or id that begins with 'master'. So don't reference anyting that has 'master' at the start and everything should be just fine. https://tenor.com/view/meme-clueless-gif-27097026
+Everything's styling is based off what the gigadiv has. This is intentional, it's why any of this exists. As such, there is a new attribute to all the tags: ignore_default_styling. Adding this will override all of the gigadiv's styling, and make it do it's own thing. Don't assign a value, just include it. You need nothing more.
 
-
-
-
-
-
-
-
-
-
+Comments are now done with double slashes. You know, the "//" thiny. There are no multi-line comments, stop asking. Also, you cannot have a comment on the same line as code;
+	<p> text </p>
+	// Comment!
+Is valid, but
+	<p> text </p> // Comment!
+can and will cause problems.
+Same as usual: <br>, <i>, <b>.
+<style> is exactly the same as before, with all the CSS you could want. I didn't put it up there because this is worth drawing attention to.
+<script> is exactly the same as before, with all the Javascript you could want. I didn't put it up there because this is worth drawing attention to.
+<a> is the same as before, but it only supports attributers href, target, and download.
+<p> is the same, but margins have been shifted to a dedicated attribute because of convenience and the lack of inline styling. margin="[number]", [number] being what you would usually put in its respective css tag (including the units; px, em, cm, etc.).
+<img> is the same, but 
 
 </page_body>
 
