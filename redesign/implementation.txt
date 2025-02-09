@@ -9,9 +9,17 @@ I want to do this using a custom XML parser that loads files using a query compo
 Consider: You can make this with Javascript OR use Emscriptem with C++ to compile wasm.
 	Although wasm will also make it load faster, the browser support will go to hell and the speed gain will be inconsequential at best. Plus, it means compiling stuff which makes this harder than it should be.
 	Unless using C++ instead of Javascript is worth that much trouble, don't bother with wasm. You'll regret it.
-
 _________________________________________________________________
+
 // Comments start with '//'s. I'm using them here but to be fair they could probably be implemented in the parser too (technically ignored but you get it). They are single-line comments.
+// You cannot have a comment on the same line as code;
+// <p> text </p>
+//	// Comment!
+// Is valid, but
+//	<p> text </p> // Comment!
+// will be parsed as code and not considered a comment.
+
+
 // In this XML, order of everything is VERY VERY important. DON'T FORGET THAT.
 // Unless a tag specifically tells you that it's optional, don't skip it.
 // Also this has the fun benefit or being a template. Kind of. Everything is put in order, so you can always refer to this.
@@ -34,7 +42,8 @@ _________________________________________________________________
 <background_size_number>Numbers only! By default this is 100% 100%</background_size_number>
 <background_size_number>Keywords only! By default this is cover</background_size_keyword>
 
-<dont_include_footer/> // This does what you think it does and is optional. If you don't use it then the footer will be included. 
+<dont_include_footer/>
+// This does what you think it does and is 100% optional. If you don't use it then the footer will be included. 
 
 <page_body>
 
@@ -42,25 +51,14 @@ Alright! We're now in the hardest part: The actual page. You know, the reason we
 This is basically a limited version of HTML; we don't include certain things because we don't want to include them, to make style consistent and whatnot.
 I'm gonna do this by only having support for specific tags and specific attributes of said tags, as well as custom tags. Although you're able to use any HTML you want, the parser won't be programmed to handle it and can cause fatal errors.
 
+Don't get it twisted: The double slash comment rule still applies.
 All tags support the class and id attributes. The style attrbute dies but you have <style> so no worries.
 A piece of advice though: If your ids and classes happen to be similar to that of the HTML page (there is stuff happening separately from the parser, lest you forget) then there could be conflicts. How do we solve this? Well, everything in the master HTML page has a class or id that begins with 'master'. So don't reference anyting that has 'master' at the start and everything should be just fine. https://tenor.com/view/meme-clueless-gif-27097026
 Everything's styling is based off what the gigadiv has. This is intentional, it's why any of this exists. As such, there is a new attribute to all the tags: ignore_default_styling. Adding this will override all of the gigadiv's styling, and make it do it's own thing. Don't assign a value, just include it. You need nothing more.
-
-Comments are now done with double slashes. You know, the "//" thiny. There are no multi-line comments, stop asking. Also, you cannot have a comment on the same line as code;
-	<p> text </p>
-	// Comment!
-Is valid, but
-	<p> text </p> // Comment!
-can and will cause problems.
 Same as usual: <br>, <i>, <b>.
-<style> is exactly the same as before, with all the CSS you could want. I didn't put it up there because this is worth drawing attention to.
+<style> is exactly the same as before, with all the CSS you could want. Comments are still done with double slashes. I didn't put it up there because this is worth drawing attention to.
 <script> is exactly the same as before, with all the Javascript you could want. I didn't put it up there because this is worth drawing attention to.
 <a> is the same as before, but it only supports attributers href, target, and download.
 <p> is the same, but margins have been shifted to a dedicated attribute because of convenience and the lack of inline styling. margin="[number]", [number] being what you would usually put in its respective css tag (including the units; px, em, cm, etc.).
-<img> is the same, but 
-
+<img> is the same but does not support the decode tag. It's set to async no matter what. 
 </page_body>
-
-
-
-__________________________________________________________________
