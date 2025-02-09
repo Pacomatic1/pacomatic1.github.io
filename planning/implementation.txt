@@ -1,0 +1,49 @@
+The goal: Instead of using separate HTML pages for everything, I want one master page that reads from separate files in order to easiuly keep consistent elements of the page. Kinda like a markdown static site generator, but it's a different format and it's 100% clientside.
+Breaking news! This already exists and I just didn't know about it. It's called a single page application.
+I want to do this using a custom XML parser that loads files using a query component at the end of the URL to signify what page we're on.
+	Example: pacomatic1.github.io/?pagename=misc
+	This means that we're going to be on index.html, and have a variable called pagemane be set to "misc".
+	The function that runs when the page is loaded will then sned "misc" through a lookup table (contained in the HTML) to find the corresponding XML.
+	Now that we know what file to look for, we parse the XML and create HTML based on it. Once that's done, inject it into a gigadiv's contents and have fun now.
+
+Consider: You can make this with Javascript OR use Emscriptem with C++ to compile wasm.
+	Although wasm will also make it load faster, the browser support will go to hell and the speed gain will be inconsequential at best. Plus, it means compiling stuff which makes this harder than it should be.
+	Unless using C++ instead of Javascript is worth that much trouble, don't bother with wasm. You'll regret it.
+
+_________________________________________________________________
+// Comments start with '//'s. I'm using them here but to be fair they could probably be implemented in the parser too (technically ignored but you get it). They are single-line comments.
+// In this XML, order of everything is VERY VERY important. DON'T FORGET THAT.
+// Unless a tag specifically tells you that it's optional, don't skip it.
+
+// All backgrounds have an image or video at the back and sometimes interactivity to go along with it.
+// The background types are: image & video.
+// image is a plain image. video is a plain video.
+// I plan on adding more stuff, maybe cool effects or interactivity. I don't feel it right now though, so that's it for now.
+<background_type>This is an enumerator. Don't leave it empty, problems will occur.</background type>
+<background_image>This is a path to the background image, WITHOUT QUOATION MARKS. If the type is video then this should point to, well, a video.</background_image>
+// The following tabs apply to image and video. If skipped, the default is 
+<background_strech_to_fit/>
+
+<page_title>This is the name of the title for the tab. Plain string. If this is blank, just run on a fallback set by the HTML page</page_title>
+<favicon>Favicon override, which is a path to the favicon image WITHOUT QUOTATION MARKS. If this is blank, just run on a fallback set by the HTML page.</favicon>
+
+
+<page_body>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</page_body>
+
+
+
+__________________________________________________________________
