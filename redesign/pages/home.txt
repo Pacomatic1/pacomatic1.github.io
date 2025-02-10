@@ -1,0 +1,35 @@
+<page_title>TEST TITLE!!!!!</page_title>
+<favicon>.\resources\404_favicon.ico</favicon>
+
+<background_type>image</background type>
+<background_image>.\resources\ps3_xmb_bg_thumb_full.png</background_image>
+
+<background_repeat>no-repeat</background_repeat>
+<background_attachment>fixed</background_attachment>
+// background-size can go multiple times while still having an effect, once for numbers and once for keywords. So we have two now. Yay.
+<background_size_number>100% 100%</background_size_number>
+<background_size_keyword>cover</background_size_keyword>
+
+// <dont_include_footer/>
+<page_body>
+<style> 
+    .weird {
+        color: brown;
+    }
+    .funy_image {
+        width: 130px;
+
+    }
+
+</style>
+<p> This is <b>bold</b>, this is <i>italic</i>, this is <s>stuckthrough</s>. <br>
+How cool.
+<p class = "weird"> I should be brown.... 
+<img
+  class="funy_image"
+  src=".\resources\ps3_xmb_bg_thumb_full.png"
+  alt="alternative........" />
+</p>
+
+
+</page_body>
