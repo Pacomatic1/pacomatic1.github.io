@@ -1,0 +1,39 @@
+The goal: We have my site's external and persistent UI using normal means, and then style an iframe within the webpage that contains the child page. Single-page framework.
+
+This is basically bog-standard HTML, with a bit of tiny extras to make it work.
+I 
+
+Supported: <p>, <b>, <br>, <i>, <b>, <s>, <a>, <img>, <script>
+I want to bring attention to styling: Everything, even the things in the iframe are, by default, styled by the parent page; everything has a default style and whatever you do will be piling on top of it. 
+
+
+
+
+
+
+
+
+
+
+
+
+______________________________________ Using the old spec for reference, pay no mind to This
+// This does what you think it does and is 100% optional. If you don't use it then the footer will be included. 
+
+@@ -52,13 +52,15 @@ This is basically a limited version of HTML; we don't include certain things bec
+I'm gonna do this by only having support for specific tags and specific attributes of said tags, as well as custom tags. Although you're able to use any HTML you want, the parser won't be programmed to handle it and can cause fatal errors.
+
+Don't get it twisted: The double slash comment rule still applies.
+All relative paths are not based on the location of your XML-style file but the HTML file. Remember that.
+All tags support the class and id attributes. The style attrbute dies but you have <style> so no worries.
+A piece of advice though: If your ids and classes happen to be similar to that of the HTML page (there is stuff happening separately from the parser, lest you forget) then there could be conflicts. How do we solve this? Well, everything in the master HTML page has a class or id that begins with 'master'. So don't reference anyting that has 'master' at the start and everything should be just fine. https://tenor.com/view/meme-clueless-gif-27097026
+Everything's styling is based off what the gigadiv has. This is intentional, it's why any of this exists. As such, there is a new attribute to all the tags: ignore_default_styling. Adding this will override all of the gigadiv's styling, and make it do it's own thing. Don't assign a value, just include it. You need nothing more.
+Same as usual: <br>, <i>, <b>.
+Same as usual: <br>, <i>, <b>, <s>.
+<style> is exactly the same as before, with all the CSS you could want. Comments are still done with double slashes. I didn't put it up there because this is worth drawing attention to.
+<script> is exactly the same as before, with all the Javascript you could want. I didn't put it up there because this is worth drawing attention to.
+<a> is the same as before, but it only supports attributers href, target, and download.
+<p> is the same, but margins have been shifted to a dedicated attribute because of convenience and the lack of inline styling. margin="[number]", [number] being what you would usually put in its respective css tag (including the units; px, em, cm, etc.).
+<img> is the same but does not support the decode tag. It's set to async no matter what. 
+
+</page_body>
