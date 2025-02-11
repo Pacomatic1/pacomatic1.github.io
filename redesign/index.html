@@ -1,41 +1,29 @@
 <!DOCTYPE html>
-<html>
-<head>
-	<title>Paco's Place</title>
-	<style>
-		.defaultClass {
-			margin: 1em;
-
-		}
-	</style>
-	<link href=".\pages\home.txt" id="home"/>
+<html lang="en">
 	
-</head>
-<body style="margin:0;">
-	<p>aaaaaaaassssa</p>
-	<iframe id="frmFile" src=".\pages\home.txt" onload="LoadFile();" style="display: none;"></iframe>
-	<div id="master_gigadiv"> <!-- This is where all the custom stuff is added. Avoid adding much.-->
+	<head>
+		<title>Paco's Place</title>
+		<style>
+			#childPage {
+				border: none;
+				width: 100%;
+				height: 100%;
+				margin: 0px;
+				padding: 0px;
+			}
+		</style>
+		<!-- <link href="./pages/iframe_styling.css", rel="stylesheet", type="text/css"></link> -->
+		
+	</head>
+	<body style="margin:0;">
+		<p> help....</p>
+		<iframe src="./pages/home.html" id="childPage" ></iframe>
 
 
+		<script>
+			var childPageIframe = document.getElementById("childPage");
+			childPageIframe.contentWindow.postMessage("startInit");
 
-
-	</div>
-	
-	<!-- I don't know how to get any sort of plaintext from the current directory or its children, so I took the coward's way out and I'm storing them here. In a bunch of invisible tags. Yahooie. The parser happens after all of this for obious reasons. -->
-
-
-
-
-	<script>
-		function LoadFile() {
-			var oFrame = document.getElementById("frmFile");
-			var strRawContents = oFrame.contentWindow.document.body.childNodes[0].innerHTML;
-			while (strRawContents.indexOf("\r") >= 0)
-				strRawContents = strRawContents.replace("\r", "");
-			alert(strRawContents);
-		}
-
-	</script>
-
-</body>
+		</script>
+	</body>
 </html>
