@@ -48,7 +48,7 @@
 
 
 
-			function findValueofSecondItemInArrayOf2ItemArraysAssumingYouKnowWhatTheFirstItemIs(valueOfFirstItem, arrayOfArraysToLookThrough) { // This finds the value of an item within an array of 2-item arrays assuming you already know what the first item is. This seems oddly specific, but it has uses; refer to the lookup table and the query string shenanigans.
+			function findValueofNthItemInArrayOf2ItemArraysAssumingYouKnowWhatTheFirstItemIs(valueOfFirstItem, arrayOfArraysToLookThrough, indiceOfNthItem) { // This finds the value of an item within an array of 2-item arrays assuming you already know what the first item is. This seems oddly specific, but it has uses; refer to the lookup table and the query string shenanigans.
 				var foundValue;
 				var firstItemInNestedArraysArray= []; // Not a typo!
 				// We'll do this by making firstItemInNestedArraysArray. The new array is an array corresponding to the first items within.
@@ -63,10 +63,10 @@
 						foundValueIndice = i;
 					};
 				};
-				// We then return [1] from the array inside the array. That is, unless nothing was found, in which case we return null.
+				// We then return [indiceOfNthItem] from the array inside the array. That is, unless nothing was found, in which case we return null.
 				if (foundValueIndice == -1) { return null; }
 				else {   
-					foundValue = arrayOfArraysToLookThrough[foundValueIndice][1];
+					foundValue = arrayOfArraysToLookThrough[foundValueIndice][indiceOfNthItem];
 					return foundValue;
 				}
 			}
@@ -79,14 +79,14 @@
 					const queryStringArray = Array.from(urlSearchParams.entries()); // Returns an array of arrays. Each array corresponds to one key/value pair, the key being [0] and value being [1].
 					// We need to find an array (inside this one) whose [0]	is the key we seek.
 					// Good thing I made a highly specific functon for that!
-					return findValueofSecondItemInArrayOf2ItemArraysAssumingYouKnowWhatTheFirstItemIs(keyToFindValueOf, queryStringArray);
+					return findValueofNthItemInArrayOf2ItemArraysAssumingYouKnowWhatTheFirstItemIs(keyToFindValueOf, queryStringArray, 1);
 				}
 
 
 			function findUrlOfPageName(pageName) {
 				// This function used to be useful. Now it's a single line because everything it does is contained by another function.
 				// A highly specific, very strict function. Yes.
-				return findValueofSecondItemInArrayOf2ItemArraysAssumingYouKnowWhatTheFirstItemIs(pageName, pageNameAndUrlLookupTable);
+				return findValueofNthItemInArrayOf2ItemArraysAssumingYouKnowWhatTheFirstItemIs(pageName, pageNameAndUrlLookupTable, 1);
 			}
 
 		</script>
