@@ -3,9 +3,9 @@ The goal: We have my site's external and persistent UI using normal means, and t
 This is basically bog-standard HTML, with a bit of tiny extras to make it work.
 
 
-Supported: <p>, <b>, <br>, <i>, <b>, <s>, <a>, <script>
+Supported: <p>, <b>, <br>, <i>, <b>, <s>, <a>, <script>, <img>
 I want to bring attention to styling: Everything, even the things in the iframe are, by default, styled by iframe_styling.css, imported by iframe_script.css; everything has a default style and whatever you do will be piling on top of it. Because of this and specificity, you can give something the "ignore-master-css" class to, well, ignore the master page's CSS.
-<img> is the same, but the decode property is always set to async unless you set it yourself. If you want it to be set to what it'd be without iframe_script.js interfering, set it to auto.
+
 
 
 
