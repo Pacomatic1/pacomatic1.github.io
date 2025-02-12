@@ -11,18 +11,83 @@
 				margin: 0px;
 				padding: 0px;
 			}
+
 		</style>
 		<!-- <link href="./pages/iframe_styling.css", rel="stylesheet", type="text/css"></link> -->
 		
 	</head>
 	<body style="margin:0;">
 		<p> help....</p>
-		<iframe src="./pages/home.html" id="childPage" ></iframe>
+		<iframe id="childPage" ></iframe>
+		
+
 
 
 		<script>
+			// pageNameAndUrlLookupTable is an array of stringarrays containing 2 elements: [0] is the pageName, like what would be inputted via the query string, and [1] is the URL of said name, which is... you know... the location of the file.
+			// This lookup table must be updated with every page added, though all things considered this isn't too bad.
+			const pageNameAndUrlLookupTable = [
+				["home", "./pages/home.html"],
+
+			];
 			var childPageIframe = document.getElementById("childPage");
-			childPageIframe.contentWindow.postMessage("startInit");
+			const fallbackPageNameIfNoPageWasSelected = "home"; // The site finds the page you want via query strings. If none of the query strings have the page key, we don't want to 404 them, we want to bring them to a fallback. Where does the fallback lead? Well, the page name defined by this!
+
+
+
+
+
+
+			// We find what page you're on and then bring you there,
+			var pageName = findValueOfKeyFromQueryStringInUrl("page");
+			if (pageName == null) {pageName = fallbackPageNameIfNoPageWasSelected;}; // If the query strings define no page key, then we bring them wherever the fallback wants.
+			var pageUrl = findUrlOfPageName(pageName);
+			if (pageUrl == null) {window.location.replace("404.html");}; // Since we handled the case in which a page key doesn't exist, if a page key does exist but its value isn't on the lookup table, it's probably nonexistent. In that case, 404 them.  
+			childPageIframe.src = pageUrl;
+
+
+
+
+			function findValueofSecondItemInArrayOf2ItemArraysAssumingYouKnowWhatTheFirstItemIs(valueOfFirstItem, arrayOfArraysToLookThrough) { // This finds the value of an item within an array of 2-item arrays assuming you already know what the first item is. This seems oddly specific, but it has uses; refer to the lookup table and the query string shenanigans.
+				var foundValue;
+				var firstItemInNestedArraysArray= []; // Not a typo!
+				// We'll do this by making firstItemInNestedArraysArray. The new array is an array corresponding to the first items within.
+				for (var i = 0; i != arrayOfArraysToLookThrough.length; i++) {
+					firstItemInNestedArraysArray[i] = arrayOfArraysToLookThrough[i][0];
+				};
+				// We then find our first item's indice, and plug that indice into arrayOfArraysToLookThrough to get the indice for the array we seek.
+				// I won't use find() though, it's a bit more complicated than I like and makes the code messy. I'm using a for loop instead, it's cleaner. Theoretically.
+				var foundValueIndice = -1; // Set to -1 to handle if nothing's found.
+				for (var i = 0; i != firstItemInNestedArraysArray.length; i++) {
+					if (firstItemInNestedArraysArray[i] == pageName) {
+						foundValueIndice = i;
+					};
+				};
+				// We then return [1] from the array inside the array. That is, unless nothing was found, in which case we return null.
+				if (foundValueIndice == -1) { return null; }
+				else {   
+					foundValue = arrayOfArraysToLookThrough[foundValueIndice][1];
+					return foundValue;
+				}
+			}
+
+			function findValueOfKeyFromQueryStringInUrl(keyToFindValueOf) { // Gets the URl, looks the query strings, and finds the corresponding the value for the key you want. If the key doesn't exist, it returns null.
+					var foundValue; 
+					const url = window.location.href; 
+					const searchParams = new URL(url).searchParams; 
+					const urlSearchParams = new URLSearchParams(searchParams);
+					const queryStringArray = Array.from(urlSearchParams.entries()); // Returns an array of arrays. Each array corresponds to one key/value pair, the key being [0] and value being [1].
+					// We need to find an array (inside this one) whose [0]	is the key we seek.
+					// Good thing I made a highly specific functon for that!
+					return findValueofSecondItemInArrayOf2ItemArraysAssumingYouKnowWhatTheFirstItemIs(keyToFindValueOf, queryStringArray);
+				}
+
+
+			function findUrlOfPageName(pageName) {
+				// This function used to be useful. Now it's a single line because everything it does is contained by another function.
+				// A highly specific, very strict function. Yes.
+				return findValueofSecondItemInArrayOf2ItemArraysAssumingYouKnowWhatTheFirstItemIs(pageName, pageNameAndUrlLookupTable);
+			}
 
 		</script>
 	</body>
