@@ -58,22 +58,23 @@
 
 
 			// We find what page you're on and then bring you there,
-			var pageName = findValueOfKeyFromQueryStringInUrl("page");
+			var pageName = findValueOfKeyFromQueryStringInUrl("page"); 
 			if (pageName == null) {pageName = fallbackPageNameIfNoPageWasSelected;}; // If the query strings define no page key, then we bring them wherever the fallback wants.
-			var pageUrl = findUrlOfPageName(pageName);
-			if (pageUrl == null) {window.location.replace("404.html");}; // Since we handled the case in which a page key doesn't exist, if a page key does exist but its value isn't on the lookup table, it's probably nonexistent. In that case, 404 them.  
-			childPageIframe.src = pageUrl;
 			
+			//pageName = home.
+			var pageUrl = findUrlOfPageName(pageName);
+			//if (pageUrl == null) {window.location.replace("404.html");}; // Since we handled the case in which a page key doesn't exist, if a page key does exist but its value isn't on the lookup table, it's probably nonexistent. In that case, 404 them.  
+			childPageIframe.src = pageUrl; // The issue: Finding pageUrl. pageName is fine.
 			// Now for the much simpler background iframe.
 			var bgName = findBgNameOfPageName(pageName);
-			console.log(bgName);
 			var bgUrl = findUrlOfBgName(bgName);
-			console.log(bgUrl); // The issue: Finding bgUrl. bgName is fine.
+			// console.log(bgUrl); // The issue: Finding bgUrl. bgName is fine.
 			bgIframe.src = bgUrl;
 
 
 
 
+			// The issue: everything after finding the value from the value fronm the query key dies.
 
 
 
@@ -90,54 +91,38 @@
 
 
 
-
-			function findValueofNthItemInArrayOf2ItemArraysAssumingYouKnowWhatTheFirstItemIs(valueOfFirstItem, arrayOfArraysToLookThrough, indiceOfNthItem) { // This finds the value of an item within an array of 2-item arrays assuming you already know what the first item is. This seems oddly specific, but it has uses; refer to the lookup table and the query string shenanigans.
+			function findValueofNthItemInArrayOfMultiItemArraysAssumingYouKnowWhatTheFirstItemIs(valueOfFirstItem, arrayOfArraysToLookThrough, indiceOfNthItem) { // This finds the value of an item within an array of multi-item arrays assuming you already know what the first item is. This seems oddly specific, but it has uses; refer to the lookup table and the query string shenanigans.
 				var foundValue;
-				var firstItemInNestedArraysArray= []; // Not a typo!
-				// We'll do this by making firstItemInNestedArraysArray. The new array is an array corresponding to the first items within.
-				for (var i = 0; i != arrayOfArraysToLookThrough.length; i++) {
-					firstItemInNestedArraysArray[i] = arrayOfArraysToLookThrough[i][0];
-				};
-				// We then find our first item's indice, and plug that indice into arrayOfArraysToLookThrough to get the indice for the array we seek.
-				// I won't use find() though, it's a bit more complicated than I like and makes the code messy. I'm using a for loop instead, it's cleaner. Theoretically.
-				var foundValueIndice = -1; // Set to -1 to handle if nothing's found.
-				var firstItemInNestedArraysArrayLengthPlusOne = firstItemInNestedArraysArray.length + 1 // Workaround
-				for (var i = 0; i != firstItemInNestedArraysArrayLengthPlusOne; i++) {
-					if (firstItemInNestedArraysArray[i] == pageName) {
-						foundValueIndice = i;
-						console.log("yes");
-					} else {
-						console.log('no');
-
+				for (let i = 0; i < arrayOfArraysToLookThrough.length; i++) { // For every array in the top array,
+					for (let j = 0; j < arrayOfArraysToLookThrough[i].length; j++) { // see if the first value is what you seek.
+						if (arrayOfArraysToLookThrough[i][0] == valueOfFirstItem) { // If it is, iterate to find nth item and, if found, foundValue to it.
+							for (let k = -1; k < indiceOfNthItem; i++) {
+								foundValue = indiceOfNthItem;
+							} // If it isn't, keep going.
+						};
 					};
+					console.log(indiceOfNthItem);
 				};
-				console.log(foundValueIndice);
-				// We then return [indiceOfNthItem] from the array inside the array. That is, unless nothing was found, in which case we return null.
-				if (foundValueIndice == -1) { return null; }
-				else {   
-					foundValue = arrayOfArraysToLookThrough[foundValueIndice][indiceOfNthItem];
-					return foundValue;
-				}
-			}
+			};
 
-			function findValueOfKeyFromQueryStringInUrl(keyToFindValueOf) { // Gets the URl, looks the query strings, and finds the corresponding the value for the key you want. If the key doesn't exist, it returns null.
-					var foundValue; 
+			function findValueOfKeyFromQueryStringInUrl(keyToFindValueOf) { // Gets the URl, looks at the query strings, and finds the corresponding the value for the key you want. If the key doesn't exist, it returns null.
 					const url = window.location.href; 
 					const searchParams = new URL(url).searchParams; 
 					const urlSearchParams = new URLSearchParams(searchParams);
 					const queryStringArray = Array.from(urlSearchParams.entries()); // Returns an array of arrays. Each array corresponds to one key/value pair, the key being [0] and value being [1].
 					// We need to find an array (inside this one) whose [0]	is the key we seek.
 					// Good thing I made a highly specific functon for that!
-					return findValueofNthItemInArrayOf2ItemArraysAssumingYouKnowWhatTheFirstItemIs(keyToFindValueOf, queryStringArray, 1);
-				}
+					return findValueofNthItemInArrayOfMultiItemArraysAssumingYouKnowWhatTheFirstItemIs(keyToFindValueOf, queryStringArray, 1);
+			}
+
 			function findUrlOfPageName(pageName) {
-				return findValueofNthItemInArrayOf2ItemArraysAssumingYouKnowWhatTheFirstItemIs(pageName, pageNameAndUrlLookupTable, 1);
+				return findValueofNthItemInArrayOfMultiItemArraysAssumingYouKnowWhatTheFirstItemIs(pageName, pageNameAndUrlLookupTable, 1);
 			}
 			function findBgNameOfPageName(pageName) {
-				return findValueofNthItemInArrayOf2ItemArraysAssumingYouKnowWhatTheFirstItemIs(pageName, pageNameAndUrlLookupTable, 2);
+				return findValueofNthItemInArrayOfMultiItemArraysAssumingYouKnowWhatTheFirstItemIs(pageName, pageNameAndUrlLookupTable, 2);
 			}
 			function findUrlOfBgName(bgName) {
-				return findValueofNthItemInArrayOf2ItemArraysAssumingYouKnowWhatTheFirstItemIs(bgName, bgNameAndUrlLookupTable, 1);
+				return findValueofNthItemInArrayOfMultiItemArraysAssumingYouKnowWhatTheFirstItemIs(bgName, bgNameAndUrlLookupTable, 1);
 			}
 
 		</script>
