@@ -8,7 +8,7 @@ I want to bring attention to styling: Everything, even the things in the iframe 
 
 
 
-
+There are also the backgrounds, which are *oviously* done via iframes. There isn't much to say, for they have no templates or special works. Don't worry abouyt anything, just make a standard HTML page.
 
 
 

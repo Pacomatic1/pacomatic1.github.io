@@ -4,12 +4,20 @@
 	<head>
 		<title>Paco's Place</title>
 		<style>
-			#childPageIframe {
+			.plainIframe {
 				border: none;
-				width: 100%;
-				height: 100%;
 				margin: 0px;
 				padding: 0px;
+			}
+			#childPageIframe {
+
+			}
+			#bgIframe {
+				/*position: fixed;
+				inset: 0;
+				height: 100vh;
+				width: 100vw;
+				z-index: -1;*/
 			}
 
 		</style>
@@ -17,24 +25,35 @@
 		
 	</head>
 	<body style="margin:0;">
-		<p> help....</p>
-		<iframe id="childPageIframe"></iframe>
+		<iframe id="bgIframe" class="plainIframe" allowtransparency="false"></iframe>
+		<iframe id="childPageIframe" class="plainIframe" allowtransparency="true"></iframe>
 		
 
 
 
 		<script>
-			// pageNameAndUrlLookupTable is an array of stringarrays containing 2 elements: [0] is the pageName, like what would be inputted via the query string, and [1] is the URL of said name, which is... you know... the location of the file.
+			// pageNameAndUrlLookupTable is an array of stringarrays containing 3 elements:
+			// [0] is the pageName, like what would be inputted via the query string.
+			// [1] is the URL of said name, which is... you know... the location of the file.
+			// [2] is the background name. As for which names get which url, that's what the other lookup table is for. If it wasn't obvious, I like lookup tables TwT
 			// This lookup table must be updated with every page added, though all things considered this isn't too bad.
 			const pageNameAndUrlLookupTable = [
-				["home", "./pages/home.html"],
+				["home", "./pages/home.html", "ps3XmbBg"],
 
 			];
-			var childPageIframe = document.getElementById("childPage");
+
+			// bgNameAndUrlLookupTable is an array of stringarrays containing 2 elements: the name of the background, and the url of the background.
+			// This lookup table must be updated with every background added, though all things considered this isn't too bad.
+			const bgNameAndUrlLookupTable = [
+				["ps3XmbBg", "./backgrounds/ps3Xmb.html"], 
+
+			];
+
+
+
+			var bgIframe = document.getElementById("bgIframe");
+			var childPageIframe = document.getElementById("childPageIframe");
 			const fallbackPageNameIfNoPageWasSelected = "home"; // The site finds the page you want via query strings. If none of the query strings have the page key, we don't want to 404 them, we want to bring them to a fallback. Where does the fallback lead? Well, the page name defined by this!
-
-
-
 
 
 
@@ -44,6 +63,30 @@
 			var pageUrl = findUrlOfPageName(pageName);
 			if (pageUrl == null) {window.location.replace("404.html");}; // Since we handled the case in which a page key doesn't exist, if a page key does exist but its value isn't on the lookup table, it's probably nonexistent. In that case, 404 them.  
 			childPageIframe.src = pageUrl;
+			
+			// Now for the much simpler background iframe.
+			var bgName = findBgNameOfPageName(pageName);
+			console.log(bgName);
+			var bgUrl = findUrlOfBgName(bgName);
+			console.log(bgUrl); // The issue: Finding bgUrl. bgName is fine.
+			bgIframe.src = bgUrl;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -58,11 +101,17 @@
 				// We then find our first item's indice, and plug that indice into arrayOfArraysToLookThrough to get the indice for the array we seek.
 				// I won't use find() though, it's a bit more complicated than I like and makes the code messy. I'm using a for loop instead, it's cleaner. Theoretically.
 				var foundValueIndice = -1; // Set to -1 to handle if nothing's found.
-				for (var i = 0; i != firstItemInNestedArraysArray.length; i++) {
+				var firstItemInNestedArraysArrayLengthPlusOne = firstItemInNestedArraysArray.length + 1 // Workaround
+				for (var i = 0; i != firstItemInNestedArraysArrayLengthPlusOne; i++) {
 					if (firstItemInNestedArraysArray[i] == pageName) {
 						foundValueIndice = i;
+						console.log("yes");
+					} else {
+						console.log('no');
+
 					};
 				};
+				console.log(foundValueIndice);
 				// We then return [indiceOfNthItem] from the array inside the array. That is, unless nothing was found, in which case we return null.
 				if (foundValueIndice == -1) { return null; }
 				else {   
@@ -81,12 +130,14 @@
 					// Good thing I made a highly specific functon for that!
 					return findValueofNthItemInArrayOf2ItemArraysAssumingYouKnowWhatTheFirstItemIs(keyToFindValueOf, queryStringArray, 1);
 				}
-
-
 			function findUrlOfPageName(pageName) {
-				// This function used to be useful. Now it's a single line because everything it does is contained by another function.
-				// A highly specific, very strict function. Yes.
 				return findValueofNthItemInArrayOf2ItemArraysAssumingYouKnowWhatTheFirstItemIs(pageName, pageNameAndUrlLookupTable, 1);
+			}
+			function findBgNameOfPageName(pageName) {
+				return findValueofNthItemInArrayOf2ItemArraysAssumingYouKnowWhatTheFirstItemIs(pageName, pageNameAndUrlLookupTable, 2);
+			}
+			function findUrlOfBgName(bgName) {
+				return findValueofNthItemInArrayOf2ItemArraysAssumingYouKnowWhatTheFirstItemIs(bgName, bgNameAndUrlLookupTable, 1);
 			}
 
 		</script>
