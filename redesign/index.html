@@ -10,14 +10,14 @@
 				padding: 0px;
 			}
 			#childPageIframe {
-
+				/* There is nothing here yet, so begone! */
 			}
 			#bgIframe {
-				/*position: fixed;
+				position: fixed;
 				inset: 0;
 				height: 100vh;
 				width: 100vw;
-				z-index: -1;*/
+				z-index: -300;
 			}
 
 		</style>
@@ -26,8 +26,20 @@
 	</head>
 	<body style="margin:0;">
 		<iframe id="bgIframe" class="plainIframe" allowtransparency="false"></iframe>
-		<iframe id="childPageIframe" class="plainIframe" allowtransparency="true"></iframe>
+
+
+
+		<div id="gigaDiv">
+
+			<iframe id="childPageIframe" class="plainIframe" allowtransparency="true"></iframe>
+		</div>
 		
+
+
+
+
+
+
 
 
 
@@ -63,7 +75,7 @@
 			
 			//pageName = home.
 			var pageUrl = findUrlOfPageName(pageName);
-			//if (pageUrl == null) {window.location.replace("404.html");}; // Since we handled the case in which a page key doesn't exist, if a page key does exist but its value isn't on the lookup table, it's probably nonexistent. In that case, 404 them.  
+			if (pageUrl == null) {window.location.replace("404.html");}; // Since we handled the case in which a page key doesn't exist, if a page key does exist but its value isn't on the lookup table, it's probably nonexistent. In that case, 404 them.  
 			childPageIframe.src = pageUrl; // The issue: Finding pageUrl. pageName is fine.
 			// Now for the much simpler background iframe.
 			var bgName = findBgNameOfPageName(pageName);
@@ -94,15 +106,15 @@
 			function findValueofNthItemInArrayOfMultiItemArraysAssumingYouKnowWhatTheFirstItemIs(valueOfFirstItem, arrayOfArraysToLookThrough, indiceOfNthItem) { // This finds the value of an item within an array of multi-item arrays assuming you already know what the first item is. This seems oddly specific, but it has uses; refer to the lookup table and the query string shenanigans.
 				var foundValue;
 				for (let i = 0; i < arrayOfArraysToLookThrough.length; i++) { // For every array in the top array,
-					for (let j = 0; j < arrayOfArraysToLookThrough[i].length; j++) { // see if the first value is what you seek.
-						if (arrayOfArraysToLookThrough[i][0] == valueOfFirstItem) { // If it is, iterate to find nth item and, if found, foundValue to it.
-							for (let k = -1; k < indiceOfNthItem; i++) {
-								foundValue = indiceOfNthItem;
-							} // If it isn't, keep going.
+					for (let j = 0; j <= arrayOfArraysToLookThrough[i].length; j++) { // see if the first value is what you seek.
+						if (arrayOfArraysToLookThrough[i][0] == valueOfFirstItem) { // If it is, iterate to find nth item and, if found, set foundValue to it.
+							foundValue = arrayOfArraysToLookThrough[i][indiceOfNthItem];
 						};
 					};
-					console.log(indiceOfNthItem);
 				};
+				return foundValue;
+				// You know, the code for this used to make multiple arrays and sort through them. It sucked. This is faster. And with far less bugs.
+				// I'm glad I refactored this.
 			};
 
 			function findValueOfKeyFromQueryStringInUrl(keyToFindValueOf) { // Gets the URl, looks at the query strings, and finds the corresponding the value for the key you want. If the key doesn't exist, it returns null.
