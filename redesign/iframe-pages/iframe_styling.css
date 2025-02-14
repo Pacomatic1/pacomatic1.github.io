@@ -1,0 +1,7 @@
+/* Everything here must not apply to anything with the class "ignore-master-css". For that, use the :not() thingy; see MDN for more. */
+@import url(7_scrollbar.css);
+
+p:not(.ignore-master-css) {
+    /*font-size: .92em;*/
+
+}

@@ -19,7 +19,7 @@ All you need to remember is that their position is fixed, they wlays consume the
 
 
 TODO LIST: Once the whole thing is done, make a credits section.
-Me for the programing.
+Me for the programing. 7.css or the scrollbar, and BomberFish's neocities for helping me extract the scrollbar and nothing else.
 
 ______________________________________ Using the old spec for reference, pay no mind to This
 // This does what you think it does and is 100% optional. If you don't use it then the footer will be included. 
