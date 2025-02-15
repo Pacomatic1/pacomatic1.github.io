@@ -1,7 +1,32 @@
-/* Everything here must not apply to anything with the class "ignore-master-css". For that, use the :not() thingy; see MDN for more. */
-@import url(7_scrollbar.css);
+/* Everything here must not apply to anything with the class "ignore-master-css". For that, use the :not() thingy; see MDN for more. 
+Yes, there are exceptions, but they should be non-destructive and be things I would have no reason to override. */
 
-p:not(.ignore-master-css) {
-    /*font-size: .92em;*/
+@import url(7_scrollbar.css); /* The scrollbar is pulled from bomberfish.neocities.org. It only works on browsers that are based on or share common blood with WebKit. This is why it's quite convenient that Chromium shares some blood with WebKit!*/
+@import url(7_scoped.css); /* https://khang-nd.github.io/7.css/ This is using 0.17.0 of the scoped version. Update whenever you notice it's outdated. */
+@import url('https://fonts.googleapis.com/css2?family=Markazi+Text:wght@400..700&family=Odibee+Sans&family=Saira+Condensed:wght@100;200;300;400;500;600;700;800;900&display=swap'); /* Imported from Google Fonts: Markazi Text, Odibee Sans, and Saira Condensed. */
+
+
+
+* {
+    /* This is an exception to the 'ignore-master-css' rule. 
+    You should ONLY use this for non-destructive things, things 
+    that don't change the appearance at all and are things you 
+    would set no matter what but always forget to do.
+    90% of the time, they'll pertain to how something looks 
+    while it's loading. */
+    font-display: swap;
+
+
+
 
 }
+
+
+
+p:not(.ignore-master-css) {
+    font-size: 1em;
+    font-family: 'Saira Condensed', serif;
+    line-height: 110%;
+    overflow-wrap: break-word;
+}
+
