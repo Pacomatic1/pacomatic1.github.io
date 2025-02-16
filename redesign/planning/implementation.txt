@@ -4,13 +4,13 @@ This is basically bog-standard HTML, with a bit of tiny extras to make it work.
 
 
 Supported: <p>, <b>, <br>, <i>, <b>, <s>, <a>, <script>, <img>
-I want to bring attention to styling: Everything, even the things in the iframe are, by default, styled by iframe_styling.css, imported by iframe_script.css; everything has a default style and whatever you do will be piling on top of it. Because of this and specificity, you can give something the "ignore-master-css" class to, well, ignore the master page's CSS.
+I want to bring attention to styling: Everything, even the things in the iframe are, by default, styled by iframe_styling.css, imported by iframe_script.css; everything has a default style and whatever you do will be piling on top of it. With that said, it can all be ignored if you give something the class 'ignore-master-css'.
 
 
 
 
 
-There are also the backgrounds, which are *oviously* done via iframes. There isn't much to say, for they have no templates or special works. 
+There are also the backgrounds, which I just HAD to do via iframes. There isn't much to say, for they have no templates or special works. 
 All you need to remember is that their position is fixed, they wlays consume the whole screen, and always render (and are interacted with) BEHIND everything.
 
 

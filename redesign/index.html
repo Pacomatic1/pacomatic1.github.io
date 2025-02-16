@@ -4,10 +4,11 @@
 	<head>
 		<title>Paco's Place</title>
 
-		<link rel="stylesheet" href="./iframe-pages/7_scrollbar.css">
+		<link rel="stylesheet" href="./iframe-pages/resources/7_scrollbar.css">
 
 
 		<style>
+
 			:root {
 				--min-height-of-childpage: 80em;
 			}
@@ -20,7 +21,7 @@
 			}
 			#childPageIframe {
 				width:100%;
-				height: var(--min-height-of-childpage);
+				min-height: var(--min-height-of-childpage);
 				grid-template: childPageIframe;
 			}
 			#bgIframe {
@@ -44,6 +45,7 @@
 				max-width: 90em;
 				min-width: 50em;
 
+
 				grid-template-areas: 
 				"leftSideExtras" "childPageIframe" "rightSideExtras"
 				;
@@ -65,11 +67,14 @@
 				width: 100%;
 			}
 
+
 		</style>
 
 		
 	</head>
-	<body style="margin:0;" class="">			
+	<body style="margin:0;" class="">
+
+
 			<iframe id="bgIframe" class="plainIframe" allowtransparency="false"></iframe> <!-- Contains the background and everything within. -->
 
 			<div id="gigaDiv">
@@ -107,6 +112,7 @@
 			// This lookup table must be updated with every page added, though all things considered this isn't too bad.
 			const pageNameAndUrlLookupTable = [
 				["home", "./iframe-pages/home.html", "ps3XmbBg",],
+				["themetest", "./iframe-pages/theme_test.html", "ps3XmbBg",],
 
 			];
 
@@ -190,6 +196,22 @@
 			}
 			function findUrlOfHeroName(heroName) {
 				return findValueofNthItemInArrayOfMultiItemArraysAssumingYouKnowWhatTheFirstItemIs(heroName, heroNameAndUrlLookupTable, 1);
+			}
+
+			function changeScanlineOverlayStatus(canYouSeeIt) {
+				if (canYouSeeIt == true) {
+					document.getElementById("scanline_overlay").style.display = "block";
+				} else {
+					document.getElementById("scanline_overlay").style.display = "none";
+				}
+			}
+
+			function changeStaticOverlayStatus(canYouSeeIt) {
+				if (canYouSeeIt == true) {
+					document.getElementById("static_overlay").style.display = "block";
+				} else {
+					document.getElementById("static_overlay").style.display = "none";
+				}
 			}
 
 		</script>
