@@ -3,9 +3,11 @@ The goal: We have my site's external and persistent UI using normal means, and t
 This is basically bog-standard HTML, with a bit of tiny extras to make it work.
 
 
-Supported: <p>, <b>, <br>, <i>, <b>, <s>, <a>, <script>, <img>
-I want to bring attention to styling: Everything, even the things in the iframe are, by default, styled by iframe_styling.css, imported by iframe_script.css; everything has a default style and whatever you do will be piling on top of it. With that said, it can all be ignored if you give something the class 'ignore-master-css'.
 
+
+Supported: <p>, <b>, <br>, <i>, <b>, <s>, <a>, <script>, <img>, <div>
+I want to bring attention to styling: Everything, even the things in the iframe are, by default, styled by iframe_styling.css, imported by iframe_script.css; everything has a default style and whatever you do will be piling on top of it. With that said, it can all be ignored if you give something the class 'ignore-master-css'.
+If anything needs a scrollbar, add .has-scrollbar and you will get what you seek.
 
 
 
@@ -14,12 +16,13 @@ There are also the backgrounds, which I just HAD to do via iframes. There isn't 
 All you need to remember is that their position is fixed, they wlays consume the whole screen, and always render (and are interacted with) BEHIND everything.
 
 
+Now, for some design stuff so that all this effort actually means something.
 
 
 
 
 TODO LIST: Once the whole thing is done, make a credits section.
-Me for the programing. 7.css or the scrollbar, and BomberFish's neocities for helping me extract the scrollbar and nothing else.
+Me for the programing. 7.css for the scrollbar, and BomberFish's neocities for helping me extract the scrollbar and nothing else.
 
 ______________________________________ Using the old spec for reference, pay no mind to This
 // This does what you think it does and is 100% optional. If you don't use it then the footer will be included. 

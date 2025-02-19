@@ -21,7 +21,7 @@
 			}
 			#childPageIframe {
 				width:100%;
-				min-height: var(--min-height-of-childpage);
+				min-height: var(--min-height-of-childpage); 
 				grid-template: childPageIframe;
 			}
 			#bgIframe {
@@ -103,7 +103,7 @@
 
 
 
-
+		<script src="./resources/iframe-resizer.parent.js"></script>
 		<script>
 			// pageNameAndUrlLookupTable is an array of stringarrays containing 3 elements:
 			// [0] is the pageName, like what would be inputted via the query string.
@@ -145,7 +145,8 @@
 			var bgUrl = findUrlOfBgName(bgName);
 			bgIframe.src = bgUrl;
 
-
+			resizeIframeToFitContent(childPageIframe);
+			
 
 
 
@@ -198,20 +199,10 @@
 				return findValueofNthItemInArrayOfMultiItemArraysAssumingYouKnowWhatTheFirstItemIs(heroName, heroNameAndUrlLookupTable, 1);
 			}
 
-			function changeScanlineOverlayStatus(canYouSeeIt) {
-				if (canYouSeeIt == true) {
-					document.getElementById("scanline_overlay").style.display = "block";
-				} else {
-					document.getElementById("scanline_overlay").style.display = "none";
-				}
-			}
 
-			function changeStaticOverlayStatus(canYouSeeIt) {
-				if (canYouSeeIt == true) {
-					document.getElementById("static_overlay").style.display = "block";
-				} else {
-					document.getElementById("static_overlay").style.display = "none";
-				}
+
+			function resizeIframeToFitContent(iframe) {
+				iframeResize( { license: 'GPLv3', waitForLoad: false }, iframe );
 			}
 
 		</script>

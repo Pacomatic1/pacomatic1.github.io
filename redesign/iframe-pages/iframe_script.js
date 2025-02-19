@@ -11,6 +11,10 @@ function addMandatoryBitsToChildPage() {
 	cssLink.type = "text/css";
 	document.head.appendChild(cssLink);
 
-	document.body.classList.add("has-scrollbar");
+	// iframe-resizer's child script is added in order to avoid a scrollbar for the childPage.
+	var iframeResizerChildLink = document.createElement("link");
+	iframeResizerChildLink.src = "./resources/iframe-resizer.child.js"; 
+	document.head.appendChild(iframeResizerChildLink);
+	
 
 }
