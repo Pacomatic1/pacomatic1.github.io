@@ -12,45 +12,7 @@ body:not(.ignore-master-css) {
     overflow-wrap: break-word;
     overflow-y:visible;
 }
-
-button:not(.ignore-master-css) {
-    background: linear-gradient(to bottom, #454545, #3a3a3a);
-    border: 1px solid #232323;
-    border-radius: 4px;
-    box-shadow: inset 0 0 0 1px #5B5B5B;
-    color: #ffffff;
-    font: 9pt "Segoe UI", "SegoeUI", "Noto Sans", sans-serif;
-    min-height: 23px;
-    min-width: 75px;
-    padding: 0 12px;
-    position: relative;
-    text-align: center;
-    /* GitHub Copilot recommended me 90% of this and I was curious so I gave it a chance and, *wow*. It cooked. */
-}
-
-button:hover:not(.ignore-master-css):not(:disabled):not(:active) {
-    border-color: #9ED868;
-    box-shadow: inset 0 0 0 1px #7dad50;
-    background: linear-gradient(to bottom, #4b4e48, #434a3d);
-
-    /* GitHub Copilot did that. It cooked.*/
-}
-
-button:disabled:not(.ignore-master-css) {
-    background: #f4f4f4;
-    box-shadow: inset 0 0 0 0px;
-    border-color: #b4b4b4;
-    border-width: 2px;
-    color: #838383;
-}
-
-button:active:not(.ignore-master-css) {
-    border: 1px solid #9ED868;
-    box-shadow: inset 0 0 0 1px #7dad50;
-    background: linear-gradient(to bottom, #5f6f50, #555d4d);
-    
-    
-} 
+ 
 
 
 h1:not(.ignore-master-css) {
@@ -73,6 +35,68 @@ code:not(.ignore-master-css), code *:not(.ignore-master-css) {
     font-family: monospace;
 }
 
+p:not(.ignore-master-css) {
+    margin-inline: 1em;
+    margin-top: .5em;
+
+}
+
+p:not(ignore-master-css).text-align-middle {
+    text-align: center;
+
+
+}
+
+div:not(.ignore-master-css).inset-box {
+    background-color: #222222;
+    border: 2px solid #404040;
+    margin: 0px;
+
+}
+
+
+
+
+
+
+
+
+/* Button Code. Lots of stuff, of course. */
+button:not(.ignore-master-css) {
+    background: linear-gradient(to bottom, #454545, #3a3a3a);
+    border: 1px solid #232323;
+    border-radius: 4px;
+    box-shadow: inset 0 0 0 1px #5B5B5B;
+    color: #ffffff;
+    font: 9pt "Segoe UI", "SegoeUI", "Noto Sans", sans-serif;
+    min-height: 23px;
+    min-width: 75px;
+    padding: 0 12px;
+    position: relative;
+    text-align: center;
+    /* GitHub Copilot recommended me 90% of this and I was curious so I gave it a chance and, *wow*. It cooked. */
+}
+button:hover:not(.ignore-master-css):not(:disabled):not(:active) {
+    border-color: #9ED868;
+    box-shadow: inset 0 0 0 1px #7dad50;
+    background: linear-gradient(to bottom, #4b4e48, #434a3d);
+
+    /* GitHub Copilot did that. It cooked.*/
+}
+button:disabled:not(.ignore-master-css) {
+    background: #f4f4f4;
+    box-shadow: inset 0 0 0 0px;
+    border-color: #b4b4b4;
+    border-width: 2px;
+    color: #838383;
+}
+button:active:not(.ignore-master-css) {
+    border: 1px solid #9ED868;
+    box-shadow: inset 0 0 0 1px #7dad50;
+    background: linear-gradient(to bottom, #5f6f50, #555d4d);
+    
+    
+}
 
 
 
@@ -86,7 +110,12 @@ Buttom color palette (base): 232323 outer border, 5B5B5B inner border, 454545 gr
 Buttom color palette (while being clicked via mouse): 232323 outer border, 4e4e4e inner border, insides are all 363636
 Buttom color palette (hover over via tabs): Outer border 9ED868, middle border 515151, inner border 3a3a3a, inner inner border gradient top 5F6F50, inner inner border gradient bottom 566846, inner gradient top 565953, inner gradient bottom 484f42
 Buttom color palette (clicked by enter): outer border 9ed868, inner border 4e4e4e, middle border 363636, inner inner border gradient top 566647, inner inner border gradient top 536542, inner gradient top 4b4e68, inner gradient bottom 434a3d
+Inset Box: Border shine/outer outline #404040, border surface 313131, inset box border 262626, inset box surface (content's bg) 222222
 */
+
+
+
+
 
 
 

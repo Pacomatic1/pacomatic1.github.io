@@ -1,6 +1,6 @@
 /* 7.css, v0.17.0, used the tree-shaking thingy for the scrolbar and unminified with unminify.com. Modded from there. */
 
-/* The mods are: only applying to things with .has-scrollbar and a custom theme to look more like Prism Launcher. */
+/* The mod is only applying to things with .has-scrollbar.*/
 
 :root {
     --font: 9pt "Segoe UI", "SegoeUI", "Noto Sans", sans-serif;

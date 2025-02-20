@@ -5,11 +5,13 @@ This is basically bog-standard HTML, with a bit of tiny extras to make it work.
 
 
 
-Supported: <p>, <b>, <br>, <i>, <b>, <s>, <a>, <script>, <img>, <div>
-I want to bring attention to styling: Everything, even the things in the iframe are, by default, styled by iframe_styling.css, imported by iframe_script.css; everything has a default style and whatever you do will be piling on top of it. With that said, it can all be ignored if you give something the class 'ignore-master-css'.
-If anything needs a scrollbar, add .has-scrollbar and you will get what you seek.
+Supported: <p>, <b>, <u>, <br>, <i>, <b>, <s>, <a>, <script>, <img>, <div>
+All child pages have the mandatory iframe-ressize library applied.
 
-
+Styling is fun, and is also quite quirky for today.
+Everything is, by default, styled by iframe_styling.css, imported by iframe_script.css; everything has a default style and whatever you do will be piling on top of it. You can always ignore this by giving omething class .ignore-master-css.
+If anything needs a scrollbar, add .has-scrollbar in order to use the global styling.
+There is a .text-align-middle class availiable for <p>. It centers text in the middle of its container.
 
 
 There are also the backgrounds, which I just HAD to do via iframes. There isn't much to say, for they have no templates or special works. 
