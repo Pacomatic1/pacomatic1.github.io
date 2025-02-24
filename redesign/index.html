@@ -129,7 +129,7 @@
 
 			var bgIframe = document.getElementById("bgIframe");
 			var childPageIframe = document.getElementById("childPageIframe");
-			const fallbackPageNameIfNoPageWasSelected = "home"; // The site finds the page you want via query strings. If none of the query strings have the page key, we don't want to 404 them, we want to bring them to a fallback. Where does the fallback lead? Well, the page name defined by this!
+			const fallbackPageNameIfNoPageWasSelected = "home"; // The site finds the page you want via query strings. If none of the query strings have the page key, we don't want to 404 them, we want to bring them to a fallback. Where does the fallback lead? Well, the page name defined by this! Consider it the landing page.
 
 
 
@@ -137,7 +137,7 @@
 			var pageName = findValueOfKeyFromQueryStringInUrl("page"); 
 			if (pageName == null) {pageName = fallbackPageNameIfNoPageWasSelected;}; // If the query strings define no page key, then we bring them wherever the fallback wants.
 			
-			//pageName = home.
+			// pageName = home.
 			var pageUrl = findUrlOfPageName(pageName);
 			if (pageUrl == null) {window.location.replace("404.html");}; // Since we handled the case in which a page key doesn't exist, if a page key does exist but its value isn't on the lookup table, it's probably nonexistent. In that case, 404 them.  
 			childPageIframe.src = pageUrl;
