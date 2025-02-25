@@ -12,6 +12,20 @@
             height: 10em;
 
           }
+
+          #gridDiv {
+            margin-inline: auto;
+            display: grid;
+            grid-template-columns: auto auto auto;
+            width: 100%;
+
+            grid-template-areas: 
+            "leftSideExtras" "childPageIframe" "rightSideExtras"
+            ;
+
+
+          }
+
         </style>
 
 
@@ -20,9 +34,14 @@
     <body>
       <div class="rounded-box fitBgBoilerPlate" id="pageHero">
         <p> Placeholder text. You put the text and hero art and background here at home, 'kay? </p>
+
         <!-- Remember! image-rendering tag. -->
       </div> 
+      
+      <div id="gridDiv">
+        
 
+      </div>
 
     </body>
 </html>
