@@ -1,6 +1,6 @@
 The goal: We have my site's external and persistent UI using normal means, and then style an iframe within the webpage that contains the child page. Single-page framework.
 
-This is basically bog-standard HTML, with a bit of tiny extras to make it work.
+Within the iframe is basically bog-standard HTML, with a bit of tiny extras to make it work.
 
 
 Styling is fun, and is also quite quirky for today.
@@ -10,8 +10,11 @@ Anyways, here are some things that iframe_styling.css doesn't tell you!
 If anything needs a scrollbar, add .has-scrollbar in order to use the global styling.
 The iframes automatically get linked to the child script for the iframe-resizer library. As such, take precautions to avoid breaking the library or cause issues.
 
+You are not allowed to use the <hr> tag. Use the separator defined in the iframe_styling instead.
+
 There are also the backgrounds, which I just HAD to do via iframes. There isn't much to say, for they have no templates or special works. 
 All you need to remember is that their position is fixed, they wlays consume the whole screen, and always render (and are interacted with) BEHIND everything.
+
 
 
 Now, for some design stuff so that all this effort actually means something.

@@ -111,6 +111,16 @@ div:not(.ignore-master-css).rounded-box {
     text-align: center;
 }
 
+div:not(.ignore-master-css).horizontalPageSeparator {
+    border:0px;
+    max-width:80%;
+    min-width: 10px;
+    height: 1px;
+    margin-inline: auto;
+    background-image: linear-gradient(to right, #FFFFFF00, #FFFFFFDf, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFFDf, #FFFFFF00); /* You may notice that there are a copious amount of gradient stops - It sucks, but it works and that's all I ask of it.*/
+
+}
+
 
 
 
