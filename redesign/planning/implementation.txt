@@ -24,3 +24,5 @@ Now, for some design stuff so that all this effort actually means something.
 
 TODO LIST: Once the whole thing is done, make a credits section.
 Me for the programing.
+
+Make some JS code to make all .horizontalPageSeparators have ARIA role seprator, or just have stuff based on role separator.

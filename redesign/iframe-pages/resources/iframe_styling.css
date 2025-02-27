@@ -34,9 +34,7 @@ code:not(.ignore-master-css), code *:not(.ignore-master-css) {
 }
 
 p:not(.ignore-master-css) {
-    margin-inline: 1em;
-    margin-top: .5em;
-
+    padding-inline: 1rem;
 }
 
 
@@ -113,13 +111,16 @@ div:not(.ignore-master-css).rounded-box {
 
 div:not(.ignore-master-css).horizontalPageSeparator {
     border:0px;
-    max-width:80%;
+    max-width:90%;
     min-width: 10px;
     height: 1px;
     margin-inline: auto;
+    margin-top: 0px;
+    margin-bottom: 0px;
     background-image: linear-gradient(to right, #FFFFFF00, #FFFFFFDf, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFFDf, #FFFFFF00); /* You may notice that there are a copious amount of gradient stops - It sucks, but it works and that's all I ask of it.*/
 
-}
+} /* https://stackoverflow.com/questions/8397852/why-cant-the-p-tag-contain-a-div-tag-inside-it
+p tags are only allowed to inclue inline tags within. I mght have to ban p tags completely. */
 
 
 
