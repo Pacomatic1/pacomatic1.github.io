@@ -10,26 +10,17 @@
             margin: 0px;
             width: 100%;
             height: 10em;
+            background-repeat: no-repeat;
+            background-size: 100%;
+            background-position: center;
+            background-image: url("assets/home/ps3_xmb.png");
+            background-image: url("assets/home/ps3_xmb.apng");
           }
-
-          #gridDiv {
-            margin-inline: auto;
-            display: grid;
-            grid-template-columns: auto auto auto;
-            width: 100%;
-
-            grid-template-areas: 
-            "leftSideExtras" "childPageIframe" "rightSideExtras"
-            ;
-
-
-          }
-
 
           #heroImage {
             image-rendering: pixelated;
             height:100%;
-            margin-inline:auto;
+            width: auto;
           }
         </style>
 
@@ -37,10 +28,8 @@
 
     </head>
     <body>
-      <div class="rounded-box fitBgBoilerPlate" id="pageHero">
-        <img id="heroImage" src="./assets/pacomatic-hero-2x.png"> </img>
-
-        <!-- Remember! image-rendering tag. -->
+      <div class="rounded-box" id="pageHero">
+        <img id="heroImage" src="./assets/home/pacomatic-hero-2x.png" decoding="async" alt="Image of Pacomatic's OC"> </img>
       </div> 
       
       <div style="width:300px">
