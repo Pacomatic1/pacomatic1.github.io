@@ -26,3 +26,8 @@ TODO LIST: Once the whole thing is done, make a credits section.
 Me for the programing.
 
 Make some JS code to make all .horizontalPageSeparators have ARIA role seprator, or just have stuff based on role separator.
+
+
+
+EXTRAS:
+The Celeste font is Renogare. If you cannot use it, try Montserrat SemiBold 600 on Google Fonts.
