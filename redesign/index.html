@@ -112,7 +112,7 @@
 			// [2] is the background name. As for which names get which url, that's what the other lookup table is for.
 			// This lookup table must be updated with every page added, though all things considered this isn't too bad.
 			const pageNameAndUrlLookupTable = [
-				["home", "./iframe-pages/home.html", "finalsAtticBg",],
+				["home", "./iframe-pages/home.html", "randomStuffOutlookBg",],
 				["themetest", "./iframe-pages/theme_test.html", "ps3XmbBg",],
 
 			];
@@ -122,6 +122,7 @@
 			const bgNameAndUrlLookupTable = [
 				["ps3XmbBg", "./backgrounds/ps3Xmb.html"], 
 				["finalsAtticBg", "./backgrounds/finals_attic.html"],
+				["randomStuffOutlookBg", "./backgrounds/random_stuff_outlook.html"],
 
 			];
 
@@ -138,7 +139,6 @@
 			var pageName = findValueOfKeyFromQueryStringInUrl("page"); 
 			if (pageName == null) {pageName = fallbackPageNameIfNoPageWasSelected;}; // If the query strings define no page key, then we bring them wherever the fallback wants.
 			
-			// pageName = home.
 			var pageUrl = findUrlOfPageName(pageName);
 			if (pageUrl == null) {window.location.replace("404.html");}; // Since we handled the case in which a page key doesn't exist, if a page key does exist but its value isn't on the lookup table, it's probably nonexistent. In that case, 404 them.  
 			childPageIframe.src = pageUrl;

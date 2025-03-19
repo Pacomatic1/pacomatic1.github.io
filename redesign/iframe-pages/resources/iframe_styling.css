@@ -120,7 +120,7 @@ div:not(.ignore-master-css).horizontalPageSeparator {
     background-image: linear-gradient(to right, #FFFFFF00, #FFFFFFDf, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFFDf, #FFFFFF00); /* You may notice that there are a copious amount of gradient stops - It sucks, but it works and that's all I ask of it.*/
 
 } /* https://stackoverflow.com/questions/8397852/why-cant-the-p-tag-contain-a-div-tag-inside-it
-p tags are only allowed to inclue inline tags within. I mght have to ban p tags completely. */
+p tags are only allowed to include inline tags within. Put this between 2 p tags. */
 
 
 
