@@ -16,6 +16,5 @@ function addMandatoryBitsToChildPage() {
 	var iframeResizerChildLink = document.createElement("script");
 	iframeResizerChildLink.src = "./resources/iframe-resizer-child.js"; 
 	document.head.appendChild(iframeResizerChildLink);
-	
 
 }

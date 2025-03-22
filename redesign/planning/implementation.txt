@@ -6,26 +6,25 @@ Within the iframe is basically bog-standard HTML, with a bit of tiny extras to m
 Styling is fun, and is also quite quirky for today.
 Everything is, by default, styled by iframe_styling.css, imported by iframe_script.css; everything has a default style and whatever you do will be piling on top of it. You can always ignore this by giving omething class .ignore-master-css.
 Also keep in mind that iframe_styling.css contains several classes, so find the section with classes for custom objects and refer to it in order to see things you can use.
+
 Anyways, here are some things that iframe_styling.css doesn't tell you!
 If anything needs a scrollbar, add .has-scrollbar in order to use the global styling.
 The iframes automatically get linked to the child script for the iframe-resizer library. As such, take precautions to avoid breaking the library or cause issues.
+The body has some styling that cannot be applied with the stylesheet, so it's applied with some javascrpt on both the child page and the main page.
 
-You are not allowed to use the <hr> tag. Use the separator defined in the iframe_styling instead.
+There are also the backgrounds, which I did with even more iframes. There isn't much to say, for they have no templates or special works. 
+All you need to remember is that their position is fixed, they always consume the whole screen, and always render and are interacted with BEHIND everything else.
 
-There are also the backgrounds, which I just HAD to do via iframes. There isn't much to say, for they have no templates or special works. 
-All you need to remember is that their position is fixed, they wlays consume the whole screen, and always render (and are interacted with) BEHIND everything.
+
 
 
 
 Now, for some design stuff so that all this effort actually means something.
 
 
-
-
 TODO LIST: Once the whole thing is done, make a credits section.
 Me for the programing.
 
-Make some JS code to make all .horizontalPageSeparators have ARIA role seprator, or just have stuff based on role separator.
 
 
 

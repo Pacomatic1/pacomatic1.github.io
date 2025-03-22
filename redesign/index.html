@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
+<!-- Hello! If you're looking through my code to do something, just know that this is also a public GutHub repo and that it's better to see my code from there.
+For help, here's the gist of it: This is a single-page application, and the thingy in the middle (the only part of the page that changes on certain links) is an iframe. The background is also an iframe. In this SPA, I use query strings at the end of the URL to determine what page you're on; if you're on a separate page that isn't part of this mess, it won't bother with the iframes at all and will be its own, completely separate thing. -->
 	
 	<head>
 		<title>Paco's Place</title>
@@ -13,17 +15,18 @@
 				--min-height-of-childpage: 80em;
 			}
 
-
 			.plainIframe {
 				border: none;
 				margin: 0px;
 				padding: 0px;
 			}
+
 			#childPageIframe {
 				width:100%;
 				min-height: var(--min-height-of-childpage); 
 				grid-template: childPageIframe;
 			}
+
 			#bgIframe {
 				display: block;
 				position: fixed;
@@ -42,10 +45,8 @@
 				margin-inline: auto;
 				display: grid;
 				grid-template-columns: 10em auto 10em;
-				max-width: 90em;
-				min-width: 50em;
-
-
+				width: 80em;
+				
 				grid-template-areas: 
 				"leftSideExtras" "childPageIframe" "rightSideExtras"
 				;
@@ -75,17 +76,19 @@
 	<body style="margin:0;" class="has-scrollbar">
 
 
-			<iframe id="bgIframe" class="plainIframe" allowtransparency="false"></iframe> <!-- Contains the background and everything within. -->
+			<iframe id="bgIframe" class="plainIframe" allowtransparency="false" title="Background"></iframe> <!-- Contains the background and everything within. -->
 
 			<div id="gigaDiv">
 				<div id="gridDiv">
 
 					<div id="leftSideExtras">
-						<style> @import url(./iframe-pages/resources/iframe_styling.css); </style>
+						<!-- <style> @import url(./iframe-pages/resources/iframe_styling.css); </style> -->
 						<p> oskosksojdousahdksamx</p>
 					</div>
 					
-					<iframe id="childPageIframe" class="plainIframe" allowtransparency="true"></iframe> <!-- This is where all the child page's contents go. -->
+					<iframe id="childPageIframe" class="plainIframe" allowtransparency="true" title="Main Content"></iframe>
+					<!-- This is where all the child page's contents go. Also note the following:
+					If the body of the iframe doesn't have .ignore-master-css, JS will add the .childPageIframeWhoseBodyAllowsMasterCss class to this. -->
 					
 					<div id="rightSideExtras">
 						<p>
@@ -127,13 +130,9 @@
 			];
 
 			// If it wasn't obvious, I like lookup tables. They're very... useful.
-
-
 			var bgIframe = document.getElementById("bgIframe");
 			var childPageIframe = document.getElementById("childPageIframe");
 			const fallbackPageNameIfNoPageWasSelected = "home"; // The site finds the page you want via query strings. If none of the query strings have the page key, we don't want to 404 them, we want to bring them to a fallback. Where does the fallback lead? Well, the page name defined by this! Consider it the landing page.
-
-
 
 			// We find what page you're on and then bring you there,
 			var pageName = findValueOfKeyFromQueryStringInUrl("page"); 
@@ -142,13 +141,17 @@
 			var pageUrl = findUrlOfPageName(pageName);
 			if (pageUrl == null) {window.location.replace("404.html");}; // Since we handled the case in which a page key doesn't exist, if a page key does exist but its value isn't on the lookup table, it's probably nonexistent. In that case, 404 them.  
 			childPageIframe.src = pageUrl;
+
 			// Now for the much simpler background iframe.
 			var bgName = findBgNameOfPageName(pageName);
 			var bgUrl = findUrlOfBgName(bgName);
 			bgIframe.src = bgUrl;
 
 			resizeIframeToFitContent(childPageIframe);
-			
+
+
+
+
 
 
 
@@ -185,6 +188,11 @@
 					return findValueofNthItemInArrayOfMultiItemArraysAssumingYouKnowWhatTheFirstItemIs(keyToFindValueOf, queryStringArray, 1);
 			}
 
+
+
+
+
+			// Keep these buried down here, this is stuff I'm likely never gonna change again and it clutters the code.  
 			function findUrlOfPageName(pageName) {
 				return findValueofNthItemInArrayOfMultiItemArraysAssumingYouKnowWhatTheFirstItemIs(pageName, pageNameAndUrlLookupTable, 1);
 			}
@@ -200,9 +208,6 @@
 			function findUrlOfHeroName(heroName) {
 				return findValueofNthItemInArrayOfMultiItemArraysAssumingYouKnowWhatTheFirstItemIs(heroName, heroNameAndUrlLookupTable, 1);
 			}
-
-
-
 			function resizeIframeToFitContent(iframe) {
 				iframeResize( { license: 'GPLv3', waitForLoad: false }, iframe );
 			}

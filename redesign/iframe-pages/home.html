@@ -7,9 +7,8 @@
 
         <style>
           #pageHero {    
-            margin-left: -2px; /* I hate this. Please find something, ANYTHING better. */
-            margin-right: auto;
-            width: 100%;
+            margin-inline: auto;
+            width: 98%;
             height: 10em;
             background-repeat: no-repeat;
             background-size: 100%;
@@ -22,6 +21,7 @@
             height:100%;
             width: auto;
             filter: drop-shadow(0px 0px 5px black);
+            z-index: -90;
           }
         </style>
 
@@ -29,6 +29,7 @@
 
     </head>
     <body>
+      <div style="height:1em"></div> <!-- Using this to make some space because margin-top breaks it. SO NICE. -->
       <div class="rounded-box" id="pageHero">
         <img id="heroImage" src="./assets/home/pacomatic-hero-2x.png" decoding="async" alt="Image of Pacomatic's OC"> </img>
       </div> 
@@ -38,9 +39,9 @@
           Hey guys, nya. I gots text for ya!
           <br>Perhaps you seek it? This piece is 300px wide.
         </p>
-          <div class="horizontalPageSeparator"></div>
-        <p style="margin-top: 0px; padding-top: 0px;">
-          <br>That stupid div!
+          <hr>
+        <p>
+          That stupid div!
         </p>
         </div>
 

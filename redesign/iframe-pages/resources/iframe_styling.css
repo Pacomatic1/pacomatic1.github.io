@@ -1,6 +1,6 @@
-/* Close to nothing here should apply if an object has class 'ignore-master-css'.*/
+/* Close to nothing here should apply if an object has class ignore-master-css. That's the biggest, most important part of this simple yet stupid SPA thingy I'm doing. */
 
-@import url(7_scrollbar.css);  /* This only applies to elements with .has-scrollbar */
+@import url(7_scrollbar.css);  /* This only applies to elements with .has-scrollbar. */
 
 
 
@@ -11,6 +11,11 @@ body:not(.ignore-master-css) {
     background-color: #313131;
     overflow-wrap: break-word;
     overflow-y: visible;
+    margin: 0px;
+    border-left: medium solid #1c1c1c;
+    border-right: medium solid #1c1c1c;
+    height:100%;
+    
 }
 
 h1:not(.ignore-master-css) {
@@ -35,7 +40,25 @@ code:not(.ignore-master-css), code *:not(.ignore-master-css) {
 
 p:not(.ignore-master-css) {
     padding-inline: 1rem;
+    
+    margin-top: 0px;
+    margin-bottom: 0px;
+
+    padding-bottom: 0px;
+    padding-top: 0px;
 }
+
+hr:not(.ignore-master-css) {
+    border: 0px;
+    max-width: 90%;
+    min-width: 10px;
+    height: 1px;
+    margin-inline: auto;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    background-image: linear-gradient(to right, #FFFFFF00, #FFFFFFDf, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFFDf, #FFFFFF00); /* You may notice that there are a copious amount of gradient stops - It sucks, but it works and that's all I ask of it.*/
+} 
+/* Funny story: I had these exact properties in div:not(.ignore-master-css).horizontalPageSeparator, but gave up and used a standard hr. GitHub Copilot noticed this and the suggestion it gave was to copy and paste all of my code, which was **exactly what I was going to do.** How many people have tried what I did and gave up?? */
 
 
 
@@ -58,14 +81,14 @@ button:not(.ignore-master-css) {
     padding: 0 12px;
     position: relative;
     text-align: center;
-    /* GitHub Copilot recommended me 90% of this and I was curious so I gave it a chance and, *wow*. It cooked. */
+    /* GitHub Copilot recommended me 90% of this and I was curious so I gave it a chance and, *wow*. It did well! */
 }
 button:hover:not(.ignore-master-css):not(:disabled):not(:active) {
     border-color: #9ED868;
     box-shadow: inset 0 0 0 1px #7dad50;
     background: linear-gradient(to bottom, #4b4e48, #434a3d);
 
-    /* GitHub Copilot did that. It cooked.*/
+    /* GitHub Copilot did that. It did well!*/
 }
 button:disabled:not(.ignore-master-css) {
     background: #f4f4f4;
@@ -107,21 +130,7 @@ div:not(.ignore-master-css).rounded-box {
 
 :not(.ignore-master-css).text-align-middle {
     text-align: center;
-}
-
-div:not(.ignore-master-css).horizontalPageSeparator {
-    border:0px;
-    max-width:90%;
-    min-width: 10px;
-    height: 1px;
-    margin-inline: auto;
-    margin-top: 0px;
-    margin-bottom: 0px;
-    background-image: linear-gradient(to right, #FFFFFF00, #FFFFFFDf, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFFDf, #FFFFFF00); /* You may notice that there are a copious amount of gradient stops - It sucks, but it works and that's all I ask of it.*/
-
-} /* https://stackoverflow.com/questions/8397852/why-cant-the-p-tag-contain-a-div-tag-inside-it
-p tags are only allowed to include inline tags within. Put this between 2 p tags. */
-
+} /* Seems stupid right now, but some limit of HTML is gonna pop up and it's gonna necessitate this. **Trust the process.** */
 
 
 
