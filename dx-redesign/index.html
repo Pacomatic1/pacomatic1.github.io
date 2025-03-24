@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title> Paco's Place </title>
+        <title>Paco's Place</title>
         <link rel="icon" type="image/x-icon" href="./assets/favicon.png">
         <style>
             @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
@@ -9,47 +9,29 @@
             :root {
                 --default-bg-color: #313131;
                 --default-text-color: #ffffff;
-                --default-font: 550 9pt "Noto Sans", sans-serif;
+                --default-font: 9pt "Noto Sans", sans-serif;
+
             }
 
-            body {
-                margin: 0;
-                padding: 0;
-            }
-
-            /* Button Code. Lots of stuff, of course. */
-            button:not(.ignore-master-css) {
-                background: linear-gradient(to bottom, #454545, #3a3a3a);
-                border: 1px solid #232323;
-                border-radius: 4px;
-                box-shadow: inset 0 0 0 1px #5B5B5B;
-                color: #ffffff;
-                font: 9pt "Segoe UI", "SegoeUI", "Noto Sans", sans-serif;
-                min-height: 23px;
-                min-width: 75px;
-                padding: 0 12px;
-                position: relative;
+            hr {
+                border: 0px;
+                max-width: 90%;
+                min-width: 10px;
+                height: 1px;
+                margin-inline: auto;
+                margin-top: 0px;
+                margin-bottom: 0px;
+                background-image: linear-gradient(to right, #FFFFFF00, #FFFFFFDf, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFFDf, #FFFFFF00); /* You may notice that there are a copious amount of gradient stops - It sucks, but it works and that's all I ask of it.*/
+            } 
+            .navBarTitle {
+                color: var(--default-text-color);
+                font-size: 1.5rem;
+                margin: 0px;
                 text-align: center;
-                /* GitHub Copilot recommended me 90% of this and I was curious so I gave it a chance and, *wow*. It did well! */
             }
-            button:hover:not(.ignore-master-css):not(:disabled):not(:active) {
-                border-color: #9ED868;
-                box-shadow: inset 0 0 0 1px #7dad50;
-                background: linear-gradient(to bottom, #4b4e48, #434a3d);
-
-                /* GitHub Copilot did that. It did well!*/
-            }
-            button:disabled:not(.ignore-master-css) {
-                background: #f4f4f4;
-                box-shadow: inset 0 0 0 0px;
-                border-color: #b4b4b4;
-                border-width: 2px;
-                color: #838383;
-            }
-            button:active:not(.ignore-master-css) {
-                border: 1px solid #9ED868;
-                box-shadow: inset 0 0 0 1px #7dad50;
-                background: linear-gradient(to bottom, #5f6f50, #555d4d);
+            u {
+                border-bottom: .5px solid #b9b9b9;
+                text-decoration: none;
             }
 
             #gigaDiv {
@@ -57,23 +39,30 @@
                 height: 100%;
                 display: grid;
                 grid-template-columns: 10em auto;
-				grid-template-rows: auto 10em;
+				grid-template-rows: 10em auto;
 				grid-template-areas: 
 				"leftSide topSide"
                 "leftSide mainIframe"
 				;
+                margin: 0px;
+                padding: 0px;
             }
 
             #leftSide {
                 grid-area: leftSide;
                 background-color: var(--default-bg-color);
                 font: var(--default-font);
+                color: var(--default-text-color);
+                margin: 0px;
+                padding-inline: .5rem;
             }
 
             #topSide {
                 grid-area: topSide;
                 background-color: red;
                 font: var(--default-font);
+                margin: 0px;
+                padding: 0px;
             }
 
             #mainIframe {
@@ -82,7 +71,8 @@
                 font: var(--default-font);
             }
 
-            /* For using Noto Sans 
+
+            /* For using Noto Sans. Grabbed from Google Fonts.
             .noto-sans-<uniquifier> {
                 font-family: "Noto Sans", sans-serif;
                 font-optical-sizing: auto;
@@ -92,17 +82,69 @@
                     "wdth" 100;
             }
             */
+            
+            /* Now for the messy stuff! */
+            button {
+                background: linear-gradient(to bottom, #454545, #3a3a3a);
+                border: 1px solid #232323;
+                border-radius: 4px;
+                box-shadow: inset 0 0 0 1px #5B5B5B;
+                color: var(--default-text-color);
+                font: var(--default-font);
+                min-height: 23px;
+                min-width: 75px;
+                padding: 0 12px;
+                position: relative;
+                text-align: center;
+            } button:hover:not(:disabled):not(:active) {
+                border-color: #9ED868;
+                box-shadow: inset 0 0 0 1px #7dad50;
+                background: linear-gradient(to bottom, #4b4e48, #434a3d);
+            } button:disabled {
+                background: #f4f4f4;
+                box-shadow: inset 0 0 0 0px;
+                border-color: #b4b4b4;
+                border-width: 2px;
+                color: #838383;
+            } button:active {
+                border: 1px solid #9ED868;
+                box-shadow: inset 0 0 0 1px #7dad50;
+                background: linear-gradient(to bottom, #5f6f50, #555d4d);
+            }
 
         </style>
     
     
     </head>
-    <body>
+    <body style="margin: 0; padding: 0;">
         <div id="gigaDiv">
-            <div id="leftSide">sdsdsdsd</div>
-            <div id="topSide">sdsdsd</div>
-            <div id="mainIframe">sdsdsd</div>
+            <div id="leftSide">
+                <h4 class="navBarTitle">Paco's Place</h4>
+                <hr> <!-- It's the easiest thing to do, okay? -->
+                <div id="navBarButtonContainers">
+                    <!-- All the buttons and their respective icons are inserted via Javascript and a list that's contained in, well, the Javascript. Normally I'd be doing it manually but there's a LOT of buttons and because of this it's gonna be data-driven (but still in this HTML page TwT) -->
+                    <!-- Note: All styling within this div is inherited form the parent, so if there's any styling that the parent has, you won't have to worry about styling things yourself. -->
+                    <button> <img src="assets/navbar-icons/3ds-home-menu-icon.svg" height="auto" width="16px" style="margin-bottom:0px; margin-top: auto"/> Home</button>
+                </div>
+            </div>
+
+            <div id="topSide">sdsdsd
+
+            </div>
+            
+            <div id="mainIframe">sdsdsd
+
+            </div>
         </div>
+
+
+
+        <script> 
+            // I'm gonna use a gigantic list of buttons and their respective icons for the navbar. Looks to me like we're gonna have the copiously stupid lookup tables from th old, unfinished redesign! YAY! 
+
+
+
+        </script>
     </body>
 </html>
 
@@ -112,7 +154,61 @@
 
 
 
-<!--
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!--        This is the stylesheet from the old redesign. Just keeping this for future reference, as the general style is still the same as the old, unfinished redesign.
 
 <style>
 /* Close to nothing here should apply if an object has class ignore-master-css. That's the biggest, most important part of this simple yet stupid SPA thingy I'm doing. */
@@ -121,7 +217,7 @@
 
 
 
-body:not(.ignore-master-css) {
+body {
     color: #ffffff;
     font-family: Segoe UI, SegoeUI, Noto Sans, sans-serif;
     font-size: 9pt;
@@ -135,27 +231,27 @@ body:not(.ignore-master-css) {
     
 }
 
-h1:not(.ignore-master-css) {
+h1 {
     font-size: 5rem;
 }
-h2:not(.ignore-master-css) {
+h2 {
     font-size: 2.5rem;
 }
-h3:not(.ignore-master-css) {
+h3 {
     font-size: 2rem;
 }
-h4:not(.ignore-master-css) {
+h4 {
     font-size: 1.5rem;
 }
-u:not(.ignore-master-css) {
+u {
     border-bottom: .5px solid #b9b9b9;
     text-decoration: none;
 }
-code:not(.ignore-master-css), code *:not(.ignore-master-css) {
+code, code * {
     font-family: monospace;
 }
 
-p:not(.ignore-master-css) {
+p {
     padding-inline: 1rem;
     
     margin-top: 0px;
@@ -165,7 +261,7 @@ p:not(.ignore-master-css) {
     padding-top: 0px;
 }
 
-hr:not(.ignore-master-css) {
+hr {
     border: 0px;
     max-width: 90%;
     min-width: 10px;
@@ -175,7 +271,7 @@ hr:not(.ignore-master-css) {
     margin-bottom: 0px;
     background-image: linear-gradient(to right, #FFFFFF00, #FFFFFFDf, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFFDf, #FFFFFF00); /* You may notice that there are a copious amount of gradient stops - It sucks, but it works and that's all I ask of it.*/
 } 
-/* Funny story: I had these exact properties in div:not(.ignore-master-css).horizontalPageSeparator, but gave up and used a standard hr. GitHub Copilot noticed this and the suggestion it gave was to copy and paste all of my code, which was **exactly what I was going to do.** How many people have tried what I did and gave up?? */
+/* Funny story: I had these exact properties in div.horizontalPageSeparator, but gave up and used a standard hr. GitHub Copilot noticed this and the suggestion it gave was to copy and paste all of my code, which was **exactly what I was going to do.** How many people have tried what I did and gave up?? */
 
 
 
@@ -186,7 +282,7 @@ hr:not(.ignore-master-css) {
 
 
 /* Button Code. Lots of stuff, of course. */
-button:not(.ignore-master-css) {
+button {
     background: linear-gradient(to bottom, #454545, #3a3a3a);
     border: 1px solid #232323;
     border-radius: 4px;
@@ -200,21 +296,21 @@ button:not(.ignore-master-css) {
     text-align: center;
     /* GitHub Copilot recommended me 90% of this and I was curious so I gave it a chance and, *wow*. It did well! */
 }
-button:hover:not(.ignore-master-css):not(:disabled):not(:active) {
+button:hover:not(:disabled):not(:active) {
     border-color: #9ED868;
     box-shadow: inset 0 0 0 1px #7dad50;
     background: linear-gradient(to bottom, #4b4e48, #434a3d);
 
     /* GitHub Copilot did that. It did well!*/
 }
-button:disabled:not(.ignore-master-css) {
+button:disabled {
     background: #f4f4f4;
     box-shadow: inset 0 0 0 0px;
     border-color: #b4b4b4;
     border-width: 2px;
     color: #838383;
 }
-button:active:not(.ignore-master-css) {
+button:active {
     border: 1px solid #9ED868;
     box-shadow: inset 0 0 0 1px #7dad50;
     background: linear-gradient(to bottom, #5f6f50, #555d4d);
