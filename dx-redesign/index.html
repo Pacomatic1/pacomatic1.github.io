@@ -1,3 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title> Paco's Place </title>
+        <link rel="icon" type="image/x-icon" href="./assets/favicon.png">
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+            :root {
+                --default-bg-color: #313131;
+                --default-text-color: #ffffff;
+                --default-font: 550 9pt "Noto Sans", sans-serif;
+            }
+
+            body {
+                margin: 0;
+                padding: 0;
+            }
+
+            /* Button Code. Lots of stuff, of course. */
+            button:not(.ignore-master-css) {
+                background: linear-gradient(to bottom, #454545, #3a3a3a);
+                border: 1px solid #232323;
+                border-radius: 4px;
+                box-shadow: inset 0 0 0 1px #5B5B5B;
+                color: #ffffff;
+                font: 9pt "Segoe UI", "SegoeUI", "Noto Sans", sans-serif;
+                min-height: 23px;
+                min-width: 75px;
+                padding: 0 12px;
+                position: relative;
+                text-align: center;
+                /* GitHub Copilot recommended me 90% of this and I was curious so I gave it a chance and, *wow*. It did well! */
+            }
+            button:hover:not(.ignore-master-css):not(:disabled):not(:active) {
+                border-color: #9ED868;
+                box-shadow: inset 0 0 0 1px #7dad50;
+                background: linear-gradient(to bottom, #4b4e48, #434a3d);
+
+                /* GitHub Copilot did that. It did well!*/
+            }
+            button:disabled:not(.ignore-master-css) {
+                background: #f4f4f4;
+                box-shadow: inset 0 0 0 0px;
+                border-color: #b4b4b4;
+                border-width: 2px;
+                color: #838383;
+            }
+            button:active:not(.ignore-master-css) {
+                border: 1px solid #9ED868;
+                box-shadow: inset 0 0 0 1px #7dad50;
+                background: linear-gradient(to bottom, #5f6f50, #555d4d);
+            }
+
+            #gigaDiv {
+                width: 100%;
+                height: 100%;
+                display: grid;
+                grid-template-columns: 10em auto;
+				grid-template-rows: auto 10em;
+				grid-template-areas: 
+				"leftSide topSide"
+                "leftSide mainIframe"
+				;
+            }
+
+            #leftSide {
+                grid-area: leftSide;
+                background-color: var(--default-bg-color);
+                font: var(--default-font);
+            }
+
+            #topSide {
+                grid-area: topSide;
+                background-color: red;
+                font: var(--default-font);
+            }
+
+            #mainIframe {
+                grid-area: mainIframe;
+                background-color: green;
+                font: var(--default-font);
+            }
+
+            /* For using Noto Sans 
+            .noto-sans-<uniquifier> {
+                font-family: "Noto Sans", sans-serif;
+                font-optical-sizing: auto;
+                font-weight: <weight>; Anything from 100 to 900.
+                font-style: normal;
+                font-variation-settings:
+                    "wdth" 100;
+            }
+            */
+
+        </style>
+    
+    
+    </head>
+    <body>
+        <div id="gigaDiv">
+            <div id="leftSide">sdsdsdsd</div>
+            <div id="topSide">sdsdsd</div>
+            <div id="mainIframe">sdsdsd</div>
+        </div>
+    </body>
+</html>
+
+
+
+<!-- HUGE thanks to melonking.net! -->
+
+
+
+<!--
+
+<style>
 /* Close to nothing here should apply if an object has class ignore-master-css. That's the biggest, most important part of this simple yet stupid SPA thingy I'm doing. */
 
 @import url(7_scrollbar.css);  /* This only applies to elements with .has-scrollbar. */
@@ -106,45 +223,6 @@ button:active:not(.ignore-master-css) {
 
 
 
-
-
-/* Custom elements go here. Things that require a specific class or something. */
-
-div:not(.ignore-master-css).inset-box {
-    background-color: #222222;
-    border: 2px solid #404040;
-}
-
-div:not(.ignore-master-css).rounded-box {
-    background-color: #222222;
-    border: 2px solid #404040;
-    border-radius: 8px;
-} /* This doesn't play well with the scrollbar as the scrollbar renders on top of the rounded parts (so 1 or 2 sides aren't rounded). I agree, it's a greek tragedy. */
-
-
-:not(.ignore-master-css).fitBgBoilerPlate {
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-    background-size: cover;
-} /* This requires background-image to actually do... something. */
-
-:not(.ignore-master-css).text-align-middle {
-    text-align: center;
-} /* Seems stupid right now, but some limit of HTML is gonna pop up and it's gonna necessitate this. **Trust the process.** */
-
-div:not(.ignore-master-css).separatingBox {
-    border: 2px solid #404040;
-    background-color: #222222;
-
-
-
-}
-
-
-
-
-
-
 /* 
 Reference colors, courtesy of PrismLauncher. I based the theming of this site off PrismLauncher so thanks, lads!
 
@@ -156,3 +234,4 @@ Buttom color palette (hover over via tabs): Outer border 9ED868, middle border 5
 Buttom color palette (clicked by enter): outer border 9ed868, inner border 4e4e4e, middle border 363636, inner inner border gradient top 566647, inner inner border gradient top 536542, inner gradient top 4b4e68, inner gradient bottom 434a3d
 Inset Box: Border shine/outer outline #404040, border surface 313131, inset box border 262626, inset box surface (content's bg) 222222
 */
+</style>  -->

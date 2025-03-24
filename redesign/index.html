@@ -12,7 +12,7 @@ For help, here's the gist of it: This is a single-page application, and the thin
 		<style>
 
 			:root {
-				--min-height-of-childpage: 0em;
+				--min-height-of-childpage: 0em; /* The body refuses to stretch to the minimum height. I don't know why, though. */
 			}
 
 			.plainIframe {
@@ -33,7 +33,6 @@ For help, here's the gist of it: This is a single-page application, and the thin
 				height: 100%; /* Using vw and vh causes bugs on certain aspect ratios. As such, stick to percents. */
 				width: 100%;
 				z-index: -300;
-
 			}
 
 			#gigaDiv {
