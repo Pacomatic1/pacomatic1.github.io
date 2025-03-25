@@ -35,8 +35,8 @@
         <img id="heroImage" src="./assets/home/pacomatic-hero-2x.png" decoding="async" alt="Image of Pacomatic's OC"> </img>
       </div>
 
-      <div style="width:300px" class = "separatingBox" >
-        <p>
+      <div style="width:300px" class = "separatingBox">
+        <p> 
           Hey guys, nya. I gots text for ya!
           <br>Perhaps you seek it? This piece is 300px wide.
         </p>
@@ -45,6 +45,17 @@
           That stupid div! <a href="https://pacomatic1.github.io">What da helll?????</a>
         </p>
         </div>
+        <button onclick="load()">HELP</button>
+        <script>
+          function load() {
+            const url = new URL("projects","https://pacomatic1.github.io");
+            url.searchParams.set("foo", "bar");
+            history.pushState({}, "", url);
 
+
+          }
+
+
+        </script>
     </body>
 </html>

@@ -153,6 +153,215 @@
 <!-- HUGE thanks to melonking.net! -->
 
 
+<!-- Code stolen from melonking. I will get rid of this and make some stuff myself, but I'm borrowing this to understand how they change the query strings in the URL without reloading everything.
+
+MDN, THANK YOU:
+const url = new URL(location);
+url.searchParams.set("foo", "bar");
+history.pushState({}, "", url);
+
+    
+            // +++ Main UI Scripting +++
+            let mk = {};
+
+            mk.html = {};
+            mk.html.handler = document.querySelector(".handler");
+            mk.html.wrapper = document.getElementById("wrapper");
+            mk.html.windows = document.getElementsByClassName("window");
+            mk.html.mainWindow = mk.html.windows[0];
+            mk.html.extraWindow = mk.html.windows[1];
+            mk.html.uiLight = document.getElementById("ui-light");
+            mk.html.forumLinkBadge = document.getElementById("main-forum-thread-badge");
+
+            mk.isHandlerDragging = false;
+            mk.isColour = true;
+            mk.firstLoad = true;
+            mk.extraLink = undefined;
+
+            mk.bgs = [];
+            mk.bgs.push("stone-and-brick/ciq60910.jpg");
+            mk.bgs.push("stone-and-brick/STONE04.png");
+            mk.bgs.push("stone-and-brick/GD8.JPG");
+            mk.bgs.push("stone-and-brick/cio60049.jpg");
+            mk.bgs.push("stone-and-brick/TILES24.png");
+            mk.bgs.push("stone-and-brick/cis60010.jpg");
+            mk.bgs.push("stone-and-brick/ciq60909.jpg");
+            mk.bgs.push("stone-and-brick/N083.JPG");
+            mk.bgs.push("stone-and-brick/cip60054.jpg");
+            mk.bgs.push("stone-and-brick/ciq60728.jpg");
+            mk.bgs.push("stone-and-brick/cio60113.jpg");
+            mk.bgs.push("stone-and-brick/cio60094.jpg");
+            mk.bgs.push("stone-and-brick/TXTR0002.GIF");
+            mk.bgs.push("stone-and-brick/cip60004.jpg");
+            mk.bgs.push("stone-and-brick/ROCK04.png");
+            mk.bgs.push("stone-and-brick/011C.png");
+            mk.bgs.push("pattern-and-prints/honeycomb195.jpg");
+            mk.bgs.push("pattern-and-prints/pdj50233.gif");
+            mk.bgs.push("pattern-and-prints/pdj50276.gif");
+            mk.bgs.push("pattern-and-prints/pdj50270.gif");
+            mk.bgs.push("pattern-and-prints/cio60416.jpg");
+            mk.bgs.push("pattern-and-prints/MACHINE.JPG");
+            mk.bgs.push("pattern-and-prints/pdj50186.gif");
+            mk.bgs.push("pattern-and-prints/034C.png");
+            mk.bgs.push("pattern-and-prints/pdj50136.gif");
+            mk.bgs.push("pattern-and-prints/pdj50196.gif");
+            mk.bgs.push("pattern-and-prints/pdj50248.gif");
+            mk.bgs.push("pattern-and-prints/pdj50253.gif");
+            mk.bgs.push("pattern-and-prints/ZEBRA.JPG");
+            mk.bgs.push("pattern-and-prints/GREYTILE.png");
+            mk.bgs.push("metal/SC132.JPG");
+            mk.bgs.push("metal/SC154.JPG");
+            mk.bgs.push("metal/SC089.JPG");
+            mk.bgs.push("metal/SC068.JPG");
+            mk.bgs.push("metal/SC128.JPG");
+            mk.bgs.push("metal/SC097.JPG");
+            mk.bgs.push("humans-and-technology/026C.png");
+            mk.bgs.push("humans-and-technology/cc085110.jpg");
+            mk.bgs.push("humans-and-technology/qcu50050.jpg");
+            mk.bgs.push("humans-and-technology/017C.png");
+            mk.bgs.push("humans-and-technology/025C.png");
+            mk.bgs.push("humans-and-technology/pni50050.jpg");
+            mk.bgs.push("paper-and-sponge/SB042.JPG");
+            mk.bgs.push("paper-and-sponge/SB052.JPG");
+            mk.bgs.push("paper-and-sponge/SB041.JPG");
+            mk.bgs.push("paper-and-sponge/cip60062.jpg");
+            mk.bgs.push("paper-and-sponge/SB038.JPG");
+            mk.bgs.push("wood/SQ176.JPG");
+
+            mk.extraLinks = [];
+            mk.extraLinks["/frames/pixelsea"] = "https://forum.melonland.net/index.php?topic=2046.0;wap2";
+            mk.extraLinks["/frames/textures"] = "https://forum.melonland.net/index.php?topic=223.0;wap2";
+            mk.extraLinks["/frames/pet"] = "https://forum.melonland.net/index.php?topic=1273.0;wap2";
+            mk.extraLinks["/free/software/gallery-maker"] = "https://forum.melonland.net/index.php?topic=2088.0;wap2";
+            mk.extraLinks["/free/software/neocities-downloader"] = "https://forum.melonland.net/index.php?topic=2288.0;wap2";
+            mk.extraLinks["/frames/world"] = "https://forum.melonland.net/index.php?topic=925.0;wap2";
+            mk.extraLinks["/frames/forum"] = "https://wiki.melonland.net/forum_help";
+            mk.extraLinks["/universe/melozorbs"] = "https://forum.melonland.net/index.php?topic=2667.0;wap2";
+            mk.extraLinks["/free/software/flood"] = "https://forum.melonland.net/index.php?topic=2715.0;wap2";
+
+            function go() {
+                muteExtraWindow();
+                backgroundSet();
+            }
+
+            // +++ TextureTown Background +++
+            async function backgroundSet() {
+                let pick = Math.floor(Math.random() * mk.bgs.length);
+                let textureURL = "https://textures.neocities.org/textures/" + mk.bgs[pick];
+                fetch(textureURL)
+                    .then((res) => res.blob())
+                    .then((blob) => {
+                        document.body.style.backgroundImage = "url('" + URL.createObjectURL(blob) + "')";
+                    });
+                if (audio != undefined) {
+                    audio.background.currentTime = 0;
+                    audio.background.play();
+                }
+            }
+
+            // +++ Window Management! +++
+            function frameEye() {
+                let mainPath = mk.html.mainWindow.firstElementChild.contentWindow.location.pathname;
+                mk.html.forumLinkBadge.style.display = "none";
+                for (link in mk.extraLinks) {
+                    if (mainPath.includes(link)) {
+                        mk.extraLink = mk.extraLinks[link];
+                        mk.html.forumLinkBadge.style.display = "block";
+                    }
+                }
+            }
+
+            document.addEventListener("mousedown", function (e) {
+                // If mousedown event is fired from .handler, toggle flag to true
+                if (e.target === mk.html.handler) {
+                    mk.isHandlerDragging = true;
+                    setFrameInteract("none");
+                    audio.squeek.play();
+                }
+            });
+
+            document.addEventListener("mouseup", function (e) {
+                // Turn off dragging flag when user mouse is up
+                mk.isHandlerDragging = false;
+                setFrameInteract("all");
+                audio.squeek.pause();
+            });
+
+            document.addEventListener("mousemove", function (e) {
+                // Don't do anything if dragging flag is false
+                if (!mk.isHandlerDragging) {
+                    return false;
+                }
+                // Manually offset by the nav size!
+                let pointerRelativeXpos = e.clientX - 260;
+                // Arbitrary minimum width set on box A, otherwise its inner content will collapse to width of 0
+                let boxAminWidth = 60;
+                // Resize box A
+                // * 8px is the left/right spacing between .handler and its inner pseudo-element
+                // * Set flex-grow to 0 to prevent it from growing
+                mk.html.mainWindow.style.width = Math.max(boxAminWidth, pointerRelativeXpos - 8) + "px";
+                mk.html.mainWindow.style.flexGrow = 0;
+            });
+
+            function setFrameInteract(pointerEvent) {
+                for (element of mk.html.windows) {
+                    if (element.firstChild.style != undefined) element.firstChild.style.pointerEvents = pointerEvent;
+                }
+            }
+
+            function closeExtraWindow() {
+                mk.html.extraWindow.style.display = "none";
+                mk.html.handler.style.display = "none";
+                mk.html.mainWindow.style.flexGrow = 10;
+                audio.door.play();
+            }
+
+            function openExtraWindow() {
+                mk.html.extraWindow.style.display = "block";
+                mk.html.handler.style.display = "block";
+                audio.door.play();
+            }
+
+            function muteExtraWindow() {
+                let iframe = mk.html.extraWindow.firstElementChild;
+                if (iframe.contentDocument == undefined) {
+                    return;
+                }
+                let MediaSource = iframe.contentDocument.getElementsByTagName("AUDIO")[0];
+                if (MediaSource != undefined) {
+                    MediaSource.muted = true;
+                }
+            }
+
+            function openExtraLink() {
+                mk.html.extraWindow.firstElementChild.src = mk.extraLink;
+                openExtraWindow();
+                mk.html.forumLinkBadge.style.display = "none";
+            }
+
+            function toggleColour() {
+                if (mk.isColour) {
+                    mk.html.mainWindow.style.filter = "grayscale(1)";
+                    mk.html.uiLight.style.filter = "grayscale(1)";
+                    mk.isColour = false;
+                } else {
+                    mk.html.mainWindow.style.filter = "grayscale(0)";
+                    mk.html.uiLight.style.filter = "grayscale(0)";
+                    mk.isColour = true;
+                }
+            }
+
+            window.addEventListener("DOMContentLoaded", (e) => {
+                go();
+            });
+        
+
+
+
+
+
+-->
+
 
 
 
