@@ -57,7 +57,7 @@
 				grid-template-rows: 5em auto;
 				grid-template-areas: 
 				"leftSide topSide"
-                "leftSide mainIframe"
+                "leftSide mainIframeContainer"
 				;
                 margin: 0px;
                 padding: 0px;
@@ -75,16 +75,26 @@
 
             #topSide {
                 grid-area: topSide;
-                background-color: red;
+                background-color: #00000020;
                 font: var(--default-font);
                 margin: 0px;
                 padding: 0px;
+                backdrop-filter: blur(10px);
+                border-bottom: solid 2px #FFFFFF10;
             }
 
-            #mainIframe {
-                grid-area: mainIframe;
-                background-color: green;
+            #mainIframeContainer {
+                grid-area: mainIframeContainer;
                 font: var(--default-font);
+            }
+
+            #backgroundIframe {
+				display: block;
+				position: fixed;
+				height: 100vh; /* Using vw and vh causes bugs on certain aspect ratios. As such, stick to percents. */
+				width: 100vw;
+				z-index: -300;
+                border: none;
             }
 
 
@@ -133,6 +143,7 @@
     
     </head>
     <body style="margin: 0; padding: 0;">
+        <iframe id="backgroundIframe" title="backgroundIframe">GAT</iframe> <!-- THIS IS FOR THE BACKGROUND. NOT THE PAGE. DO NOT GET THESE MIXED UP! -->
         <div id="gigaDiv">
             <div id="leftSide">
                 <h4 class="navBarTitle">Paco's Place</h4>
@@ -143,11 +154,12 @@
                 </div>
             </div>
 
-            <div id="topSide">sdsdsd
+            <div id="topSide">
 
             </div>
             
-            <div id="mainIframe">sdsdsd <!-- Just so that future me can remember, opening a link from an iframe will automatically open the link inside the iframe. That is to say, the system melonking uses requires 0 effort on your end. All you gotta do is tell the link to open in the current tab and you're good. -->
+            <div id="mainIframeContainer"><!-- Just so that future me can remember, opening a link from an iframe will automatically open the link inside the iframe. That is to say, the system melonking uses requires 0 effort on your end. All you gotta do is tell the link to open in the current tab and you're good. -->
+
 
             </div>
         </div>
@@ -166,15 +178,26 @@
                     // If [2] is 2, then [3] will be a link that opens in a new tab.
                 // [4] is the per-button styling applied to the image within the button. Just so you have a loose idea of what's what, the result will look like <img [other stuff] style="whatever you put inside 4">. As you may have guessed, this has no support for classes or anything so only use it for things that apply to one button and nobody else.
 				[" Home", "assets/navbar-icons/3ds-home-menu-icon.svg", 1, "https://pacomatic1.github.io", "margin-bottom:-2px; height: auto; width: 16px"],
-                ["Projects", "", 2, "pacomatic1.github.io"],
-
+                ["Projects", "", 2, "https://pacomatic1.github.io"],
 			];
-            propogateButtonList();
+
+            // Unlike the navigation bar, this is a simple array: a list of paths to each background's HTML file.
+            const backgrorundList = [
+                "./backgrounds/ps3Xmb.html", "./backgrounds/random_stuff_outlook.html"
+            ]
+
+            propagateButtonList();
+            setBackgroundIframe(); 
 
 
-            function propogateButtonList() {
+
+            function setBackgroundIframe() { // The background is randomly set because it's fun. Who doesn't like fun?
+                const backgroundIframe = document.getElementById("backgroundIframe");
+                backgroundIframe.src = backgrorundList[getRandomInt(0, backgrorundList.length - 1)];
+            }
+
+            function propagateButtonList() {
                 const navBarButtonContainer = document.getElementById("navBarButtonContainer");
-
                 for (let i = 0; i < buttonNameAndIconLookupTable.length; i++) {
                     // In order to understand this, you need to understand buttonNameAndIconLookupTable.
                     // With that said, here's a quick reference on how to access each property and what they do.
@@ -184,7 +207,6 @@
                         // buttonNameAndIconLookupTable[i][3] Button action link
                         // buttonNameAndIconLookupTable[i][4] Button icon styling
                     var anchorThatSurroundsTheButton = document.createElement("a"); // This <a> tag is crucial for adding interactivity. No interactivity = useless buttons, so use this.
-
 
                     var buttonToCreate = document.createElement("button");
                     buttonToCreate.className = "navBarButton";
@@ -197,7 +219,6 @@
                     buttonToCreate.appendChild(imageWithinTheButton);
                     buttonToCreate.innerHTML += buttonNameAndIconLookupTable[i][0]; 
                     
-
                     // "What does the button do?"
                     switch(buttonNameAndIconLookupTable[i][2]) {
                         case 0:
@@ -228,21 +249,12 @@
 
             }
 
-            function openLinkInCurrentTab(linkAsString) {
-                console.log("This has yet to be implemented.");
-
-
+            function getRandomInt(min, max) { // Thanks, MDN! https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+                const minCeiled = Math.ceil(min);
+                const maxFloored = Math.floor(max);
+                return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled); // The maximum is inclusive and the minimum is inclusive
             }
-
-            function openLinkInNewTab(linkAsString) {
-                console.log("This has yet to be implemented.");
-
-
-            }
-
-
-
-
+                
 
 			function findValueOfKeyFromQueryStringInUrl(keyToFindValueOf) { // Gets the URL, looks at the query strings, and finds the corresponding the value for the key you want. If the key doesn't exist, it returns null.
 					const url = window.location.href; 
