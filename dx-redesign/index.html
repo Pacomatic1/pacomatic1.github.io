@@ -33,8 +33,16 @@
             .navBarButton {
                 width: 100%;
                 text-align:left;
-
-
+                background: #232323;
+                margin-bottom: 2px;
+                box-shadow: none;
+                border: none;
+            }
+            .navBarButton:hover:not(:disabled):not(:active) {
+                background: linear-gradient(to bottom, #454545, #3a3a3a);
+                border: 1px solid #232323;
+                border-radius: 4px;
+                box-shadow: inset 0 0 0 1px #5B5B5B;
             }
             u {
                 border-bottom: .5px solid #b9b9b9;
@@ -42,11 +50,11 @@
             }
 
             #gigaDiv {
-                width: 100%;
-                height: 100%;
+                width: 100vw;
+                height: 100vh;
                 display: grid;
-                grid-template-columns: 10em auto;
-				grid-template-rows: 10em auto;
+                grid-template-columns: 10.1em auto;
+				grid-template-rows: 5em auto;
 				grid-template-areas: 
 				"leftSide topSide"
                 "leftSide mainIframe"
@@ -62,6 +70,7 @@
                 color: var(--default-text-color);
                 margin: 0px;
                 padding-inline: .5rem;
+                border-right: solid 2px #5B5B5B;
             }
 
             #topSide {
@@ -157,7 +166,7 @@
                     // If [2] is 2, then [3] will be a link that opens in a new tab.
                 // [4] is the per-button styling applied to the image within the button. Just so you have a loose idea of what's what, the result will look like <img [other stuff] style="whatever you put inside 4">. As you may have guessed, this has no support for classes or anything so only use it for things that apply to one button and nobody else.
 				[" Home", "assets/navbar-icons/3ds-home-menu-icon.svg", 1, "https://pacomatic1.github.io", "margin-bottom:-2px; height: auto; width: 16px"],
-                ["Projects", "", 1, "pacomatic1.github.io"],
+                ["Projects", "", 2, "pacomatic1.github.io"],
 
 			];
             propogateButtonList();
@@ -167,7 +176,8 @@
                 const navBarButtonContainer = document.getElementById("navBarButtonContainer");
 
                 for (let i = 0; i < buttonNameAndIconLookupTable.length; i++) {
-                    // For reference:
+                    // In order to understand this, you need to understand buttonNameAndIconLookupTable.
+                    // With that said, here's a quick reference on how to access each property and what they do.
                         // buttonNameAndIconLookupTable[i][0] Button name
                         // buttonNameAndIconLookupTable[i][1] Button icon
                         // buttonNameAndIconLookupTable[i][2] Button action
@@ -189,12 +199,22 @@
                     
 
                     // "What does the button do?"
-                    if (buttonNameAndIconLookupTable[i][2] == 0) {
-                        console.log("Implement this once you add the iframe.");
-                    } else if (buttonNameAndIconLookupTable[i][2] == 1) {
-                        anchorThatSurroundsTheButton.href = buttonNameAndIconLookupTable[i][3];
+                    switch(buttonNameAndIconLookupTable[i][2]) {
+                        case 0:
+                            console.log("Implement this once you add the iframe.");
+                            break;
+                        case 1:
+                            anchorThatSurroundsTheButton.href = buttonNameAndIconLookupTable[i][3];
+                            break;
+                        case 2:
+                            anchorThatSurroundsTheButton.href = buttonNameAndIconLookupTable[i][3];
+                            anchorThatSurroundsTheButton.target = "_blank";
+                            break;
+                        default:
+                            console.log("Error: One of the buttons in the navigation bar has an undefined action! Either the lookup table is wrong or the action has yet to be implemented. Rgardless, do something about it.");
+                            break;
                     }
-                    
+
                     navBarButtonContainer.appendChild(anchorThatSurroundsTheButton);
                     anchorThatSurroundsTheButton.appendChild(buttonToCreate);
                     
