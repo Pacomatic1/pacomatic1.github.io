@@ -29,6 +29,13 @@
                 margin: 0px;
                 text-align: center;
             }
+
+            .navBarButton {
+                width: 100%;
+                text-align:left;
+
+
+            }
             u {
                 border-bottom: .5px solid #b9b9b9;
                 text-decoration: none;
@@ -120,11 +127,10 @@
         <div id="gigaDiv">
             <div id="leftSide">
                 <h4 class="navBarTitle">Paco's Place</h4>
-                <hr> <!-- It's the easiest thing to do, okay? -->
-                <div id="navBarButtonContainers">
+                <hr style="margin-bottom: 5px;"> <!-- It's the easiest thing to do, okay? -->
+                <div id="navBarButtonContainer">
                     <!-- All the buttons and their respective icons are inserted via Javascript and a list that's contained in, well, the Javascript. Normally I'd be doing it manually but there's a LOT of buttons and because of this it's gonna be data-driven (but still in this HTML page TwT) -->
                     <!-- Note: All styling within this div is inherited form the parent, so if there's any styling that the parent has, you won't have to worry about styling things yourself. -->
-                    <button> <img src="assets/navbar-icons/3ds-home-menu-icon.svg" height="auto" width="16px" style="margin-bottom:0px; margin-top: auto"/> Home</button>
                 </div>
             </div>
 
@@ -140,15 +146,114 @@
 
 
         <script> 
-            // I'm gonna use a gigantic list of buttons and their respective icons for the navbar. Looks to me like we're gonna have the copiously stupid lookup tables from th old, unfinished redesign! YAY! 
+            // I'm gonna use a gigantic list of buttons and their respective icons for the navbar. Looks to me like its time for a comically bad lookup table! 
+            const buttonNameAndIconLookupTable = [
+                // This is an array of string arrays. The contents of each string array are as follows:
+                // [0] is the button's name. Note that there is no margin between the icon and the text, so you're gonna have to do it yourself using custom styling or a space before the text starts.
+                // [1] is the **relative path** to the button's icon, staring from this page. Keep in mind that this icon is done with the 'src' attribute of an <img> tag inside the button tag, so make surethat your icon is suppported by the <img>.
+                // [2] and [3] control what the button does.
+                    // If [2] is 0, then [3] will be a link that gets opened inside the iframe.
+                    // If [2] is 1, then [3] will be a link that replaces the current tab and will get rid of this whole single-page thing. I repeat, it will open in the current tab and get rid of this site.
+                    // If [2] is 2, then [3] will be a link that opens in a new tab.
+                // [4] is the per-button styling applied to the image within the button. Just so you have a loose idea of what's what, the result will look like <img [other stuff] style="whatever you put inside 4">. As you may have guessed, this has no support for classes or anything so only use it for things that apply to one button and nobody else.
+				[" Home", "assets/navbar-icons/3ds-home-menu-icon.svg", 1, "https://pacomatic1.github.io", "margin-bottom:-2px; height: auto; width: 16px"],
+                ["Projects", "", 1, "pacomatic1.github.io"],
+
+			];
+            propogateButtonList();
 
 
+            function propogateButtonList() {
+                const navBarButtonContainer = document.getElementById("navBarButtonContainer");
+
+                for (let i = 0; i < buttonNameAndIconLookupTable.length; i++) {
+                    // For reference:
+                        // buttonNameAndIconLookupTable[i][0] Button name
+                        // buttonNameAndIconLookupTable[i][1] Button icon
+                        // buttonNameAndIconLookupTable[i][2] Button action
+                        // buttonNameAndIconLookupTable[i][3] Button action link
+                        // buttonNameAndIconLookupTable[i][4] Button icon styling
+                    var anchorThatSurroundsTheButton = document.createElement("a"); // This <a> tag is crucial for adding interactivity. No interactivity = useless buttons, so use this.
+
+
+                    var buttonToCreate = document.createElement("button");
+                    buttonToCreate.className = "navBarButton";
+                    buttonToCreate.type = "button";
+
+                    // For the contents of the button, I want to add the text after the image and its custom styling, and that's best done via appending. As such, I'm doing all the complicated image stuff and THEN doing the text stuff.
+                    var imageWithinTheButton = document.createElement("img");
+                    imageWithinTheButton.src = buttonNameAndIconLookupTable[i][1];
+                    imageWithinTheButton.style = buttonNameAndIconLookupTable[i][4];
+                    buttonToCreate.appendChild(imageWithinTheButton);
+                    buttonToCreate.innerHTML += buttonNameAndIconLookupTable[i][0]; 
+                    
+
+                    // "What does the button do?"
+                    if (buttonNameAndIconLookupTable[i][2] == 0) {
+                        console.log("Implement this once you add the iframe.");
+                    } else if (buttonNameAndIconLookupTable[i][2] == 1) {
+                        anchorThatSurroundsTheButton.href = buttonNameAndIconLookupTable[i][3];
+                    }
+                    
+                    navBarButtonContainer.appendChild(anchorThatSurroundsTheButton);
+                    anchorThatSurroundsTheButton.appendChild(buttonToCreate);
+                    
+                }
+
+            }
+
+            function openLinkInIframe(linkAsString) {
+                console.log("This has yet to be implemented.");
+
+
+            }
+
+            function openLinkInCurrentTab(linkAsString) {
+                console.log("This has yet to be implemented.");
+
+
+            }
+
+            function openLinkInNewTab(linkAsString) {
+                console.log("This has yet to be implemented.");
+
+
+            }
+
+
+
+
+
+			function findValueOfKeyFromQueryStringInUrl(keyToFindValueOf) { // Gets the URL, looks at the query strings, and finds the corresponding the value for the key you want. If the key doesn't exist, it returns null.
+					const url = window.location.href; 
+					const searchParams = new URL(url).searchParams; 
+					const urlSearchParams = new URLSearchParams(searchParams);
+					const queryStringArray = Array.from(urlSearchParams.entries()); // Returns an array of arrays. Each array corresponds to one key/value pair, the key being [0] and value being [1].
+					// We need to find an array (inside this one) whose [0]	is the key we seek.
+					// Good thing I made a highly specific functon for that!
+					return findValueofNthItemInArrayOfMultiItemArraysAssumingYouKnowWhatTheFirstItemIs(keyToFindValueOf, queryStringArray, 1);
+			}
+
+            function findValueofNthItemInArrayOfMultiItemArraysAssumingYouKnowWhatTheFirstItemIs(valueOfFirstItem, arrayOfArraysToLookThrough, indiceOfNthItem) { // This finds the value of an item within an array of multi-item arrays assuming you already know what the first item is. This seems oddly specific (because it is), but it has its uses; refer to the lookup table and the query string shenanigans.
+				var foundValue;
+				for (let i = 0; i < arrayOfArraysToLookThrough.length; i++) { // For every array in the top array,
+					for (let j = 0; j <= arrayOfArraysToLookThrough[i].length; j++) { // see if the first value is what you seek.
+						if (arrayOfArraysToLookThrough[i][0] == valueOfFirstItem) { // If it is, iterate to find nth item and, if found, set foundValue to it.
+							foundValue = arrayOfArraysToLookThrough[i][indiceOfNthItem];
+						};
+					};
+				};
+				return foundValue;
+				// You know, the code for this used to make multiple arrays and sort through them. It sucked. This is faster. And with far less bugs.
+				// I'm glad I refactored this.
+			};
 
         </script>
     </body>
 </html>
 
-
+<!-- If you ever need generic pages that use markdown or something (like a blog), here's an idea:
+Make a SPA with query strings, same way you did for the old redesign, and add an iframe that contains the page, just like you did for the old design. Set the iframe's CSS display property to 'none', and then go into the iframe and extract all the needed text from a single <p> tag. Now that you have the markdown as a string, you can pass it through an interpreter and do whatever you want. Consider: Custom interpreters? That would be pointlessly difficult, *but it would also be fun.* -->
 
 <!-- HUGE thanks to melonking.net! -->
 
