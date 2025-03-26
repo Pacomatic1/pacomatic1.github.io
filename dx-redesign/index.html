@@ -84,10 +84,22 @@
                 padding: 0px;
                 backdrop-filter: blur(3px);
                 border-bottom: solid 2px #FFFFFF3F;
+                display: grid;
+                grid-template-columns: auto minmax(min-content, max-content) auto;
+				grid-template-areas: 
+				"socialMediaButtons vr fullscreenModeUI";
             }
             #mainIframeContainer {
                 grid-area: mainIframeContainer;
                 font: var(--default-font);
+                padding: 1.2em; 
+            }
+            #mainIframe {
+                width: 100%;
+                height: 100%;
+                border: solid 2px #5B5B5B;
+                border-radius: .5em;
+                display: block;
             }
             #backgroundIframe {
 				display: block;
@@ -98,6 +110,40 @@
                 border: none;
             }
             
+            /* TOP SIDE CONTENTS*/
+            #socialMediaButtonContainer {
+                grid-area: 'socialMediaButtons';
+                overflow-x: scroll;
+                margin: 0px;
+                padding: 0px;
+            }
+            #fullscreenModeUI {
+                grid-area: 'fullscreenModeUI';
+                background-color: white;
+            }
+
+            /* SOCIAL MEDIA BUTTONS */
+            .socialMediaButton {
+                height: 100%;
+                background: #FFFFFF00;
+                background-repeat: no-repeat;
+                margin-bottom: 2px;
+                box-shadow: none;
+                border: none;
+            } .socialMediaButton:hover:not(:disabled):not(:active) {
+                background: none;
+                border: 1px solid #232323;
+                border-radius: 4px;
+                box-shadow: inset 0 0 0 1px #5B5B5B;
+                
+            }
+            .socialMediaButtonImage {
+                height: 3em;
+                width: auto;
+                margin-inline: auto;
+            }
+
+
             /* BUTTONS */
             button {
                 background: linear-gradient(to bottom, #454545, #3a3a3a);
@@ -143,6 +189,15 @@
                 margin-bottom: 5px;
                 background-image: linear-gradient(to right, #FFFFFF00, #FFFFFFDf, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFFDf, #FFFFFF00); /* You may notice that there are a copious amount of gradient stops - It sucks, but it works and that's all I ask of it.*/
             } 
+            .vr { /* Vertical Rules don't exist, sadly. If they ever do, please replace all instances of this with the real thing. */
+                grid-area: 'vr';
+                border: 0px;
+                height: 100%;
+                margin-inline: 5px;
+                min-height: 10px;
+                width: 1px;
+                background-image: linear-gradient(to bottom, #FFFFFF00, #FFFFFF00, #FFFFFFDf, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFFDf, #FFFFFF00, #FFFFFF00); /* You may notice that there are a copious amount of gradient stops - It sucks, but it works and that's all I ask of it.*/
+            }
         </style>
     
     
@@ -155,16 +210,20 @@
                 <hr> <!-- It's the easiest thing to do, okay? -->
                 <div id="navBarItemContainer">
                     <!-- All the buttons and their respective icons are inserted via Javascript and a list that's contained in, well, the Javascript. Normally I'd be doing it manually but there's a LOT of buttons and because of this it's gonna be data-driven (but still in this HTML page TwT) -->
-                    <!-- Note: All styling within this div is inherited form the parent, so if there's any styling that the parent has, you won't have to worry about styling things yourself. -->
                 </div>
             </div>
 
             <div id="topSide">
+                <div id="socialMediaButtonContianer">
+                    <!-- All the buttons and their respective icons are inserted via Javascript and a list that's contained in, well, the Javascript. Normally I'd be doing it manually but there's a LOT of buttons and because of this it's gonna be data-driven (but still in this HTML page TwT) -->
+                </div>
+                <div class="vr"></div>
+                <div id="fullscreenModeUI"> </div>
 
             </div>
             
             <div id="mainIframeContainer"> <!-- Just so that future me can remember, opening a link from an iframe will automatically open the link inside the iframe. That is to say, the system melonking uses requires 0 effort on your end. All you gotta do is tell the link to open in the current tab and you're good. -->
-
+                <iframe id="mainIframe" title="mainIframe" src="https://pacomatic1.github.io" allowtransparency="true"></iframe>
 
             </div>
         </div>
@@ -174,17 +233,16 @@
         <script> 
             // I'm gonna use a gigantic list of buttons and their respective icons for the navbar. Looks to me like its time for a comically bad lookup table! 
             const navBarItemLookupTable = [
-                // This is an array of arrays. The contents of each string are as follows:
+                // This is an array of arrays. The contents of each array are as follows:
                 // [0] is the type. This determines the values of everything afterwards.
 
                 // If [0] is 0, it's a button.
                     // [1] is the buttons's name. Note that there is no margin between the icon and the text, so you're gonna have to do it yourself using custom styling or a space before the text starts.
-                    // [2] is the **relative path** to the button's icon, staring from this page. Keep in mind that this icon is done with the 'src' attribute of an <img> tag inside the button tag, so make surethat your icon is suppported by the <img>.
+                    // [2] is the **relative path** to the button's icon, staring from this page. Keep in mind that this icon is done with the 'src' attribute of an <img> tag inside the button tag, so make surethat your icon is suppported by the <img>. If you don't want an icon, 
                     // [3] and [4] control what the item does.
                         // If [3] is 0, then it will be a button and [3] will be a link that gets opened inside the iframe.
                         // If [2] is 1, then  it will be a button and [3] will be a link that replaces the current tab and will get rid of this whole single-page thing. I repeat, it will open in the current tab and get rid of this site.
                         // If [3] is 2, then it will be a button and [3] will be a link that opens in a new tab.
-                        // If [3] is 3, then it will be a horizontal rule and [3] will be the text preceeding it. 
                     // [5] is the per-button styling applied to the image within the button. Just so you have a loose idea of what's what, the result will look like <img [other stuff] style="whatever you put inside 5">. As you may have guessed, this has no support for classes or anything so only use it for things that apply to one button and nobody else.
                     
                 // If [0] is 1, it's text and maybe a horizontal rule.
@@ -192,24 +250,113 @@
                     // [2] is the text's styling. "1" makes it a navBar section. If it's left as a blank string while [1] contains text, it won't have any sizing attached. If [1] is blank, this will be irrelevant.
                     // [3] is whether or not we should append a horizontal rule, using true or false. If you just want a horizontal rule, leave everything else blank. 
 				[0, " Home", "assets/navbar-icons/3ds-home-menu-icon.svg", 1, "https://pacomatic1.github.io", "margin-bottom:-2px; height: auto; width: 16px"],
-                [0, "Projects", "", 5, "https://pacomatic1.github.io"],
+                [0, "Projects", "", 2, "https://pacomatic1.github.io"],
                 [1, "Extra Pages", "1", true],
+                [0, "Link in iframe!", "", 0, "https://pacomatic1.github.io/projects/clicking_palace/index.html"]
 			];
+
+            const socialLinksItemLookupTable = [
+                // This is an array of arrays. The contents of each array are as follows:
+                // [0] is the type. This determines the values of everything afterwards.
+
+                // If [0] is 0, it's a button.
+                    // [1] is the buttons's name. Note that there is no margin between the icon and the text, so you're gonna have to do it yourself using custom styling or a space before the text starts.
+                    // [2] is the **relative path** to the button's icon, staring from this page. Keep in mind that this icon is done with the 'src' attribute of an <img> tag inside the button tag, so make surethat your icon is suppported by the <img>. If you don't want an icon, 
+                    // [3] and [4] control what the item does.
+                        // If [3] is 0, then it will be a button and [3] will be a link that gets opened inside the iframe.
+                        // If [2] is 1, then  it will be a button and [3] will be a link that replaces the current tab and will get rid of this whole single-page thing. I repeat, it will open in the current tab and get rid of this site.
+                        // If [3] is 2, then it will be a button and [3] will be a link that opens in a new tab.
+                    // [5] is the per-button styling applied to the image within the button. Just so you have a loose idea of what's what, the result will look like <img [other stuff] style="whatever you put inside 5">. As you may have guessed, this has no support for classes or anything so only use it for things that apply to one button and nobody else. If you have nothing to style with, then leave it as a blank string: ""
+                    // [6] is the title of the button. It's what appears when you hover over it.
+                    // [7] is the alt of the button. It's what you see when the image fails to load or if the user needs assistive technology.
+
+                    // If it wasn't immediately obvious, this is based onthe navBar system.
+                [0, "", "assets/socialmedia-icons/youtube_icon.svg", 2, "https://www.youtube.com/user/AmmarZawar", "", "I do a lot of things here, so check this out.", "YouTube"],
+                [0, "", "assets/socialmedia-icons/bsky_logo.svg", 2, "https://bsky.app/profile/pacomatic.bsky.social", "", "I surprised myself with how long it took for me to get social media. Crazy, honestly. I do a lot on here, so check this as well.", "Bluesky"],
+                [0, "", "assets/socialmedia-icons/github_logo.svg", 2, "https://github.com/pacomatic1/", "", "If I open-source dode, it's usually here. ", "GitHub"],
+                [0, "", "assets/socialmedia-icons/reddit_logo.png", 2, "https://www.reddit.com/user/Pacomatic", "", "This was like a 'baby step' to 'real' social media. I think.", "Reddit"],
+                [0, "", "assets/socialmedia-icons/itch_logo.png", 2, "https://pacomatic1.itch.io/", "", "If I make a free game, it's probably going here.", "Itch.io"],
+            ];
+
+            // Ripped from the old site
+            // <div class="MyLinksDivActualLinks GeneralSlightlyPadded BlursBackground"> <!-- This is the thingy with all the social media links and whatnot. -->
+			// 	<a href="https://scratch.mit.edu/users/Pacomatic33/" title='Scratch is more powerful than you think, so I have an account there.'><img src="./images/scratch_logo.png" alt="Scratch" class="MyLinksDivSingleLink"/></a>
+			// 	<a href="https://www.pixilart.com/pacomatic" title='Pixel Art. A relatively new art form. This is my pixilart account.'><img src="./images/pixilart_logo.webp" class="MyLinksDivSingleLink" alt="Pixil Art"/></a>
+			// 	<a href="https://indreams.me/Pacomatic1" title="My Dreams profile! Dreams has more ability than one may assume; we just haven't used it."><img src="./images/dreams_imp_img.svg"  class="MyLinksDivSingleLink"style="filter: brightness(7);" alt="Dreams"/></a>
+			// 	<a href="https://rec.net/user/Pacomatic1" title="My Rec Room account, which I use for fooling around. I find it quite enjoyable, as if it's another world."><img src="./images/recroom_logo.png"  class="MyLinksDivSingleLink" alt="Rec Room"/></a>
+			// 	<a href="https://steamcommunity.com/id/Pacomatic1/" title="My Steam account. I use this to do gaming. One of the best PC plaforms around."><img src="./images/steam_logo.png"  class="MyLinksDivSingleLink" alt="Steam"/></a>
+			// 	<a href="https://retroachievements.org/user/Pacomatic" title="My account on RetroAcheivements. I love acheivements, so having them on older games is epic."><img src="./images/retroacheivements_logo.png"  class="MyLinksDivSingleLink" alt="RetroAcheivements"/></a>
+			// 	<a href="https://pastebin.com/u/Pacomatic" title="My profile on Pastebin. It's a great place for temporary information."><img src="./images/pastebin-logo.png"  class="MyLinksDivSingleLink" alt="Pastebin"/></a>
+			// 	<a href="https://archive.org/details/@pacomatic" title="Internet Archive. Preserving history is important, and for that I love them."><img src="./images/internet_archive_logo.svg"  class="MyLinksDivSingleLink" alt="Internet Archive" style="padding-left:2px"/></a>
+			// </div>
+                    
+                    
+                    
+                    
+                    
+                
 
             // Unlike the navigation bar, this is a simple array: a list of paths to each background's HTML file.
             const backgrorundList = [
                 "./backgrounds/ps3Xmb.html", "./backgrounds/random_stuff_outlook.html"
             ]
 
-            
-            propagateItemList();
             setBackgroundIframe(); 
+            propagateSocialMediaList();
+            propagateItemList();
 
 
 
             function setBackgroundIframe() { // The background is randomly set because it's fun. Who doesn't like fun?
                 const backgroundIframe = document.getElementById("backgroundIframe");
                 backgroundIframe.src = backgrorundList[getRandomInt(0, backgrorundList.length - 1)];
+            }
+
+            function propagateSocialMediaList() {
+                const socialMediaContainer = document.getElementById("socialMediaButtonContianer");
+                for (let i = 0; i < socialLinksItemLookupTable.length; i++) {
+                    // In order to understand this, you need to understand socialLinksItemLookupTable.
+                    // Since everything depends on the type, I'll at least tell you this: socialLinksItemLookupTable[i][0] is the item's type.
+                    
+                    if (socialLinksItemLookupTable[i][0] == 0) {
+                        var anchorThatSurroundsTheButton = document.createElement("a"); // This <a> tag is crucial for adding interactivity. No interactivity = useless buttons, so use this.
+
+                        var buttonToCreate = document.createElement("button");
+                        buttonToCreate.className = "socialMediaButton";
+                        buttonToCreate.type = "button";
+
+                        // For the contents of the button, I want to add the text after the image and its custom styling, and that's best done via appending. As such, I'm doing all the complicated image stuff and THEN doing the text stuff.
+                        var imageWithinTheButton = document.createElement("img");
+                        imageWithinTheButton.src = socialLinksItemLookupTable[i][2];
+                        imageWithinTheButton.style = socialLinksItemLookupTable[i][5];
+                        imageWithinTheButton.className = "socialMediaButtonImage";
+                        buttonToCreate.appendChild(imageWithinTheButton);
+                        buttonToCreate.innerHTML += socialLinksItemLookupTable[i][1]; 
+                        
+                        anchorThatSurroundsTheButton.title = socialLinksItemLookupTable[i][6];
+                        imageWithinTheButton.alt = socialLinksItemLookupTable[i][7];
+
+
+                        // "What does the button do?"
+                        switch(socialLinksItemLookupTable[i][3]) {
+                            case 0:
+                                anchorThatSurroundsTheButton.href = "javascript:openLinkInIframe('" + socialLinksItemLookupTable[i][4] + "')";
+                                break;
+                            case 1:
+                                anchorThatSurroundsTheButton.href = socialLinksItemLookupTable[i][4];
+                                break;
+                            case 2:
+                                anchorThatSurroundsTheButton.href = socialLinksItemLookupTable[i][4];
+                                anchorThatSurroundsTheButton.target = "_blank";
+                                break;
+                        }
+
+                        socialMediaContainer.appendChild(anchorThatSurroundsTheButton);
+                        anchorThatSurroundsTheButton.appendChild(buttonToCreate);
+                    }
+                }
+
+
             }
 
             function propagateItemList() {
@@ -235,7 +382,7 @@
                         // "What does the button do?"
                         switch(navBarItemLookupTable[i][3]) {
                             case 0:
-                                console.log("Implement this once you add the iframe.");
+                                anchorThatSurroundsTheButton.href = "javascript:openLinkInIframe('" + navBarItemLookupTable[i][4] + "')";
                                 break;
                             case 1:
                                 anchorThatSurroundsTheButton.href = navBarItemLookupTable[i][4];
@@ -261,8 +408,6 @@
                                 var horizontalRule = document.createElement("hr");
                                 navBarItemContainer.appendChild(horizontalRule);
                             }
-
-                        console.log()
                     }
                 
                 }
@@ -270,7 +415,8 @@
             }
 
             function openLinkInIframe(linkAsString) {
-                console.log("This has yet to be implemented.");
+                const mainIframe = document.getElementById("mainIframe");
+                mainIframe.src = linkAsString;
 
 
             }
