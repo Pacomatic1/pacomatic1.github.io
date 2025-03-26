@@ -86,6 +86,7 @@
                 border-bottom: solid 2px #FFFFFF3F;
                 display: grid;
                 grid-template-columns: auto minmax(min-content, max-content) auto;
+                grid-template-rows: auto;
 				grid-template-areas: 
 				"socialMediaButtons vr fullscreenModeUI";
             }
@@ -113,9 +114,10 @@
             /* TOP SIDE CONTENTS*/
             #socialMediaButtonContainer {
                 grid-area: 'socialMediaButtons';
-                overflow-x: scroll;
+                overflow: clip;
                 margin: 0px;
                 padding: 0px;
+                max-height:5em;
             }
             #fullscreenModeUI {
                 grid-area: 'fullscreenModeUI';
@@ -271,23 +273,28 @@
                     // [7] is the alt of the button. It's what you see when the image fails to load or if the user needs assistive technology.
 
                     // If it wasn't immediately obvious, this is based onthe navBar system.
-                [0, "", "assets/socialmedia-icons/youtube_icon.svg", 2, "https://www.youtube.com/user/AmmarZawar", "", "I do a lot of things here, so check this out.", "YouTube"],
-                [0, "", "assets/socialmedia-icons/bsky_logo.svg", 2, "https://bsky.app/profile/pacomatic.bsky.social", "", "I surprised myself with how long it took for me to get social media. Crazy, honestly. I do a lot on here, so check this as well.", "Bluesky"],
+                [0, "", "assets/socialmedia-icons/youtube_icon.svg", 2, "https://www.youtube.com/user/AmmarZawar", "", "Pacomatic! That is my channel.", "YouTube"],
+                [0, "", "assets/socialmedia-icons/bsky_logo.svg", 2, "https://bsky.app/profile/pacomatic.bsky.social", "", "It took me an astoundingly long time to get an account for social media that isn't Reddit or YoiTube. Ain't that a thing?", "Bluesky"],
                 [0, "", "assets/socialmedia-icons/github_logo.svg", 2, "https://github.com/pacomatic1/", "", "If I open-source dode, it's usually here. ", "GitHub"],
-                [0, "", "assets/socialmedia-icons/reddit_logo.png", 2, "https://www.reddit.com/user/Pacomatic", "", "This was like a 'baby step' to 'real' social media. I think.", "Reddit"],
-                [0, "", "assets/socialmedia-icons/itch_logo.png", 2, "https://pacomatic1.itch.io/", "", "If I make a free game, it's probably going here.", "Itch.io"],
+                [0, "", "assets/socialmedia-icons/reddit_logo.png", 2, "https://www.reddit.com/user/Pacomatic", "", "u/Pacomatic, that is me.", "Reddit"],
+                [0, "", "assets/socialmedia-icons/itch_logo.svg", 2, "https://pacomatic1.itch.io/", "", "I sometimes make games here. It's a very nice service.", "Itch.io"],
+                [0, "", "assets/socialmedia-icons/steam_logo.png", 2, "https://steamcommunity.com/id/Pacomatic1/", "", "It's not an addiction, I promise! It's simply one of the best services in PC gaming!", "Steam"],
+                [0, "", "assets/socialmedia-icons/internet_archive_logo.svg", 2, "https://archive.org/details/@pacomatic", "", "Internet Archive. Preserving history is important, and for that I love them.", "Internet Archive"],
+                [0, "", "assets/socialmedia-icons/scratch_logo.png", 2, "https://scratch.mit.edu/users/Pacomatic33/", "", "Scratch is more powerful than you think, so I have an account there.", "Scratch"],
+                [0, "", "assets/socialmedia-icons/pixilart_logo.webp", 2, "https://pixilart.com/pacomatic", "", "Pixel Art. A relatively new art form. This is my pixilart account.", "Pixil Art"],
+                [0, "", "assets/socialmedia-icons/dreams_imp_img.svg", 2, "https://indreams.me/Pacomatic1", "", "My Dreams profile! Dreams has more power than one may assume; we just haven't used it.", "Dreams"],
+                [0, "", "assets/socialmedia-icons/recroom_logo.png", 2, "https://rec.net/user/Pacomatic1", "", "My Rec Room account, which I use for fooling around. I find it quite enjoyable, as if it's another world.", "Rec Room"],
+                [0, "", "assets/socialmedia-icons/retroacheivements_logo.svg", 2, "https://retroachievements.org/user/Pacomatic", "", "My account on RetroAcheivements. I love acheivements, so having them on older games is epic.", "RetroAcheivements"],
+                [0, "", "assets/socialmedia-icons/pastebin-logo.png", 2, "https://pastebin.com/u/Pacomatic", "", "My profile on Pastebin. It's a great place for temporary information.", "Pastebin"]
+
+
+
+
             ];
 
-            // Ripped from the old site
             // <div class="MyLinksDivActualLinks GeneralSlightlyPadded BlursBackground"> <!-- This is the thingy with all the social media links and whatnot. -->
-			// 	<a href="https://scratch.mit.edu/users/Pacomatic33/" title='Scratch is more powerful than you think, so I have an account there.'><img src="./images/scratch_logo.png" alt="Scratch" class="MyLinksDivSingleLink"/></a>
-			// 	<a href="https://www.pixilart.com/pacomatic" title='Pixel Art. A relatively new art form. This is my pixilart account.'><img src="./images/pixilart_logo.webp" class="MyLinksDivSingleLink" alt="Pixil Art"/></a>
-			// 	<a href="https://indreams.me/Pacomatic1" title="My Dreams profile! Dreams has more ability than one may assume; we just haven't used it."><img src="./images/dreams_imp_img.svg"  class="MyLinksDivSingleLink"style="filter: brightness(7);" alt="Dreams"/></a>
-			// 	<a href="https://rec.net/user/Pacomatic1" title="My Rec Room account, which I use for fooling around. I find it quite enjoyable, as if it's another world."><img src="./images/recroom_logo.png"  class="MyLinksDivSingleLink" alt="Rec Room"/></a>
-			// 	<a href="https://steamcommunity.com/id/Pacomatic1/" title="My Steam account. I use this to do gaming. One of the best PC plaforms around."><img src="./images/steam_logo.png"  class="MyLinksDivSingleLink" alt="Steam"/></a>
-			// 	<a href="https://retroachievements.org/user/Pacomatic" title="My account on RetroAcheivements. I love acheivements, so having them on older games is epic."><img src="./images/retroacheivements_logo.png"  class="MyLinksDivSingleLink" alt="RetroAcheivements"/></a>
-			// 	<a href="https://pastebin.com/u/Pacomatic" title="My profile on Pastebin. It's a great place for temporary information."><img src="./images/pastebin-logo.png"  class="MyLinksDivSingleLink" alt="Pastebin"/></a>
 			// 	<a href="https://archive.org/details/@pacomatic" title="Internet Archive. Preserving history is important, and for that I love them."><img src="./images/internet_archive_logo.svg"  class="MyLinksDivSingleLink" alt="Internet Archive" style="padding-left:2px"/></a>
+			// 	<a href="https://bsky.app/profile/pacomatic.bsky.social" title="It took me an astoundingly long time to get an account for social media that isn't Reddit or YoiTube. Ain't that a thing?"><img src="./images/bksy_logo.png"  class="MyLinksDivSingleLink" alt="Bluesky"/></a>
 			// </div>
                     
                     
