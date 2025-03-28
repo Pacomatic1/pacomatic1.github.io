@@ -7,9 +7,9 @@ const navBarItemLookupTable = [
         // [1] is the buttons's name. Note that there is no margin between the icon and the text, so you're gonna have to do it yourself using custom styling. Accessible mode has no margins, so don't add a space before the item's name.  
         // [2] is exclusive to main mode and is the **relative path** to the button's icon, staring from this page. Keep in mind that this icon is done with the 'src' attribute of an <img> tag inside the button tag, so make sure that your icon is suppported by the <img>. If you don't want an icon, leave it blank. 
         // [3] and [4] control what the item does.
-            // If [3] is 0, then it will be a button and [3] will be a link that gets opened inside the iframe.
-            // If [2] is 1, then  it will be a button and [3] will be a link that replaces the current tab and will get rid of this whole single-page thing. I repeat, it will open in the current tab and get rid of this site.
-            // If [3] is 2, then it will be a button and [3] will be a link that opens in a new tab.
+            // If [3] is 0, then it will be a button and [4] will be a link that gets opened inside the iframe.
+            // If [3] is 1, then it will be a button and [4] will be a link that replaces the current tab and will get rid of this whole single-page thing. I repeat, it will open in the current tab and get rid of this site.
+            // If [3] is 2, then it will be a button and [4] will be a link that opens in a new tab.
         // [5] is exclusive to main mode and is the per-button styling applied to the image within the button. Just so you have a loose idea of what's what, the result will look like <img [other stuff] style="whatever you put inside 5">. As you may have guessed, this has no support for classes or anything so only use it for things that apply to one button and nobody else.
         
     // If [0] is 1, it's text and maybe a horizontal rule.
@@ -22,7 +22,7 @@ const navBarItemLookupTable = [
     [1, "Extra Pages", "1", true],
     [0, "Link in iframe!", "", 0, "https://pacomatic1.github.io/projects/clicking_palace/index.html"],
     [1, "", "", true],
-    [0, "Thick of It Paradise!!", "", 0, "https://pacomatic1.github.io/projects/clicking_palace/index.html"]
+    [0, "Thick of It Paradise!!", "", 1, "https://pacomatic1.github.io/projects/clicking_palace/index.html"]
 ];
 
 const socialLinksItemLookupTable = [
@@ -63,7 +63,7 @@ if (pageMode == "main") {
     populateAccessibleNavBar();
     document.getElementById('gotoPageButton').addEventListener("click", accessibleModeNavBarSelected);
 }
-openLinkInIframe('./pages/home/index.html');
+openLinkInIframe('./pages/landing/index.html');
 
 
 
@@ -183,8 +183,6 @@ function populateMainModeNavBar() {
     }
 }
 
-
-
 function populateAccessibleNavBar() {
     const navBarSelector = document.getElementById("navBarDropDown");
     var currentOptionGroup = null;
@@ -231,10 +229,23 @@ function populateAccessibleNavBar() {
     
 }
 
-
 function accessibleModeNavBarSelected() { // This is called when the user presses the "Go to Page" button in accessible mode.
-    console.log("NANI");
-
+    const navBarSelector = document.getElementById("navBarDropDown");
+    var optionActionType = findValueofNthItemInArrayOfMultiItemArraysAssumingYouKnowWhatAndWhereTheRthItemIs(navBarSelector.value, 1, navBarItemLookupTable, 3);
+    var optionActionValue = findValueofNthItemInArrayOfMultiItemArraysAssumingYouKnowWhatAndWhereTheRthItemIs(navBarSelector.value, 1, navBarItemLookupTable, 4);
+    
+    switch (optionActionType) {
+        case 0:
+            openLinkInIframe(optionActionValue);
+            break;
+        case 1:
+            window.open(optionActionValue, '_self').focus();
+            break;
+        case 2:
+            window.open(optionActionValue, '_blank').focus();
+            break;
+    
+    }
 
 }
 
@@ -260,11 +271,11 @@ function findValueOfKeyFromQueryStringInUrl(keyToFindValueOf) { // Gets the URL,
         return findValueofNthItemInArrayOfMultiItemArraysAssumingYouKnowWhatTheFirstItemIs(keyToFindValueOf, queryStringArray, 1);
 }
 
-function findValueofNthItemInArrayOfMultiItemArraysAssumingYouKnowWhatTheFirstItemIs(valueOfFirstItem, arrayOfArraysToLookThrough, indiceOfNthItem) { // This finds the value of an item within an array of multi-item arrays assuming you already know what the first item is. This seems oddly specific (because it is), but it has its uses; refer to the lookup table and the query string shenanigans.
+function findValueofNthItemInArrayOfMultiItemArraysAssumingYouKnowWhatAndWhereTheRthItemIs(valueOfRthItem, indiceOfRthItem, arrayOfArraysToLookThrough, indiceOfNthItem) { // This finds the value of an item within an array of multi-item arrays assuming you already know what the first item is. This seems oddly specific (because it is), but it has its uses; refer to the lookup table and the query string shenanigans.
     var foundValue;
     for (let i = 0; i < arrayOfArraysToLookThrough.length; i++) { // For every array in the top array,
-        for (let j = 0; j <= arrayOfArraysToLookThrough[i].length; j++) { // see if the first value is what you seek.
-            if (arrayOfArraysToLookThrough[i][0] == valueOfFirstItem) { // If it is, iterate to find nth item and, if found, set foundValue to it.
+        for (let j = 0; j <= arrayOfArraysToLookThrough[i].length; j++) { // see if the rth value is what you seek.
+            if (arrayOfArraysToLookThrough[i][indiceOfRthItem] == valueOfRthItem) { // If it is, iterate to find nth item and, if found, set foundValue to it.
                 foundValue = arrayOfArraysToLookThrough[i][indiceOfNthItem];
             };
         };

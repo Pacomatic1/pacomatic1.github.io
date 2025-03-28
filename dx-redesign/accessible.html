@@ -6,28 +6,29 @@
         <link rel="icon" type="image/x-icon" href="./assets/favicon.png">
 
         <style>
+            @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+
+            :root {
+                --default-bg-color: #313131;
+                --default-text-color: #ffffff;
+                --default-font: 9pt "Noto Sans", sans-serif;
+            }
             
+
+            /* BUILDING BLOCKS */
             #accessibleModeIdentifier { display: none; }
-            
             body {
                 margin: 0px;
                 padding: 0px;
                 height: 100vh;
                 width: 100vw;
             }
-
             #barAtTheTop {
-                font-size: 1.2em;
-                margin: 0px;
-                padding: 3px;
-                text-align:left;
-                color:white;
-                font-family: 'Rubik';
-                font-weight:400;
                 background-color: #121212;
-                min-width:400px;
+                padding-inline: 10px;
+                padding-top: 3px;
+                padding-bottom: 3px;
             }
-      
             #mainIframe {
                 height: 100%;
                 width: 100%;
@@ -36,18 +37,80 @@
                 border: none;
                 display: block;
 				position: fixed;
+            } 
+
+            /* SELECT AND ITS RELATED TAGS */
+            select {
+                background: linear-gradient(to bottom, #454545, #3a3a3a);
+                border: 1px solid #232323;
+                border-radius: 4px;
+                box-shadow: inset 0 0 0 1px #5B5B5B;
+                color: var(--default-text-color);
+                font: var(--default-font);
+                min-height: 23px;
+                min-width: 75px;
+                padding: 0 12px;
+                
+            } select:hover:not(:disabled):not(:active) {
+                border-color: #9ED868;
+                box-shadow: inset 0 0 0 1px #7dad50;
+                background: linear-gradient(to bottom, #4b4e48, #434a3d);
+            } select:disabled {
+                background: #f4f4f4;
+                box-shadow: inset 0 0 0 0px;
+                border-color: #b4b4b4;
+                border-width: 2px;
+                color: #838383;
+            } select:active {
+                border: 1px solid #9ED868;
+                box-shadow: inset 0 0 0 1px #7dad50;
+                background: linear-gradient(to bottom, #5f6f50, #555d4d);
+            }
+            option, optgroup {
+                all: initial;
+                font: var(--default-font);
+                
+            }
+            /* BUTTONS */
+            button {
+                vertical-align: top;
+                background: linear-gradient(to bottom, #454545, #3a3a3a);
+                border: 1px solid #232323;
+                border-radius: 4px;
+                box-shadow: inset 0 0 0 1px #5B5B5B;
+                color: var(--default-text-color);
+                font: var(--default-font);
+                min-height: 23px;
+                min-width: 75px;
+                padding: 0 12px;
+                position: relative;
+                text-align: center;
+            } button:hover:not(:disabled):not(:active) {
+                border-color: #9ED868;
+                box-shadow: inset 0 0 0 1px #7dad50;
+                background: linear-gradient(to bottom, #4b4e48, #434a3d);
+            } button:disabled {
+                background: #f4f4f4;
+                box-shadow: inset 0 0 0 0px;
+                border-color: #b4b4b4;
+                border-width: 2px;
+                color: #838383;
+            } button:active {
+                border: 1px solid #9ED868;
+                box-shadow: inset 0 0 0 1px #7dad50;
+                background: linear-gradient(to bottom, #5f6f50, #555d4d);
             }
       
       </style>
     </head>
     <body>
         <div id="accessibleModeIdentifier"></div>
-        <div id="barAtTheTop">
+        <div id="barAtTheTop" class="">
             <select id="navBarDropDown" name="Page Select">
                 <option value="">Select a Page</option> 
                 <!-- Everything here is inserted via Javascript and a list that's contained in, well, the Javascript. Normally I'd be doing it manually but there's a LOT of buttons and because of this it's gonna be data-driven. -->
             </select>    
-            <button id="gotoPageButton">
+            <button id="gotoPageButton" class="">
                 Go to Page
             </button>
         </div>
