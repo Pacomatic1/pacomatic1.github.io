@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Paco's Place - Accessible Mode</title>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Rubik:400">
+        <link rel="icon" type="image/x-icon" href="./assets/favicon.png">
+
+        <style>
+            
+            #accessibleModeIdentifier { display: none; }
+            
+            body {
+                margin: 0px;
+                padding: 0px;
+                height: 100vh;
+                width: 100vw;
+            }
+
+            #barAtTheTop {
+                font-size: 1.2em;
+                margin: 0px;
+                padding: 3px;
+                text-align:left;
+                color:white;
+                font-family: 'Rubik';
+                font-weight:400;
+                background-color: #121212;
+                min-width:400px;
+            }
+      
+            #mainIframe {
+                height: 100%;
+                width: 100%;
+                margin: 0px;
+                padding: 0px;
+                border: none;
+                display: block;
+				position: fixed;
+            }
+      
+      </style>
+    </head>
+    <body>
+        <div id="accessibleModeIdentifier"></div>
+        <div id="barAtTheTop">
+            <select id="navBarDropDown" name="Page Select">
+                <option value="">Select a Page</option> 
+                <!-- Everything here is inserted via Javascript and a list that's contained in, well, the Javascript. Normally I'd be doing it manually but there's a LOT of buttons and because of this it's gonna be data-driven. -->
+            </select>    
+            <button id="gotoPageButton">
+                Go to Page
+            </button>
+        </div>
+
+        <iframe id="mainIframe" title="Main Iframe" allow="autoplay" allowtransparency="false"></iframe> <!-- The default source page is selected by the javascript. -->
+
+        <script src="./shared.js"> </script> 
+    </body>
+</html>
