@@ -51,18 +51,20 @@ const backgroundList = [
     "./backgrounds/ps3Xmb.html", "./backgrounds/random_stuff_outlook.html"
 ]
 
-var pageMode = determinePageMode();// "main" or "accessible"
+var pageMode = determinePageMode(); // "main" or "accessible"
 console.log("You're using " + pageMode + " mode.")
+
+initializeIframePage('./pages/landing/index.html');
+
 
 setBackgroundIframe(); 
 
-populateMainModeNavBar(); // This only does something if you're in main mode, so don't worry.
-populateMainModeSocialMediaList(); // This only does something if you're in main mode, so don't worry.
+populateMainModeNavBar(); // This only does something if you're in main mode.
+populateMainModeSocialMediaList(); // This only does something if you're in main mode.
 if (pageMode == "accessible") {
     populateAccessibleNavBar();
     document.getElementById('gotoPageButton').addEventListener("click", accessibleModeNavBarSelected);
 }
-openLinkInIframe('./pages/landing/index.html');
 
 
 
@@ -311,10 +313,19 @@ function accessibleModeNavBarSelected() { // This is called when the user presse
 
 }
 
+function initializeIframePage(relativePathToDefaultPage) {
+    var currentPage = findValueOfKeyFromQueryStringInUrl('page');
+    if (currentPage == null) { openLinkInIframe(relativePathToDefaultPage); }
+    else {openLinkInIframe(currentPage);}
+    
+}
+
 
 function openLinkInIframe(linkAsString) {
     const mainIframe = document.getElementById("mainIframe");
     mainIframe.src = linkAsString + "?autoplay=1"; // Autoplay audio!
+    replaceValueInKeyValuePairInUrlQueryStringBasedOnKey('page', linkAsString);
+    
 
 }
 
@@ -331,11 +342,36 @@ function findValueOfKeyFromQueryStringInUrl(keyToFindValueOf) { // Gets the URL,
         const queryStringArray = Array.from(urlSearchParams.entries()); // Returns an array of arrays. Each array corresponds to one key/value pair, the key being [0] and value being [1].
         // We need to find an array (inside this one) whose [0]	is the key we seek.
         // Good thing I made a highly specific functon for that!
-        return findValueofNthItemInArrayOfMultiItemArraysAssumingYouKnowWhatTheFirstItemIs(keyToFindValueOf, queryStringArray, 1);
+        return findValueofNthItemInArrayOfMultiItemArraysAssumingYouKnowWhatAndWhereTheRthItemIs(keyToFindValueOf, 0, queryStringArray, 1);
 }
 
-function findValueofNthItemInArrayOfMultiItemArraysAssumingYouKnowWhatAndWhereTheRthItemIs(valueOfRthItem, indiceOfRthItem, arrayOfArraysToLookThrough, indiceOfNthItem) { // This finds the value of an item within an array of multi-item arrays assuming you already know what the first item is. This seems oddly specific (because it is), but it has its uses; refer to the lookup table and the query string shenanigans.
-    var foundValue;
+function replaceValueInKeyValuePairInUrlQueryStringBasedOnKey(keyToSelect, newValue) {
+    var url = new URL(window.location.href);
+    const params = new URLSearchParams(url.search);
+    console.log(url);
+    console.log(params);
+
+    console.log(`Query string (before):\t ${params}`);
+    params.delete(keyToSelect);
+    
+    params.append(keyToSelect, newValue);
+    console.log(`Query string (after):\t ${params}`);
+ 
+    console.log(params.toString())
+
+    // Add the params to url. I tried looking for a built-in method but I can't find one, so I'll do it myself.
+    url.search = params.toString();
+    console.log(url.toString());
+
+
+
+    history.pushState({}, "", url);
+
+}
+
+
+function findValueofNthItemInArrayOfMultiItemArraysAssumingYouKnowWhatAndWhereTheRthItemIs(valueOfRthItem, indiceOfRthItem, arrayOfArraysToLookThrough, indiceOfNthItem) { // This finds the value of an item within an array of multi-item arrays assuming you already know what another item is. This seems oddly specific (because it is), but it has its uses; refer to the query string shenanigans.
+    var foundValue = null;
     for (let i = 0; i < arrayOfArraysToLookThrough.length; i++) { // For every array in the top array,
         for (let j = 0; j <= arrayOfArraysToLookThrough[i].length; j++) { // see if the rth value is what you seek.
             if (arrayOfArraysToLookThrough[i][indiceOfRthItem] == valueOfRthItem) { // If it is, iterate to find nth item and, if found, set foundValue to it.
@@ -346,4 +382,4 @@ function findValueofNthItemInArrayOfMultiItemArraysAssumingYouKnowWhatAndWhereTh
     return foundValue;
     // You know, the code for this used to make multiple arrays and sort through them. It sucked. This is faster. And with far less bugs.
     // I'm glad I refactored this.
-};
+}
