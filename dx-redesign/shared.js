@@ -30,8 +30,8 @@ const socialLinksItemLookupTable = [
     // [0] is the type. This determines the values of everything afterwards.
 
     // If [0] is 0, it's a button.
-        // [1] is the buttons's name. Note that there is no margin between the icon and the text, so you're gonna have to do it yourself using custom styling or a space before the text starts. 
-        // [2] is the **relative path** to the button's icon, staring from this page. Keep in mind that this icon is done with the 'src' attribute of an <img> tag inside the button tag, so make surethat your icon is suppported by the <img>. If you don't want an icon, 
+        // [1] is the buttons's name. Note that while this doesn't appear on main mode, this does appear on accessible mode. 
+        // [2] is the **relative path** to the button's icon, staring from this page. Keep in mind that this icon is done with the 'src' attribute of an <img> tag inside the button tag, so make sure that your icon is suppported by the <img>. If you don't want an icon, leave it as a blank string. This does nothing in accessiblity. 
         // [3] and [4] control what the item does.
             // If [3] is 0, then it will be a button and [3] will be a link that gets opened inside the iframe.
             // If [2] is 1, then  it will be a button and [3] will be a link that replaces the current tab and will get rid of this whole single-page thing. I repeat, it will open in the current tab and get rid of this site.
@@ -40,10 +40,10 @@ const socialLinksItemLookupTable = [
         // [6] is the title of the button. It's what appears when you hover over it.
         // [7] is the alt of the button. It's what you see when the image fails to load or if the user needs assistive technology.
 
-        // If it wasn't immediately obvious, this is based onthe navBar system.
-    [0, "", "assets/socialmedia-icons/youtube_icon.svg", 2, "https://www.youtube.com/user/AmmarZawar", "", "Pacomatic! That is my channel.", "YouTube", "margin-bottom: -2px;"],
-    [0, "", "assets/socialmedia-icons/bsky_logo.svg", 2, "https://bsky.app/profile/pacomatic.bsky.social", "", "It took me an astoundingly long time to get an account for social media that isn't Reddit or YoiTube. Ain't that a thing?", "Bluesky"],
-    [0, "", "assets/socialmedia-icons/github_logo.svg", 2, "https://github.com/pacomatic1/", "", "If I open-source code, it's usually here. ", "GitHub"],
+        // If it wasn't immediately obvious, this is based on the navBar system.
+    [0, "YouTube", "assets/socialmedia-icons/youtube_icon.svg", 2, "https://www.youtube.com/user/AmmarZawar", "", "Pacomatic! That is my channel.", "YouTube", "margin-bottom: -2px;"],
+    [0, "Bluesky", "assets/socialmedia-icons/bsky_logo.svg", 2, "https://bsky.app/profile/pacomatic.bsky.social", "", "It took me an astoundingly long time to get an account for social media that isn't Reddit or YoiTube. Ain't that a thing?", "Bluesky"],
+    [0, "GitHub", "assets/socialmedia-icons/github_logo.svg", 2, "https://github.com/pacomatic1/", "", "If I open-source code, it's usually here. ", "GitHub"],
 
 ];
 // Unlike the navigation bar, this is a simple array: a list of paths to each background's HTML file.
@@ -52,14 +52,13 @@ const backgroundList = [
 ]
 
 var pageMode = determinePageMode();// "main" or "accessible"
-
 console.log("You're using " + pageMode + " mode.")
 
 setBackgroundIframe(); 
-if (pageMode == "main") {
-    populateMainModeNavBar();
-    populateMainModeSocialMediaList();
-} else if (pageMode == "accessible") {
+
+populateMainModeNavBar(); // This only does something if you're in main mode, so don't worry.
+populateMainModeSocialMediaList(); // This only does something if you're in main mode, so don't worry.
+if (pageMode == "accessible") {
     populateAccessibleNavBar();
     document.getElementById('gotoPageButton').addEventListener("click", accessibleModeNavBarSelected);
 }
@@ -84,6 +83,7 @@ function setBackgroundIframe() { // This is exclusive to main mode. If you're on
 }
 
 function populateMainModeSocialMediaList() {
+    if (pageMode != "main") { return; } // Exit function if you're not in main mode so as to avoid issues. return seemed better than putting everything in yet another if statement so I'm keeping it this way.
     const socialMediaContainer = document.getElementById("socialMediaButtonContianer");
     for (let i = 0; i < socialLinksItemLookupTable.length; i++) {
         // In order to understand this, you need to understand socialLinksItemLookupTable.
@@ -129,6 +129,7 @@ function populateMainModeSocialMediaList() {
 }
 
 function populateMainModeNavBar() {
+    if (pageMode != "main") { return; } // Exit function if you're not in main mode so as to avoid issues. return seemed better than putting everything in yet another if statement so I'm keeping it this way.
     const navBarItemContainer = document.getElementById("navBarItemContainer");
     for (let i = 0; i < navBarItemLookupTable.length; i++) {
         // In order to understand this, you need to understand navBarItemLookupTable.
@@ -183,18 +184,76 @@ function populateMainModeNavBar() {
     }
 }
 
-function populateAccessibleNavBar() {
+function populateAccessibleNavBar() { // This also handles the social media links since they're in the same spot and using 2 functions seems awfully useless.
+    if (pageMode != "accessible") { return; } // Exit function if you're not in main mode so as to avoid issues. return seemed better than putting everything in yet another if statement so I'm keeping it this way.
     const navBarSelector = document.getElementById("navBarDropDown");
     var currentOptionGroup = null;
-    for (let i = 0; i < navBarItemLookupTable.length; i++) {
+    var newNavBarItemLookupTable = navBarItemLookupTable;
+
+    // The social media links are in a separate lookup table, but appear in the same spot as the usual page links. To me, the simplest way of doing this is to convert the stuff from the social media lookup table into the same format as the navigation bar lookup table, and then add those BEFORE everything in the navigation bar.
+    
+    var socialMediaItemsArray = [
+        [1, 'Social Media',"", true] // This is going to happen anyways, why even do this first thing through code? I'd just be wasting time.
+    ];
+    for (let i = 0; i < socialLinksItemLookupTable.length; i++) {
+        // We're gonna make a brand new button and push() that into the social media table.
+        var newOptionArray = [];
+
+        switch (socialLinksItemLookupTable[i][0]) {
+            case 0: // Type: Button
+            newOptionArray.push(0); // Why read from the var, it's already guaranteed to be 0
+            newOptionArray.push(socialLinksItemLookupTable[i][1]);
+            newOptionArray.push("") // This value is irrelevant
+            switch (socialLinksItemLookupTable[i][3]) { // Handles [3] and [4], after this switch statement we move to [5]
+                case 0:
+                    newOptionArray.push(0);
+                    newOptionArray.push(socialLinksItemLookupTable[i][4]);
+                    break;
+                case 1:
+                    newOptionArray.push(1);
+                    newOptionArray.push(socialLinksItemLookupTable[i][4]);
+                    break;
+                case 2:
+                    newOptionArray.push(2);
+                    newOptionArray.push(socialLinksItemLookupTable[i][4]);
+                    break;     
+                default:
+                    console.log("Error: The Social Media lookup table has a button that uses unimplemented funtionality in accessibility mode! Either the table is wrong or accessibility mode needs updating.");
+            }
+            newOptionArray.push(""); // This value is irrelevant
+            // There are other values in the social media lookup table but they're irrelevant.
+            break;
+        }
+
+
+
+
+
+        socialMediaItemsArray.push(newOptionArray);
+    }
+    socialMediaItemsArray.push( [1, "", "", true] ); // This breaks out of the option group.
+    
+    // I'd love to unshift, but right now the social media lookup table is an array of arrays. This means that the items we want would be 2 layers deep, which isn't suppoorted. As such, I'm going to unshift each array within socialMediaItemsArray one by one so as to make sure it's not nested.
+    // Because we're unshifting, we have to go backwards.
+    for (let i = socialMediaItemsArray.length - 1; i > -1; i--) {
+        newNavBarItemLookupTable.unshift(socialMediaItemsArray[i]);
+    }
+
+
+
+
+
+    for (let i = 0; i < newNavBarItemLookupTable.length; i++) {
         // In order to understand this, you need to understand navBarItemLookupTable.
-        // Since everything depends on the type, I'll at least tell you this: navBarItemLookupTable[i][0] is the item's type.
+        // Since everything depends on the type, I'll at least tell you this: newNavBarItemLookupTable[i][0] is the item's type.
+
+        // Also keep in mind that we have to use newNavBarItemLookupTable because we modify navBarItemLookupTable before we do anything.
         
         // Doing it in accessible mode is especially fun because having a divider with text creates an option group. As such, currentOptionGroup keeps track of where we are, and where we are is updated every time we create text and maybe a horizontal rule. It's a system that frankly shouldn't work as well as it does.
 
-        if (navBarItemLookupTable[i][0] == 0) {
+        if (newNavBarItemLookupTable[i][0] == 0) {
             var optionToAdd = document.createElement("option");
-            optionToAdd.innerHTML = navBarItemLookupTable[i][1];
+            optionToAdd.innerHTML = newNavBarItemLookupTable[i][1];
             optionToAdd.id = "navBarSelectableOption" + i;
             if (currentOptionGroup != null) {
                 currentOptionGroup.appendChild(optionToAdd);
@@ -202,22 +261,22 @@ function populateAccessibleNavBar() {
                 navBarSelector.appendChild(optionToAdd);
             }
             document.getElementById(optionToAdd.id).addEventListener("change", accessibleModeNavBarSelected);
-        } else if (navBarItemLookupTable[i][0] == 1) {
+        } else if (newNavBarItemLookupTable[i][0] == 1) {
             var optionGroupToMake = document.createElement('optgroup');
             var horizontalRuleToMake = document.createElement('hr');
-            var isJustAHorizontalRule                
+            var isJustAHorizontalRule;
 
-            if ( (navBarItemLookupTable[i][1] == "") && (navBarItemLookupTable[i][3] == true) ) { isJustAHorizontalRule = true; }
+            if ( (newNavBarItemLookupTable[i][1] == "") && (newNavBarItemLookupTable[i][3] == true) ) { isJustAHorizontalRule = true; }
             else { isJustAHorizontalRule = false; }
 
             if (isJustAHorizontalRule == true) {
-                currentOptionGroup = null;
+                currentOptionGroup = null; // This breaks out of the current option group.
                 navBarSelector.appendChild(horizontalRuleToMake);
             } else {
-                // todo: give custom id then getById and set currentOptGroup to that
-                optionGroupToMake.label = navBarItemLookupTable[i][1];
+                // We give them an id so that we can swap currentOptionGroup to the correct object. After all, we're not appending them while they're still in a variable. We're appending them after they've already been added to the page.
+                optionGroupToMake.label = newNavBarItemLookupTable[i][1];
                 optionGroupToMake.id = "navBarDividngOption"+ i;
-                if (navBarItemLookupTable[i][3] == true) {
+                if (newNavBarItemLookupTable[i][3] == true) {
                     optionGroupToMake.appendChild(horizontalRuleToMake);
                 }
                 navBarSelector.appendChild(optionGroupToMake);
@@ -229,11 +288,14 @@ function populateAccessibleNavBar() {
     
 }
 
-function accessibleModeNavBarSelected() { // This is called when the user presses the "Go to Page" button in accessible mode.
+function accessibleModeNavBarSelected() { // This is called when the user presses the "Go to Page" button in accessible mode. This is because using event handlers for every option seems difficult and makes the ever-annoying misclick easier. 
     const navBarSelector = document.getElementById("navBarDropDown");
     var optionActionType = findValueofNthItemInArrayOfMultiItemArraysAssumingYouKnowWhatAndWhereTheRthItemIs(navBarSelector.value, 1, navBarItemLookupTable, 3);
     var optionActionValue = findValueofNthItemInArrayOfMultiItemArraysAssumingYouKnowWhatAndWhereTheRthItemIs(navBarSelector.value, 1, navBarItemLookupTable, 4);
     
+    // Find what you've selected, then find where it is in the lookup table so we can get their action type and value. Once we have those, we just implement their functionality right here.
+    // We don't bother handling the text + horizontal rules because they can't be selected in the first place.
+
     switch (optionActionType) {
         case 0:
             openLinkInIframe(optionActionValue);
@@ -249,9 +311,10 @@ function accessibleModeNavBarSelected() { // This is called when the user presse
 
 }
 
+
 function openLinkInIframe(linkAsString) {
     const mainIframe = document.getElementById("mainIframe");
-    mainIframe.src = linkAsString + "?autoplay=1";
+    mainIframe.src = linkAsString + "?autoplay=1"; // Autoplay audio!
 
 }
 
