@@ -56,8 +56,11 @@
 
             /* LAYOUT BUILDING BLOCKS */
             #gigaDiv {
+                min-height: 20em;
+                min-width: 10em;
                 width: 100vw;
                 height: 100vh;
+
                 display: grid;
                 grid-template-columns: 10.1em auto;
 				grid-template-rows: 3em auto;
@@ -204,7 +207,7 @@
     
     </head>
     <body style="margin: 0; padding: 0;">
-        <div id="mainModeIdentifier"></div>
+        <div id="mainModeIdentifier"></div> <!-- The javascript needs this to exist so that it knows you're on main mode. Unless you plan on refactoring the javascript, DO NOT REMOVE THIS.-->
         <iframe id="backgroundIframe" title="Background Iframe"></iframe> <!-- THIS IS FOR THE BACKGROUND. NOT THE PAGE. DO NOT GET THESE MIXED UP! -->
         <div id="gigaDiv">
             <div id="leftSide">
