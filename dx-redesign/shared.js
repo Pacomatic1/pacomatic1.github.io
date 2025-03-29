@@ -102,7 +102,7 @@ function populateMainModeSocialMediaList() {
             imageWithinTheButton.style = socialLinksItemLookupTable[i][5];
             imageWithinTheButton.className = "socialMediaButtonImage";
             buttonToCreate.appendChild(imageWithinTheButton);
-            buttonToCreate.innerHTML += socialLinksItemLookupTable[i][1]; 
+            // buttonToCreate.innerHTML += socialLinksItemLookupTable[i][1]; This value is irrelevant for main mode, but in the event it does become relevant, this'll make it a smidge easier to re-implement it.
             
             anchorThatSurroundsTheButton.title = socialLinksItemLookupTable[i][6];
             imageWithinTheButton.alt = socialLinksItemLookupTable[i][7];
