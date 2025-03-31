@@ -52,7 +52,6 @@ console.log("You're using " + pageMode + " mode.")
 
 initializeIframePage('./pages/landing/index.html');
 
-
 setBackgroundIframe(); 
 
 populateMainModeNavBar(); // This only does something if you're in main mode.
@@ -61,6 +60,22 @@ if (pageMode == "accessible") {
     populateAccessibleNavBar();
     document.getElementById('gotoPageButton').addEventListener("click", accessibleModeNavBarSelected);
 }
+
+
+
+
+
+
+
+
+
+
+// DIVIDER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
+
+
+
+
 
 
 
