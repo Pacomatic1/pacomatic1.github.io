@@ -19,10 +19,6 @@ const navBarItemLookupTable = [
         // Note that in accessible mode, just text or text and a horizontal rule will create a new option group. Breaking out of that option group is done by just creating a horizontal rule. 
     [0, "Home", "assets/navbar-icons/3ds-home-menu-icon.svg", 0, "./pages/home/index.html", "margin-bottom:-2px; height: auto; width: 16px; margin-right: 4px;"],
     [0, "Projects", "", 2, "https://pacomatic1.github.io"],
-    [1, "Extra Pages", "1", true],
-    [0, "Link in iframe!", "", 0, "https://pacomatic1.github.io/projects/clicking_palace/index.html"],
-    [1, "", "", true],
-    [0, "Thick of It Paradise!!", "", 1, "https://pacomatic1.github.io/projects/clicking_palace/index.html"]
 ];
 
 const socialLinksItemLookupTable = [
@@ -348,25 +344,11 @@ function findValueOfKeyFromQueryStringInUrl(keyToFindValueOf) { // Gets the URL,
 function replaceValueInKeyValuePairInUrlQueryStringBasedOnKey(keyToSelect, newValue) {
     var url = new URL(window.location.href);
     const params = new URLSearchParams(url.search);
-    console.log(url);
-    console.log(params);
-
-    console.log(`Query string (before):\t ${params}`);
     params.delete(keyToSelect);
-    
     params.append(keyToSelect, newValue);
-    console.log(`Query string (after):\t ${params}`);
- 
-    console.log(params.toString())
-
     // Add the params to url. I tried looking for a built-in method but I can't find one, so I'll do it myself.
     url.search = params.toString();
-    console.log(url.toString());
-
-
-
     history.pushState({}, "", url);
-
 }
 
 
