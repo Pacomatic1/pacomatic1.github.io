@@ -1,12 +1,22 @@
 <html>
     <head>
         <style>
+            @import url("https://fonts.googleapis.com/css?family=Roboto:100,200,300,400,500|Rubik:400|Ubuntu:300,400|Roboto+Condensed|Source+Sans+Pro:600");
+            
+            
             body {
                 background-color: #ffffff;
                 margin:0px;
                 padding:0px;
+                font: 9pt "Unbuntu", sans-serif;
+                color: #ffffff;
             }
             
+            .bigWhiteText {
+                font-size: large;
+
+            }
+
             #gigaDiv {
                 min-width: 40em;
 
@@ -14,6 +24,40 @@
             }
 
 
+            /* GIGACLASSES */
+
+            .WindowIntoBG {
+                margin-left:0px;
+                margin-right:0px;
+                margin-top:0px;
+                margin-bottom:0px;
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+                background-size: 100% 100%;
+                background-size: cover;
+                padding-bottom: 0px;
+                padding-top: 0px;
+                background-color: #121212;
+                max-width: 100%;
+            }
+
+            /*INDIVIDUAL ELEMENTS */
+            #topWindow {
+                width: 100%;
+                height: 20em;
+                background-image: url('./assets/backgrounds/mc_pc.png');
+                background-position: bottom;
+                position: relative;     
+            }
+
+            #gradientAtBottomOftopWindow {
+                width: 100%;
+                height:5em;
+                background-image: linear-gradient(to top, #000000FF, #00000000);
+                margin: 0px;
+                position:absolute;
+                bottom:0
+            }
 
 
             /* SOCIAL MEDIA BUTTONS */
@@ -23,7 +67,7 @@
                 height:3em;
                 background-color: #000000FF;
                 color: #ffffff;
-                position:relative;
+                position:fixed;
             }
             .socialMediaButton {
                 height: 3em;
@@ -35,7 +79,6 @@
                 background-color: #000000DD;
             } .socialMediaButton:hover:not(:disabled):not(:active) {
                 border: 1px solid #5B5B5B;
-                
             }
             .socialMediaButtonImage {
                 height: 2em;
@@ -55,8 +98,13 @@
     <body>
         <audio src="./assets/rafflesia_plaza.mp3" autoplay loop></audio>
         <div id="gigaDiv">
-            <p> soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br>soksoksok<br></p>
-            <div id="socialMediaButtonContianer"></div>
+            <div class="windowIntoBG" id="topWindow">
+                <div id="socialMediaButtonContianer"></div>
+                <p class="mainWhite">
+                    <img/>
+                </p>
+                <div id="gradientAtBottomOftopWindow"></div>
+            </div>
         </div>
 
 
