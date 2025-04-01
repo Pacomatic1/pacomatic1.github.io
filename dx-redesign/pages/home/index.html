@@ -2,7 +2,7 @@
     <head>
         <style>
             @import url("https://fonts.googleapis.com/css?family=Roboto:100,200,300,400,500|Rubik:400|Ubuntu:300,400|Roboto+Condensed|Source+Sans+Pro:600");
-            
+            @import url('./7_scrollbar.css');
             
             body {
                 background-color: #ffffff;
@@ -11,10 +11,6 @@
 
             }
             
-            .bigWhiteText {
-                font-size: large;
-
-            }
 
             #gigaDiv {
                 min-width: 40em;
@@ -42,13 +38,18 @@
                 max-width: 100%;
             }
 
+
+
+
+
             /*INDIVIDUAL ELEMENTS */
             #topWindow {
                 width: 100%;
                 height: 20em;
                 background-image: url('./assets/backgrounds/mc_pc.png');
                 background-position: bottom;
-                position: relative;     
+                position: relative;   
+                z-index: -1  
             }
 
             #gradientAtBottomOftopWindow {
@@ -122,7 +123,7 @@
 
     </head>
 
-    <body>
+    <body class="has-scrollbar">
         <audio src="./assets/rafflesia_plaza.mp3" autoplay loop></audio>
         <div id="gigaDiv">
             <div class="windowIntoBG" id="topWindow">
