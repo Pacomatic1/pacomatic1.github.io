@@ -47,11 +47,10 @@ const socialLinksItemLookupTable = [
 const backgroundList = [
     "./backgrounds/ps3Xmb.html", "./backgrounds/random_stuff_outlook.html"
 ]
+initializeIframePage('./pages/landing/index.html');
 
 var pageMode = determinePageMode(); // "main" or "accessible"
 console.log("You're using " + pageMode + " mode.")
-
-initializeIframePage('./pages/landing/index.html');
 
 setBackgroundIframe(); 
 

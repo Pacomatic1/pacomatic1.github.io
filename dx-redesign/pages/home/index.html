@@ -2,7 +2,8 @@
     <head>
         <style>
             @import url("https://fonts.googleapis.com/css?family=Roboto:100,200,300,400,500|Rubik:400|Ubuntu:300,400|Roboto+Condensed|Source+Sans+Pro:600");
-            @import url('./7_scrollbar.css');
+            @import url('7_scrollbar.css');
+           /* @import url('https://unpkg.com/7.css/dist/7.scoped.css'); unpkg was down when I was making this, please host this file locally once it's back up so as to avoid such issues */
             
             body {
                 background-color: #ffffff;
@@ -14,7 +15,6 @@
 
             #gigaDiv {
                 min-width: 40em;
-
 
             }
 
@@ -37,9 +37,15 @@
                 background-color: #121212;
                 max-width: 100%;
             }
-
-
-
+            .standardText {
+                font: 12pt "Ubuntu", sans-serif;
+                font-weight: 400;
+                color: #ffffff;
+            } a.standardText {
+                color:rgb(125, 135, 212);   
+            } a.standardText:visited {
+                color: #b087dc
+            }
 
 
             /*INDIVIDUAL ELEMENTS */
@@ -49,7 +55,8 @@
                 background-image: url('./assets/backgrounds/mc_pc.png');
                 background-position: bottom;
                 position: relative;   
-                z-index: -1  
+                /* DO NOT SET THE Z-INDEX TO A NEGATIVE NUMBER. This will cause all of its contents to become unclickable and require JS or 'Tab/Enter mode' which is anything but ideal. */
+                margin: 0px;
             }
 
             #gradientAtBottomOftopWindow {
@@ -74,17 +81,32 @@
                 position: absolute;
                 bottom:0;
             }
-
             #pacoHeroImage {
                 height: 100%;
                 width: auto;
                 margin:0px;
                 margin-inline: auto;
                 filter: drop-shadow(0px 0px 5px black);
+            }
+            #pageContentsSection {
+                background-image: url('./assets/backgrounds/mc_barrel_4x.png');
+                margin: 0px;
+                z-index: 1;
+            }
+            #introText {
+                margin: 0px;
+                padding-top: 1rem;
+                padding-inline: 1rem;
+
 
             }
+            #pacoStatsBody {
+                background-color: rgb(240,240,240);
 
-
+            }
+            #pacoStatsContainer {
+                width: 300px;
+            }
 
 
 
@@ -93,7 +115,7 @@
                 margin: 0px;
                 padding: 0px;
                 height:3em;
-                background-color: #000000FF;
+                background-color: #000000CC;
                 color: #ffffff;
                 position:fixed;
             }
@@ -125,18 +147,48 @@
 
     <body class="has-scrollbar">
         <audio src="./assets/rafflesia_plaza.mp3" autoplay loop></audio>
-        <div id="gigaDiv">
+        <div id="gigaDiv"> <!-- You'd be surprised by how often a gigaDiv comes in handy. -->
+            
             <div class="windowIntoBG" id="topWindow">
                 <div id="socialMediaButtonContianer"></div>
                 <div id="heroSection">
-                    <img src="./assets/images/pacomatic-hero-4x.png" id="pacoHeroImage" decoding="async" loading="lazy"/>
+                    <img src="./assets/images/pacomatic-hero-4x.png" id="pacoHeroImage" decoding="async" loading="lazy"/> <!-- As slow as it is, using an image that was upscaled by Nearest Neighbor and then rendered via Bilinear is the simplest way to provide maximum quality. The quality gains are good enough that I can justify the loading times. -->
                 </div>
                 <div id="gradientAtBottomOftopWindow"></div>
             </div>
+
+            <div id="pageContentsSection">
+                <p class="standardText" id="introText">
+                    Welcome! This is my site, my own personal corner of the internet. <br>
+                    There's something I love about this webiste.
+                </p>
+
+                <div id="pacoStatsContainer">
+                    <div class="win7 window" style="max-width: 300px">
+                        <div class="title-bar">
+                            <div class="title-bar-text">Who am I?</div>
+                            <div class="title-bar-controls">
+                                <button aria-label="Minimize"></button>
+                                <button aria-label="Maximize"></button>
+                                <button aria-label="Close"></button>
+                            </div>
+                        </div>
+                        <div class="window-body has-space">
+                            <p>There's so much room for activities!</p>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+            </div>
+
+
         </div>
 
 
-        
+
 
 
 
@@ -230,8 +282,7 @@
                         // "What does the button do?"
                         switch(socialLinksItemLookupTable[i][3]) {
                             case 0:
-                                anchorThatSurroundsTheButton.href = "javascript:openLinkInIframe('" + socialLinksItemLookupTable[i][4] + "')";
-                                break;
+                                var nope;
                             case 1:
                                 anchorThatSurroundsTheButton.href = socialLinksItemLookupTable[i][4];
                                 break;
