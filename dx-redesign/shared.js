@@ -43,10 +43,13 @@ const socialLinksItemLookupTable = [
     [0, "GitHub", "assets/socialmedia-icons/github_logo.svg", 2, "https://github.com/pacomatic1/", "", "If I open-source code, it's usually here. ", "GitHub"],
 
 ];
-// Unlike the navigation bar, this is a simple array: a list of paths to each background's HTML file.
 const backgroundList = [
+    // Unlike the navigation bar, this is a simple array: a list of paths to each background's HTML file.
     "./backgrounds/ps3Xmb.html", "./backgrounds/random_stuff_outlook.html"
-]
+];
+
+
+
 initializeIframePage('./pages/landing/index.html');
 
 var pageMode = determinePageMode(); // "main" or "accessible"
@@ -70,7 +73,6 @@ if (pageMode == "accessible") {
 
 
 
-// DIVIDER!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
 
 
 
@@ -132,6 +134,9 @@ function populateMainModeSocialMediaList() {
                 case 2:
                     anchorThatSurroundsTheButton.href = socialLinksItemLookupTable[i][4];
                     anchorThatSurroundsTheButton.target = "_blank";
+                    break;
+                default:
+                    console.log("Main mode's social media list has an broken item! Either the lookup table's wrong or the item is unimplemented. Either way, go fix it.");
                     break;
             }
 
@@ -237,11 +242,6 @@ function populateAccessibleNavBar() { // This also handles the social media link
             // There are other values in the social media lookup table but they're irrelevant.
             break;
         }
-
-
-
-
-
         socialMediaItemsArray.push(newOptionArray);
     }
     socialMediaItemsArray.push( [1, "", "", true] ); // This breaks out of the option group.
@@ -251,7 +251,6 @@ function populateAccessibleNavBar() { // This also handles the social media link
     for (let i = socialMediaItemsArray.length - 1; i > -1; i--) {
         newNavBarItemLookupTable.unshift(socialMediaItemsArray[i]);
     }
-
 
 
 
@@ -319,13 +318,16 @@ function accessibleModeNavBarSelected() { // This is called when the user presse
         case 2:
             window.open(optionActionValue, '_blank').focus();
             break;
-    
+        default:
+            console.log("You pressed the 'Go to page' button in accessible mode! Sadly, the page you're going to uses an unsupported action type. Either the lookup table is wrong, or your didn't implement it. Get to work!");
+            break;
     }
 
 }
 
 function initializeIframePage(relativePathToDefaultPage) {
     var currentPage = findValueOfKeyFromQueryStringInUrl('page');
+    console.log(currentPage);
     if (currentPage == null) { openLinkInIframe(relativePathToDefaultPage); }
     else {openLinkInIframe(currentPage);}
     
@@ -363,6 +365,11 @@ function replaceValueInKeyValuePairInUrlQueryStringBasedOnKey(keyToSelect, newVa
     params.append(keyToSelect, newValue);
     // Add the params to url. I tried looking for a built-in method but I can't find one, so I'll do it myself.
     url.search = params.toString();
+    
+    // params.toString() converts everything to percent-based encoding, converting every slash into a %2F. This sucks!
+    // As such, I'm going to convert these back to slashes, since having slashes in your query string has no issues.
+    // One might immediately assume that I'm gonna use decodeURIComponent(). As much as I'd love to, this is a bad idea since it decodes things that aren't slashes, and that's bad. Time to do it myself!
+    url = convertPercentEncodedQueryStringToFinalQueryString(url.toString());
     history.pushState({}, "", url);
 }
 
@@ -379,4 +386,11 @@ function findValueofNthItemInArrayOfMultiItemArraysAssumingYouKnowWhatAndWhereTh
     return foundValue;
     // You know, the code for this used to make multiple arrays and sort through them. It sucked. This is faster. And with far less bugs.
     // I'm glad I refactored this.
+}
+
+
+function convertPercentEncodedQueryStringToFinalQueryString(percentEncodedQueryString) { // Include the leading 
+    var newText = percentEncodedQueryString;
+    newText = newText.replaceAll("%2F", "/");
+    return newText;
 }

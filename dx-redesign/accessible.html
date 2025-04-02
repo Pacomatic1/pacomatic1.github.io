@@ -23,13 +23,21 @@
                 padding: 0px;
                 height: 100vh;
                 width: 100vw;
+                display: grid;
+                grid-template-rows: min-content auto;
+                grid-template-areas:
+                "barAtTheTop"
+                "mainIframe"
+                ;
             }
             #barAtTheTop {
                 background-color: #121212;
                 padding-inline: 10px;
                 padding-top: 3px;
                 padding-bottom: 3px;
+                grid-area: barAtTheTop;
             }
+
             #mainIframe {
                 height: 100%;
                 width: 100%;
@@ -37,11 +45,7 @@
                 padding: 0px;
                 border: none;
                 display: block;
-				position: absolute;
-                top:0%;
-                left:0px;
-                right:0px;
-                bottom:0px;
+                grid-area:mainIframe;
             } 
 
             /* SELECT AND ITS RELATED TAGS */
@@ -119,9 +123,9 @@
                 Go to Page
             </button>
         </div>
-
+        
         <iframe id="mainIframe" title="Main Iframe" allow="autoplay" allowtransparency="false"></iframe> <!-- The default source page is selected by the javascript. -->
-
+        
         <script src="./shared.js"> </script> 
     </body>
 </html>
