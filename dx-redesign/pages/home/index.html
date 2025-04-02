@@ -91,23 +91,36 @@
             #pageContentsSection {
                 background-image: url('./assets/backgrounds/mc_barrel_4x.png');
                 margin: 0px;
+                padding-top: 10px;
                 z-index: 0;
+                display: grid;
+                grid-template-columns: auto 25em;
+				grid-template-areas: 
+                "basePageContents featuredPageContents"
             }
             #introText {
                 margin: 0px;
-                padding-top: 1rem;
                 padding-inline: 1rem;
-
-
             }
             #pacoStatsBody {
                 background-color: rgb(240,240,240);
-
             }
             #pacoStatsContainer {
                 width: 300px;
             }
-
+            #statsWindow {
+                border: none;      
+                width: 100%;      
+                margin-inline: auto; 
+                height: 30em;
+            }
+            #basePageContents {
+                grid-area: basePageContents;
+            }
+            #featuredPageContents {
+                grid-area: featuredPageContents;
+                padding-inline: 10px;
+            }
 
 
             /* SOCIAL MEDIA BUTTONS */
@@ -158,28 +171,18 @@
             </div>
 
             <div id="pageContentsSection">
-                <p class="standardText" id="introText">
-                    Welcome! This is my site, my own personal corner of the internet. <br>
-                    There's something I love about this webiste.
-                </p>
-
-                <div id="pacoStatsContainer">
-                    <div class="win7 window" style="max-width: 300px">
-                        <div class="title-bar">
-                            <div class="title-bar-text">Who am I?</div>
-                            <div class="title-bar-controls">
-                                <button aria-label="Minimize"></button>
-                                <button aria-label="Maximize"></button>
-                                <button aria-label="Close"></button>
-                            </div>
-                        </div>
-                        <div class="window-body has-space">
-                            <p>There's so much room for activities!</p>
-                        </div>
-                    </div>
+                
+                <div id="basePageContents">
+                    <p class="standardText" id="introText">
+                        Welcome! This is my site, my own personal corner of the internet. <br>
+                        This place is amazing, simply because it being a website means I can do whatever I want! <br>
+                        Seriously, this stuff is awesome. Go make your own site, you'll see what I mean.
+                    </p>
                 </div>
 
-
+                <div id="featuredPageContents">
+                    <iframe id="statsWindow" src="stats_iframe.html" allowtransparency="false"><!-- I hate this so much. If 7.css's scoped version wasn'tso picky, I would do this with a div like a smart person. Alas, I don't have the patience to fix this problem. Forgive me. --></iframe>
+                </div>
 
 
             </div>
