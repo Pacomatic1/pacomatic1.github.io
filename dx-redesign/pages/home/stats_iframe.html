@@ -60,12 +60,45 @@
             <div class="window-body has-space">
                 <div class="standardText" id="smallStats"> <!-- When this used to be a paragraph, nested children grid element broke out of the grid. I have no clue why but it's worth mentioning. Even so, I have a few theories regarding the fact that paragraphs only allow inline children; maybe I have to make this a div. -->
                     <p class="smallStatsChild">
-                        <h4 style="display:inline;">Pacomatic</h4>
+                        <h4 style="display:inline;">Pacomatic</h4> <br>
+                        Gamer, Programmer, Aspiring 3D Artist <br>
+                        Age <span id="dynamicAge"></span><br>
+                        
                     </p>
                 </div>
                 <img id="pacoProfilePicture" src="./assets/images/paco-pfp-square.png">
                 <p id="longStats">KILL ME</p>
             </div>
         </div>
+
+        <script>
+            handleAging();
+
+            function handleAging() {
+                const ageIndicator = document.getElementById("dynamicAge");
+                const birthdate = "2009-09-06"; // I don't know of the exact hour. I just know that it was on that day, and most likely during the evening.
+                var currentDateAsObject = new Date(); // Automatically returns current date
+                var currentDateAsText = currentDateAsObject.toISOString(); // Turns to same string as birthDate
+                
+                var [path] = currentDateAsText.split('T')
+                
+                currentDateAsText = path;
+
+
+
+            }
+
+
+
+            //function subtractDatesInHours(date1, date2) {
+            //     const oneHour = 60 * 60 * 1000; // milliseconds in one hour
+            //     const diffInMilliseconds = date1 - date2;
+            //     return Math.round(diffInMilliseconds / oneHour); // Convert milliseconds to hours
+            // }
+
+            // const date1 = new Date('2023-07-15T10:00:00');
+            // const date2 = new Date('2023-07-14T20:00:00');
+            // console.log(subtractDatesInHours(date1, date2));  // Output: 14
+        </script>
     </body>
 </html>

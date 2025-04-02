@@ -327,7 +327,6 @@ function accessibleModeNavBarSelected() { // This is called when the user presse
 
 function initializeIframePage(relativePathToDefaultPage) {
     var currentPage = findValueOfKeyFromQueryStringInUrl('page');
-    console.log(currentPage);
     if (currentPage == null) { openLinkInIframe(relativePathToDefaultPage); }
     else {openLinkInIframe(currentPage);}
     
