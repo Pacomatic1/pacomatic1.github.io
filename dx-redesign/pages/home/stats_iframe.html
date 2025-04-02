@@ -20,7 +20,6 @@
                 grid-template-columns: auto 10em;
                 grid-template-areas: 
                 "smallStats pacoProfilePicture"
-                /* "longStats longStats" */
                 ;
             }
 
@@ -63,42 +62,52 @@
                         <h4 style="display:inline;">Pacomatic</h4> <br>
                         Gamer, Programmer, Aspiring 3D Artist <br>
                         Age <span id="dynamicAge"></span><br>
-                        
+                        I am currently: <span id="currentActionIndicator"></span>    
                     </p>
                 </div>
                 <img id="pacoProfilePicture" src="./assets/images/paco-pfp-square.png">
-                <p id="longStats">KILL ME</p>
             </div>
         </div>
 
         <script>
+            const possibleCurrentActionList = [
+                // List of possible current actions. Array of strings.
+                "Sane", "Quivering", "Staring at the Wall", "Gooning", "Listening to Weezer on repeat",
+                "Eating a Blunt", "Edging", "Playing Monster Hunter", "Spamming a comment section 💀💀💀", "Pissed off 🥀",
+                "Eating Rocks", "Eating Sand", "Eating Tofu", "Doomscrolling", "Grinding", "Programming", "Working", "Mewing",
+                "Reading Manga", "[CENSORED]"
+            ];
+
+
             handleAging();
+            randomizeCurrentAction();
+
+            function randomizeCurrentAction() {
+                const actionIndicator = document.getElementById("currentActionIndicator");
+                var chosenIndice = randomInt(0, possibleCurrentActionList.length-1)
+                var chosenString = possibleCurrentActionList[chosenIndice];
+                actionIndicator.innerHTML = chosenString;
+                
+            }
 
             function handleAging() {
                 const ageIndicator = document.getElementById("dynamicAge");
-                const birthdate = "2009-09-06"; // I don't know of the exact hour. I just know that it was on that day, and most likely during the evening.
-                var currentDateAsObject = new Date(); // Automatically returns current date
-                var currentDateAsText = currentDateAsObject.toISOString(); // Turns to same string as birthDate
+                const birthdate = new Date("2009-09-06"); 
+                var currentDate = new Date(); // Automatically returns current date
                 
-                var [path] = currentDateAsText.split('T')
-                
-                currentDateAsText = path;
+                const oneYear = 365 * 24 * 60 * 60 * 1000; // ms in a year
+                var diffInMilliseconds = currentDate - birthdate;
+                var yearsPassed = Math.floor(diffInMilliseconds / oneYear);
 
-
-
+                ageIndicator.innerHTML = yearsPassed;
             }
 
 
-
-            //function subtractDatesInHours(date1, date2) {
-            //     const oneHour = 60 * 60 * 1000; // milliseconds in one hour
-            //     const diffInMilliseconds = date1 - date2;
-            //     return Math.round(diffInMilliseconds / oneHour); // Convert milliseconds to hours
-            // }
-
-            // const date1 = new Date('2023-07-15T10:00:00');
-            // const date2 = new Date('2023-07-14T20:00:00');
-            // console.log(subtractDatesInHours(date1, date2));  // Output: 14
+            function randomInt(upperBoundInclusive, lowerBoundInclusive) { // Thanks, MDN! https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+                const minCeiled = Math.ceil(upperBoundInclusive);
+                const maxFloored = Math.floor(lowerBoundInclusive);
+                return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled); 
+            }
         </script>
     </body>
 </html>
