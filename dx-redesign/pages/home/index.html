@@ -183,6 +183,10 @@
 
                 <div id="featuredPageContents">
                     <iframe id="statsWindow" src="stats_iframe.html" allowtransparency="false"><!-- I hate this so much. If 7.css's scoped version wasn'tso picky, I would do this with a div like a smart person. Alas, I don't have the patience to fix this problem. Forgive me. --></iframe>
+
+                    <!-- For 2 hours, I tried to make a functioning profile embedder. Considering my use case, I decided that it wasn't worth the time when all of this could easy be done with a *static div.* -->
+                    <!-- Oh, and take this. https://embed.bsky.app/embed/did:plc:ivahk4tfpjcge5bkhaxh4zvb/app.bsky.feed.post/3llkpqlc7d22x?id=9811442599174174&colorMode=system -->
+
                 </div>
 
 
@@ -237,26 +241,19 @@
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+            // var embedData; // This is some stuff from when I was trying to have a fully functional profile embed from Bluesky. Maybe I can salvage this?
+            // getEmbedData("pacomatic.bsky.social")
+            function getEmbedData(profileHandleWithoutLeadingAtSymbol) {
+                var xhr = new XMLHttpRequest();
+                xhr.onreadystatechange = function () {
+                    if (xhr.readyState === 4) {
+                        embedData = xhr.response;
+                    }
+                }
+                xhr.open('get', 'https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor=' + profileHandleWithoutLeadingAtSymbol, true);
+                xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+                xhr.send();
+            }
 
             function propagateSocialMediaList() {
                 const socialMediaContainer = document.getElementById("socialMediaButtonContianer");
