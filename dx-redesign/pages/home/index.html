@@ -11,7 +11,6 @@
                 padding:0px;
 
             }
-            
 
             #gigaDiv {
                 min-width: 40em;
@@ -98,6 +97,7 @@
                 grid-template-columns: auto 25em;
 				grid-template-areas: 
                 "basePageContents featuredPageContents"
+                ;
             }
             #introText {
                 margin: 0px;
@@ -113,7 +113,15 @@
                 border: none;      
                 width: 100%;      
                 margin-inline: auto; 
-                height: 30em;
+                height: 11em;
+                grid-area: statsWindow;
+            }
+            #bskyEmbed {
+                border: none;      
+                width: 100%;      
+                margin-inline: auto; 
+                height: 5em;
+                grid-area: bskyEmbed;
             }
             #basePageContents {
                 grid-area: basePageContents;
@@ -121,70 +129,13 @@
             #featuredPageContents {
                 grid-area: featuredPageContents;
                 padding-inline: 10px;
-            }
-
-
-
-
-            #bskyProfileEmbed {
-                background-color: #161E27;
-                width: 90%;
-                margin-inline:auto;
-                padding:12px 16px 10px;
-                height:42.5px;
-                border: 1px solid #475569;
-                border-radius: 9px;
-                display: grid;
-                grid-template-columns: minmax(min-content, max-content) auto minmax(min-content, max-content);
-                grid-template-areas: "profilePic embedText bskyIcon";
-            }
-            #bskyProfileEmbedPFP {
-                grid-area: profilePic;
-                width: 40px;
-                height: 40px;
-                margin-right: 11px;
-                border-radius: 100px;
-            }
-            #bskyProfileEmbedText {
-                grid-area: embedText;
-                display: block;
-                /* margin-block-start: 1em;
-                margin-block-end: 1em;
-                margin-inline-start: 0px;   
-                margin-inline-end: 0px; */
-                unicode-bidi: isolate;
-                color: #E2E8F0;
-                /* Uses Segoe UI */
-                font-family: ui-sans-serif,system-ui,sans-serif,"Apple Color Emoji","Segoe UI Emoji", Segoe UI Symbol,"Noto Color Emoji";
-                font-size: 17px;
-            }
-            #bskyProfileEmbedText > b {
-                font-weight: 700;
-            }
-            #bskyProfileEmbedText > span {
-                color: #AEBBC9;
-                font-size: 15px;
-            }
-            #bskyProfileEmbedIcon {
-                grid-area: bskyIcon;
-                width: 35.79px;
-                margin-bottom: auto;
-                overflow: visible;
-                transition: 100ms ease-out 50ms;;
-            } #bskyProfileEmbedIcon:hover {
-                transform:scale(1.1);
+                display:grid;
+                grid-template-rows: min-content min-content;
+				grid-template-areas: 
+                "statsWindow" "bskyEmbed"
+                ;
 
             }
-            @font-face {
-                font-family: "Segoe UI";
-                src: url("./assets/segoe-ui/segoeuithis.ttf") format("truetype");
-            }
-            @font-face {
-                font-family: "Segoe UI Bold";
-                src: url("./assets/segoe-ui/segoeuithisbd.ttf") format("truetype");
-            }
-            
-
 
 
             /* SOCIAL MEDIA BUTTONS */
@@ -247,18 +198,8 @@
                 <div id="featuredPageContents">
                     <iframe id="statsWindow" src="stats_iframe.html" allowtransparency="false"><!-- I hate this so much. If 7.css's scoped version wasn't so picky, I would do this with a div like a smart person. Alas, I don't have the patience to fix this problem. Forgive me. --></iframe>
 
-                    <!-- For 2 hours, I tried to make a functioning profile embedder. Considering my use case, I decided that it wasn't worth the time when all of this could easy be done with a *static div.* -->
-                    <!-- Oh, and take this. https://embed.bsky.app/embed/did:plc:ivahk4tfpjcge5bkhaxh4zvb/app.bsky.feed.post/3llkpqlc7d22x?id=9811442599174174&colorMode=system -->
-                    <div id="bskyProfileEmbed">
-                        <img id="bskyProfileEmbedPFP" src="./assets/images/paco-pfp-square.png">
-                        <div id="bskyProfileEmbedText">
-                            <b>Pacomatic</b>  <br>
-                            <span>@pacomatic.bksy.app</span>
-                        </div>
-                        <img id="bskyProfileEmbedIcon" src="data:image/svg+xml,%3csvg%20xmlns='http://www.w3.org/2000/svg'%20fill='none'%20viewBox='0%200%20320%20286'%3e%3cpath%20fill='rgb(10,122,255)'%20d='M69.364%2019.146c36.687%2027.806%2076.147%2084.186%2090.636%20114.439%2014.489-30.253%2053.948-86.633%2090.636-114.439C277.107-.917%20320-16.44%20320%2032.957c0%209.865-5.603%2082.875-8.889%2094.729-11.423%2041.208-53.045%2051.719-90.071%2045.357%2064.719%2011.12%2081.182%2047.953%2045.627%2084.785-80%2082.874-106.667-44.333-106.667-44.333s-26.667%20127.207-106.667%2044.333c-35.555-36.832-19.092-73.665%2045.627-84.785-37.026%206.362-78.648-4.149-90.071-45.357C5.603%20115.832%200%2042.822%200%2032.957%200-16.44%2042.893-.917%2069.364%2019.147Z'/%3e%3c/svg%3e">
-
-                    </div>
-
+                    <iframe id="bskyEmbed" src="https://pacomatic1.github.io/Goofy-ahh-Bsky-Profile-Embed/?profile=pacomatic.bsky.social" allowtransparency="false"></iframe> <!-- I went on a sidequest for this 💀 -->
+                    
                 </div>
 
 
@@ -266,14 +207,6 @@
 
 
         </div>
-
-
-
-
-
-
-
-
 
         <script>
             const socialLinksItemLookupTable = [
@@ -310,23 +243,6 @@
 
             propagateSocialMediaList();
 
-
-
-
-            // var embedData; // This is some stuff from when I was trying to have a fully functional profile embed from Bluesky. Maybe I can salvage this?
-            // getEmbedData("pacomatic.bsky.social")
-            // https://embed.bsky.app/embed/did:plc:ivahk4tfpjcge5bkhaxh4zvb/app.bsky.feed.post/3llkpqlc7d22x?id=9811442599174174&colorMode=system
-            // function getEmbedData(profileHandleWithoutLeadingAtSymbol) {
-            //     var xhr = new XMLHttpRequest();
-            //     xhr.onreadystatechange = function () {
-            //         if (xhr.readyState === 4) {
-            //             embedData = xhr.response;
-            //         }
-            //     }
-            //     xhr.open('get', 'https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor=' + profileHandleWithoutLeadingAtSymbol, true);
-            //     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-            //     xhr.send();
-            // }
 
             function propagateSocialMediaList() {
                 const socialMediaContainer = document.getElementById("socialMediaButtonContianer");
