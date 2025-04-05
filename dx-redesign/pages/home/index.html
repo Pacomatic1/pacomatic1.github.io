@@ -123,14 +123,14 @@
                 border: none;      
                 width: 100%;      
                 margin-inline: auto; 
-                height: 10.6em;
+                height: 11em;
                 grid-area: statsWindow;
             }
             #bskyEmbed {
                 border: none;      
                 width: 100%;      
                 margin-inline: auto; 
-                height: 4.15em;
+                height: 4.2em;
                 grid-area: bskyEmbed;
             }
             #basePageContents {
@@ -184,13 +184,13 @@
             }
             #oldSiteArchiveButtonLink {
                 display: flex;
-                width: 100%;
                 z-index:10;
                 position:absolute;
                 bottom:0;
                 text-align:right;
                 margin-inline: 10px;
                 margin-bottom: 10px;
+                text-decoration: none;
             }
             #oldSiteArchiveButtonLink img {
                 width: 70%;
@@ -247,7 +247,7 @@
                 <div id="heroSection">
                     <img src="./assets/images/pacomatic-hero-4x.png" id="pacoHeroImage" decoding="async" loading="lazy"/> <!-- As slow as it is, using an image that was upscaled by Nearest Neighbor and then rendered via Bilinear is the simplest way to provide maximum quality. The quality gains are good enough that I can justify the loading times. -->
                 </div>
-                <a id="oldSiteArchiveButtonLink">
+                <a id="oldSiteArchiveButtonLink" href="../wip/index.html">
                     <div id="oldSiteArchiveButtonImage"> 
                         <img src="./assets/socialmedia-icons/internet_archive_logo.svg" alt="Old Site Archive" title="Old Site Archive"/>
                     </div>
@@ -269,8 +269,17 @@
                 </div>
 
                 <div id="featuredPageContents">
-                    <iframe id="statsWindow" src="stats_iframe.html" allowtransparency="false"><!-- I hate this so much. If 7.css's scoped version wasn't so picky, I would do this with a div like a smart person. Alas, I don't have the patience to fix this problem. Forgive me. --></iframe>
-                    <iframe id="bskyEmbed" src="https://pacomatic1.github.io/Goofy-ahh-Bsky-Profile-Embed/?profile=pacomatic.bsky.social" allowtransparency="false"></iframe> <!-- I went on a sidequest for this 💀 -->
+                    <iframe id="statsWindow" src="stats_iframe.html" allowtransparency="true"><!-- I hate this so much. If 7.css's scoped version wasn't so picky, I would do this with a div like a smart person. Alas, I don't have the patience to fix this problem. Forgive me. --></iframe>
+                    <iframe id="bskyEmbed" src="https://pacomatic1.github.io/Goofy-ahh-Bsky-Profile-Embed/?profile=pacomatic.bsky.social" allowtransparency="ture"></iframe> <!-- I went on a sidequest for this 💀 -->
+                    <iframe id="" src="https://www.youtube.com/" allowtransparency="false"> <!-- I did some fiddling, and may or may not have pulled some hair out. 
+                    In the end, I was able to obtain this link.
+                    https://www.googleapis.com/youtube/v3/channels?part=statistics&forHandle=Pacomatic&key= API KEY, THIS IS PRIVATE
+                    Run this using a key from your account's Google API console, and find 'subscriberCount' in the response. This has your subscribers. It has what you seek.
+                    Sadly, YouTube is a meanie and requires authentication to get public info, which Bluesky doesn't. They need to learn from Bluesky.
+                    You next task: Find a way to get the subscriber count using some free service, and then send that to this GitHub repo.
+                        IDEA: Since this is my own API, can I send a request to *my* API which sends a request YouTub's then relays it back to me? If I'm not wrong, I'm allowed to execute code off a GitHub repo, so I could keep that here or somewhere else or something.
+                    --> </iframe> 
+
                     
 
                     
