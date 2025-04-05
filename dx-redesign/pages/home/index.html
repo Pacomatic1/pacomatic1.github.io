@@ -1,11 +1,9 @@
 <html>
     <head>
         <style>
-            @import url("https://fonts.googleapis.com/css?family=Roboto:100,200,300,400,500|Rubik:400|Ubuntu:300,400|Roboto+Condensed|Source+Sans+Pro:600");
             @import url('7_scrollbar.css');
             @import url('7.scoped.css');
-            
-            @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+            @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
             /* .noto-sans-<uniquifier> {
                 font-family: "Noto Sans", sans-serif;
                 font-optical-sizing: auto;
@@ -145,7 +143,6 @@
 				grid-template-areas: 
                 "statsWindow" "bskyEmbed"
                 ;
-
             }
 
             #oldSiteArchiveButton {
@@ -198,6 +195,70 @@
                 margin-inline:auto;
             }
 
+
+            #YTembedContainer {
+                width: 23.5em;
+                height: 4em;
+                background-color: #0F0F0F;
+                border: 1px solid #3F3F3F;
+                border-radius: 3px;
+                margin-inline: auto;
+                margin-bottom: 10px;
+                padding: none;
+                display: grid;
+                grid-template-columns: minmax(min-content, max-content) auto;
+                grid-template-areas: "profilePic embedText";
+            } #YTembedContainer:hover {
+                background-color: #1a1a1a;
+            }
+            #YTembedContainer:active {
+                background-color: #2a2a2a;
+            }
+            #YTembedContainer img {
+                width: 3em;
+                height: auto;
+                border-radius: 50%;
+                margin-inline: auto;
+                margin: 0.5em;
+                grid-area: profilePic;
+
+            }
+            #YTembedContainer p {
+                font: 8pt "Roboto", sans-serif;
+                color: #ffffff;
+                margin: 0px;
+                padding-top: 10px;
+                padding-bottom: 10px;
+                text-align: left;
+                grid-area: embedText;
+            }
+
+            #YTembedName {
+                font-size: 1.3rem;
+                font-weight: 700;
+                color: #ffffff;
+                grid-area: YTembedName;
+                margin-top: auto;
+                margin-bottom: 0px;
+            }
+            #YTembedHandle {
+                font-size: 0.8rem;
+                font-weight: 400;
+                color: #ffffff;
+                grid-area: YTembedHandle;
+                margin-top: 0px;
+                margin-bottom: auto;
+            }
+            a.YTembedLink, a.YTembedLink:visited {
+                text-decoration: none;
+                color: inherit;
+                outline: 0;
+                cursor: auto;
+            } a.YTembedLink:hover, a.YTembedLink:focus, a.YTembedLink:active {
+                text-decoration: underline;
+                color: #ffffff;
+                cursor: pointer;
+            }
 
 
             /* SOCIAL MEDIA BUTTONS */
@@ -258,6 +319,9 @@
                 <div id="gradientAtBottomOftopWindow"></div>
             </div>
 
+
+
+
             <div id="pageContentsSection">
                 
                 <div id="basePageContents">
@@ -266,21 +330,26 @@
                         This place is amazing, simply because it being a website means I can do whatever I want! <br>
                         Seriously, this stuff is awesome. Go make your own site, you'll see what I mean.
                     </p>
+
+                    <!-- Why I made this -->
+                    <!-- Other sites I like -->
                 </div>
+
+
+
+
 
                 <div id="featuredPageContents">
                     <iframe id="statsWindow" src="stats_iframe.html" allowtransparency="true"><!-- I hate this so much. If 7.css's scoped version wasn't so picky, I would do this with a div like a smart person. Alas, I don't have the patience to fix this problem. Forgive me. --></iframe>
-                    <iframe id="bskyEmbed" src="https://pacomatic1.github.io/Goofy-ahh-Bsky-Profile-Embed/?profile=pacomatic.bsky.social" allowtransparency="ture"></iframe> <!-- I went on a sidequest for this 💀 -->
-                    <iframe id="" src="https://www.youtube.com/" allowtransparency="false"> <!-- I did some fiddling, and may or may not have pulled some hair out. 
-                    In the end, I was able to obtain this link.
-                    https://www.googleapis.com/youtube/v3/channels?part=statistics&forHandle=Pacomatic&key= API KEY, THIS IS PRIVATE
-                    Run this using a key from your account's Google Cloud API (console.cloud.google.com), and find 'subscriberCount' in the response. This has your subscribers. It has what you seek.
-                    Sadly, YouTube is a meanie and requires authentication to get public info, which Bluesky doesn't. They need to learn from Bluesky.
-                    You next task: Find a way to get the subscriber count using some free service, and then send that to this GitHub repo.
-                        IDEA: Since this is my own API, can I send a request to *my* API which sends a request YouTub's then relays it back to me? If I'm not wrong, I'm allowed to execute code off a GitHub repo, so I could keep that here or somewhere else or something.
-                    --> </iframe> 
-
-                    
+                    <iframe id="bskyEmbed" src="https://pacomatic1.github.io/Goofy-ahh-Bsky-Profile-Embed/?profile=pacomatic.bsky.social" allowtransparency="true"></iframe> <!-- I went on a sidequest for this 💀 -->
+                    <div id="YTembedContainer"> <!-- I was gonna make an actual embed, but stupid YouTube needs an authentication key to access public information. Doing this on a static site sucks. They should be more like Bluesky. -->
+                        <!-- FONT: Roboto (phew!) -->
+                         <img src="./assets/images/yt_pfp.jpg">
+                         <p>
+                            <a class="YTembedLink" id="YTembedName">Pacomatic</a> <br>
+                            <a class="YTembedLink" id="YTembedHandle">@Pacomatic</a>
+                         </p>
+                    </div>
 
                     
                 </div>
@@ -325,6 +394,22 @@
             
 
             propagateSocialMediaList();
+            addYTembedLinks();
+
+
+
+            function addYTembedLinks() {
+                var allElementsToSetYTLinkOn = document.getElementsByClassName("YTembedLink");
+                for(let i = 0; i < allElementsToSetYTLinkOn.length; i++) {
+                    var elementToModify = allElementsToSetYTLinkOn[i];
+                    elementToModify.href = "https://www.youtube.com/user/AmmarZawar";
+                    elementToModify.target = "_blank";
+                }
+                document.getElementById("YTembedContainer").addEventListener('click', function (event) {
+                    open("https://www.youtube.com/user/AmmarZawar", "_blank");
+                });
+            }
+
 
 
             function propagateSocialMediaList() {
