@@ -19,7 +19,6 @@ const navBarItemLookupTable = [
         // Note that in accessible mode, just text or text and a horizontal rule will create a new option group. Breaking out of that option group is done by just creating a horizontal rule. 
     [0, "Landing Page", " ", 0, "./pages/landing/index.html", ""],
     [0, "Home", "assets/navbar-icons/3ds-home-menu-icon.svg", 0, "./pages/home/index.html", "margin-bottom:-2px; height: auto; width: 16px; margin-right: 4px;"],
-    [0, "Projects", "", 2, "https://pacomatic1.github.io"],
 ];
 
 const socialLinksItemLookupTable = [

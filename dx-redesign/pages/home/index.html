@@ -333,6 +333,9 @@
 
                     <!-- Why I made this -->
                     <!-- Other sites I like -->
+                    
+                
+                
                 </div>
 
 
@@ -343,15 +346,12 @@
                     <iframe id="statsWindow" src="stats_iframe.html" allowtransparency="true"><!-- I hate this so much. If 7.css's scoped version wasn't so picky, I would do this with a div like a smart person. Alas, I don't have the patience to fix this problem. Forgive me. --></iframe>
                     <iframe id="bskyEmbed" src="https://pacomatic1.github.io/Goofy-ahh-Bsky-Profile-Embed/?profile=pacomatic.bsky.social" allowtransparency="true"></iframe> <!-- I went on a sidequest for this 💀 -->
                     <div id="YTembedContainer"> <!-- I was gonna make an actual embed, but stupid YouTube needs an authentication key to access public information. Doing this on a static site sucks. They should be more like Bluesky. -->
-                        <!-- FONT: Roboto (phew!) -->
                          <img src="./assets/images/yt_pfp.jpg">
                          <p>
                             <a class="YTembedLink" id="YTembedName">Pacomatic</a> <br>
                             <a class="YTembedLink" id="YTembedHandle">@Pacomatic</a>
-                         </p>
+                         </p>     
                     </div>
-
-                    
                 </div>
 
 
@@ -393,8 +393,15 @@
             ];
             
 
+
+
+
             propagateSocialMediaList();
             addYTembedLinks();
+
+
+
+
 
 
 
@@ -409,8 +416,6 @@
                     open("https://www.youtube.com/user/AmmarZawar", "_blank");
                 });
             }
-
-
 
             function propagateSocialMediaList() {
                 const socialMediaContainer = document.getElementById("socialMediaButtonContianer");
