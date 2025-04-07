@@ -78,8 +78,14 @@ if (pageMode == "accessible") {
 
 
 
-
-
+function onIframePageSwap() {
+    // Get the current link of the iframe, and then set the iframe's new link to the current link. That way, we can handle the query strings.
+    const mainIframe = document.getElementById("mainIframe");
+    var currentPage = mainIframe.src;
+    openLinkInIframe(currentPage);
+    console.log(currentPage);
+    
+}
 
 function determinePageMode() {
     if (document.getElementById("mainModeIdentifier") != null) {
@@ -325,10 +331,11 @@ function accessibleModeNavBarSelected() { // This is called when the user presse
 }
 
 function initializeIframePage(relativePathToDefaultPage) {
+    const mainIframe = document.getElementById("mainIframe");
     var currentPage = findValueOfKeyFromQueryStringInUrl('page');
     if (currentPage == null) { openLinkInIframe(relativePathToDefaultPage); }
     else {openLinkInIframe(currentPage);}
-    
+    mainIframe.addEventListener("load", onIframePageSwap);
 }
 
 

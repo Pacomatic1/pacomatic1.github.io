@@ -201,33 +201,7 @@
                 margin-inline: 1em;
             }
 
-            #whyThisSiteExistsLink {
-                height: 8em;
-                width: 8em;
-                background-image: url('./assets/images/mc_hotbar_frame_16x.png');
-                background-size: 100% 100%;
-                margin-left: 2em;
-                border: 0px;
-                padding: 0px;
-                margin-top: 1em;
-            }
-            #whyThisSiteExistsLink button {
-                height: 100%;
-                width: 100%;
-                background: none;
-                padding: 0px;
-                border: 0px;
-                transition: 50ms ease-out 50ms;
-                overflow: visible;
-            } #whyThisSiteExistsLink button:hover {
-                transform:scale(1.2);
-            } 
-
-            #whyThisSiteExistsLink button img {
-                width: 60%;
-                height: auto;
-                margin: 20%;
-            }
+            
 
             #YTembedContainer {
                 width: 23.5em;
@@ -243,11 +217,9 @@
                 grid-template-areas: "profilePic embedText";
             } #YTembedContainer:hover {
                 background-color: #1a1a1a;
-            }
-            #YTembedContainer:active {
+            } #YTembedContainer:active {
                 background-color: #2a2a2a;
-            }
-            #YTembedContainer img {
+            } #YTembedContainer img {
                 width: 3em;
                 height: auto;
                 border-radius: 50%;
@@ -255,8 +227,7 @@
                 margin: 0.5em;
                 grid-area: profilePic;
 
-            }
-            #YTembedContainer p {
+            } #YTembedContainer p {
                 font: 8pt "Roboto", sans-serif;
                 color: #ffffff;
                 margin: 0px;
@@ -264,25 +235,21 @@
                 padding-bottom: 10px;
                 text-align: left;
                 grid-area: embedText;
-            }
-
-            #YTembedName {
+            } #YTembedName {
                 font-size: 1.3rem;
                 font-weight: 700;
                 color: #ffffff;
                 grid-area: YTembedName;
                 margin-top: auto;
                 margin-bottom: 0px;
-            }
-            #YTembedHandle {
+            } #YTembedHandle {
                 font-size: 0.8rem;
                 font-weight: 400;
                 color: #ffffff;
                 grid-area: YTembedHandle;
                 margin-top: 0px;
                 margin-bottom: auto;
-            }
-            a.YTembedLink, a.YTembedLink:visited {
+            } a.YTembedLink, a.YTembedLink:visited {
                 text-decoration: none;
                 color: inherit;
                 outline: 0;
@@ -292,6 +259,55 @@
                 color: #ffffff;
                 cursor: pointer;
             }
+            
+
+
+
+
+
+
+
+
+
+            #whyThisSiteExistsLinkContainer {
+                height: 12em;
+                width: 8em;
+                margin-top: 1em;
+                margin-left: 1em;
+            } #whyThisSiteExistsLinkContainer p {
+                font: 9pt "Ubuntu", sans-serif;
+                font-weight: 400;
+                color: #ffffff;
+                filter: drop-shadow(0px 0px 1rem black);
+                text-align: center;
+                margin: 0px;
+                margin-bottom: 0.1rem;
+                padding: 0px;
+            } #whyThisSiteExistsLinkContainer div {
+                width: 100%;
+                height: 8em;
+                border: 0px;
+                padding: 0px;
+                background-image: url('./assets/images/mc_hotbar_frame_16x.png');
+                background-size: 8em 8em;
+            } #whyThisSiteExistsLinkContainer div button {
+                height: 100%;
+                width: 100%;
+                background: none;
+                padding: 0px;
+                border: 0px;
+                transition: 50ms ease-out 50ms;
+                overflow: visible;
+            } #whyThisSiteExistsLinkContainer div button:hover {
+                transform:scale(1.2);
+            } #whyThisSiteExistsLinkContainer div button img {
+                width: 60%;
+                height: auto;
+                filter: drop-shadow(0px 0px 1rem black);
+            }
+
+
+
 
 
             /* SOCIAL MEDIA BUTTONS */
@@ -364,14 +380,15 @@
                         Seriously, this stuff is awesome. Go make your own site, you'll see what I mean.
                     </p>
 
-
-                    <div id="whyThisSiteExistsLink">
-                        <button class="standardText">
-                            Why I made this site
-                            <img src="./assets/images/mc_written_book_16x.png">
-                        </button>
-                        
+                    <div id="whyThisSiteExistsLinkContainer">
+                        <p>Why I made this site</p>
+                        <div>
+                            <button id="whyThisSiteExistsLinkButton">
+                                <img src="./assets/images/mc_written_book_16x.png">
+                            </button>
+                        </div>
                     </div>
+
                     <!-- Why I made this -->
                     <!-- Other sites I like -->
 
@@ -441,7 +458,9 @@
 
             propagateSocialMediaList();
             addYTembedLinks();
-
+            document.getElementById("whyThisSiteExistsLinkButton").addEventListener('click', function (event) {
+                open("https://pacomatic1.github.io/Why-This-Site-Exists/", "_self");
+            });
 
 
 
