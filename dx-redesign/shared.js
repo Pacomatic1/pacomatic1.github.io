@@ -102,13 +102,13 @@ function handleIframeExternalities() { // Currently, it handles query strings.
         IframePage = mainIframe.src;
     } );
     
-    
+    // Current issue: Despite this running after the Iframe has loaded, it cannot obtain the iframe's source.
     console.log("Iframe page: " + IframePage);
     replaceValueInKeyValuePairInUrlQueryStringBasedOnKey('page', IframePage);
-    console.log("SOKSOKSOKSOK")
 }
 
 function onIframePageSwap() {
+    console.log(mainIframe.src);
     handleIframeExternalities();
 }
 
