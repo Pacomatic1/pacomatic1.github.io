@@ -48,7 +48,7 @@ const backgroundList = [
 ];
 
 
-
+const mainIframe = document.getElementById("mainIframe");
 initializeIframePage('./pages/landing/index.html');
 
 var pageMode = determinePageMode(); // "main" or "accessible"
@@ -74,17 +74,140 @@ if (pageMode == "accessible") {
 
 
 
+// IFRAME SHENANIGANS
+
+
+// WHAT I WANT:
+// When page loads or when a navbar button is selected, load the page from query string into the iframe.
+// When the iframe loads, be it from the above or a link within the iframe, set the query string to the page that was loaded.
+
+// ....THAT'S IT??????
 
 
 
+
+// IDEA: On clicking navbar button, reload page. Saves me effort, but it sucks for the user.
+
+function initializeIframePage(relativePathToDefaultPage) {
+    mainIframe.addEventListener("load", onIframePageSwap);
+    var currentPage = findValueOfKeyFromQueryStringInUrl('page');
+
+    if (currentPage == null) { loadNewPageInIframe(relativePathToDefaultPage); }
+    else {loadNewPageInIframe(currentPage);}
+}
+
+function handleIframeExternalities() { // Currently, it handles query strings.
+    var IframePage;
+    mainIframe.addEventListener("load", () => {
+        IframePage = mainIframe.src;
+    } );
+    
+    
+    console.log("Iframe page: " + IframePage);
+    replaceValueInKeyValuePairInUrlQueryStringBasedOnKey('page', IframePage);
+    console.log("SOKSOKSOKSOK")
+}
 
 function onIframePageSwap() {
-    // Get the current link of the iframe, and then set the iframe's new link to the current link. That way, we can handle the query strings.
-    const mainIframe = document.getElementById("mainIframe");
-    var currentPage = mainIframe.src;
-    openLinkInIframe(currentPage);
-    console.log(currentPage);
+    handleIframeExternalities();
+}
+
+function loadNewPageInIframe(linkToLoad) {
+    mainIframe.src = linkToLoad;
+    // I won't handle externalities as this is already done by the load event listener. Don't worry about it.
+}
+
+function openPageInIframeFromNavbar(linkToLoad) { // This is called when the user clicks on a navbar button. It loads the page in the iframe and sets the query string to the page that was loaded.
+    loadNewPageInIframe(linkToLoad);
+
+}
+
+
+
+
+// function onIframePageSwap() {
+//     // Set the query strings mannually. Sounds stupid but there are a million worse ways we could have done this.
+//     const mainIframe = document.getElementById("mainIframe");
+//     var currentPage = mainIframe.src;
+//     handleIframeExtrasAfterLoading();
+// }
+
+// function initializeIframePage(relativePathToDefaultPage) {
+//     const mainIframe = document.getElementById("mainIframe");
+//     var currentPage = findValueOfKeyFromQueryStringInUrl('page');
+//     mainIframe.addEventListener("load", onIframePageSwap);
+//     if (currentPage == null) { openLinkInIframe(relativePathToDefaultPage); }
+//     else {openLinkInIframe(currentPage);}
+// }
+
+// function handleIframeLoadEventListeners(functionToListenToTheEvent) { // This is a really stupid function, so listen up:
+//     // When you clicked on a link in the iframe, I wanted to modify the query string of the URL to show where you were (same as when you use the navbar) and decided to use a listener for when the iframe loads.
+//     // Problem was, I added the load listener and then used the same swap function that the navbar uses, causing the listener to get called again and then re-swap and then get called and re-swap and then get called and re-swap and... yeah. It was like bootlooping but stupid.
+//     // For this reason, I found that the simplest way of handling this was to remove the event listener and then re-create it **after** the page loaded. Once the page loads again (like when you click on a link), it's gonna run the listener function, begin reloading, remove the listener, and then re-add it after it's done loading.
+
+//     mainIframe.removeEventListener("load", functionToListenToTheEvent);
+
+//     mainIframe.addEventListener("load", () => {
+//             mainIframe.addEventListener("load", functionToListenToTheEvent);
+//     } );
+
+// }
+
+// function openLinkInIframe(linkAsString) {
+//     const mainIframe = document.getElementById("mainIframe");
+//     mainIframe.src = handleIframeExtrasBeforeLoading(linkAsString); 
+//     handleIframeExtrasAfterLoading();
+
+// }
+
+// function handleIframeExtrasBeforeLoading(linkToLoad) { // Handles stuff before loading, like modifying the link to include autoplay.
+//     const mainIframe = document.getElementById("mainIframe");
+//     linkToLoad = linkToLoad + "?autoplay=1"; // Autoplay audio!
+//     return linkToLoad;
+// }
+
+// function handleIframeExtrasAfterLoading() { // Handles stuff beyond loading, like query strings.
+
+//     const mainIframe = document.getElementById("mainIframe");
+//     var mainIframeLink = mainIframe.src; // This is NOT a relative path.
+
+//     replaceValueInKeyValuePairInUrlQueryStringBasedOnKey('page', mainIframeLink);
+//     console.log(mainIframeLink);
+// }
+
+
+
+
+
+
+
+// MATH AND MISCELLANEOUS
+
+function findValueofNthItemInArrayOfMultiItemArraysAssumingYouKnowWhatAndWhereTheRthItemIs(valueOfRthItem, indiceOfRthItem, arrayOfArraysToLookThrough, indiceOfNthItem) { // This finds the value of an item within an array of multi-item arrays assuming you already know what another item is. This seems oddly specific (because it is), but it has its uses; refer to the query string shenanigans.
+    var foundValue = null;
+    for (let i = 0; i < arrayOfArraysToLookThrough.length; i++) { // For every array in the top array,
+        for (let j = 0; j <= arrayOfArraysToLookThrough[i].length; j++) { // see if the rth value is what you seek.
+            if (arrayOfArraysToLookThrough[i][indiceOfRthItem] == valueOfRthItem) { // If it is, iterate to find nth item and, if found, set foundValue to it.
+                foundValue = arrayOfArraysToLookThrough[i][indiceOfNthItem];
+            };
+        };
+    };
+    return foundValue;
+    // You know, the code for this used to make multiple arrays and sort through them. It sucked. This is faster. And with far less bugs.
+    // I'm glad I refactored this.
+}
+
+function getRandomInt(min, max) { // Thanks, MDN! https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+    const minCeiled = Math.ceil(min);
+    const maxFloored = Math.floor(max);
+    return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled); // The maximum is inclusive and the minimum is inclusive
+}
     
+function setBackgroundIframe() { // This is exclusive to main mode. If you're on accessible mode, nothing happens.
+    if (pageMode == "main") {
+        const backgroundIframe = document.getElementById("backgroundIframe");
+        backgroundIframe.src = backgroundList[getRandomInt(0, backgroundList.length - 1)];
+    } else { return; }
 }
 
 function determinePageMode() {
@@ -95,12 +218,13 @@ function determinePageMode() {
     }
 }
 
-function setBackgroundIframe() { // This is exclusive to main mode. If you're on accessible mode, nothing happens.
-    if (pageMode == "main") {
-        const backgroundIframe = document.getElementById("backgroundIframe");
-        backgroundIframe.src = backgroundList[getRandomInt(0, backgroundList.length - 1)];
-    } else { return; }
-}
+
+
+
+
+
+
+// NAVIGATION BAR(S)
 
 function populateMainModeSocialMediaList() {
     if (pageMode != "main") { return; } // Exit function if you're not in main mode so as to avoid issues. return seemed better than putting everything in yet another if statement so I'm keeping it this way.
@@ -131,7 +255,7 @@ function populateMainModeSocialMediaList() {
             // "What does the button do?"
             switch(socialLinksItemLookupTable[i][3]) {
                 case 0:
-                    anchorThatSurroundsTheButton.href = "javascript:openLinkInIframe('" + socialLinksItemLookupTable[i][4] + "')";
+                    anchorThatSurroundsTheButton.href = "javascript:openPageInIframeFromNavbar('" + socialLinksItemLookupTable[i][4] + "')";
                     break;
                 case 1:
                     anchorThatSurroundsTheButton.href = socialLinksItemLookupTable[i][4];
@@ -177,7 +301,7 @@ function populateMainModeNavBar() {
             // "What does the button do?"
             switch(navBarItemLookupTable[i][3]) {
                 case 0:
-                    anchorThatSurroundsTheButton.href = "javascript:openLinkInIframe('" + navBarItemLookupTable[i][4] + "')";
+                    anchorThatSurroundsTheButton.href = "javascript:openPageInIframeFromNavbar('" + navBarItemLookupTable[i][4] + "')";
                     break;
                 case 1:
                     anchorThatSurroundsTheButton.href = navBarItemLookupTable[i][4];
@@ -315,7 +439,7 @@ function accessibleModeNavBarSelected() { // This is called when the user presse
 
     switch (optionActionType) {
         case 0:
-            openLinkInIframe(optionActionValue);
+            openPageInIframeFromNavbar(optionActionValue);
             break;
         case 1:
             window.open(optionActionValue, '_self').focus();
@@ -330,29 +454,16 @@ function accessibleModeNavBarSelected() { // This is called when the user presse
 
 }
 
-function initializeIframePage(relativePathToDefaultPage) {
-    const mainIframe = document.getElementById("mainIframe");
-    var currentPage = findValueOfKeyFromQueryStringInUrl('page');
-    if (currentPage == null) { openLinkInIframe(relativePathToDefaultPage); }
-    else {openLinkInIframe(currentPage);}
-    mainIframe.addEventListener("load", onIframePageSwap);
-}
 
 
-function openLinkInIframe(linkAsString) {
-    const mainIframe = document.getElementById("mainIframe");
-    mainIframe.src = linkAsString + "?autoplay=1"; // Autoplay audio!
-    replaceValueInKeyValuePairInUrlQueryStringBasedOnKey('page', linkAsString);
-    
 
-}
 
-function getRandomInt(min, max) { // Thanks, MDN! https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random
-    const minCeiled = Math.ceil(min);
-    const maxFloored = Math.floor(max);
-    return Math.floor(Math.random() * (maxFloored - minCeiled + 1) + minCeiled); // The maximum is inclusive and the minimum is inclusive
-}
-    
+
+
+
+
+// QUERY STRING SHENANIGANS
+
 function findValueOfKeyFromQueryStringInUrl(keyToFindValueOf) { // Gets the URL, looks at the query strings, and finds the corresponding the value for the key you want. If the key doesn't exist, it returns null.
         const url = window.location.href; 
         const searchParams = new URL(url).searchParams; 
@@ -378,24 +489,9 @@ function replaceValueInKeyValuePairInUrlQueryStringBasedOnKey(keyToSelect, newVa
     history.pushState({}, "", url);
 }
 
-
-function findValueofNthItemInArrayOfMultiItemArraysAssumingYouKnowWhatAndWhereTheRthItemIs(valueOfRthItem, indiceOfRthItem, arrayOfArraysToLookThrough, indiceOfNthItem) { // This finds the value of an item within an array of multi-item arrays assuming you already know what another item is. This seems oddly specific (because it is), but it has its uses; refer to the query string shenanigans.
-    var foundValue = null;
-    for (let i = 0; i < arrayOfArraysToLookThrough.length; i++) { // For every array in the top array,
-        for (let j = 0; j <= arrayOfArraysToLookThrough[i].length; j++) { // see if the rth value is what you seek.
-            if (arrayOfArraysToLookThrough[i][indiceOfRthItem] == valueOfRthItem) { // If it is, iterate to find nth item and, if found, set foundValue to it.
-                foundValue = arrayOfArraysToLookThrough[i][indiceOfNthItem];
-            };
-        };
-    };
-    return foundValue;
-    // You know, the code for this used to make multiple arrays and sort through them. It sucked. This is faster. And with far less bugs.
-    // I'm glad I refactored this.
-}
-
-
 function convertPercentEncodedQueryStringToFinalQueryString(percentEncodedQueryString) { // Include the leading 
     var newText = percentEncodedQueryString;
     newText = newText.replaceAll("%2F", "/");
     return newText;
 }
+
