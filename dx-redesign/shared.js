@@ -52,11 +52,12 @@ const absoluteToRelativePathLookupTable = [
     // If there was a better way of doing this that doesn't involve this stupid error-prone lookup table, then I would love it. But for now, this will have to do.
 
     // This is an array of arrays. Within each array:
-    // [0] is the string to find.
-    // [1] is the string to do something with.
-    // [2] is the mode.
-    //     If set to 0, this will delete all the text that precedes the first instance of [0] and replace the found string with [1].
-    ["/pages/", "./pages/", 0],
+    // [0] is mode.
+        // If set to 0, find the first instance of [1], delete everything that precedes it, and replace it with [2]. 
+
+    // Note that order matters. The first array here is the first one that we do stuff with, then the second, then the third.
+    [0, "/pages/", "./pages/"],
+    [0, "siojsiojsijsij", "ACK"]
 ];
 
 
@@ -109,15 +110,14 @@ function initializeIframePage(relativePathToDefaultPage) {
 }
 
 function handleIframeExternalities() { // Currently, it handles query strings. This is to happen AFTER the iframe has loaded.
-    var IframePage;
-    IframePage = mainIframe.src;
-    // Current issue: Despite this running after the Iframe has loaded, it cannot obtain the iframe's source.
-    console.log("Iframe page: " + IframePage);
-    replaceValueInKeyValuePairInUrlQueryStringBasedOnKey('page', IframePage);
+    var IframePagePath = mainIframe.src;;
+
+    IframePagePath = convertAbsoluteIframePagePathToRelativePath(IframePagePath);
+    
+    replaceValueInKeyValuePairInUrlQueryStringBasedOnKey('page', IframePagePath);
 }
 
 function onIframePageSwap() {
-    console.log(mainIframe.src);
     handleIframeExternalities();
 }
 
@@ -131,6 +131,26 @@ function openPageInIframeFromNavbar(linkToLoad) { // This is called when the use
 
 }
 
+function convertAbsoluteIframePagePathToRelativePath(absolutePath) { // Bro trying not to use a lookup table: 
+    var newPath; // The final result should be written into here.
+    for (let i = 0; i < absoluteToRelativePathLookupTable.length; i++) { // For every array in the top array,
+        switch (absoluteToRelativePathLookupTable[i][0]) { // Find the type, and handle the next steps based on a switch statement.
+            case 0:
+                var stringToFind = absoluteToRelativePathLookupTable[i][1];
+                var stringToReplaceItWith = absoluteToRelativePathLookupTable[i][2];
+                if (absolutePath.indexOf(stringToFind) == -1) { break; } // Need to make sure that the thing we're finding exists before changing it. Otherwise, the path we want may have already been chosen and we would be overwriting it.
+                newPath = absolutePath.substring(absolutePath.indexOf(stringToFind));
+                newPath = newPath.replace(stringToFind, stringToReplaceItWith); 
+                break;
+            default:
+                console.log("Error: The lookup table for absolute to relative paths has an unimplemented type! Either the lookup table is wrong or you need to implement it. Get to work!");
+                break;
+
+        }
+    };
+    return newPath;
+
+}
 
 
 
@@ -213,10 +233,9 @@ function getRandomInt(min, max) { // Thanks, MDN! https://developer.mozilla.org/
 }
     
 function setBackgroundIframe() { // This is exclusive to main mode. If you're on accessible mode, nothing happens.
-    if (pageMode == "main") {
-        const backgroundIframe = document.getElementById("backgroundIframe");
-        backgroundIframe.src = backgroundList[getRandomInt(0, backgroundList.length - 1)];
-    } else { return; }
+   if (pageMode != 'main') {return;} 
+    const backgroundIframe = document.getElementById("backgroundIframe");
+    backgroundIframe.src = backgroundList[getRandomInt(0, backgroundList.length - 1)];
 }
 
 function determinePageMode() {
