@@ -89,17 +89,15 @@ if (pageMode == "accessible") {
 
 // IFRAME SHENANIGANS
 
-
-// WHAT I WANT:
-// When page loads or when a navbar button is selected, load the page from query string into the iframe.
-// When the iframe loads, be it from the above or a link within the iframe, set the query string to the page that was loaded.
-
-// ....THAT'S IT??????
+// You may need this: https://forum.melonland.net/index.php?topic=115.0
 
 
+// CURRENT ISSUE: When user clicks a link in the iframe, we get where they are.
+// Sadly, mainIframe.src doesn't work, as src isn't changed.
+// How do we get the link of the page they're currently in?
+    // iframe.contentDocument - This is incompatible with cross-origin, but according to https://stackoverflow.com/questions/9249680/how-to-check-if-iframe-is-loaded-or-it-has-a-content, if it's loaded incorrecly cross-origin frames will still tell me.
 
 
-// IDEA: On clicking navbar button, reload page. Saves me effort, but it sucks for the user.
 
 function initializeIframePage(relativePathToDefaultPage) {
     mainIframe.addEventListener("load", onIframePageSwap);
@@ -110,7 +108,7 @@ function initializeIframePage(relativePathToDefaultPage) {
 }
 
 function handleIframeExternalities() { // Currently, it handles query strings. This is to happen AFTER the iframe has loaded.
-    var IframePagePath = mainIframe.src;;
+    var IframePagePath = mainIframe.src;
 
     IframePagePath = convertAbsoluteIframePagePathToRelativePath(IframePagePath);
     
