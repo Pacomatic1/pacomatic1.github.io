@@ -43,8 +43,20 @@ const socialLinksItemLookupTable = [
 
 ];
 const backgroundList = [
-    // Unlike the navigation bar, this is a simple array: a list of paths to each background's HTML file.
+    // Unlike the navigation bar(s), this is a simple array: a list of paths to each background's HTML file. Exclusive to main mode.
     "./backgrounds/ps3Xmb.html", "./backgrounds/random_stuff_outlook.html"
+];
+const absoluteToRelativePathLookupTable = [
+    // So you know the query string, right? Well, the query string has to display the realtive path to the pages, and when we're trying to get the iframe's source, we don't have that. We only have the absolute path.
+    // The only solution I could come up with was do a really stupid find and replace system, finding a string and, if it exists, replacing it with a new string.
+    // If there was a better way of doing this that doesn't involve this stupid error-prone lookup table, then I would love it. But for now, this will have to do.
+
+    // This is an array of arrays. Within each array:
+    // [0] is the string to find.
+    // [1] is the string to do something with.
+    // [2] is the mode.
+    //     If set to 0, this will delete all the text that precedes the first instance of [0] and replace the found string with [1].
+    ["/pages/", "./pages/", 0],
 ];
 
 
@@ -96,12 +108,9 @@ function initializeIframePage(relativePathToDefaultPage) {
     else {loadNewPageInIframe(currentPage);}
 }
 
-function handleIframeExternalities() { // Currently, it handles query strings.
+function handleIframeExternalities() { // Currently, it handles query strings. This is to happen AFTER the iframe has loaded.
     var IframePage;
-    mainIframe.addEventListener("load", () => {
-        IframePage = mainIframe.src;
-    } );
-    
+    IframePage = mainIframe.src;
     // Current issue: Despite this running after the Iframe has loaded, it cannot obtain the iframe's source.
     console.log("Iframe page: " + IframePage);
     replaceValueInKeyValuePairInUrlQueryStringBasedOnKey('page', IframePage);
