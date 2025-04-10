@@ -88,7 +88,7 @@ if (pageMode == "accessible") {
 
 
 // IFRAME SHENANIGANS
-// Remember: Every single page (should) link to '/pages/shared.js'. If you want to do something that applies to all pages no matter what, this is where you go.
+// Remember: Every single page (should) have a link to '/pages/shared.js'. If you want to do something that applies to all pages no matter what, this is where you go.
 // You may need this: https://forum.melonland.net/index.php?topic=115.0
 
 
@@ -110,7 +110,6 @@ function handleIframeExternalities() { // Currently, it handles query strings. T
 
     window.addEventListener('message', function(event) { 
         IframePagePath = event.data; 
-        console.log(IframePagePath);
         IframePagePath = convertAbsoluteIframePagePathToRelativePath(IframePagePath);    
         replaceValueInKeyValuePairInUrlQueryStringBasedOnKey('page', IframePagePath);
     }, {once : true});
