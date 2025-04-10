@@ -113,7 +113,7 @@ function handleIframeExternalities() { // Currently, it handles query strings. T
         console.log(IframePagePath);
         IframePagePath = convertAbsoluteIframePagePathToRelativePath(IframePagePath);    
         replaceValueInKeyValuePairInUrlQueryStringBasedOnKey('page', IframePagePath);
-    });
+    }, {once : true});
     mainIframe.contentWindow.postMessage('sendHref', '*');
     
 }
@@ -157,60 +157,6 @@ function convertAbsoluteIframePagePathToRelativePath(absolutePath) { // Bro tryi
     return newPath;
 
 }
-
-
-
-// function onIframePageSwap() {
-//     // Set the query strings mannually. Sounds stupid but there are a million worse ways we could have done this.
-//     const mainIframe = document.getElementById("mainIframe");
-//     var currentPage = mainIframe.src;
-//     handleIframeExtrasAfterLoading();
-// }
-
-// function initializeIframePage(relativePathToDefaultPage) {
-//     const mainIframe = document.getElementById("mainIframe");
-//     var currentPage = findValueOfKeyFromQueryStringInUrl('page');
-//     mainIframe.addEventListener("load", onIframePageSwap);
-//     if (currentPage == null) { openLinkInIframe(relativePathToDefaultPage); }
-//     else {openLinkInIframe(currentPage);}
-// }
-
-// function handleIframeLoadEventListeners(functionToListenToTheEvent) { // This is a really stupid function, so listen up:
-//     // When you clicked on a link in the iframe, I wanted to modify the query string of the URL to show where you were (same as when you use the navbar) and decided to use a listener for when the iframe loads.
-//     // Problem was, I added the load listener and then used the same swap function that the navbar uses, causing the listener to get called again and then re-swap and then get called and re-swap and then get called and re-swap and... yeah. It was like bootlooping but stupid.
-//     // For this reason, I found that the simplest way of handling this was to remove the event listener and then re-create it **after** the page loaded. Once the page loads again (like when you click on a link), it's gonna run the listener function, begin reloading, remove the listener, and then re-add it after it's done loading.
-
-//     mainIframe.removeEventListener("load", functionToListenToTheEvent);
-
-//     mainIframe.addEventListener("load", () => {
-//             mainIframe.addEventListener("load", functionToListenToTheEvent);
-//     } );
-
-// }
-
-// function openLinkInIframe(linkAsString) {
-//     const mainIframe = document.getElementById("mainIframe");
-//     mainIframe.src = handleIframeExtrasBeforeLoading(linkAsString); 
-//     handleIframeExtrasAfterLoading();
-
-// }
-
-// function handleIframeExtrasBeforeLoading(linkToLoad) { // Handles stuff before loading, like modifying the link to include autoplay.
-//     const mainIframe = document.getElementById("mainIframe");
-//     linkToLoad = linkToLoad + "?autoplay=1"; // Autoplay audio!
-//     return linkToLoad;
-// }
-
-// function handleIframeExtrasAfterLoading() { // Handles stuff beyond loading, like query strings.
-
-//     const mainIframe = document.getElementById("mainIframe");
-//     var mainIframeLink = mainIframe.src; // This is NOT a relative path.
-
-//     replaceValueInKeyValuePairInUrlQueryStringBasedOnKey('page', mainIframeLink);
-//     console.log(mainIframeLink);
-// }
-
-
 
 
 
