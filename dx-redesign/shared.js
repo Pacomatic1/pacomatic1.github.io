@@ -88,14 +88,8 @@ if (pageMode == "accessible") {
 
 
 // IFRAME SHENANIGANS
-
+// Remember: Every single page (should) link to '/pages/shared.js'. If you want to do something that applies to all pages no matter what, this is where you go.
 // You may need this: https://forum.melonland.net/index.php?topic=115.0
-
-
-// CURRENT ISSUE: When user clicks a link in the iframe, we get where they are.
-// Sadly, mainIframe.src doesn't work, as src isn't changed.
-// How do we get the link of the page they're currently in?
-    // iframe.contentDocument - This is incompatible with cross-origin, but according to https://stackoverflow.com/questions/9249680/how-to-check-if-iframe-is-loaded-or-it-has-a-content, if it's loaded incorrecly cross-origin frames will still tell me.
 
 
 
@@ -107,13 +101,25 @@ function initializeIframePage(relativePathToDefaultPage) {
     else {loadNewPageInIframe(currentPage);}
 }
 
-function handleIframeExternalities() { // Currently, it handles query strings. This is to happen AFTER the iframe has loaded.
-    var IframePagePath = mainIframe.src;
 
-    IframePagePath = convertAbsoluteIframePagePathToRelativePath(IframePagePath);
+function handleIframeExternalities() { // Currently, it handles query strings. This is to happen AFTER the iframe has loaded.
     
-    replaceValueInKeyValuePairInUrlQueryStringBasedOnKey('page', IframePagePath);
+    // Handling of the Iframe's link. Does things like this because we have to wait for the response before we can do anything.
+    var IframePagePath;
+    window.addEventListener('message', function(event) { 
+        IframePagePath = event.data; 
+        console.log(IframePagePath);
+        IframePagePath = convertAbsoluteIframePagePathToRelativePath(IframePagePath);    
+        replaceValueInKeyValuePairInUrlQueryStringBasedOnKey('page', IframePagePath);
+    });
+    mainIframe.contentWindow.postMessage('sendHref', '*');
+    
 }
+
+
+
+
+
 
 function onIframePageSwap() {
     handleIframeExternalities();
