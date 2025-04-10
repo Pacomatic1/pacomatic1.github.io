@@ -106,6 +106,8 @@ function handleIframeExternalities() { // Currently, it handles query strings. T
     
     // Handling of the Iframe's link. Does things like this because we have to wait for the response before we can do anything.
     var IframePagePath;
+    window.onmessage = null;
+
     window.addEventListener('message', function(event) { 
         IframePagePath = event.data; 
         console.log(IframePagePath);
@@ -250,7 +252,10 @@ function determinePageMode() {
     }
 }
 
+function addOneTimeEventListener(whoToAddItTo, eventType, functionToExecute) {
+    
 
+}
 
 
 
