@@ -77,6 +77,7 @@ if (pageMode == "accessible") {
 }
 
 
+window.addEventListener("popstate", onUserSwappingPageHistory);
 
 
 
@@ -86,12 +87,10 @@ if (pageMode == "accessible") {
 
 
 
-
-// IFRAME SHENANIGANS
+// IFRAMES AND PAGE HANDLING
 // Remember: Every single page (should) have a link to '/pages/shared.js'. If you want to do something that applies to all pages no matter what, this is where you go.
-// You may need this: https://forum.melonland.net/index.php?topic=115.0
 
-
+// Melonking, you're awesome! This link was used for a ton of things, namely handling the browser history: https://forum.melonland.net/index.php?topic=115.0
 
 function initializeIframePage(relativePathToDefaultPage) {
     mainIframe.addEventListener("load", onIframePageSwap);
@@ -106,21 +105,22 @@ function handleIframeExternalities() { // Currently, it handles query strings. T
     
     // Handling of the Iframe's link. Does things like this because we have to wait for the response before we can do anything.
     var IframePagePath;
+    var windowURL = window.location.href;
     window.onmessage = null;
 
     window.addEventListener('message', function(event) { 
         IframePagePath = event.data; 
         IframePagePath = convertAbsoluteIframePagePathToRelativePath(IframePagePath);    
-        replaceValueInKeyValuePairInUrlQueryStringBasedOnKey('page', IframePagePath);
+        windowURL = replaceValueInKeyValuePairInUrlQueryStringBasedOnKey('page', IframePagePath, windowURL);
+        history.replaceState({}, "Paco's Place", windowURL);
     }, {once : true});
     mainIframe.contentWindow.postMessage('sendHref', '*');
-    
+
 }
 
-
-
-
-
+function onUserSwappingPageHistory() {
+    window.location.reload();
+}
 
 function onIframePageSwap() {
     handleIframeExternalities();
@@ -133,7 +133,6 @@ function loadNewPageInIframe(linkToLoad) {
 
 function openPageInIframeFromNavbar(linkToLoad) { // This is called when the user clicks on a navbar button. It loads the page in the iframe and sets the query string to the page that was loaded.
     loadNewPageInIframe(linkToLoad);
-
 }
 
 function convertAbsoluteIframePagePathToRelativePath(absolutePath) { // Bro trying not to use a lookup table: 
@@ -434,10 +433,6 @@ function accessibleModeNavBarSelected() { // This is called when the user presse
 
 
 
-
-
-
-
 // QUERY STRING SHENANIGANS
 
 function findValueOfKeyFromQueryStringInUrl(keyToFindValueOf) { // Gets the URL, looks at the query strings, and finds the corresponding the value for the key you want. If the key doesn't exist, it returns null.
@@ -450,8 +445,8 @@ function findValueOfKeyFromQueryStringInUrl(keyToFindValueOf) { // Gets the URL,
         return findValueofNthItemInArrayOfMultiItemArraysAssumingYouKnowWhatAndWhereTheRthItemIs(keyToFindValueOf, 0, queryStringArray, 1);
 }
 
-function replaceValueInKeyValuePairInUrlQueryStringBasedOnKey(keyToSelect, newValue) {
-    var url = new URL(window.location.href);
+function replaceValueInKeyValuePairInUrlQueryStringBasedOnKey(keyToSelect, newValue, url) {
+    url = new URL(url);
     const params = new URLSearchParams(url.search);
     params.delete(keyToSelect);
     params.append(keyToSelect, newValue);
@@ -462,7 +457,7 @@ function replaceValueInKeyValuePairInUrlQueryStringBasedOnKey(keyToSelect, newVa
     // As such, I'm going to convert these back to slashes, since having slashes in your query string has no issues.
     // One might immediately assume that I'm gonna use decodeURIComponent(). As much as I'd love to, this is a bad idea since it decodes things that aren't slashes, and that's bad. Time to do it myself!
     url = convertPercentEncodedQueryStringToFinalQueryString(url.toString());
-    history.pushState({}, "", url);
+    return url;
 }
 
 function convertPercentEncodedQueryStringToFinalQueryString(percentEncodedQueryString) { // Include the leading 
