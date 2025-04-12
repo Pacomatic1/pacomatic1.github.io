@@ -1,5 +1,4 @@
-// This is a helper script, used on every single iframe (unless they're non-compliant or something).
-
+// This is a helper script, used on every single iframe (unless they're non-compliant or something, which you should defenitely fix).
 window.onmessage = function(e) { onParentSendingMessageToIframe(e.data); };
 
 
@@ -20,6 +19,8 @@ function onParentSendingMessageToIframe(message) {
 
 
 
-function sendMessageToParent(message) {
-    parent.postMessage(message, "*");
+
+function sendMessageToParent(message, parentOrigin) { // If parentOrigin is empty, it will be sent, no matter who the parent is. 
+    if (parentOrigin == null) { parentOrigin = "*"}
+    parent.postMessage(message, parentOrigin);
 }

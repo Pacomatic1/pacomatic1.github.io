@@ -272,12 +272,12 @@
 
 
 
-            #whyThisSiteExistsLinkContainer {
+            .mcItemLinkContainer {
                 height: 12em;
                 width: 8em;
                 margin-top: 1em;
                 margin-left: 1em;
-            } #whyThisSiteExistsLinkContainer p {
+            } .mcItemLinkContainer p {
                 font: 9pt "Ubuntu", sans-serif;
                 font-weight: 400;
                 color: #ffffff;
@@ -286,14 +286,14 @@
                 margin: 0px;
                 margin-bottom: 0.1rem;
                 padding: 0px;
-            } #whyThisSiteExistsLinkContainer div {
+            } .mcItemLinkContainer div {
                 width: 100%;
                 height: 8em;
                 border: 0px;
                 padding: 0px;
                 background-image: url('./assets/images/mc_hotbar_frame_16x.png');
                 background-size: 8em 8em;
-            } #whyThisSiteExistsLinkContainer div button {
+            } .mcItemLinkContainer div button {
                 height: 100%;
                 width: 100%;
                 background: none;
@@ -301,9 +301,9 @@
                 border: 0px;
                 transition: 50ms ease-out 50ms;
                 overflow: visible;
-            } #whyThisSiteExistsLinkContainer div button:hover {
+            } .mcItemLinkContainer div button:hover {
                 transform:scale(1.2);
-            } #whyThisSiteExistsLinkContainer div button img {
+            } .mcItemLinkContainer div button img {
                 width: 60%;
                 height: auto;
                 filter: drop-shadow(0px 0px 1rem black);
@@ -383,12 +383,25 @@
                         Seriously, this stuff is awesome. Go make your own site, you'll see what I mean.
                     </p>
 
-                    <div id="whyThisSiteExistsLinkContainer">
+                    <div class="mcItemLinkContainer">
                         <p>Why I made this site</p>
                         <div>
-                            <button id="whyThisSiteExistsLinkButton">
-                                <img src="./assets/images/mc_written_book_16x.png">
-                            </button>
+                            <a href="../wip/index.html">
+                                <button>
+                                    <img src="./assets/images/mc_written_book_16x.png" alt="Minecraft Book Icon">
+                                </button>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="mcItemLinkContainer">
+                        <p>Other Sites I like</p>
+                        <div>
+                            <a href="../wip/index.html">
+                                <button>
+                                    <img src="./assets/images/mc_written_book_16x.png" alt="Minecraft Book Icon">
+                                </button>
+                            </a>
                         </div>
                     </div>
 
