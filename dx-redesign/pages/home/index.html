@@ -382,26 +382,27 @@
                         This place is amazing, simply because it being a website means I can do whatever I want! <br>
                         Seriously, this stuff is awesome. Go make your own site, you'll see what I mean.
                     </p>
-
-                    <div class="mcItemLinkContainer">
-                        <p>Why I made this site</p>
-                        <div>
-                            <a href="../wip/index.html">
-                                <button>
-                                    <img src="./assets/images/mc_written_book_16x.png" alt="Minecraft Book Icon">
-                                </button>
-                            </a>
+                    <div>
+                        <div class="mcItemLinkContainer">
+                            <p>Why I made this site</p>
+                            <div>
+                                <a href="../wip/index.html">
+                                    <button>
+                                        <img src="./assets/images/mc_written_book_16x.png" alt="Minecraft Book Icon">
+                                    </button>
+                                </a>
+                            </div>
                         </div>
-                    </div>
 
-                    <div class="mcItemLinkContainer">
-                        <p>Sites I like</p>
-                        <div>
-                            <a href="../wip/index.html">
-                                <button>
-                                    <img src="./assets/images/mc-compass/mc-compass-animated.png" alt="Minecraft Book Icon">
-                                </button>
-                            </a>
+                        <div class="mcItemLinkContainer">
+                            <p>Sites I like</p>
+                            <div>
+                                <a href="../wip/index.html">
+                                    <button>
+                                        <img src="./assets/images/mc-compass/mc-compass-animated.png" alt="Minecraft Book Icon">
+                                    </button>
+                                </a>
+                            </div>
                         </div>
                     </div>
 
@@ -452,7 +453,7 @@
                     // [6] is the title of the button. It's what appears when you hover over it.
                     // [7] is the alt of the button. It's what you see when the image fails to load or if the user needs assistive technology.
 
-                    // If it wasn't immediately obvious, this is based onthe navBar system.
+                // If it wasn't immediately obvious, this is based onthe navBar system.
                 [0, "", "assets/socialmedia-icons/youtube_icon.svg", 2, "https://www.youtube.com/user/AmmarZawar", "", "Pacomatic! That is my channel.", "YouTube"],
                 [0, "", "assets/socialmedia-icons/bsky_logo.svg", 2, "https://bsky.app/profile/pacomatic.bsky.social", "", "It took me an astoundingly long time to get an account for social media that isn't Reddit or YoiTube. Ain't that a thing?", "Bluesky"],
                 [0, "", "assets/socialmedia-icons/github_logo.svg", 2, "https://github.com/pacomatic1/", "", "If I open-source dode, it's usually here. ", "GitHub"],
@@ -474,9 +475,6 @@
 
             propagateSocialMediaList();
             addYTembedLinks();
-            document.getElementById("whyThisSiteExistsLinkButton").addEventListener('click', function (event) {
-                open("https://pacomatic1.github.io/Why-This-Site-Exists/", "_self");
-            });
 
 
             function addYTembedLinks() {
