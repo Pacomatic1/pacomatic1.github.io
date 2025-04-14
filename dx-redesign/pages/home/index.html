@@ -263,7 +263,12 @@
                 cursor: pointer;
             }
             
-
+            #mcItemLinkGrid {
+                display:grid;
+                grid-template-columns: minmax(min-content, max-content);
+                grid-template-areas: "whyIMadeThis sitesILike";
+                padding:1em;
+            }
 
 
 
@@ -275,7 +280,7 @@
             .mcItemLinkContainer {
                 height: auto;
                 width: 8em;
-                margin: 1em;
+                margin: 0px;
                 white-space: nowrap; 
             } .mcItemLinkContainer p {
                 font: 9pt "Ubuntu", sans-serif;
@@ -382,8 +387,9 @@
                         This place is amazing, simply because it being a website means I can do whatever I want! <br>
                         Seriously, this stuff is awesome. Go make your own site, you'll see what I mean.
                     </p>
-                    <div>
-                        <div class="mcItemLinkContainer">
+
+                    <div id=mcItemLinkGrid>
+                        <div class="mcItemLinkContainer" style='grid-area: whyIMadeThis;'>
                             <p>Why I made this site</p>
                             <div>
                                 <a href="../wip/index.html">
@@ -394,7 +400,7 @@
                             </div>
                         </div>
 
-                        <div class="mcItemLinkContainer">
+                        <div class="mcItemLinkContainer" style="grid-area: sitesILike;">
                             <p>Sites I like</p>
                             <div>
                                 <a href="../wip/index.html">
@@ -404,11 +410,8 @@
                                 </a>
                             </div>
                         </div>
+
                     </div>
-
-                    <!-- Why I made this -->
-                    <!-- Other sites I like -->
-
 
                     <!-- <iframe id="theCorporationYTEmbed" src="https://www.youtube.com/embed/6v8e7dUwq_Q" title="The Corporation | in HD  | Feature Documentary" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe> -->
                 
