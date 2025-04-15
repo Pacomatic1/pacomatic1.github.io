@@ -198,13 +198,13 @@
                 margin-inline:auto;
             }
 
-            #theCorporationYTEmbed {
-                height: auto;
-                width: 90%;
-                margin-inline: 1em;
+            #songPlayingText {
+                margin: 1rem;
+                position:absolute;
+                bottom:0;
+                right:0;
+                z-index: 100;
             }
-
-            
 
             #YTembedContainer {
                 width: 23.5em;
@@ -263,20 +263,16 @@
                 cursor: pointer;
             }
             
+
+
+
+
             #mcItemLinkGrid {
                 display:grid;
                 grid-template-columns: minmax(min-content, max-content);
                 grid-template-areas: "whyIMadeThis sitesILike";
                 padding:1em;
             }
-
-
-
-
-
-
-
-
             .mcItemLinkContainer {
                 height: auto;
                 width: 8em;
@@ -361,7 +357,9 @@
         <div id="gigaDiv"> <!-- You'd be surprised by how often a gigaDiv comes in handy. -->
             
             <div class="windowIntoBG" id="topWindow">
-                <div id="socialMediaButtonContianer"></div>
+                <div id="socialMediaButtonContianer">
+                    <!-- Contents are injected via javascript. -->
+                </div>
                 <div id="heroSection">
                     <img src="./assets/images/pacomatic-hero-4x.png" id="pacoHeroImage" decoding="async" loading="lazy"/> <!-- As slow as it is, using an image that was upscaled by Nearest Neighbor and then rendered via Bilinear is the simplest way to provide maximum quality. The quality gains are good enough that I can justify the loading times. -->
                 </div>
@@ -372,7 +370,8 @@
                     <button id="oldSiteArchiveButton">
                         Old Site Archive
                     </button>
-                </a>    
+                </a>
+                <p class="standardText" id="songPlayingText">Now playing: Rafflesia Online - Plaza</p>    
                 <div id="gradientAtBottomOftopWindow"></div>
             </div>
 
@@ -423,7 +422,7 @@
 
 
                 <div id="featuredPageContents">
-                    <iframe id="statsWindow" src="stats_iframe.html" allowtransparency="true"><!-- I hate this so much. If 7.css's scoped version wasn't so picky, I would do this with a div like a smart person. Alas, I don't have the patience to fix this problem. Forgive me. --></iframe>
+                    <iframe id="statsWindow" src="stats_iframe.html" allowtransparency="true" tabindex="-1"><!-- I hate this so much. If 7.css's scoped version wasn't so picky, I would do this with a div like a smart person. Alas, I don't have the patience to fix this problem. Forgive me. --></iframe>
                     <iframe id="bskyEmbed" src="https://pacomatic1.github.io/Goofy-ahh-Bsky-Profile-Embed/?profile=pacomatic.bsky.social" allowtransparency="true"></iframe> <!-- I went on a sidequest for this 💀 -->
                     <div id="YTembedContainer"> <!-- I was gonna make an actual embed, but stupid YouTube needs an authentication key to access public information. Doing this on a static site sucks. They should be more like Bluesky. -->
                          <img src="./assets/images/yt_pfp.jpg">
@@ -449,14 +448,15 @@
                     // [1] is the buttons's name. Note that there is no margin between the icon and the text, so you're gonna have to do it yourself using custom styling or a space before the text starts.
                     // [2] is the **relative path** to the button's icon, staring from this page. Keep in mind that this icon is done with the 'src' attribute of an <img> tag inside the button tag, so make surethat your icon is suppported by the <img>. If you don't want an icon, 
                     // [3] and [4] control what the item does.
-                        // If [3] is 0, then it will be a button and [3] will be a link that gets opened inside the iframe.
-                        // If [2] is 1, then  it will be a button and [3] will be a link that replaces the current tab and will get rid of this whole single-page thing. I repeat, it will open in the current tab and get rid of this site.
+                        // If [3] is 0, nothing will happen. It is unused.
+                        // If [2] is 1, then it will open inside the iframe.
                         // If [3] is 2, then it will be a button and [3] will be a link that opens in a new tab.
                     // [5] is the per-button styling applied to the image within the button. Just so you have a loose idea of what's what, the result will look like <img [other stuff] style="whatever you put inside 5">. As you may have guessed, this has no support for classes or anything so only use it for things that apply to one button and nobody else. If you have nothing to style with, then leave it as a blank string: ""
                     // [6] is the title of the button. It's what appears when you hover over it.
                     // [7] is the alt of the button. It's what you see when the image fails to load or if the user needs assistive technology.
 
                 // If it wasn't immediately obvious, this is based onthe navBar system.
+                [0, "", "assets/images/downarrow_4x.png", 1, "#pageContentsSection", "", "If you don't have a mouse, these icons suck. So here you go.", "Skip"],
                 [0, "", "assets/socialmedia-icons/youtube_icon.svg", 2, "https://www.youtube.com/user/AmmarZawar", "", "Pacomatic! That is my channel.", "YouTube"],
                 [0, "", "assets/socialmedia-icons/bsky_logo.svg", 2, "https://bsky.app/profile/pacomatic.bsky.social", "", "It took me an astoundingly long time to get an account for social media that isn't Reddit or YoiTube. Ain't that a thing?", "Bluesky"],
                 [0, "", "assets/socialmedia-icons/github_logo.svg", 2, "https://github.com/pacomatic1/", "", "If I open-source dode, it's usually here. ", "GitHub"],
@@ -475,10 +475,30 @@
 
 
 
-
+            window.addEventListener("keydown", onAnyKeyPressed);
             propagateSocialMediaList();
             addYTembedLinks();
 
+
+            function onAnyKeyPressed(key) {
+                if (key.key == "Tab") {
+                    handleSocialMediaLinks(true);
+                }
+
+
+            }
+
+            function handleSocialMediaLinks(shouldTheyAppear) {
+                switch (shouldTheyAppear) {
+                    case true:
+
+                        break;
+                    case false:
+                        break;
+                    default:
+                        console.log("Someone passed a non-boolean value into handleSocialMediaLinks's shouldTheyAppear argument!");
+                }
+            }
 
             function addYTembedLinks() {
                 var allElementsToSetYTLinkOn = document.getElementsByClassName("YTembedLink");
@@ -497,8 +517,10 @@
                 for (let i = 0; i < socialLinksItemLookupTable.length; i++) {
                     // In order to understand this, you need to understand socialLinksItemLookupTable.
                     // Since everything depends on the type, I'll at least tell you this: socialLinksItemLookupTable[i][0] is the item's type.
-                    
-                    if (socialLinksItemLookupTable[i][0] == 0) {
+                    if (socialLinksItemLookupTable[i][0] == 1) {
+                        console.log('ack')
+                    };
+                    if (socialLinksItemLookupTable[i][0] == 0) { // 0 or 1, if its one then it's handled inisde the if. Otherwise it'll be treated as a 0.
                         var anchorThatSurroundsTheButton = document.createElement("a"); // This <a> tag is crucial for adding interactivity. No interactivity = useless buttons, so use this.
 
                         var buttonToCreate = document.createElement("button");
@@ -520,7 +542,8 @@
                         // "What does the button do?"
                         switch(socialLinksItemLookupTable[i][3]) {
                             case 0:
-                                var nope;
+                                console.log("This button is supposed to do nothing, you buffoon!")
+                                break;
                             case 1:
                                 anchorThatSurroundsTheButton.href = socialLinksItemLookupTable[i][4];
                                 break;
