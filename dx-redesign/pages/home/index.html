@@ -475,30 +475,9 @@
 
 
 
-            window.addEventListener("keydown", onAnyKeyPressed);
             propagateSocialMediaList();
             addYTembedLinks();
 
-
-            function onAnyKeyPressed(key) {
-                if (key.key == "Tab") {
-                    handleSocialMediaLinks(true);
-                }
-
-
-            }
-
-            function handleSocialMediaLinks(shouldTheyAppear) {
-                switch (shouldTheyAppear) {
-                    case true:
-
-                        break;
-                    case false:
-                        break;
-                    default:
-                        console.log("Someone passed a non-boolean value into handleSocialMediaLinks's shouldTheyAppear argument!");
-                }
-            }
 
             function addYTembedLinks() {
                 var allElementsToSetYTLinkOn = document.getElementsByClassName("YTembedLink");
