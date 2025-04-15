@@ -124,7 +124,13 @@
                 overflow: clip;
                 margin: 0px;
                 padding: 0px;
-                max-height:5em;
+            }
+
+            #swapModesButtonContainer {
+                grid-area: 'swapModesButton';
+                overflow: clip;
+                margin: 0px;
+                padding: 0px;
             }
 
             /* SOCIAL MEDIA BUTTONS */
@@ -179,6 +185,41 @@
             }
 
 
+            /* SWAP MODES BUTTON */
+
+            #swapModesButton {
+                --main-margin: .3em;
+
+                vertical-align: top;
+                background: linear-gradient(to bottom, #454545, #3a3a3a);
+                border: 1px solid #232323;
+                border-radius: 4px;
+                box-shadow: inset 0 0 0 1px #5B5B5B;
+                color: var(--default-text-color);
+                font: var(--default-font);
+                min-height: 23px;
+                padding: 0 12px;
+                position: relative;
+                text-align: center;
+
+                height: calc(100% - calc( var(--main-margin) * 2 ) );
+                margin: var(--main-margin);
+            } #swapModesButton:hover:not(:disabled):not(:active) {
+                border-color: #9ED868;
+                box-shadow: inset 0 0 0 1px #7dad50;
+                background: linear-gradient(to bottom, #4b4e48, #434a3d);
+            } #swapModesButton:disabled {
+                background: #f4f4f4;
+                box-shadow: inset 0 0 0 0px;
+                border-color: #b4b4b4;
+                border-width: 2px;
+                color: #838383;
+            } #swapModesButton:active {
+                border: 1px solid #9ED868;
+                box-shadow: inset 0 0 0 1px #7dad50;
+                background: linear-gradient(to bottom, #5f6f50, #555d4d);
+            }
+
             /* EXTRAS */
             u {
                 border-bottom: .5px solid #b9b9b9;
@@ -224,6 +265,10 @@
                     <!-- All the buttons and their respective icons are inserted via Javascript and a list that's contained in, well, the Javascript. Normally I'd be doing it manually but there's a LOT of buttons and because of this it's gonna be data-driven. -->
                 </div>
                 <div class="vr"></div>
+                <div id="swapModesButtonContainer">
+                    <button id="swapModesButton">Swap Modes</button>
+                    <!-- swapModesButton has some stuff done with shared.js. The id is important, and it having a click event is twice as important. -->
+                </div>
             </div>
             
             <div id="mainIframeContainer"> <!-- Just so that future me can remember, opening a link from an iframe will automatically open the link inside the iframe. That is to say, the system melonking uses requires 0 effort on your end. All you gotta do is tell the link to open in the current tab and you're good. -->

@@ -61,11 +61,13 @@ const absoluteToRelativePathLookupTable = [
 ];
 
 
+// Set up the important stuff ASAP, and set up 'stuff that the user won't notice until they interact with it' last.
+
 const mainIframe = document.getElementById("mainIframe");
 initializeIframePage('./pages/landing/index.html');
 
 var pageMode = determinePageMode(); // "main" or "accessible"
-console.log("You're using " + pageMode + " mode.")
+console.log("You're using " + pageMode + " mode.");
 
 setBackgroundIframe(); 
 
@@ -78,8 +80,7 @@ if (pageMode == "accessible") {
 
 
 window.addEventListener("popstate", onUserSwappingPageHistory);
-
-
+document.getElementById("swapModesButton").addEventListener("click", swapPageMode);
 
 
 
@@ -99,7 +100,6 @@ function initializeIframePage(relativePathToDefaultPage) {
     if (currentPage == null) { loadNewPageInIframe(relativePathToDefaultPage); }
     else {loadNewPageInIframe(currentPage);}
 }
-
 
 function handleIframeExternalities() { // Currently, it handles query strings. This is to happen AFTER the iframe has loaded.
     
@@ -196,6 +196,29 @@ function determinePageMode() {
     }
 }
 
+function swapPageMode() {
+    // All urls are relative to the current page. So long as both pages are in the same folder (which they should be), there will be no isses. 
+    var urlOfMainMode = "./main.html";
+    var urlOfAccessibleMode = "./accessible.html";
+    
+    
+    var everythingAfterTheUrl = window.location.href.substring(window.location.href.indexOf(".html") + 5); // Depends on the .html at the end of the url (but before query strings and all that). As of now they all share this part of the url, but be careful in case things change.
+    var newUrl;
+    var urlOfModeToUse;
+    switch(pageMode) { // Don't forget you're SWAPPING modes. If it's main mode, it has to swap to **anything that isn't main mode.**
+        case "main":
+            urlOfModeToUse = urlOfAccessibleMode;    
+            break;
+        case "accessible":
+            urlOfModeToUse = urlOfMainMode;    
+            break;
+        default:
+            console.log("Error: Tried to swap to unrecognized page mode! Either the page mode is invalid or you've yet to implement it. Get to work!");
+            break;
+    }
+    newUrl = urlOfModeToUse + everythingAfterTheUrl;
+    window.location.assign(newUrl); // This is the url that will be used for the new page. It will be the same as the current page, but with the mode changed.
+}
 
 
 
