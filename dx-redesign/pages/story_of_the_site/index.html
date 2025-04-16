@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
-        <title>"Why are we here... Just to suffer?"</title>
+        <title>Story of Undertale</title>
         <script src="../shared.js"></script>
         <style>
             @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
@@ -95,8 +95,8 @@ I wanted a piece of my site that would stay on-screen no matter where you went. 
 
 PS: If I'm not wrong, I think I wanted a navigation bar on the original site, too. Since I couldn't do it back then either, I added "Go to Sitemap" links on all of the subpages so that you could navigate back to the sitepad with minimal hassle.
 
-## Chapter 3: I was Struck by a Truck, and That was a Good Thing
-For a long, indeterminate period of time between 2021 and April 2025, nothing changed. The website had new links added for social media and whatnot, but that was it. Eventually, I found out about the web revival movement, and what people were doing on Neocities. For a while, I found it cool but otherwise didn't care. But one day, I went on my site. Then I went on their sites. Then I went on my site. Then I went on their sites.
+## Chapter 3: I was struck by a truck, and that was a good thing
+For a long, indeterminate period of time between 2021 and April 2025, almost nothing changed. The website had new links added for social media and whatnot, and dboys.ca expired so I moved to GitHub Pages, but that was it. Eventually, I found out about the web revival movement, and what people were doing on Neocities. For a while, I found it cool but otherwise didn't care. But one day, I went on my site. Then I went on their sites. Then I went on my site. Then I went on their sites.
 
 Oh my goodness, my site *sucks!* It's so boring, it could be replaced by a linktree! It's so... it's so....
 <span class="bigTextButNotAHeader">**corporate.**</span>
@@ -105,10 +105,15 @@ After deliberating for 2 days, I decided to re-build my website.
 
 ## Chapter 4: Doom came in the form of a Melon
 Now here's a funny thing: In the time between then and now, I started learning more about programming. I owe a lot of that to [Dreams](https://en.wikipedia.org/wiki/Dreams_(video_game)!) and [LittleBigPlanet 3](https://en.wikipedia.org/wiki/LittleBigPlanet_3!)'s logic system combined with [SmileBASIC 2](https://en.wikipedia.org/wiki/Petit_Computer!) and [Godot 3](https://en.wikipedia.org/wiki/Godot_(game_engine)!). In that time, I also learned a lot of C# and some C++.
-All in all, I new more. A lot more than I did before. My extra knowledge played a huge part in how the new site worked, because I stopped relying entirely on HTML and CSS and started to embrace Javascript with open arms. 
+All in all, I new more. A lot more than I did before. My extra knowledge played a huge part in how the new site worked, because I stopped relying entirely on HTML and CSS and started to embrace Javascript with open arms. As I learned more and more about web development, I had a genius idea: "What if I had everything on a single HTML page, and then loaded whatever you need using [iframes](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/iframe!) and [query strings](https://en.wikipedia.org/wiki/Query_string!)?"
+I had conceptualized a whole new idea: [Something that already exists](https://en.wikipedia.org/wiki/Single-page_application!). That's right: I conceptualized the iframe-based single-page application, something that existed long before I was born.
 
-
+This solved all of my problems: I got to have a website with multiple pages, and I got to have a piece of it that stayed around no matter where I went! Plus, I could even use a global stylesheet and global script to make sure that all of them had a consistent style!
+As for what I was to do, I based it off of 3 things: [medjed.nekoweb.org](./assets/medjed.png!), [PrismLauncher](./assets/prismlauncher.png!), and [7.css](https://khang-nd.github.io/7.css/!).
+I built a simple query string system, using a lookup table to get the page you're on and choose a specific iframe as well as a background for this. 
+I did things by modifying *the compiled version* of 7.css for, only for me to realize that  
             `;
+
             // Pre-processor
             var preprocessedArticle = theArticle;
             
@@ -120,7 +125,7 @@ All in all, I new more. A lot more than I did before. My extra knowledge played 
             mdTempContainer.innerHTML = parsedText;
             
             // Post-Injection processor (post-post-post processor) 
-            var anchorTags = mdContainer.querySelectorAll('a');
+            var anchorTags = mdTempContainer.querySelectorAll('a');
             for (let i = 0; i < anchorTags.length; i++) {
                 var tagToMod = anchorTags[i]; 
                 
