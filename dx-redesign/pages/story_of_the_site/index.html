@@ -7,20 +7,22 @@
             @import url('7_scrollbar.css');
 
             :root {
-                --default-text-color: #000000;
+                --default-text-color: #222;
                 --default-font: 9pt "Noto Sans", sans-serif;
-
+                --default-bg-color: #fafafa;
             }
+
+            #mdContainer {
+                max-width: 70em;
+                margin-inline: auto;
+            }
+
             #mdContainer {
                 font: var(--default-font);
                 color: var(--default-text-color);
                 padding: .3rem;
             }
 
-            #mdContainer p {
-                margin-top: .3rem;
-                margin-bottom: .3rem;
-            }
             #mdContainer h2 {
                 font-size: 1.5rem;
                 margin-top: 0.1rem;
@@ -32,12 +34,15 @@
                 margin-bottom: 0;
             }
 
+            .bigTextButNotAHeader {
+                font-size: 1.1rem;
+            }
         </style>
 
 
 
     </head>
-    <body style="margin:0; padding:0;">
+    <body style="margin:0; padding:0; background-color:  var(--default-bg-color);" class="has-scrollbar">
         <audio src="./assets/mario_is_missing_snes-united_states.flac" autoplay loop></audio>
         <div id="mdContainer"></div>
         <!-- Everything here is rendered with markdown. I wanna use markdown in my blog, so this is like a really scuffed precursor. -->
@@ -81,14 +86,26 @@ I wanted a piece of my site that would stay on-screen no matter where you went. 
 Don't get me wrong, it was a good looking one, but a linktree is a linktree. There's no getting around it. After I made this version of the site, I planned to make a ton more projects to fill up that searchbar area. I never did.
 Even so, I was content, and moved on to do other things, only ever updating it to add new social media links.
 
-PS: If I'm not wrong, I think I wanted a navigation bar on the original site, too. Since I couldn't do it back then either, I added "Go to Sitemap" links on all of them so that you could navigate back to the sitepad with minimal hassle.
+PS: If I'm not wrong, I think I wanted a navigation bar on the original site, too. Since I couldn't do it back then either, I added "Go to Sitemap" links on all of the subpages so that you could navigate back to the sitepad with minimal hassle.
+
+## I was Struck by a Truck, and That was a Good Thing
+For a long, indeterminate period of time between 2021 and April 2025, nothing changed. The website had new links added for social media and whatnot, but that was it. Eventually, I found out about the web revival movement, and what people were doing on Neocities. <br>
+For a while, I found it cool but otherwise didn't care. But one day, I went on my site. Then I went on their sites. Then I went on my site. Then I went on their sites.
+
+Oh my goodness, my site *sucks!* It's so boring, it could be replaced by a linktree! It's so... it's so.... <br>
+<span class="bigTextButNotAHeader">**corporate.**</span>
+
+After deliberating for 2 days, I decided to re-build my website.
+
+Now here's a funny thing: In the time between then and now, I started learning more about programming. I owe a lot of that to Dreams and LittleBigPlanet 3's logic system combined with [SmileBASIC 2](https://en.wikipedia.org/wiki/Petit_Computer!). Those 
+
             `;
             
             var parsedText = marked.parse(theArticle);
             // Post-post-processor
             mdContainer.innerHTML = parsedText;
 
-            // Post-Injection processor (post-post-post processor)
+            // Post-Injection processor (post-post-post processor) 
             var anchorTags = mdContainer.querySelectorAll('a');
             for (let i = 0; i < anchorTags.length; i++) {
                 var tagToMod = anchorTags[i]; 
