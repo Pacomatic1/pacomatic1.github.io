@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
     <head>
+        <title>"Why are we here... Just to suffer?"</title>
         <script src="../shared.js"></script>
         <style>
             @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
@@ -12,6 +13,11 @@
                 --default-bg-color: #fafafa;
             }
 
+            body {
+                margin:0; 
+                padding:0; 
+                background-color:  var(--default-bg-color);
+            }
             #mdContainer {
                 max-width: 70em;
                 margin-inline: auto;
@@ -42,7 +48,7 @@
 
 
     </head>
-    <body style="margin:0; padding:0; background-color:  var(--default-bg-color);" class="has-scrollbar">
+    <body class="has-scrollbar">
         <audio src="./assets/mario_is_missing_snes-united_states.flac" autoplay loop></audio>
         <div id="mdContainer"></div>
         <!-- Everything here is rendered with markdown. I wanna use markdown in my blog, so this is like a really scuffed precursor. -->
@@ -55,19 +61,22 @@
         <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
         <script>
             const mdContainer = document.getElementById("mdContainer");
-
+            var mdTempContainer = document.createElement("div");
+            marked.use({
+                breaks: true,
+            });
 
             // Usage:
-            //  The defaults of marked, with a few differences.
-            //  If you append an exclamation mark to a link, it will open in a new tab.
+            // The defaults of marked, with a few differences.
+            //      If you append an exclamation mark to a link, it will open in a new tab.
+            //
+            // This is just a tip, but if you want a newline without 
 
-
-            var theArticle = `
-## Preamble
-Many websites nowadays are built thanks to the **web revival** movement; all us netizens are tired of social media and the big corporations and we're bringing back our own sites and all that. <br>
+            var theArticle = `## Preamble
+Many websites nowadays are built thanks to the **web revival** movement; all us netizens are tired of social media and the big corporations and we're bringing back our own sites and all that.
 While I am involved in this movement, my website was never meant for this. Not originally.
 
-## The Beginning
+## Chapter 1: Rayman ~~Origins~~ Legends
 I like video games. This is no secret. Ever since I was a kid, I've wanted to make video games. This is no secret. <br>
 Lucky for me, my *papa* was a programmer! I don't remember how this happened, but my papa roped me into making a website by giving me some *personal, hand-made* HTML classes.
 
@@ -77,34 +86,39 @@ As you can see (eventually once I make the archive 💀), it sucked. Everything 
 
 As time went on, I took what I had and expanded it: More pages, more links to other platforms. However, the comically bad programming and my inability to expand it because I was using stylesheets and scripts that broke certain stuff meant that I had to do something drastic: Start anew.
 
-## New Website, New Frustrations
+## Chapter 2: Everything and nothing changed at the same time
 Thanks to the new stuff I made, I gained more experience than ever before in HTML and CSS. I also used a smidgeon of Javascript that I stole off some website for the search bar. Although I found the site somewhat difficult to make, I didn't mind that. What I really hated was something completely different:
 
 Navigation bars.
 
-I wanted a piece of my site that would stay on-screen no matter where you went. Sadly, I didn't know how to do this. It was for this reason that my website ended up turning into the exact same thing as the last: A linktree.
-Don't get me wrong, it was a good looking one, but a linktree is a linktree. There's no getting around it. After I made this version of the site, I planned to make a ton more projects to fill up that searchbar area. I never did.
-Even so, I was content, and moved on to do other things, only ever updating it to add new social media links.
+I wanted a piece of my site that would stay on-screen no matter where you went. Sadly, I didn't know how to do this. It was for this reason that my website ended up turning into the exact same thing as the last: A linktree. Don't get me wrong, it was a good looking one, but a linktree is a linktree. There's no getting around it. After I made this version of the site, I planned to make a ton more projects to fill up that searchbar area. I never did. Even so, I was content, and moved on to do other things, only ever updating it to add new social media links.
 
 PS: If I'm not wrong, I think I wanted a navigation bar on the original site, too. Since I couldn't do it back then either, I added "Go to Sitemap" links on all of the subpages so that you could navigate back to the sitepad with minimal hassle.
 
-## I was Struck by a Truck, and That was a Good Thing
-For a long, indeterminate period of time between 2021 and April 2025, nothing changed. The website had new links added for social media and whatnot, but that was it. Eventually, I found out about the web revival movement, and what people were doing on Neocities. <br>
-For a while, I found it cool but otherwise didn't care. But one day, I went on my site. Then I went on their sites. Then I went on my site. Then I went on their sites.
+## Chapter 3: I was Struck by a Truck, and That was a Good Thing
+For a long, indeterminate period of time between 2021 and April 2025, nothing changed. The website had new links added for social media and whatnot, but that was it. Eventually, I found out about the web revival movement, and what people were doing on Neocities. For a while, I found it cool but otherwise didn't care. But one day, I went on my site. Then I went on their sites. Then I went on my site. Then I went on their sites.
 
-Oh my goodness, my site *sucks!* It's so boring, it could be replaced by a linktree! It's so... it's so.... <br>
+Oh my goodness, my site *sucks!* It's so boring, it could be replaced by a linktree! It's so... it's so....
 <span class="bigTextButNotAHeader">**corporate.**</span>
 
 After deliberating for 2 days, I decided to re-build my website.
 
-Now here's a funny thing: In the time between then and now, I started learning more about programming. I owe a lot of that to Dreams and LittleBigPlanet 3's logic system combined with [SmileBASIC 2](https://en.wikipedia.org/wiki/Petit_Computer!). Those 
+## Chapter 4: Doom came in the form of a Melon
+Now here's a funny thing: In the time between then and now, I started learning more about programming. I owe a lot of that to [Dreams](https://en.wikipedia.org/wiki/Dreams_(video_game)!) and [LittleBigPlanet 3](https://en.wikipedia.org/wiki/LittleBigPlanet_3!)'s logic system combined with [SmileBASIC 2](https://en.wikipedia.org/wiki/Petit_Computer!) and [Godot 3](https://en.wikipedia.org/wiki/Godot_(game_engine)!). In that time, I also learned a lot of C# and some C++.
+All in all, I new more. A lot more than I did before. My extra knowledge played a huge part in how the new site worked, because I stopped relying entirely on HTML and CSS and started to embrace Javascript with open arms. 
+
 
             `;
+            // Pre-processor
+            var preprocessedArticle = theArticle;
             
-            var parsedText = marked.parse(theArticle);
-            // Post-post-processor
-            mdContainer.innerHTML = parsedText;
 
+            var parsedText = marked.parse(preprocessedArticle);
+            // Post-post-processor (marked already has its own post-processor)
+
+
+            mdTempContainer.innerHTML = parsedText;
+            
             // Post-Injection processor (post-post-post processor) 
             var anchorTags = mdContainer.querySelectorAll('a');
             for (let i = 0; i < anchorTags.length; i++) {
@@ -116,6 +130,8 @@ Now here's a funny thing: In the time between then and now, I started learning m
                 }
             }
             
+            // The end!
+            mdContainer.innerHTML = mdTempContainer.innerHTML;
         </script>
     </body>
 </html>
