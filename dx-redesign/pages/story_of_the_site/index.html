@@ -68,9 +68,9 @@
 
             // Usage:
             // The defaults of marked, with a few differences.
-            //      If you append an exclamation mark to a link, it will open in a new tab.
-            //
-            // This is just a tip, but if you want a newline without 
+            //      If a link has an exclamation mark appened to it, it will open in a new tab.
+            //      If you want attributes on an image, add "{}" after the image. This is a JSON object, so add the following to do what you want. (all of them are optional)
+            //          Specify the size of an image using 'width' and 'height'. It's applied through CSS, so you can (and should) use rem and px and em and % and all that. And yes, 'auto' is compatible. 
 
             var theArticle = `## Preamble
 Many websites nowadays are built thanks to the **web revival** movement; all us netizens are tired of social media and the big corporations and we're bringing back our own sites and all that.
@@ -110,20 +110,24 @@ I had conceptualized a whole new idea: [Something that already exists](https://e
 
 This solved all of my problems: I got to have a website with multiple pages, and I got to have a piece of it that stayed around no matter where I went! Plus, I could even use a global stylesheet and global script to make sure that all of them had a consistent style!
 As for what I was to do, I based it off of 3 things: [medjed.nekoweb.org](./assets/medjed.png!), [PrismLauncher](./assets/prismlauncher.png!), and [7.css](https://khang-nd.github.io/7.css/!).
-I built a simple query string system, using a lookup table to get the page you're on and choose a specific iframe as well as a background for this. I did styling by modifying *the compiled version* of 7.css for, only for me to realize that it was a huge waste of time since I wouldn't use half of its UI elements anyways. I instead made my own stylesheet and then only made some stuff for whatever I needed, with PrismLauncher as reference (it uses Qt, not CSS) and 7.css to *'borrow'* code from. I then injected this stylesheet into all my pages using a script that all of them shared.
+I built a simple query string system, using a lookup table to get the page you're on and choose a specific iframe as well as a background for this. I did styling by modifying *the compiled version* of 7.css for, only for me to realize that it was a huge waste of time since I wouldn't use half of its UI elements anyways. I instead made my own stylesheet and then only made some stuff for whatever I needed, with PrismLauncher as reference (it uses Qt so I took screenshots and manually picked colors and styling) and 7.css to *'borrow'* code from. I then injected this stylesheet into all my pages using a script that all of them shared.
+This worked remarkably well, and one day I decided to keep looking online for more inspiration to use on my site. The result?
+![The scrapped second redesign's home page. It's clearly unfinished.](./assets/ogredesign_homepage.png){size 100, 200}
+![The scrapped second redesign's home page. It's clearly unfinished.](./assets/ogredesign_homepage.png){size 100, 200}
+<span class="bigTextButNotAHeader">Then I found the melon.</span> 
             `;
 
-            // Pre-processor
+            // Pre-processor (before marked does anything)
             var preprocessedArticle = theArticle;
             
 
             var parsedText = marked.parse(preprocessedArticle);
-            // Post-post-processor (marked already has its own post-processor)
+            // Post-post-processor (after marked does stuff, but while it's still a string) (marked already has its own post-processor) 
+
 
 
             mdTempContainer.innerHTML = parsedText;
-            
-            // Post-Injection processor (post-post-post processor) 
+            // Post-Injection processor (post-post-post processor) (after the thing turns to HTML but before it's actually added to the DOM)
             var anchorTags = mdTempContainer.querySelectorAll('a');
             for (let i = 0; i < anchorTags.length; i++) {
                 var tagToMod = anchorTags[i]; 
@@ -134,6 +138,34 @@ I built a simple query string system, using a lookup table to get the page you'r
                 }
             }
             
+            // Look through image tags to go handle attributes
+            
+            // Create array of indices for where "<img " starts, then for each element, find where ">" is and grab text right after it. Put in JSON, and sequentially add data to each image - make sure to have an empty object if the image doesn't specify squat so as to avoid breaking things. 
+            
+            var howManyStringsThereAre = 0;
+            var articleHtmlLengthForImages = mdTempContainer.innerHTML.length;
+            var cursorPosition = 0;
+            // Tick up and store every unique indice into a var. Also, when it gets an indice skip to there.
+            while(mdTempContainer.innerHTML.indexOf("<img ", cursorPosition) != -1) {
+                cursorPosition++;
+                if (cursorPosition == mdTempContainer.innerHTML.indexOf("<img ", cursorPosition) ) {
+                    howManyStringsThereAre++;
+                }
+                // mdTempContainer.innerHTML.indexOf("<img ", howManyStringsThereAre) != -1
+                console.log(mdTempContainer.innerHTML.indexOf("<img ", howManyStringsThereAre));
+                console.log(howManyStringsThereAre)
+            } // This just becomes a counter that finds the indice of the FIRST instance! No!
+            
+            
+
+
+
+            // var imageTags = mdTempContainer.querySelectorAll('img');
+            // for (let i = 0; i < imageTags.length; i++) {
+            //     var tagToSeek = imageTags[i]; 
+            //     // Look for text right after it.
+            //     mdTempContainer.innerHTML    
+            // }
             // The end!
             mdContainer.innerHTML = mdTempContainer.innerHTML;
         </script>
