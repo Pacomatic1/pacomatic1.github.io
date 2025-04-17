@@ -19,6 +19,14 @@
                 background-color:  var(--default-bg-color);
             }
 
+            .tinymargin {
+                margin: .1rem;
+            }
+            .bigTextButNotAHeader {
+                font-size: 1.1rem;
+            }
+            
+
             #mdContainer {
                 max-width: 70em;
                 margin-inline: auto;
@@ -38,13 +46,7 @@
                 margin-bottom: 0;
             }
 
-            .tinymargin {
-                margin: 1px;
 
-            }
-            .bigTextButNotAHeader {
-                font-size: 1.1rem;
-            }
             #mdContainer img {
                 max-width: 100%;
             }
@@ -117,7 +119,7 @@ This solved all of my problems: I got to have a website with multiple pages, and
 As for what I was to do, I based it off of 3 things: [medjed.nekoweb.org](./assets/medjed.png!), [PrismLauncher](./assets/prismlauncher.png!), and [7.css](https://khang-nd.github.io/7.css/!).
 I built a simple query string system, using a lookup table to get the page you're on and choose a specific iframe as well as a background for this. I did styling by modifying *the compiled version* of 7.css for, only for me to realize that it was a huge waste of time since I wouldn't use half of its UI elements anyways. I instead made my own stylesheet and then only made some stuff for whatever I needed, with PrismLauncher as reference (it uses Qt so I took screenshots and manually picked colors and styling) and 7.css to *'borrow'* code from. I then injected this stylesheet into all my pages using a script that all of them shared.
 This worked remarkably well, and one day I decided to keep looking online for more inspiration to use on my site. The result?
-![The scrapped second redesign's home page. It's clearly unfinished.](./assets/ogredesign_homepage.png#size-48%-auto#tinymargin)![The scrapped second redesign's home page. It's clearly unfinished.](./assets/ogredesign_homepage.png#size-48%-auto#inline#tinymargin)
+![The scrapped second redesign's home page. It's clearly unfinished.](./assets/ogredesign_homepage.png#size-48%-auto#tinymargin)![The scrapped second redesign's home page. It's clearly unfinished.](./assets/ogredesign_themetest.png#size-48%-auto#inline#tinymargin)
 <span class="bigTextButNotAHeader">**Then I found the melon.**</span> 
             `;
 
@@ -166,10 +168,8 @@ This worked remarkably well, and one day I decided to keep looking online for mo
                         if (element.includes("tinymargin")) {
                             addClassToElement("tinymargin", tagToMod);
                         }
-                    });
-                    
+                    });   
                 }
-
             }
 
 
