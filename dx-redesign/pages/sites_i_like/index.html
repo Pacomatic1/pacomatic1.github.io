@@ -5,31 +5,82 @@
         <script src="../shared.js"> </script>
         <style>
             @import url('7_scrollbar.css');
-            
+            @import url('https://fonts.googleapis.com/css2?family=Cal+Sans&display=swap');
+
             body {
                 margin: 0px;
                 padding: 0px;
                 background-color: #403239;
             }
 
+
             #megaContainer {
                 
 
             }
+
+
+
+
+            #sitesILikeBanner {
+                width:100%;
+                text-align: center;
+                color: #ffffff;
+                font: 30pt 'Cal Sans', 'sans-serif';  /* Other stuff within is styled in em, so change the font and you change the image too */
+                /* Centering */
+                display: flex;
+                flex-flow: right nowrap;
+                align-items: center;
+                justify-content: center;
+            }
+            #sitesILikeBanner p {
+                margin: 0px;
+                padding: 0px;
+            }
+            #sitesILikeBanner div {
+                height: 100%;
+                /* Centering */
+                display: flex;
+                /* Width is intentionally unspecified; leave that to the image. */
+                margin-inline: .2em;
+            }
+            #sitesILikeBanner div img {
+                width: 2em;
+                height: auto;
+            }
+
         </style>
     </head>
     <body class="has-scrollbar">
         <div id="megaContainer">
-            
-        </div>
+            <div id="sitesILikeBanner"> 
+                <p>Sites I like</p> 
+                <div>
+                    <img src="./assets/mc-compass/mc-compass-animated.png">
+                </div>
+            </div>
 
+            <div id="webButtonContainer">
+
+            </div>
+        </div>
         <!-- Layout:
             - "Hey! This WILL consume your bandwidth" 
             - Add my 88x31 button! PS. Make sure to set scaling to nearest by default (in the provided code)
             - Webcomics I like (Sabrina Online, Loading Artist, XKCD, Exocomics, Nyazche)
-            - 
             - 88x31 archive (this is probably gonna be huge. MAKE IT COME LAST!)
         -->
 
+        <script>
+
+            // This is an optimization.
+            var imageTags = document.querySelectorAll('img');
+            for (let i = 0; i < imageTags.length; i++) {
+                var tagToMod = imageTags[i]; 
+                // They only load when they're on-screen, and they don't lag you when they decode (since there's a million of 'em)
+                tagToMod.loading = "lazy";
+                tagToMod.decoding = "async";
+            }
+        </script>
     </body>
 </html>
