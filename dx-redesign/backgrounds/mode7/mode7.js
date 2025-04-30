@@ -93,7 +93,6 @@ export function constructPlane(args) { // Wanna know what 'args' is? Look up.
     material.transparent = true;
     material.side = THREE.DoubleSide
     plane = new THREE.Mesh( geometry, material );
-    startingRotation.x
     
     plane.rotation.x = startingRotation.x; 
     plane.rotation.y = startingRotation.y; 
