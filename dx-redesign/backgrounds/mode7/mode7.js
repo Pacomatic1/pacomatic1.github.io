@@ -33,34 +33,36 @@ All this to say: Set up the Node.js server, and remember to stay pissed! */
 import * as THREE from 'three';
 
 var hasScriptBeenInitialized = false; // Nothing can happen until constructPlane is called. Always make sure it's true!
+var willThereBeCorsIssues = seeIfThereWillThereBeCorsIssues(); 
 
-var scene, camera, renderer, plane, ignoreCorsIssues; // Global variables.
+var scene, camera, renderer, plane, ignoreCorsIssues, renderResolutionMultiplierOnHDScreens, textureToLoad, backupColor, planeSize, cameraPosition, cameraLookAt, cameraFov, startingRotation, rotationSpeed, ignoreCorsIssues, textureFilteringWhenMipMapped, textureFilteringNoMipMap, whereToPutCanvas; // Global variables.
 
 
 export function constructPlane(args) { // Wanna know what 'args' is? Look up.
     hasScriptBeenInitialized = true;
-    var textureToLoad = args.texture;
-    var backupColor = args.backupColor || 0x00ff00;
-    var planeSize = args.planeSize || 4;
-    var cameraPosition = args.cameraPosition || { x: 0, y: 2.1, z: 5 };
-    var cameraLookAt = args.cameraLookAt || { x: 0, y: 0.2, z: 0 };
-    var cameraFov = args.cameraFov || 40;
-    var startingRotation = args.startingRotation || { x: 0, y: 0, z: 0 };
-    var rotationSpeed = args.rotationSpeed || 0.1;
+    textureToLoad = args.texture;
+    backupColor = args.backupColor || "#00ff00";
+    planeSize = args.planeSize || 4;
+    cameraPosition = args.cameraPosition || { x: 0, y: 2.1, z: 5 };
+    cameraLookAt = args.cameraLookAt || { x: 0, y: 0.2, z: 0 };
+    cameraFov = args.cameraFov || 40;
+    startingRotation = args.startingRotation || { x: 1.5708, y: 0, z: 0 }; // three.js uses radians. This is 90 in degrees.
+    rotationSpeed = args.rotationSpeed || { x: 0, y: 0, z: 0.01 };
     ignoreCorsIssues = args.ignoreCorsIssues || false;
-    var textureFilteringNoMipMap = args.textureFilteringNoMipMap || "nearest";
-    var textureFilteringWhenMipMapped = args.textureFilteringWhenMipMapped || "nearest";
-    var renderResolutionMultiplierOnHDScreens = args.renderResolutionMultiplierOnHDScreens || .5;
-    var whereToPutCanvas = args.whereToPutCanvas || "%body";
+    textureFilteringNoMipMap = args.textureFilteringNoMipMap || "nearest";
+    textureFilteringWhenMipMapped = args.textureFilteringWhenMipMapped || "nearest";
+    renderResolutionMultiplierOnHDScreens = args.renderResolutionMultiplierOnHDScreens || .5;
+    whereToPutCanvas = args.whereToPutCanvas || "%body";
 
-    if (ignoreCorsIssues) { console.log("From the background: CORS issues have been manually ignored. Expect issues."); }
-    if (willThereBeCorsIssues()) { console.log("From the background: CORS issues are expected. If you want to view this correctly, run a local server and view the background on there. An easy way is to get Node.js, npm, and the serve extension, then use 'npx serve <project directory here>'."); }
+    if (ignoreCorsIssues) { console.log("From the background: CORS issues have been manually ignored."); }
+    if (willThereBeCorsIssues) { console.log("From the background: CORS issues are expected. If you want to view this correctly, run a local server and view the background on there. An easy way is to get Node.js, npm, and the serve extension, then use 'npx serve <project directory here>'."); }
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera( cameraFov, window.innerWidth / window.innerHeight, 0.1, 1000 );
     renderer = new THREE.WebGLRenderer({ alpha: true } );
 
     renderer.setSize( 128, 128 ); // Later, we will call onWindowResize(). onWindowResize() will override this anyways, so in the meantime give it something small.
     renderer.setAnimationLoop( animate );
+
     // We need to add the canvas, but first we must pick a place - see whereToPutCanvas.
     var placeToPutCanvas;
     if (whereToPutCanvas.startsWith("#")) { // If it starts with a hashtag, it's an ID.
@@ -76,8 +78,9 @@ export function constructPlane(args) { // Wanna know what 'args' is? Look up.
     
     // If we're running on file://, disable the texture to avoid a bunch of issues.
     var material;
-    if (willThereBeCorsIssues()) {
-        material = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+    var colorAsValidHex = "#" + backupColor.substring(1);
+    if (willThereBeCorsIssues) {
+        material = new THREE.MeshBasicMaterial( { color: colorAsValidHex } );
     } else {
         const loader = new THREE.TextureLoader();
         const texture = loader.load(textureToLoad);
@@ -90,12 +93,18 @@ export function constructPlane(args) { // Wanna know what 'args' is? Look up.
     material.transparent = true;
     material.side = THREE.DoubleSide
     plane = new THREE.Mesh( geometry, material );
-    plane.rotation.x = 1.5708; // three.js uses radians. This is 90 in degrees.
+    startingRotation.x
+    
+    plane.rotation.x = startingRotation.x; 
+    plane.rotation.y = startingRotation.y; 
+    plane.rotation.z = startingRotation.z; 
     scene.add( plane );
 
-    camera.position.y = 2.1;
-    camera.position.z = 5;
-    camera.lookAt(0,.2,0);
+    camera.position.x = cameraPosition.x;
+    camera.position.y = cameraPosition.y;
+    camera.position.z = cameraPosition.z;
+    
+    camera.lookAt(cameraLookAt.x,cameraLookAt.y,cameraLookAt.z);
 
     onWindowResize(); // This does a bunch of unneeded stuff, but it also handles renderResolutionMultiplierOnHDScreens so we'll run it.
 }
@@ -120,13 +129,15 @@ function onWindowResize() { // This is called on init as well.
 
 
 function animate() {
-    // if (!hasScriptBeenInitialized) { return; } // Don't do anything if the script hasn't been initialized yet.
-    // plane.rotation.z += 0.01;
+    // This is only called after the script is initialized, so we don't need to know if it's initialized or not. This causes more bugs if other functions go against this, but it runs every frame so avoiding the extra check is a very consequential optimization.
+    plane.rotation.x += rotationSpeed.x;
+    plane.rotation.y += rotationSpeed.y;
+    plane.rotation.z += rotationSpeed.z;
     renderer.render( scene, camera );
 }
 
-function willThereBeCorsIssues() {
+function seeIfThereWillThereBeCorsIssues() { // If possible, check the variable "willThereBeCorsIssues" instead. Optimization.
     // three.js does NOT like running off local files. C'est la vie.
-    if (ignoreCorsIssues) { return false; }   
+    if (ignoreCorsIssues) { return false; }
     return window.location.href.includes("file:");
 }

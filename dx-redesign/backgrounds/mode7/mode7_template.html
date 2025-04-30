@@ -45,11 +45,18 @@
             </p>
         </div>
         
+        <script>
+            if (window.location.href.includes("file:")) {
+                console.log("From the background: CORS issues are expected. If you want to view this correctly, run a local server and view the background on there. An easy way is to get Node.js, npm, and the serve extension, then use 'npx serve <project directory here>'.")
+            }
+        </script>
 
-        <script type="module" src="./mode7.js"></script>
         <script type="module">
-            import * as MODE7 from'mode7'
-            MODE7.constructPlane({cameraFov: 40,});
+            import * as MODE7 from 'mode7'
+            MODE7.constructPlane({
+
+                texture: "../assets/threejswall.webp"
+            });
         </script>
     </body>
 </html>
