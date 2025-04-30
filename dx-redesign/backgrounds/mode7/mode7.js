@@ -85,8 +85,8 @@ export function constructPlane(args) { // Wanna know what 'args' is? Look up.
         const loader = new THREE.TextureLoader();
         const texture = loader.load(textureToLoad);
         texture.colorSpace = THREE.SRGBColorSpace;
-        texture.minFilter = THREE.NearestFilter;
-        texture.magFilter = THREE.NearestFilter;    
+        texture.minFilter = THREE.textureFilteringNoMipMap;
+        texture.magFilter = THREE.textureFilteringWhenMipMapped;    
         material = new THREE.MeshBasicMaterial( { map: texture } );
     }
 
