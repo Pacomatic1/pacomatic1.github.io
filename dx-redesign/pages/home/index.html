@@ -63,7 +63,7 @@
             #topWindow {
                 width: 100%;
                 height: 20em;
-                background-image: url('./assets/backgrounds/mc_pc.png');
+                background-image: url('./assets/backgrounds/mc_pc_optimized.webp');
                 background-position: bottom;
                 position: relative;   
                 /* DO NOT SET THE Z-INDEX TO A NEGATIVE NUMBER. This will cause all of its contents to become unclickable and require JS or 'Tab/Enter mode' which is anything but ideal. */
@@ -307,6 +307,7 @@
             } .mcItemLinkContainer div button img {
                 width: 60%;
                 height: auto;
+                /* image-rendering: pixelated; Looks really bad on low-res screens, and high-res when not using integer scale */
                 filter: drop-shadow(0px 0px 1rem black);
             }
 
@@ -393,7 +394,7 @@
                             <div>
                                 <a href="../story_of_the_site/index.html">
                                     <button>
-                                        <img src="./assets/images/mc_written_book_16x.png" alt="Minecraft Book Icon">
+                                        <img src="./assets/images/mc_written_book_16x.png" alt="Minecraft Book Icon" decoding="async" loading="lazy">
                                     </button>
                                 </a>
                             </div>
@@ -404,7 +405,7 @@
                             <div>
                                 <a href="../sites_i_like/index.html">
                                     <button>
-                                        <img src="./assets/images/mc-compass/mc-compass-animated.png" alt="Minecraft Compass Icon">
+                                        <img src="./assets/images/mc-compass/mc-compass-animated.png" alt="Minecraft Compass Icon" decoding="async" loading="lazy">
                                     </button>
                                 </a>
                             </div>
@@ -425,7 +426,7 @@
                     <iframe id="statsWindow" src="stats_iframe.html" allowtransparency="true" tabindex="-1"><!-- I hate this so much. If 7.css's scoped version wasn't so picky, I would do this with a div like a smart person. Alas, I don't have the patience to fix this problem. Forgive me. --></iframe>
                     <iframe id="bskyEmbed" src="https://pacomatic1.github.io/Goofy-ahh-Bsky-Profile-Embed/?profile=pacomatic.bsky.social" allowtransparency="true"></iframe> <!-- I went on a sidequest for this 💀 -->
                     <div id="YTembedContainer"> <!-- I was gonna make an actual embed, but stupid YouTube needs an authentication key to access public information. Doing this on a static site sucks. They should be more like Bluesky. -->
-                         <img src="./assets/images/yt_pfp.jpg">
+                         <img src="./assets/images/yt_pfp_optimized.jpg">
                          <p>
                             <a class="YTembedLink" id="YTembedName">Pacomatic</a> <br>
                             <a class="YTembedLink" id="YTembedHandle">@Pacomatic</a>
@@ -456,13 +457,13 @@
                     // [7] is the alt of the button. It's what you see when the image fails to load or if the user needs assistive technology.
 
                 // If it wasn't immediately obvious, this is based onthe navBar system.
-                [0, "", "assets/images/downarrow_4x.png", 1, "#pageContentsSection", "", "If you don't have a mouse, these icons suck. So here you go.", "Skip"],
+                [0, "", "assets/images/downarrow_4x_optimized.webp", 1, "#pageContentsSection", "", "If you don't have a mouse, these icons suck. So here you go.", "Skip"],
                 [0, "", "assets/socialmedia-icons/youtube_icon.svg", 2, "https://www.youtube.com/user/AmmarZawar", "", "Pacomatic! That is my channel.", "YouTube"],
                 [0, "", "assets/socialmedia-icons/bsky_logo.svg", 2, "https://bsky.app/profile/pacomatic.bsky.social", "", "It took me an astoundingly long time to get an account for social media that isn't Reddit or YoiTube. Ain't that a thing?", "Bluesky"],
                 [0, "", "assets/socialmedia-icons/github_logo.svg", 2, "https://github.com/pacomatic1/", "", "If I open-source dode, it's usually here. ", "GitHub"],
-                [0, "", "assets/socialmedia-icons/reddit_logo.png", 2, "https://www.reddit.com/user/Pacomatic", "", "u/Pacomatic, that is me.", "Reddit"],
+                [0, "", "assets/socialmedia-icons/reddit_logo.svg", 2, "https://www.reddit.com/user/Pacomatic", "transform: scale(1.5);", "u/Pacomatic, that is me.", "Reddit"],
                 [0, "", "assets/socialmedia-icons/itch_logo.svg", 2, "https://pacomatic1.itch.io/", "", "I sometimes make games here. It's a very nice service.", "Itch.io"],
-                [0, "", "assets/socialmedia-icons/steam_logo.png", 2, "https://steamcommunity.com/id/Pacomatic1/", "", "It's not an addiction, I promise! It's simply one of the best services in PC gaming.", "Steam"],
+                [0, "", "assets/socialmedia-icons/steam_logo.svg", 2, "https://steamcommunity.com/id/Pacomatic1/", "transform: scale(1.9);", "It's not an addiction, I promise! It's simply one of the best services in PC gaming.", "Steam"],
                 [0, "", "assets/socialmedia-icons/internet_archive_logo.svg", 2, "https://archive.org/details/@pacomatic", "", "Internet Archive. Preserving history is important, and for that I love them.", "Internet Archive"],
                 [0, "", "assets/socialmedia-icons/scratch_logo.png", 2, "https://scratch.mit.edu/users/Pacomatic33/", "", "Scratch is powerful, dude!", "Scratch"],
                 [0, "", "assets/socialmedia-icons/pixilart_logo.webp", 2, "https://pixilart.com/pacomatic", "", "It's spelled 'Pixil', not 'Pixel'. Big difference.", "Pixil Art"],
