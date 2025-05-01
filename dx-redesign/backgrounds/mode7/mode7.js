@@ -58,7 +58,7 @@ export function constructPlane(args) { // Wanna know what 'args' is? Look up.
     
 
     if (ignoreCorsIssues) { console.log("From the background: CORS issues have been manually ignored."); }
-    if (willThereBeCorsIssues) { console.log("From the background: CORS issues are expected. If you want to view this correctly, run a local server and view the background on there. An easy way is to get Node.js, npm, and the serve extension, then use 'npx serve <project directory here>'."); }
+    if (willThereBeCorsIssues) { console.log("From the background: CORS issues are expected. If you want to view this correctly, run a local server and view the background on there. It's easy to do with Node.js and http-server."); }
     scene = new THREE.Scene();
     camera = new THREE.PerspectiveCamera( cameraFov, window.innerWidth / window.innerHeight, 0.001, 1000 );
     renderer = new THREE.WebGLRenderer({ alpha: true } );
