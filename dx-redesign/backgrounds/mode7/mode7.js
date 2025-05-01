@@ -13,12 +13,13 @@ All this to say: Set up the Node.js server, and remember to stay pissed! */
             texture: pathToTexture (string), Relative path.
             backupColor: "#00ff00" (string) (optional), // In the event that the texture is blocked from being loaded, this color will be used instead.
             planeSize: 4 (float) (optional),
-            cameraPosition: { 0 (float), 2.1 (float), 5 (float) } (optional), // XYZ.
+            cameraPosition: { x: 0 (float), y: 2.1 (float), z: 5 (float) } (optional), // XYZ.
             cameraLookAt: { 0 (float), 0.2 (float), 0 (float) } (optional), // XYZ.
             cameraFov: 40 (int) (optional),
-            startingRotation: { 0 (float), 0 (float), 0 (float) } (optional), // XYZ, Euler angles.
-            rotationSpeed: 0.1 (float) (optional), // If you want no rotation, set to 0.
+            startingRotation: { x: 0 (float), y: 0 (float), z: 0 (float) } (optional), // XYZ, Euler angles.
+            rotationSpeed: 0.01 (float) (optional), // If you want no rotation, set to 0.0000001. Setting it to 0 breaks.
             ignoreCorsIssues: false (optional), // You shouldn't do this, but you can!
+            generateMipmaps: false (boolean) (optional), // If false, textureFilteringWhenMipMapped will be irrelevant.
             textureFilteringNoMipMap: "nearest" (string) (optional), // Set to "nearest" or "linear".
             textureFilteringWhenMipMapped: "nearest" (string) (optional), // Set to "nearest" or "linear".
             renderResolutionOnHDScreens: .5 (float) (optional), // iIf not 0, the render resolution will be given this multiplier because performance. Only affects high-DPI screen, others will see it at full scale. If 0, then it's off. If you wanna be evil, you can set it above 1 to make people who already have bad performance have *even worse* performance. But you would never do that, *right?*
@@ -35,7 +36,7 @@ import * as THREE from 'three';
 var hasScriptBeenInitialized = false; // Nothing can happen until constructPlane is called. Always make sure it's true!
 var willThereBeCorsIssues = seeIfThereWillThereBeCorsIssues(); 
 
-var scene, camera, renderer, plane, ignoreCorsIssues, renderResolutionMultiplierOnHDScreens, textureToLoad, backupColor, planeSize, cameraPosition, cameraLookAt, cameraFov, startingRotation, rotationSpeed, ignoreCorsIssues, textureFilteringWhenMipMapped, textureFilteringNoMipMap, whereToPutCanvas; // Global variables.
+var scene, camera, renderer, plane, ignoreCorsIssues, renderResolutionMultiplierOnHDScreens, textureToLoad, backupColor, planeSize, cameraPosition, cameraLookAt, cameraFov, startingRotation, rotationSpeed, ignoreCorsIssues, textureFilteringWhenMipMapped, textureFilteringNoMipMap, whereToPutCanvas, generateMipmaps; // Global variables.
 
 
 export function constructPlane(args) { // Wanna know what 'args' is? Look up.
@@ -47,17 +48,19 @@ export function constructPlane(args) { // Wanna know what 'args' is? Look up.
     cameraLookAt = args.cameraLookAt || { x: 0, y: 0.2, z: 0 };
     cameraFov = args.cameraFov || 40;
     startingRotation = args.startingRotation || { x: 1.5708, y: 0, z: 0 }; // three.js uses radians. This is 90 in degrees.
-    rotationSpeed = args.rotationSpeed || { x: 0, y: 0, z: 0.01 };
+    rotationSpeed = args.rotationSpeed || 0.01;
     ignoreCorsIssues = args.ignoreCorsIssues || false;
     textureFilteringNoMipMap = args.textureFilteringNoMipMap || "nearest";
     textureFilteringWhenMipMapped = args.textureFilteringWhenMipMapped || "nearest";
+    generateMipmaps = args.generateMipmaps || false; 
     renderResolutionMultiplierOnHDScreens = args.renderResolutionMultiplierOnHDScreens || .5;
     whereToPutCanvas = args.whereToPutCanvas || "%body";
+    
 
     if (ignoreCorsIssues) { console.log("From the background: CORS issues have been manually ignored."); }
     if (willThereBeCorsIssues) { console.log("From the background: CORS issues are expected. If you want to view this correctly, run a local server and view the background on there. An easy way is to get Node.js, npm, and the serve extension, then use 'npx serve <project directory here>'."); }
     scene = new THREE.Scene();
-    camera = new THREE.PerspectiveCamera( cameraFov, window.innerWidth / window.innerHeight, 0.1, 1000 );
+    camera = new THREE.PerspectiveCamera( cameraFov, window.innerWidth / window.innerHeight, 0.001, 1000 );
     renderer = new THREE.WebGLRenderer({ alpha: true } );
 
     renderer.setSize( 128, 128 ); // Later, we will call onWindowResize(). onWindowResize() will override this anyways, so in the meantime give it something small.
@@ -86,8 +89,20 @@ export function constructPlane(args) { // Wanna know what 'args' is? Look up.
         const loader = new THREE.TextureLoader();
         const texture = loader.load(textureToLoad);
         texture.colorSpace = THREE.SRGBColorSpace;
-        texture.minFilter = THREE.textureFilteringNoMipMap;
-        texture.magFilter = THREE.textureFilteringWhenMipMapped;    
+        texture.generateMipmaps = generateMipmaps;
+        // FIX TEXTURE FILTERING
+        if (textureFilteringNoMipMap == "nearest") {
+            texture.minFilter = THREE.NearestFilter;
+        }
+        if (textureFilteringNoMipMap == "linear") {
+            texture.minFilter = THREE.LinearFilter;
+        }
+        if (textureFilteringWhenMipMapped == "nearest") {
+            texture.magFilter = THREE.NearestFilter;
+        }
+        if (textureFilteringWhenMipMapped == "linear") {
+            texture.magFilter = THREE.LinearFilter;
+        }
         material = new THREE.MeshBasicMaterial( { map: texture } );
     }
 
@@ -124,11 +139,11 @@ function onWindowResize() { // This is called on init as well.
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
 
-    // if (window.devicePixelRatio >= 2 && renderResolutionMultiplierOnHDScreens != 0) {
+    if (window.devicePixelRatio >= 2 && renderResolutionMultiplierOnHDScreens != 0) {
         renderer.setSize( window.innerWidth, window.innerHeight * renderResolutionMultiplierOnHDScreens );
-    // } else {
+    } else {
         renderer.setSize( width, height );
-    // }
+    }
     
     renderer.setPixelRatio( window.devicePixelRatio );
     
@@ -137,9 +152,7 @@ function onWindowResize() { // This is called on init as well.
 
 function animate() {
     // This is only called after the script is initialized, so we don't need to know if it's initialized or not. This causes more bugs if other functions go against this, but it runs every frame so avoiding the extra check is a very consequential optimization.
-    plane.rotation.x += rotationSpeed.x;
-    plane.rotation.y += rotationSpeed.y;
-    plane.rotation.z += rotationSpeed.z;
+    plane.rotation.z += rotationSpeed;
     renderer.render( scene, camera );
 }
 
