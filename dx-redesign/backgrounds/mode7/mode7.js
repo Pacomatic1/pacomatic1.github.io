@@ -21,7 +21,7 @@ All this to say: Set up the Node.js server, and remember to stay pissed! */
             ignoreCorsIssues: false (optional), // You shouldn't do this, but you can!
             textureFilteringNoMipMap: "nearest" (string) (optional), // Set to "nearest" or "linear".
             textureFilteringWhenMipMapped: "nearest" (string) (optional), // Set to "nearest" or "linear".
-            renderResolutionOnHDScreens: .5 (float) (optional), // if not 0, the render resolution will be given this multiplier because performance. Only affects high-DPI screen, others will see it at full scale. If 0, then it's off.
+            renderResolutionOnHDScreens: .5 (float) (optional), // iIf not 0, the render resolution will be given this multiplier because performance. Only affects high-DPI screen, others will see it at full scale. If 0, then it's off. If you wanna be evil, you can set it above 1 to make people who already have bad performance have *even worse* performance. But you would never do that, *right?*
             whereToPutCanvas: "%body" (string) (optional), // Where to put this in the DOM. If you want to put it somewhere with a specific ID, prefix with hashtag thenadd ID. If you want to put it in the instance of an HTML element, prefix with % and add element's name. Unless you're putting this in a one-off element (like the body), you'd best use an ID.
             
 */
@@ -71,6 +71,7 @@ export function constructPlane(args) { // Wanna know what 'args' is? Look up.
         placeToPutCanvas = document.getElementsByTagName(whereToPutCanvas.substring(1))[0]; // Get the first element with that name.
     } // Thanks, GitHub Copilot! I'm terrified!
     
+    renderer.domElement.id = "mode7Canvas"; // Give the canvas an ID so we can find it later.
     placeToPutCanvas.appendChild( renderer.domElement );
     
     // Create the flat plane (MODE 7!!!!!) 
@@ -105,25 +106,32 @@ export function constructPlane(args) { // Wanna know what 'args' is? Look up.
     
     camera.lookAt(cameraLookAt.x,cameraLookAt.y,cameraLookAt.z);
 
+
+
     onWindowResize(); // This does a bunch of unneeded stuff, but it also handles renderResolutionMultiplierOnHDScreens so we'll run it.
 }
 
 
 
 
-addEventListener("resize", onWindowResize());
+addEventListener("resize", onWindowResize);
 
 function onWindowResize() { // This is called on init as well.
     if (!hasScriptBeenInitialized) { return; } // Don't do anything if the script hasn't been initialized yet.
-    renderer.setPixelRatio( window.devicePixelRatio );
+    var width = window.innerWidth;
+    var height = window.innerHeight;
+
     camera.aspect = window.innerWidth / window.innerHeight;
     camera.updateProjectionMatrix();
-    
-    if (window.devicePixelRatio >= 2 && renderResolutionMultiplierOnHDScreens != 0) {
+
+    // if (window.devicePixelRatio >= 2 && renderResolutionMultiplierOnHDScreens != 0) {
         renderer.setSize( window.innerWidth, window.innerHeight * renderResolutionMultiplierOnHDScreens );
-    } else {
-        renderer.setSize( window.innerWidth, window.innerHeight );
-    }
+    // } else {
+        renderer.setSize( width, height );
+    // }
+    
+    renderer.setPixelRatio( window.devicePixelRatio );
+    
 }
 
 
