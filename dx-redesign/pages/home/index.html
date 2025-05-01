@@ -508,6 +508,8 @@
 
                         // For the contents of the button, I want to add the text after the image and its custom styling, and that's best done via appending. As such, I'm doing all the complicated image stuff and THEN doing the text stuff.
                         var imageWithinTheButton = document.createElement("img");
+                        imageWithinTheButton.loading = "lazy";
+                        imageWithinTheButton.decoding = "async";
                         imageWithinTheButton.src = socialLinksItemLookupTable[i][2];
                         imageWithinTheButton.style = socialLinksItemLookupTable[i][5];
                         imageWithinTheButton.className = "socialMediaButtonImage";
