@@ -44,7 +44,7 @@ const socialLinksItemLookupTable = [
 ];
 const backgroundList = [
     // Unlike the navigation bar(s), this is a simple array: a list of paths to each background's HTML file. Exclusive to main mode.
-    "./backgrounds/ps3Xmb.html", "./backgrounds/random_stuff_outlook.html"
+    "./backgrounds/ps3Xmb.html", "./backgrounds/random_stuff_outlook.html", "./backgrounds/mode7/mariokart_snes_bowser3.html"
 ];
 const absoluteToRelativePathLookupTable = [
     // So you know the query string, right? Well, the query string has to display the realtive path to the pages, and when we're trying to get the iframe's source, we don't have that. We only have the absolute path.

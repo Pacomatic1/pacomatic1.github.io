@@ -33,6 +33,7 @@ All this to say: Set up the Node.js server, and remember to stay pissed! */
             generateMipmaps: sameAsMainPlane (boolean) (optional), // If false, textureFilteringWhenMipMapped will be irrelevant.
             textureFilteringNoMipMap: sameAsMainPlane (string) (optional), // Set to "nearest" or "linear".
             textureFilteringWhenMipMapped: sameAsMainPlane (string) (optional), // Set to "nearest" or "linear".
+            repeatAmount: 5000 (int) (optional), // This is the amount of times the texture will repeat, not the size of the texture.
 
 */
 
@@ -45,9 +46,9 @@ import * as THREE from 'three';
 var hasScriptBeenInitialized = false; // Nothing can happen until constructPlane is called. Always make sure it's true!
 var willThereBeCorsIssues = seeIfThereWillThereBeCorsIssues(); 
 
-var scene, camera, renderer, mainPlane, ignoreCorsIssues, renderResolutionMultiplierOnHDScreens, textureToLoad, backupColor, mainPlaneSize, cameraPosition, cameraLookAt, cameraFov, startingRotation, rotationSpeed, ignoreCorsIssues, textureFilteringWhenMipMapped, textureFilteringNoMipMap, whereToPutCanvas, generateMipmaps; // Global variables.
+var scene, camera, renderer, loader, mainPlane, ignoreCorsIssues, renderResolutionMultiplierOnHDScreens, textureToLoad, backupColor, mainPlaneSize, cameraPosition, cameraLookAt, cameraFov, startingRotation, rotationSpeed, ignoreCorsIssues, textureFilteringWhenMipMapped, textureFilteringNoMipMap, whereToPutCanvas, generateMipmaps; // Global variables.
 
-var infinitePlane, infinitePlaneTexture, infinitePlaneBackupColor, infinitePlaneStartingRotation, infinitePlaneRotationSpeed, infinitePlaneGenerateMipmaps, infinitePlaneTextureFilteringNoMipMap, infinitePlaneTextureFilteringWhenMipMapped; // Global variables, but for the infnite plane.
+var infinitePlane, infinitePlaneTexture, infinitePlaneBackupColor, infinitePlaneStartingRotation, infinitePlaneRotationSpeed, infinitePlaneGenerateMipmaps, infinitePlaneTextureFilteringNoMipMap, infinitePlaneTextureFilteringWhenMipMapped, infinitePlaneRepeatAmount; // Global variables, but for the infnite plane.
 
 addEventListener("resize", onWindowResize);
 
@@ -102,7 +103,7 @@ export function constructPlane(args) { // Wanna know what 'args' is? Look up.
     if (willThereBeCorsIssues) {
         material = new THREE.MeshBasicMaterial( { color: colorAsValidHex } );
     } else {
-        const loader = new THREE.TextureLoader();
+        loader = new THREE.TextureLoader();
         const texture = loader.load(textureToLoad);
         texture.colorSpace = THREE.SRGBColorSpace;
         texture.generateMipmaps = generateMipmaps;
@@ -164,8 +165,8 @@ export function constructInfinitePlane(args) {
     infinitePlaneGenerateMipmaps = args.generateMipmaps || generateMipmaps;
     infinitePlaneTextureFilteringNoMipMap = args.textureFilteringNoMipMap || textureFilteringNoMipMap;
     infinitePlaneTextureFilteringWhenMipMapped = args.textureFilteringWhenMipMapped || textureFilteringWhenMipMapped;
-
-    const geometry = new THREE.PlaneGeometry( 9, 9, 9 );
+    infinitePlaneRepeatAmount = args.repeatAmount || 5000; 
+    const geometry = new THREE.PlaneGeometry( 999, 999, 999 );
     var material;
     
     var isThisAColor = false;
@@ -174,7 +175,6 @@ export function constructInfinitePlane(args) {
     if (isThisAColor) {
         material = new THREE.MeshBasicMaterial( { color: infinitePlaneTexture } );
     } else {
-        const loader = new THREE.TextureLoader();
         const texture = loader.load(infinitePlaneTexture);
         texture.colorSpace = THREE.SRGBColorSpace;
         texture.generateMipmaps = infinitePlaneGenerateMipmaps;
@@ -204,6 +204,10 @@ export function constructInfinitePlane(args) {
                 break;
         }
 
+        texture.wrapS = THREE.RepeatWrapping; // Repeat the texture on the infinite plane.
+        texture.wrapT = THREE.RepeatWrapping; // Repeat the texture on the infinite plane.
+        texture.repeat.set( infinitePlaneRepeatAmount, infinitePlaneRepeatAmount );
+
         material = new THREE.MeshBasicMaterial( { map: texture } );
     }
     
@@ -215,10 +219,15 @@ export function constructInfinitePlane(args) {
     infinitePlane.rotation.y = infinitePlaneStartingRotation.y; 
     infinitePlane.rotation.z = infinitePlaneStartingRotation.z; 
 
-    infinitePlane.position.y = -0.1; // This is to make sure the infinite plane is below the main plane. If you want it above, set it to 0.1 or something.
+    infinitePlane.position.y = -0.1; // Anti z-fighting
     scene.add( infinitePlane );
 
+}
 
+export function constructBackgroundPlane(args) {
+
+
+    
 }
 
 // CALLED OFTEN BUT STILL PRIVATE 
@@ -244,6 +253,7 @@ if (!hasScriptBeenInitialized) { return; } // Don't do anything if the script ha
 function animate() {
     // This is only called after the script is initialized, so we don't need to know if it's initialized or not. This causes more bugs if other functions go against this, but it runs every frame so avoiding the extra check is a very consequential optimization.
     mainPlane.rotation.z += rotationSpeed;
+    infinitePlane.rotation.z += infinitePlaneRotationSpeed;
     renderer.render( scene, camera );
 }
 
