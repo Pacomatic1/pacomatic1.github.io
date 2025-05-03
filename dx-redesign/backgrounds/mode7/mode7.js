@@ -90,19 +90,32 @@ export function constructPlane(args) { // Wanna know what 'args' is? Look up.
         const texture = loader.load(textureToLoad);
         texture.colorSpace = THREE.SRGBColorSpace;
         texture.generateMipmaps = generateMipmaps;
-        // FIX TEXTURE FILTERING
-        if (textureFilteringNoMipMap == "nearest") {
-            texture.minFilter = THREE.NearestFilter;
+        
+        switch (textureFilteringNoMipMap) {
+            case "nearest":
+                texture.minFilter = THREE.NearestFilter;
+                break;
+            case "linear":
+                texture.minFilter = THREE.LinearFilter;
+                break;
+            default:
+                console.log("From the background: textureFilteringNoMipMap has in invalid value. Defaulting to nearest.");
+                texture.minFilter = THREE.NearestFilter; 
+                break;
         }
-        if (textureFilteringNoMipMap == "linear") {
-            texture.minFilter = THREE.LinearFilter;
+        switch (textureFilteringWhenMipMapped) {
+            case "nearest":
+                texture.magFilter = THREE.NearestFilter;
+                break;
+            case "linear":
+                texture.magFilter = THREE.LinearFilter;
+                break;
+            default:
+                console.log("From the background: textureFilteringWhenMipMapped has in invalid value. Defaulting to nearest.");
+                texture.magFilter = THREE.NearestFilter; 
+                break;
         }
-        if (textureFilteringWhenMipMapped == "nearest") {
-            texture.magFilter = THREE.NearestFilter;
-        }
-        if (textureFilteringWhenMipMapped == "linear") {
-            texture.magFilter = THREE.LinearFilter;
-        }
+
         material = new THREE.MeshBasicMaterial( { map: texture } );
     }
 
@@ -156,7 +169,7 @@ function animate() {
     renderer.render( scene, camera );
 }
 
-function seeIfThereWillThereBeCorsIssues() { // If possible, check the variable "willThereBeCorsIssues" instead. Optimization.
+function seeIfThereWillThereBeCorsIssues() { // If possible, check the variable "willThereBeCorsIssues" instead, as it's set at the start and is only one read as opposed to several. Optimization.
     // three.js does NOT like running off local files. C'est la vie.
     if (ignoreCorsIssues) { return false; }
     return window.location.href.includes("file:");
