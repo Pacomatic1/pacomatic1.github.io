@@ -157,7 +157,6 @@ export function constructPlane(args) { // Wanna know what 'args' is? Look up.
 }
 
 export function constructInfinitePlane(args) {
-    //     backupColor = args.backupColor || "#00ff00";
     infinitePlaneTexture = args.texture;
     infinitePlaneBackupColor = args.backupColor || "#00ff00";
     infinitePlaneStartingRotation = args.startingRotation || { x: 1.5708, y: 0, z: 0 }; // three.js uses radians. This is 90 in degrees.
@@ -227,7 +226,7 @@ export function constructInfinitePlane(args) {
 export function constructBackgroundPlane(args) {
 
 
-    
+
 }
 
 // CALLED OFTEN BUT STILL PRIVATE 
