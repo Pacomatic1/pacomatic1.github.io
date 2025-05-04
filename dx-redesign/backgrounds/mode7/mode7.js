@@ -8,7 +8,7 @@ Don't worry though, none of will cause issues once pushed to any web host; Neoci
 All this to say: Set up the Node.js server, and remember to stay pissed! */
 
 /* This script is designed to be imported as a module. Here's the documentation (assuming you 'import * as MODE7 from <name>):
-    Start with MODE7.constructPlane( { args } ).
+    Start with MODE7.constructPlane( { args } ). You must always do this first.
         Here's what args should contain. Assume all args are mandatory unless specified otherwise:
             texture: pathToTexture (string), Relative path.
             backupColor: "#00ff00" (string) (optional), // In the event that the texture is blocked from being loaded, this color will be used instead.
@@ -25,7 +25,7 @@ All this to say: Set up the Node.js server, and remember to stay pissed! */
             renderResolutionOnHDScreens: .5 (float) (optional), // iIf not 0, the render resolution will be given this multiplier because performance. Only affects high-DPI screen, others will see it at full scale. If 0, then it's off. If you wanna be evil, you can set it above 1 to make people who already have bad performance have *even worse* performance. But you would never do that, *right?*
             whereToPutCanvas: "%body" (string) (optional), // Where to put this in the DOM. If you want to put it somewhere with a specific ID, prefix with hashtag thenadd ID. If you want to put it in the instance of an HTML element, prefix with % and add element's name. Unless you're putting this in a one-off element (like the body), you'd best use an ID.
     
-    After that, you can call MODE7.constructInfinitePlane( { args } ). Perfect if you don't want everything in the distance to be a flat color.
+    You can call MODE7.constructInfinitePlane( { args } ). Perfect if you don't want everything in the distance to be a flat color.
         Here's what args should contain. Assume all args are mandatory unless specified otherwise:
             texture: "#00ff00" (string) (optional), Either a path to a texture or a color. If it's a texture, it's a relative path. Note that any mention of mipmaps or filtering is irrelevant wehn using a color (though that's not much of a surprise).
             startingRotation: { x: 1.5708 (float), y: 0 (float), z: 0 (float) } (optional), // XYZ, Euler angles.
@@ -223,11 +223,6 @@ export function constructInfinitePlane(args) {
 
 }
 
-export function constructBackgroundPlane(args) {
-
-
-
-}
 
 // CALLED OFTEN BUT STILL PRIVATE 
 
