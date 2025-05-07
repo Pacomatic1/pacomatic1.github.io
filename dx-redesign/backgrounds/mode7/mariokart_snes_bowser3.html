@@ -7,7 +7,15 @@
             body {
                 margin: 0;
                 padding: 0;
-                background:  linear-gradient(#ffb200, #B00000);
+                
+                /* background: url('../assets/mariokart_snes/mariokart_snes_bowserbg_backlayer_transparent.png'), linear-gradient(#E80000, #F8C000, #F8C000);
+                background-position: 50% 36%;
+                background-repeat: repeat-x; */
+
+                /* background-repeat: no-repeat;
+				background-attachment: fixed;
+				background-size: 100% 100%;
+				background-image: url("../assets/mariokart_snes/mariokart_snes_bowserbg_full.png"); */
             }
             .credits {
                 /* height: 100vh;
@@ -57,12 +65,12 @@
             import * as MODE7 from 'mode7'
             MODE7.constructPlane({
                 cameraPosition: {x: 0, y: 0.4, z: 1},
-                texture: "../assets/mariokart_snes_bowser3.png",
+                texture: "../assets/mariokart_snes/mariokart_snes_bowser3.png",
                 rotationSpeed: 0.001,
                 cameraFov: 80,
             });
             MODE7.constructInfinitePlane({
-                texture: "../assets/mariokart_snes_bowser_infinitetile.png",
+                texture: "../assets/mariokart_snes/mariokart_snes_bowser_infinitetile.png",
                 repeatAmount: 5000
             });
             
