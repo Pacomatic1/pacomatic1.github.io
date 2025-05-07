@@ -247,7 +247,7 @@ if (!hasScriptBeenInitialized) { return; } // Don't do anything if the script ha
 function animate() {
     // This is only called after the script is initialized, so we don't need to know if it's initialized or not. This causes more bugs if other functions go against this, but it runs every frame so avoiding the extra check is a very consequential optimization.
     mainPlane.rotation.z += rotationSpeed;
-    infinitePlane.rotation.z += infinitePlaneRotationSpeed;
+    if (infinitePlane) { infinitePlane.rotation.z += infinitePlaneRotationSpeed; }
     renderer.render( scene, camera );
 }
 
