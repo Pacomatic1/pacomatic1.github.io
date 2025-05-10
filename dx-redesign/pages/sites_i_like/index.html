@@ -13,7 +13,6 @@
                 background-color: #403239;
             }
 
-
             #megaContainer {
                 
 
@@ -49,15 +48,37 @@
                 height: auto;
             }
 
+
+
+
+            #siteShards {
+                display: flex;
+                flex-wrap: wrap;
+                margin-inline: .2rem;
+
+            }
+            .specificCategoryOfSiteShard {
+                border-inline: 3px solid #222222;
+                width: 10em;
+                min-width: 10em;
+                background-color: yellowgreen;
+            }
+
+
         </style>
     </head>
     <body class="has-scrollbar">
         <div id="megaContainer">
             <div id="sitesILikeBanner"> 
-                <p>Sites I like</p> 
+                <p>Sites I like</p>
                 <div>
                     <img src="./assets/mc-compass/mc-compass-animated.png">
                 </div>
+            </div>
+
+            <div id="siteShards">
+                <div class="specificCategoryOfSiteShard">sijsijsijsij</div>
+                <div class="specificCategoryOfSiteShard">sijsijsijsij</div>
             </div>
 
             <div id="webButtonContainer">
@@ -72,6 +93,9 @@
         -->
 
         <script>
+
+
+
 
             // This is an optimization.
             var imageTags = document.querySelectorAll('img');
