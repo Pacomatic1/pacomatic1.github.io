@@ -6,6 +6,20 @@
         <style>
             @import url('7_scrollbar.css');
             @import url('https://fonts.googleapis.com/css2?family=Cal+Sans&display=swap');
+            @font-face {
+                font-family: "Segoe UI";
+                src:
+                    local("Segoe UI"),
+                    url("./assets/segoe-ui/segoeuithis.ttf") format("truetype")
+            }
+
+            :root {
+                color:#ffffff;
+                size: 12pt;
+                text-shadow: 1px 1px 3px #000000;
+                font-family: 'Segoe UI';
+                
+            }
 
             body {
                 margin: 0px;
@@ -17,7 +31,6 @@
                 
 
             }
-
 
 
 
@@ -51,7 +64,7 @@
 
 
 
-            #siteShards {
+            #featuredSitesContainer {
                 display: flex;
                 flex-wrap: wrap;
                 margin-inline: .2rem;
@@ -76,12 +89,18 @@
                 </div>
             </div>
 
-            <div id="siteShards">
-                <div class="specificCategoryOfSiteShard">sijsijsijsij</div>
-                <div class="specificCategoryOfSiteShard">sijsijsijsij</div>
+            <div id="startingText">
+                <p>The web is full of unique and wonderful websites, and I gotta shout 'em out. Come on, it's only fair.
+                    <br>
+                    Fair warning: This will mug your bandwidth and murder your framerate for a little bit, so you gotta press a button to load them.
+                </p>
             </div>
 
-            <div id="webButtonContainer">
+            <div id="featuredSitesContainer">
+                
+            </div>
+
+            <div id="allSitesContainer">
 
             </div>
         </div>
@@ -93,9 +112,6 @@
         -->
 
         <script>
-
-
-
 
             // This is an optimization.
             var imageTags = document.querySelectorAll('img');
