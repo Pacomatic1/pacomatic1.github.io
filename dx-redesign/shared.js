@@ -39,7 +39,7 @@ const socialLinksItemLookupTable = [
 
         // If it wasn't immediately obvious, this is based on the navBar system.
     [0, "YouTube", "assets/socialmedia-icons/youtube_icon.svg", 2, "https://www.youtube.com/user/AmmarZawar", "", "Pacomatic! That is my channel.", "YouTube", "margin-bottom: -2px;"],
-    [0, "Bluesky", "assets/socialmedia-icons/bsky_logo.svg", 2, "https://bsky.app/profile/pacomatic.bsky.social", "", "It took me an astoundingly long time to get an account for social media that isn't Reddit or YoiTube. Ain't that a thing?", "Bluesky"],
+    [0, "Bluesky", "assets/socialmedia-icons/bsky_logo.svg", 2, "https://bsky.app/profile/pacomatic.bsky.social", "", "It took me an astoundingly long time to get an account for social media that isn't Reddit or YouTube. Ain't that a thing?", "Bluesky"],
     [0, "GitHub", "assets/socialmedia-icons/github_logo.svg", 2, "https://github.com/pacomatic1/", "", "If I open-source code, it's usually here. ", "GitHub"],
 
 ];
