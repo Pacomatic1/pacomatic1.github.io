@@ -33,6 +33,12 @@
             }
 
 
+            #startingText {
+                text-align: center;
+            }
+
+
+
 
             #sitesILikeBanner {
                 width:100%;
@@ -66,15 +72,15 @@
 
             #featuredSitesContainer {
                 display: flex;
-                flex-wrap: wrap;
-                margin-inline: .2rem;
-
+                flex-flow: row wrap;
+                /* margin-inline: .2rem; */
+                background-color: aquamarine;
+                height: 9em;
             }
-            .specificCategoryOfSiteShard {
-                border-inline: 3px solid #222222;
-                width: 10em;
-                min-width: 10em;
-                background-color: yellowgreen;
+
+            .featuredSite {
+                width: 15em;
+                min-height: auto;
             }
 
 
@@ -92,12 +98,15 @@
             <div id="startingText">
                 <p>The web is full of unique and wonderful websites, and I gotta shout 'em out. Come on, it's only fair.
                     <br>
-                    Fair warning: This will mug your bandwidth and murder your framerate for a little bit, so you gotta press a button to load them.
+                    Fair warning: This will mug your bandwidth and murder your framerate for a little bit, so you gotta press a button to load them. TODO: MOVE DOWN ONCE YOU GET THE BIG STUFF DONE FIRST
                 </p>
             </div>
 
             <div id="featuredSitesContainer">
-                
+
+                <img src="./assets/sites/extraordinary_comics.jpg" class="featuredSite"/>
+                <img src="./assets/sites/sabrina_online.webp" class="featuredSite"/>
+                <img src="./assets/sites/theloadingartist.png" class="featuredSite"/> 
             </div>
 
             <div id="allSitesContainer">
@@ -112,6 +121,21 @@
         -->
 
         <script>
+            var featuredSiteLookupTable = [
+                // I seem to be addicted to lookup tables. This one is... actually VERY different from the parent page tables, assuming they were never refactored not to use arrays.
+
+                // Each item is a JS object. Within, there are the following properties:
+                // image: This is a RELATIVE PATH to the image you seek.
+                // resultingLink: Where should you go when you click on the image?
+                // unoptimizedImage: If the image is an optimized version, then put down the unoptimized version. This is currently unused, but I would like to make 'Open Image in New Tab' link to the unoptimiized version. Maybe. That's a feature for later.
+                // alt: Alternative Text, like when you hover or something.
+
+
+
+            ];
+
+
+
 
             // This is an optimization.
             var imageTags = document.querySelectorAll('img');
