@@ -31,10 +31,14 @@
                 
 
             }
+            .basicText {
+                text-align: center;
+            }
+
+
 
 
             #startingText {
-                text-align: center;
             }
 
 
@@ -71,16 +75,15 @@
 
 
             #featuredSitesContainer {
-                display: flex;
-                flex-flow: row wrap;
-                /* margin-inline: .2rem; */
-                background-color: aquamarine;
-                height: 9em;
+                padding: .2rem;
+                background-color: #34292e;
+                text-align: center;
             }
 
             .featuredSite {
-                width: 15em;
-                min-height: auto;
+                min-width: auto;
+                height: 6em;
+                padding: .2em;
             }
 
 
@@ -95,22 +98,20 @@
                 </div>
             </div>
 
-            <div id="startingText">
-                <p>The web is full of unique and wonderful websites, and I gotta shout 'em out. Come on, it's only fair.
-                    <br>
-                    Fair warning: This will mug your bandwidth and murder your framerate for a little bit, so you gotta press a button to load them. TODO: MOVE DOWN ONCE YOU GET THE BIG STUFF DONE FIRST
+            <div id="startingText" class="basicText">
+                <p>
+                    The web is full of unique and wonderful websites, and I gotta shout 'em out. Come on, it's only fair.
                 </p>
             </div>
 
             <div id="featuredSitesContainer">
-
-                <img src="./assets/sites/extraordinary_comics.jpg" class="featuredSite"/>
-                <img src="./assets/sites/sabrina_online.webp" class="featuredSite"/>
-                <img src="./assets/sites/theloadingartist.png" class="featuredSite"/> 
+                <!-- The contents of this container are generated in Javascript. See featuredSitesLookupTable. -->
             </div>
 
-            <div id="allSitesContainer">
-
+            <div id="allSitesContainer" class="basicText">
+                <p>
+                    Next up: The 88x31 archive! Normally I'd just put it here, but I've seen other sites and can conclude that, if this gets too big, your bandwidth, framerate, and battery life will <b>tank.</b> As such, you gotta press a button to load them. Expect stuttering, freezing, and MAYBE crashing.<br>
+                </p>
             </div>
         </div>
         <!-- Layout:
@@ -121,20 +122,37 @@
         -->
 
         <script>
-            var featuredSiteLookupTable = [
+            var featuredSitesLookupTable = [
                 // I seem to be addicted to lookup tables. This one is... actually VERY different from the parent page tables, assuming they were never refactored not to use arrays.
 
                 // Each item is a JS object. Within, there are the following properties:
                 // image: This is a RELATIVE PATH to the image you seek.
+                // unoptimizedImage: If the image is an optimized version, then put down the unoptimized version. This is currently unused, but I would like to make 'Open Image in New Tab' link to the unoptimiized version. Maybe. That's a feature for later. In the event the thing you already have is optimized, don't put anything here.
                 // resultingLink: Where should you go when you click on the image?
-                // unoptimizedImage: If the image is an optimized version, then put down the unoptimized version. This is currently unused, but I would like to make 'Open Image in New Tab' link to the unoptimiized version. Maybe. That's a feature for later.
-                // alt: Alternative Text, like when you hover or something.
-
-
-
+                // altText: Used for screen reader and when the image doesn't load. DO NOT ADD FLAVOR TEXT, see titleText.
+                // titleText: This is the tooltip of every image. Add all the flavor text you want. 
+                {
+                    image: "./assets/sites/extraordinary_comics.jpg",
+                    resultingLink: "https://exocomics.com",
+                    alt: "ExoComics",
+                    titleText:"'Extraordinary' Comics. Short and sweet, kind of like a snack."
+                },
+                {
+                    image: "./assets/sites/sabrina_online.webp",
+                    unoptimizedImage: "assets/sites/unoptimized/sabrina_online.png",
+                    resultingLink: "https://www.sabrina-online.com",
+                    alt: "Sabrina Online.",
+                    titleText: "Sabrina Online. It's freaky but right (or left? i don't know) hand to God it's not exclusively for one-handed reading."
+                },
+                {
+                    image: "./assets/sites/theloadingartist.png",
+                    resultingLink: "https://loadingartist.com/",
+                    alt: "The Loading Artist.",
+                    titleText: "The Loading Artist. Spam that random button and you'll be fed for years."
+                },
             ];
 
-
+            loadFeaturedSites(featuredSitesLookupTable, document.getElementById('featuredSitesContainer'));
 
 
             // This is an optimization.
@@ -145,6 +163,34 @@
                 tagToMod.loading = "lazy";
                 tagToMod.decoding = "async";
             }
+
+
+
+
+            function loadFeaturedSites(lookupTable, placeToPutStuff) { // placeToPutStuff uses innerHTML and modifies the tag directly. Just thought I'd mention that.
+                // See featuredSitesLookupTable for documentation on how this stypiud format works. You're gonna need it if you want to understand this. 
+
+                for (var i = 0; i < lookupTable.length; i++) {
+                    var containerAnchor = document.createElement('a');
+                    var imageTag = document.createElement('img');
+                    imageTag.classList.add("featuredSite");
+                    
+                    imageTag.src = lookupTable[i].image;
+                    // unoptimizedImage is unused. But this is a reminder that it exists in case you need it sometime ;)
+                    imageTag.alt = lookupTable[i].alt;
+                    
+                    containerAnchor.title = lookupTable[i].titleText;
+                    containerAnchor.href = lookupTable[i].resultingLink;
+                    containerAnchor.target = "_blank";
+                    
+                    // We have to put the image inside an anchor tag because images can't lead to links. Oh well, it's less of a hacky workaround and more of 'an established precedent' that was established before I was born. What the hell man??? 
+                    containerAnchor.appendChild(imageTag);
+                    placeToPutStuff.appendChild(containerAnchor);
+                }
+            }
+
+
+
         </script>
     </body>
 </html>
