@@ -58,7 +58,6 @@ const absoluteToRelativePathLookupTable = [
 
     // Note that order matters. The first array here is the first one that we do stuff with, then the second, then the third.
     [0, "/pages/", "./pages/"],
-    [0, "siojsiojsijsij", "ACK"]
 ];
 
 
