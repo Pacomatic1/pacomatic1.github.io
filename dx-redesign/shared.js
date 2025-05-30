@@ -68,7 +68,7 @@ const mainIframe = document.getElementById("mainIframe");
 initializeIframePage('./pages/landing/index.html');
 
 var pageMode = determinePageMode(); // "main" or "accessible"
-console.log("You're using " + pageMode + " mode.");
+// console.log("You're using " + pageMode + " mode."); This got really annoying, really fast. I disabled it.
 
 if ( window.location.href.includes("file:") ) { console.log("Some stuff on the site, like three.js, doesn't like being run locally. If you want to see the site in all its glory, get Node.js + http-server."); } // This also has the funny side effect that, because you're still going from PC to router to PC and not just loading from the hard drive, you get to see a glimpse into the network performance of the site. Perfect for network optimization; epic wins all around!
 
@@ -152,7 +152,6 @@ function convertAbsoluteIframePagePathToRelativePath(absolutePath) { // Bro tryi
             default:
                 console.log("Error: The lookup table for absolute to relative paths has an unimplemented type! Either the lookup table is wrong or you need to implement it. Get to work!");
                 break;
-
         }
     };
     return newPath;
@@ -203,7 +202,6 @@ function swapPageMode() {
     // All urls are relative to the current page. So long as both pages are in the same folder (which they should be), there will be no isses. 
     var urlOfMainMode = "./main.html";
     var urlOfAccessibleMode = "./accessible.html";
-    
     
     var everythingAfterTheUrl = window.location.href.substring(window.location.href.indexOf(".html") + 5); // Depends on the .html at the end of the url (but before query strings and all that). As of now they all share this part of the url, but be careful in case things change.
     var newUrl;
