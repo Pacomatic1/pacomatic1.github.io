@@ -87,6 +87,39 @@
             }
 
 
+
+
+            button {
+                vertical-align: top;
+                background: linear-gradient(to bottom, #454545, #3a3a3a);
+                border: 1px solid #232323;
+                border-radius: 4px;
+                box-shadow: inset 0 0 0 1px #5B5B5B;
+                color: #ffffff;
+                font-family: 'Segoe UI';
+                min-height: 23px;
+                min-width: 75px;
+                padding: 0 12px;
+                position: relative;
+                text-align: center;
+            } button:hover:not(:disabled):not(:active) {
+                border-color: #9ED868;
+                box-shadow: inset 0 0 0 1px #7dad50;
+                background: linear-gradient(to bottom, #4b4e48, #434a3d);
+            } button:disabled {
+                background: #f4f4f4;
+                box-shadow: inset 0 0 0 0px;
+                border-color: #b4b4b4;
+                border-width: 2px;
+                color: #838383;
+            } button:active {
+                border: 1px solid #9ED868;
+                box-shadow: inset 0 0 0 1px #7dad50;
+                background: linear-gradient(to bottom, #5f6f50, #555d4d);
+            }
+      
+
+
         </style>
     </head>
     <body class="has-scrollbar">
@@ -112,6 +145,7 @@
                 <p>
                     Next up: The 88x31 archive! Normally I'd just put it here, but I've seen other sites and can conclude that, if this gets too big, your bandwidth, framerate, and battery life will <b>tank.</b> As such, you gotta press a button to load them. Expect stuttering, freezing, and MAYBE crashing.<br>
                 </p>
+                <button id="archiveLoader">Load the archive.... IF YOU DARE!!!!</button>
             </div>
         </div>
         <!-- Layout:
@@ -151,7 +185,8 @@
                     titleText: "The Loading Artist. Spam that random button and you'll be fed for years."
                 },
             ];
-
+            
+            document.getElementById("archiveLoader").addEventListener("click", loadSuperArchive);
             loadFeaturedSites(featuredSitesLookupTable, document.getElementById('featuredSitesContainer'));
 
 
@@ -189,7 +224,15 @@
                 }
             }
 
+            function loadSuperArchive() {
+                const archiveLoader = new Worker("super_archive.js");
+                archiveLoader.postMessage("ack");
 
+                archiveLoader.onmessage = (e) => {
+                console.log(e.data);
+                };
+
+            }
 
         </script>
     </body>
