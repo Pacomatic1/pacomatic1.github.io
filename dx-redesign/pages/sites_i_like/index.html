@@ -35,7 +35,9 @@
                 text-align: center;
             }
 
-
+            #superArchiveContainer {
+                padding: 0.5em;
+            }
 
 
             #startingText {
@@ -141,9 +143,9 @@
                 <!-- The contents of this container are generated in Javascript. See featuredSitesLookupTable. -->
             </div>
 
-            <div id="allSitesContainer" class="basicText">
+            <div id="superArchiveContainer" class="basicText">
                 <p>
-                    Next up: The 88x31 archive! Normally I'd just put it here, but I've seen other sites and can conclude that, if this gets too big, your bandwidth, framerate, and battery life will <b>tank.</b> As such, you gotta press a button to load them. Expect stuttering, freezing, and MAYBE crashing.<br>
+                    Next up: The 88x31 archive! Normally I'd just put it here, but I've seen other sites and can conclude that, if this gets too big, your bandwidth and framerate can <b>tank</b> for upwards of a minute. As such, you gotta press a button to load them. Expect stuttering, freezing, and hopefully no crashing.<br>
                 </p>
                 <button id="archiveLoader">Load the archive.... IF YOU DARE!!!!</button>
             </div>
@@ -157,9 +159,8 @@
 
         <script>
             var featuredSitesLookupTable = [
-                // I seem to be addicted to lookup tables. This one is... actually VERY different from the parent page tables, assuming they were never refactored not to use arrays.
-
-                // Each item is a JS object. Within, there are the following properties:
+                // This is an array of JS objects. Assume all properties are mandatory unless explicitly specified. Within is:
+                
                 // image: This is a RELATIVE PATH to the image you seek.
                 // unoptimizedImage: If the image is an optimized version, then put down the unoptimized version. This is currently unused, but I would like to make 'Open Image in New Tab' link to the unoptimiized version. Maybe. That's a feature for later. In the event the thing you already have is optimized, don't put anything here.
                 // resultingLink: Where should you go when you click on the image?
@@ -186,8 +187,23 @@
                 },
             ];
             
-            document.getElementById("archiveLoader").addEventListener("click", loadSuperArchive);
+            var itemsLookupTable = [
+                // This is an array of JS objects. Assume all properties are mandatory unless explicitly specified. Within is:
+
+                // image: This is, well, the image. I dunno what to say.
+                // unoptimizedImage: If the image is an optimized version, then put down the unoptimized version. This is currently unused, but I would like to make 'Open Image in New Tab' link to the unoptimiized version. Maybe. That's a feature for later. In the event the thing you already have is optimized, don't put anything here.
+                // titleText: This is the flavor text that you see when you hover over it. This is optional.
+                // altText: This is what screenreaders and people who couldn't load the image will replace it with. No flavor text!!
+                // resultingLink: This is a link to the site that the button would, well, link to.
+
+                {
+                    resultingLink: "https://medjed.nekoweb.org",
+                    image: "./assets/sites/medjed-nekoweb.jpg",
+                    altText: "Medjed, on Nekoweb."
+                }
+            ];
             loadFeaturedSites(featuredSitesLookupTable, document.getElementById('featuredSitesContainer'));
+            document.getElementById("archiveLoader").addEventListener("click", () => { loadSuperArchive(itemsLookupTable, document.getElementById('superArchiveContainer')) } ); // Calling an inline function was necessary 'cause I couldn't specifiy the args unless the function ran *before* you click the button (which defeats the purpose). This is good enough. 
 
 
             // This is an optimization.
@@ -201,9 +217,8 @@
 
 
 
-
             function loadFeaturedSites(lookupTable, placeToPutStuff) { // placeToPutStuff uses innerHTML and modifies the tag directly. Just thought I'd mention that.
-                // See featuredSitesLookupTable for documentation on how this stypiud format works. You're gonna need it if you want to understand this. 
+                // See featuredSitesLookupTable for documentation on how this stupid format works. You're gonna need it if you want to understand this. 
 
                 for (var i = 0; i < lookupTable.length; i++) {
                     var containerAnchor = document.createElement('a');
@@ -212,7 +227,10 @@
                     
                     imageTag.src = lookupTable[i].image;
                     // unoptimizedImage is unused. But this is a reminder that it exists in case you need it sometime ;)
-                    imageTag.alt = lookupTable[i].alt;
+                    imageTag.alt = lookupTable[i].altText;
+                    imageTag.loading = "lazy";
+                    imageTag.decoding = "async";
+
                     
                     containerAnchor.title = lookupTable[i].titleText;
                     containerAnchor.href = lookupTable[i].resultingLink;
@@ -224,14 +242,34 @@
                 }
             }
 
-            function loadSuperArchive() {
-                const archiveLoader = new Worker("super_archive.js");
-                archiveLoader.postMessage("ack");
+            function loadSuperArchive(lookupTable, placeToPutStuff) {
+                // See itemsLookupTable for documentation on how this stupid format works. You're gonna need it if you want to understand this. 
 
-                archiveLoader.onmessage = (e) => {
-                console.log(e.data);
-                };
 
+                placeToPutStuff.innerHTML = "";
+                for (var i = 0; i < lookupTable.length; i++) {
+                    if (lookupTable[i].altText == undefined) { lookupTable[i].altText = lookupTable[i].resultingLink }
+                    if (lookupTable[i].titleText == undefined) { lookupTable[i].titleText = lookupTable[i].altText }
+
+                    var containerAnchor = document.createElement('a');
+                    var imageTag = document.createElement('img');
+                    imageTag.classList.add("archiveSite");
+                    
+                    imageTag.src = lookupTable[i].image;
+                    // unoptimizedImage is unused. But this is a reminder that it exists in case you need it sometime ;)
+                    imageTag.alt = lookupTable[i].altText;
+                    imageTag.loading = "lazy";
+                    imageTag.decoding = "async";
+
+                    
+                    containerAnchor.title = lookupTable[i].altText;
+                    containerAnchor.href = lookupTable[i].resultingLink;
+                    containerAnchor.target = "_blank";
+                    
+                    // We have to put the image inside an anchor tag because images can't lead to links. Oh well, it's less of a hacky workaround and more of 'an established precedent' that was established before I was born. What the hell man??? 
+                    containerAnchor.appendChild(imageTag);
+                    placeToPutStuff.appendChild(containerAnchor);
+                }
             }
 
         </script>
