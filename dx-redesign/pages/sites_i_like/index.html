@@ -44,6 +44,22 @@
             }
 
 
+            #archiveSite {
+
+            }
+
+            .archiveSite-nearestfilter {
+                image-rendering: pixelated;
+            }
+            .archiveSite-smoothfilter {
+                image-rendering: smooth;
+            }
+
+
+
+
+
+
 
 
             #sitesILikeBanner {
@@ -193,14 +209,27 @@
                 // image: This is, well, the image. I dunno what to say.
                 // unoptimizedImage: If the image is an optimized version, then put down the unoptimized version. This is currently unused, but I would like to make 'Open Image in New Tab' link to the unoptimiized version. Maybe. That's a feature for later. In the event the thing you already have is optimized, don't put anything here.
                 // titleText: This is the flavor text that you see when you hover over it. This is optional.
-                // altText: This is what screenreaders and people who couldn't load the image will replace it with. No flavor text!!
+                // altText: This is what screenreaders and people who couldn't load the image will replace it with. No flavor text!! If left empty this will just be the link.
                 // resultingLink: This is a link to the site that the button would, well, link to.
+                // filterMode: nearest/smooth --- This determines the filtering mode when scaled. If left empty, it will default to nearest. 
 
                 {
                     resultingLink: "https://medjed.nekoweb.org",
                     image: "./assets/sites/medjed-nekoweb.jpg",
-                    altText: "Medjed, on Nekoweb."
+                },
+                {
+                    resultingLink: "https://melongking.net",
+                    image: "./assets/sites/melonking.gif",
+                    altText: "Visit melonking.net!",
+                    filterMode: "smooth"
                 }
+
+                /*
+
+
+                <a target="_blank" href="https://melonking.net"><img alt="Visit Melonking.Net!" src="https://melonking.net/images/badges/MELON-BADGE-2.GIF" style="image-rendering: pixelated"></a>
+
+                */
             ];
             loadFeaturedSites(featuredSitesLookupTable, document.getElementById('featuredSitesContainer'));
             document.getElementById("archiveLoader").addEventListener("click", () => { loadSuperArchive(itemsLookupTable, document.getElementById('superArchiveContainer')) } ); // Calling an inline function was necessary 'cause I couldn't specifiy the args unless the function ran *before* you click the button (which defeats the purpose). This is good enough. 
@@ -244,7 +273,7 @@
 
             function loadSuperArchive(lookupTable, placeToPutStuff) {
                 // See itemsLookupTable for documentation on how this stupid format works. You're gonna need it if you want to understand this. 
-
+                // TODO: Put this in a web worker. I did try, mind you, but document.createElement doesn't work and manually making the tag with string concatenation + innerHTML doesn't support images for some reason.
 
                 placeToPutStuff.innerHTML = "";
                 for (var i = 0; i < lookupTable.length; i++) {
@@ -260,6 +289,14 @@
                     imageTag.alt = lookupTable[i].altText;
                     imageTag.loading = "lazy";
                     imageTag.decoding = "async";
+                    if (lookupTable[i].filterMode == undefined) { lookupTable[i].filterMode = "nearest" }
+
+                    switch(lookupTable[i].filterMode) {
+                        case "nearest":
+                            imageTag.classList.add("archiveSite-nearestfilter");
+                        case "smooth":
+                            imageTag.classList.add("archiveSite-smoothfilter");
+                    }
 
                     
                     containerAnchor.title = lookupTable[i].altText;
