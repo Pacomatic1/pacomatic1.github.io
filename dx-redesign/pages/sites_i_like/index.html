@@ -4,7 +4,7 @@
         <title>Bye-bye bandwidth!</title>
         <script src="../shared.js"> </script>
         <style>
-            @import url('7_scrollbar.css');
+            @import url('./assets/7_scrollbar.css');
             @import url('https://fonts.googleapis.com/css2?family=Cal+Sans&display=swap');
             @font-face {
                 font-family: "Segoe UI";
@@ -44,8 +44,8 @@
             }
 
 
-            #archiveSite {
-
+            .archiveSite {
+                margin: .08em;
             }
 
             .archiveSite-nearestfilter {
@@ -137,11 +137,36 @@
             }
       
 
+            .musicCredits {
+                /*height: 100vh;
+                width: 100vw;*/
+                text-align: right;
+                color: white;
+                font-size: 0.8em;
+                font-family: 'Segoe UI';
+                font-weight:600;
+                position: fixed;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                margin-left:0px;
+                margin-right:2em;
+                z-index: 100;
+            }
 
         </style>
     </head>
     <body class="has-scrollbar">
+        <audio src="./assets/c418dreiton.mp3" autoplay loop></audio>
+
         <div id="megaContainer">
+            <div class="musicCredits">
+                <p>
+                    Now playing: C418 - Dreiton
+                </p>
+            </div>
+
+
             <div id="sitesILikeBanner"> 
                 <p>Sites I like</p>
                 <div>
