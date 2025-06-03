@@ -1,57 +1,57 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Wayback Machine but better...?</title>
+        <title>Wayback Machine but official</title>
         <script src="../shared.js"> </script>
         
         <style>
             body {
-                margin: 0;
+                margin: 0px;
+                padding:0px;
+                min-width: 100vw;
+                min-height: 100vh;
+
             }
-
-            #gigaDiv {
-
-            }
-
-
 
 
             #selectionContainer {
+                margin: 0;
+                padding: 0;
                 display: flex;
                 flex-direction: row;
-                background-color: blue;
-                min-height:max-content;
-                min-width: max-content;
+                background-color: #141414;
+                min-height: 100vh;
             }
             #v1-container {
-                display: block;
-                flex: 1;
                 background-color: aqua;
             }
             #v2-container {
-                flex: 1;
                 background-color: green;
             }
-
+            
+            .selectionOption {
+                flex: 1;
+                min-height: 100%;
+            }
 
 
         </style>
     
     </head>
     <body>
-        <p>HELP</p>
-        <div id="gigaDiv">
-            <div id="selectionContainer">                
-                <div id="v1-container">
-                    HELP
-                </div>
-                <div id="v2-container">
-                    HELP
-                </div>
+        <div id="selectionContainer">                
+            <div id="v1-container" class="selectionOption">
+                <h1>Placeholder text.</h1> <br>
+                Actual Text. <br>
+                <button class="goButton">GO TO SITE</button>
+
             </div>
+            <div id="v2-container" class="selectionOption">
+                HELP
+            </div>
+        </div>
 
 
-        </div> 
 
         <script>
 
