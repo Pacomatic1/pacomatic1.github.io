@@ -25,25 +25,74 @@
             }
             #v1-container {
                 background-color: #ffffff;
+                background-image: url("./assets/v1_blur.avif");
                 text-align: center;
                 color: #000000;
                 font-family: "arial";
-            } #v1-container h1 {
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+                background-size: 100% 100%;
+                background-size: cover;
+                max-width: 100%;
+
                 margin: 0;
-            } #v1-container p {
+                padding: 0;
+            }
+            #v1-container div {
+                padding: 0;
+                margin:0;
+                /* text-shadow: #ffffff 0px 0px 4px; */
+            }
+            #v1-container div h1 {
+                margin: 0;
+            } #v1-container div p {
                 margin: 0;
             }
-
-
-
-
-
 
 
             #v2-container {
-                background-color: green;
+                /* background-color: #ffffff00; */
+                text-align: center;
+                color: #000000;
+                font-family: "arial";
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+
+
+                margin: 0;
+                padding: 0;
             }
-            
+            #v2-container div {
+                padding: 0;
+                margin:0;
+                /* text-shadow: #ffffff 0px 0px 4px; */
+            }
+            #v2-container div h1 {
+                margin: 0;
+            } #v2-container div p {
+                margin: 0;
+            }
+
+
+            .background-video {
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                position: fixed;
+                left: 0;
+                right: 0;
+                top: 0;
+                bottom: 0;
+                z-index: -5;
+            }
+
             .selectionOption {
                 flex: 1;
                 min-height: 100%;
@@ -59,21 +108,32 @@
     <body>
         <div id="selectionContainer">                
             <div id="v1-container" class="selectionOption">
-                <h1>Placeholder text.</h1>
-                Actual Text. <br>
-                <button class="goButton">GO TO SITE</button>
                 <div>
-                    <img>
+                    <h1>Version 1</h1>
+                    <p>This was the first revision of my site, which you can only see because I (vainly) put it on the Internet Archive a long time ago.</p> <br>
+                    <button class="goButton" id="v1_goButton">GO TO SITE</button>
                 </div>
             </div>
             <div id="v2-container" class="selectionOption">
-                HELP
+                <video class="background-video" autoplay loop muted disablePictureInPicture poster="./assets/ps3_xmb_bg_thumb.jpg" style="pointer-events: none;">
+                    <source src="./assets/ps3_xmb_bg.webm" type="video/webm">
+                <video>
+                <div>
+                    <h1>Version 2</h1>
+                    <p>
+                        I rebuilt by site from the gorund-up with a sleek, modern design. <br>
+                        Sadly, 'modern' is generic.
+                    </p>
+                    <br>
+                    <button class="goButton" id="v2_goButton">GO TO SITE</button>
+                </div>
             </div>
         </div>
 
-
-
         <script>
+
+
+
 
 
         </script>
