@@ -5,7 +5,8 @@
         <script src="../shared.js"> </script>
         
         <style>
-            @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&display=swap');
+            @import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100..900;1,100..900&family=Rubik:ital,wght@0,300..900;1,300..900&display=swap');
+            
             body {
                 margin: 0px;
                 padding:0px;
@@ -13,7 +14,6 @@
                 min-height: 100vh;
 
             }
-
 
             #selectionContainer {
                 margin: 0;
@@ -23,6 +23,8 @@
                 background-color: #141414;
                 min-height: 100vh;
             }
+
+
             #v1-container {
                 background-color: #ffffff;
                 background-image: url("./assets/v1_blur.avif");
@@ -42,13 +44,15 @@
 
                 margin: 0;
                 padding: 0;
-            }
-            #v1-container div {
+            } #v1-container div {
                 padding: 0;
+                background-color: white;
                 margin:0;
+                padding-top: 1em;
+                padding-bottom: 1em;
+                box-shadow: #000000AA 0px 0px 20px;
                 /* text-shadow: #ffffff 0px 0px 4px; */
-            }
-            #v1-container div h1 {
+            } #v1-container div h1 {
                 margin: 0;
             } #v1-container div p {
                 margin: 0;
@@ -58,8 +62,8 @@
             #v2-container {
                 /* background-color: #ffffff00; */
                 text-align: center;
-                color: #000000;
-                font-family: "arial";
+                color: white;
+                font-family: 'Roboto', serif;
                 display: flex;
                 flex-direction: column;
                 justify-content: center;
@@ -68,49 +72,62 @@
 
                 margin: 0;
                 padding: 0;
-            }
-            #v2-container div {
+            } #v2-container div { 
+                width: 100%;
+                background-color: #00000050;
+            
+                vertical-align:bottom;
+                backdrop-filter: blur(10px);
+
                 padding: 0;
+                padding-bottom: 1em;
+                padding-top: 1em;
                 margin:0;
                 z-index: 10;
                 /* text-shadow: #ffffff 0px 0px 4px; */
-            }
-            #v2-container div h1 {
+            } #v2-container div.v2darkBar {
+                margin:0;
+                padding:0;
+                text-align:left;
+                font-family: 'Rubik';
+                font-weight:400;
+                background-color: #121212;
+            } #v2-container div h1 {
                 margin: 0;
+                font-size:2em;
+                font-weight:500;
+                text-align: center;
             } #v2-container div p {
                 margin: 0;
+            }
+            #v2-container div button {
+                font-family: 'Rubik';
+                background-color: #000000BB;
+                color: white;
+                border: none;
+                padding: .4em;
+                border-radius: .3em;
+                font-size: 12pt;
+            } #v2-container div button:hover {
+                background-color: #00000050;
+                border: 3px solid #000000BB;
+            } #v2-container div button:active {
+                background-color: #000000DE;
             }
 
 
             .background-video {
-
                 width: 50%;
                 height: 100%;
                 position: absolute;
                 object-fit: cover;
                 z-index: 0;
-
-                /* display:none;
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-                /* position: fixed; */
-                /* left: 0; */
-                /* right: 0; */
-                /* top: 0; */
-                /* bottom: 0;
-                z-index: -5; */
             }
 
             .selectionOption {
                 flex: 1;
                 min-height: 100%;
             }
-            
-            
-            
-
-
         </style>
     
     </head>
@@ -127,11 +144,12 @@
                 <video class="background-video" autoplay loop muted disablePictureInPicture poster="./assets/ps3_xmb_bg_thumb.jpg" style="pointer-events: none;">
                     <source src="./assets/ps3_xmb_bg.webm" type="video/webm"/>
                 </video>
+                <div class="v2darkBar">&nbsp;Reject simplicity, embrace simplicity but different!</div>
                 <div>
                     <h1>Version 2</h1>
                     <p>
-                        I rebuilt by site from the gorund-up with a sleek, modern design. <br>
-                        Sadly, 'modern' is generic.
+                        I rebuilt by site from the ground-up with a sleek, modern design. <br>
+                        Sadly, I never really did anything and it looked quite generic, so I redesigned it again.
                     </p>
                     <br>
                     <button class="goButton" id="v2_goButton">GO TO SITE</button>
@@ -140,10 +158,16 @@
         </div>
 
         <script>
+            document.getElementById("v1_goButton").addEventListener(onclick, function(){
+                goSomewhere("./v1/")
+            });
+            document.getElementById("v2_goButton").addEventListener(onclick, function() {
 
+            });
 
-
-
+            function goSomewhere(linkToGoTo) {
+                history.pushState({}, {}, linkToGoTo);
+            }
 
         </script>
     </body>
