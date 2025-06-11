@@ -158,8 +158,9 @@
         </div>
 
         <script>
-            document.getElementById("v1_goButton").addEventListener(onclick, function(){
-                goSomewhere("./v1/")
+            document.getElementById("v1_goButton").addEventListener(onclick, () =>{
+                console.log("HAH");
+                goSomewhere("./v1/");
             });
             document.getElementById("v2_goButton").addEventListener(onclick, function() {
 
