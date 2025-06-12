@@ -7,6 +7,7 @@ function onParentSendingMessageToIframe(message) {
     switch(message) {
         case "sendHref":
             sendMessageToParent(window.location.href);
+            console.log("IFRAME: Daddy told me to send my link. It's '"+window.location.href+"'!")
             break;
 
 

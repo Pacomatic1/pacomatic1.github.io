@@ -137,7 +137,7 @@
                 <div>
                     <h1>Version 1</h1>
                     <p>This was the first revision of my site, which you can only see because I (vainly) put it on the Internet Archive a long time ago.</p> <br>
-                    <button class="goButton" id="v1_goButton">GO TO SITE</button>
+                    <a href="./v1/index.html"><button class="goButton" id="v1_goButton">GO TO SITE</button></a>
                 </div>
             </div>
             <div id="v2-container" class="selectionOption">
@@ -152,24 +152,9 @@
                         Sadly, I never really did anything and it looked quite generic, so I redesigned it again.
                     </p>
                     <br>
-                    <button class="goButton" id="v2_goButton">GO TO SITE</button>
+                    <a href="./v2/"><button class="goButton" id="v2_goButton">GO TO SITE</button></a>
                 </div>
             </div>
         </div>
-
-        <script>
-            document.getElementById("v1_goButton").addEventListener(onclick, () =>{
-                console.log("HAH");
-                goSomewhere("./v1/");
-            });
-            document.getElementById("v2_goButton").addEventListener(onclick, function() {
-
-            });
-
-            function goSomewhere(linkToGoTo) {
-                history.pushState({}, {}, linkToGoTo);
-            }
-
-        </script>
     </body>
 </html>
