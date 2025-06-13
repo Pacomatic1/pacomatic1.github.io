@@ -59,29 +59,37 @@ const absoluteToRelativePathLookupTable = [
     // Note that order matters. The first array here is the first one that we do stuff with, then the second, then the third.
     [0, "/pages/", "./pages/"],
 ];
-var doesIFrameHaveSharedJS = false;
-
-// Set up the important stuff ASAP, and set up 'stuff that the user won't notice until they interact with it' last.
-const mainIframe = document.getElementById("mainIframe");
-initializeIframePage('./pages/landing/index.html');
-
-var pageMode = determinePageMode(); // "main" or "accessible"
-// console.log("You're using " + pageMode + " mode."); This got really annoying, really fast. I disabled it.
+var doesIFrameHaveSharedJS = false; // Check this before asking the iframe for any favors.
+var pageMode;
 
 if ( window.location.href.includes("file:") ) { console.log("Some stuff on the site, like three.js, doesn't like being run locally. If you want to see the site in all its glory, get Node.js + http-server."); } // This also has the funny side effect that, because you're still going from PC to router to PC and not just loading from the hard drive, you get to see a glimpse into the network performance of the site. Perfect for network optimization; epic wins all around!
+const mainIframe = document.getElementById("mainIframe");
+pageMode = determinePageMode(); // "main" or "accessible"
+
+
+
+initializeIframePage('./pages/landing/index.html');
 
 setBackgroundIframe(); 
-
-populateMainModeNavBar(); // This only does something if you're in main mode.
-populateMainModeSocialMediaList(); // This only does something if you're in main mode.
-if (pageMode == "accessible") {
-    populateAccessibleNavBar();
-    document.getElementById('gotoPageButton').addEventListener("click", accessibleModeNavBarSelected);
-}
+preparePage();
 
 
 window.addEventListener("popstate", onUserSwappingPageHistory);
 document.getElementById("swapModesButton").addEventListener("click", swapPageMode);
+
+
+function preparePage() {
+    switch(pageMode) {
+        case "main":
+            populateMainModeNavBar();
+            populateMainModeSocialMediaList();
+            break;
+        case "accessible":
+            populateAccessibleNavBar();
+            document.getElementById('gotoPageButton').addEventListener("click", accessibleModeNavBarSelected);
+            break;
+        }
+}
 
 
 
@@ -104,6 +112,9 @@ function initializeIframePage(relativePathToDefaultPage) {
 
 function handleIframeExternalities() { // Currently, it handles query strings. This is to happen AFTER the iframe has loaded.
     
+    // This despreately needs refactoring, oh my goodness.
+    // REFACTOR 
+
     // Handling of the Iframe's link. Does things like this because we have to wait for the response before we can do anything.
     var IframePagePath;
     var windowURL = window.location.href;
@@ -217,7 +228,7 @@ function swapPageMode() {
     var everythingAfterTheUrl = window.location.href.substring(window.location.href.indexOf(".html") + 5); // Depends on the .html at the end of the url (but before query strings and all that). As of now they all share this part of the url, but be careful in case things change.
     var newUrl;
     var urlOfModeToUse;
-    switch(pageMode) { // Don't forget you're SWAPPING modes. If it's main mode, it has to swap to **anything that isn't main mode.**
+    switch(pageMode) { // Don't forget you're SWAPPING modes. If it's main mode, it has to swap to something that's NOT main mode.
         case "main":
             urlOfModeToUse = urlOfAccessibleMode;    
             break;
@@ -235,7 +246,6 @@ function swapPageMode() {
 // NAVIGATION BAR(S)
 
 function populateMainModeSocialMediaList() {
-    if (pageMode != "main") { return; } // Exit function if you're not in main mode so as to avoid issues. return seemed better than putting everything in yet another if statement so I'm keeping it this way.
     const socialMediaContainer = document.getElementById("socialMediaButtonContianer");
     for (let i = 0; i < socialLinksItemLookupTable.length; i++) {
         // In order to understand this, you need to understand socialLinksItemLookupTable.
@@ -263,7 +273,11 @@ function populateMainModeSocialMediaList() {
             // "What does the button do?"
             switch(socialLinksItemLookupTable[i][3]) {
                 case 0:
-                    anchorThatSurroundsTheButton.href = "javascript:openPageInIframeFromNavbar('" + socialLinksItemLookupTable[i][4] + "')";
+                    // REFACTOR. FIX. openPageInIframeFromNavbar().
+                    buttonToCreate.addEventListener("click", () => {
+                        openPageInIframeFromNavbar(socialLinksItemLookupTable[i][4]);
+                    });
+                    // anchorThatSurroundsTheButton.href = socialLinksItemLookupTable[i][4]; keeping this in case. However, adding an href will make the anchor do stuff so idk
                     break;
                 case 1:
                     anchorThatSurroundsTheButton.href = socialLinksItemLookupTable[i][4];
@@ -284,7 +298,6 @@ function populateMainModeSocialMediaList() {
 }
 
 function populateMainModeNavBar() {
-    if (pageMode != "main") { return; } // Exit function if you're not in main mode so as to avoid issues. return seemed better than putting everything in yet another if statement so I'm keeping it this way.
     const navBarItemContainer = document.getElementById("navBarItemContainer");
     for (let i = 0; i < navBarItemLookupTable.length; i++) {
         // In order to understand this, you need to understand navBarItemLookupTable.
@@ -304,12 +317,14 @@ function populateMainModeNavBar() {
             buttonToCreate.appendChild(imageWithinTheButton);
             buttonToCreate.innerHTML += navBarItemLookupTable[i][1]; 
             
-
-
             // "What does the button do?"
             switch(navBarItemLookupTable[i][3]) {
                 case 0:
-                    anchorThatSurroundsTheButton.href = "javascript:openPageInIframeFromNavbar('" + navBarItemLookupTable[i][4] + "')";
+                    // REFACTOR. FIX. openPageInIframeFromNavbar().
+                    buttonToCreate.addEventListener("click", () => {
+                        openPageInIframeFromNavbar(navBarItemLookupTable[i][4]);
+                    });
+                    // anchorThatSurroundsTheButton.href = navBarItemLookupTable[i][4]; keeping this in case. However, adding an href will make the anchor do stuff so idk
                     break;
                 case 1:
                     anchorThatSurroundsTheButton.href = navBarItemLookupTable[i][4];
@@ -339,8 +354,7 @@ function populateMainModeNavBar() {
     }
 }
 
-function populateAccessibleNavBar() { // This also handles the social media links since they're in the same spot and using 2 functions seems awfully useless.
-    if (pageMode != "accessible") { return; } // Exit function if you're not in main mode so as to avoid issues. return seemed better than putting everything in yet another if statement so I'm keeping it this way.
+function populateAccessibleNavBar() { // This also handles the social media links since they're in the same spot and this seems simpler. Kind of.
     const navBarSelector = document.getElementById("navBarDropDown");
     var currentOptionGroup = null;
     var newNavBarItemLookupTable = navBarItemLookupTable;
@@ -409,7 +423,7 @@ function populateAccessibleNavBar() { // This also handles the social media link
             } else {
                 navBarSelector.appendChild(optionToAdd);
             }
-            document.getElementById(optionToAdd.id).addEventListener("change", accessibleModeNavBarSelected);
+            document.getElementById(optionToAdd.id);
         } else if (newNavBarItemLookupTable[i][0] == 1) {
             var optionGroupToMake = document.createElement('optgroup');
             var horizontalRuleToMake = document.createElement('hr');
@@ -437,7 +451,7 @@ function populateAccessibleNavBar() { // This also handles the social media link
     
 }
 
-function accessibleModeNavBarSelected() { // This is called when the user presses the "Go to Page" button in accessible mode. This is because using event handlers for every option seems difficult and makes the ever-annoying misclick easier. 
+function accessibleModeNavBarSelected() { // This is called when the user presses the "Go to Page" button in accessible mode. This is because using event handlers for every option seems difficult and makes the ever-annoying misclick easier. (Addendum: It wasn't that hard. Still removed it though, 'cause mislicks) 
     const navBarSelector = document.getElementById("navBarDropDown");
     var optionActionType = findValueofNthItemInArrayOfMultiItemArraysAssumingYouKnowWhatAndWhereTheRthItemIs(navBarSelector.value, 1, navBarItemLookupTable, 3);
     var optionActionValue = findValueofNthItemInArrayOfMultiItemArraysAssumingYouKnowWhatAndWhereTheRthItemIs(navBarSelector.value, 1, navBarItemLookupTable, 4);
