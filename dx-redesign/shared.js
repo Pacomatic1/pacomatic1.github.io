@@ -59,10 +59,9 @@ const absoluteToRelativePathLookupTable = [
     // Note that order matters. The first array here is the first one that we do stuff with, then the second, then the third.
     [0, "/pages/", "./pages/"],
 ];
-
+var doesIFrameHaveSharedJS = false;
 
 // Set up the important stuff ASAP, and set up 'stuff that the user won't notice until they interact with it' last.
-
 const mainIframe = document.getElementById("mainIframe");
 initializeIframePage('./pages/landing/index.html');
 
@@ -110,13 +109,26 @@ function handleIframeExternalities() { // Currently, it handles query strings. T
     var windowURL = window.location.href;
     window.onmessage = null;
 
-    window.addEventListener('message', function(event) { 
-        IframePagePath = event.data; 
-        IframePagePath = convertAbsoluteIframePagePathToRelativePath(IframePagePath);    
-        windowURL = replaceValueInKeyValuePairInUrlQueryStringBasedOnKey('page', IframePagePath, windowURL);
-        history.replaceState({}, "Paco's Place", windowURL);
+    window.addEventListener('message', function(event) {
+        // It will always send an array. The original message is [0], and [1] contains the thing you asked for. 
+        if(event.data[0] == "sendHref") {
+            IframePagePath = event.data[1]; 
+            IframePagePath = convertAbsoluteIframePagePathToRelativePath(IframePagePath);    
+            windowURL = replaceValueInKeyValuePairInUrlQueryStringBasedOnKey('page', IframePagePath, windowURL);
+            history.replaceState({}, "Paco's Place", windowURL);
+        } else if (event.data[0] == "doesSharedExist") {
+            doesIFrameHaveSharedJS = true;
+        }
+        
     }, {once : true});
+    mainIframe.contentWindow.postMessage('doesSharedExist', '*');
     mainIframe.contentWindow.postMessage('sendHref', '*');
+    setTimeout(() => {
+        if (doesIFrameHaveSharedJS != true) {
+            doesIFrameHaveSharedJS = false;
+            console.log("This page does not have shared.js!");
+        }
+    }, 300);
 
 }
 
