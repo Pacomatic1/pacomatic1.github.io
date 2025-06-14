@@ -1,24 +1,26 @@
+ <!--  I've kept it largely unmodified from way back when, save for a few modifications. Most of the changes will have a comment addressing them, which you'll be able to spot because the old code had no comments to begin with. -->
 <!DOCTYPE html>
 <html>
   <head>
   	<title>
   	Dboys
     </title>
-    <script src="../../shared.js"></script>
+    <script src="../../shared.js"></script> <!-- This was added to be compatible with the new site. -->
 
   	<link rel="stylesheet" href="./bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 	<script src="./bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="css/main.css"   crossorigin="anonymous">
-
+    <!-- <link rel="stylesheet" href="css/main.css"   crossorigin="anonymous"> Removed this because nothing changed when I removed it so I think it did nothing. That way I can avoid the errors. -->
+<!-- All of these stylesheets and scripts are now self-hosted. -->
+    
     <style>
       .top-header {
-      background-image: url('./assets/minecraft.jpg');
+      background-image: url('./assets/minecraft.jpg'); /* This is now self-hosted. */
       height:100px;
       }
 
 
       .top-header .center {
-      background-image: url('./assets/minecraft-title.jpg');
+      background-image: url('./assets/minecraft-title.jpg'); /* This is now self-hosted. */
       background-repeat: no-repeat;
       height:100px;
             
@@ -38,7 +40,7 @@
   <div class="top-header">
   <div class="left">
   </div>
-
+<!-- These seem to be malformed, according to VS Code... I think. The center tags are yellow, maybe because of the div or an invalid tag or something. Whatever the case, I don't wanna fix this. It feels like sacrilege for some reason. -->
  <center><div class="center">
   </div></center> 
 
@@ -77,12 +79,18 @@
 </div>   
 
  
+<!-- No indentation. I'd say I was naive, but my papa made this and very obviously rushed it. 
+It's insane to find what's changed in the last... 8? 9? years? I am writing this at 15 and this was made when I was in grade 4.
 
+At least 6 years has passed. I feel old at 15, this can only mean bad things. -->
 
 
 
  
-</table>
+</table> <!-- Ended a tag that didn't before. You know, fixes. -->
+
+      <p> Tip: Open the inspect thingy and see the site's source code!
+      </p> <!-- Added this text. -->
  </div>
 	</body>
 </html>
