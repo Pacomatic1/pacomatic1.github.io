@@ -108,32 +108,23 @@ function initializeIframePage(relativePathToDefaultPage) {
 
     if (currentPage == null) { loadNewPageInIframe(relativePathToDefaultPage); }
     else {loadNewPageInIframe(currentPage);}
+
+
+
+    // It will always send an array. The original message is [0], and [1] contains the thing you asked for. 
+    window.addEventListener('message', function(event) {
+        onIframeSeindingMessageToParent(event);
+    });
 }
 
 function handleIframeExternalities() { // Currently, it handles query strings. This is to happen AFTER the iframe has loaded.
-    
-    // This despreately needs refactoring, oh my goodness.
-    // REFACTOR 
-
     // Handling of the Iframe's link. Does things like this because we have to wait for the response before we can do anything.
     var IframePagePath;
     var windowURL = window.location.href;
     window.onmessage = null;
 
-    window.addEventListener('message', function(event) {
-        // It will always send an array. The original message is [0], and [1] contains the thing you asked for. 
-        if(event.data[0] == "sendHref") {
-            IframePagePath = event.data[1]; 
-            IframePagePath = convertAbsoluteIframePagePathToRelativePath(IframePagePath);    
-            windowURL = replaceValueInKeyValuePairInUrlQueryStringBasedOnKey('page', IframePagePath, windowURL);
-            history.replaceState({}, "Paco's Place", windowURL);
-        } else if (event.data[0] == "doesSharedExist") {
-            doesIFrameHaveSharedJS = true;
-        }
-        
-    }, {once : true});
-    mainIframe.contentWindow.postMessage('doesSharedExist', '*');
     mainIframe.contentWindow.postMessage('sendHref', '*');
+    mainIframe.contentWindow.postMessage('doesSharedExist', '*');
     setTimeout(() => {
         if (doesIFrameHaveSharedJS != true) {
             doesIFrameHaveSharedJS = false;
@@ -180,7 +171,17 @@ function convertAbsoluteIframePagePathToRelativePath(absolutePath) { // Bro tryi
 
 }
 
-
+function onIframeSeindingMessageToParent(event) { 
+    if(event.data[0] == "sendHref") { // Sent when the page first loads. See handleIframeExternalities()
+        IframePagePath = event.data[1]; 
+        IframePagePath = convertAbsoluteIframePagePathToRelativePath(IframePagePath);    
+        var windowURL = window.location.href;
+        windowURL = new URL(replaceValueInKeyValuePairInUrlQueryStringBasedOnKey('page', IframePagePath, windowURL));
+        history.replaceState({}, "Paco's Place", windowURL);
+    } else if (event.data[0] == "doesSharedExist") { // Sent when the page first loads. See handleIframeExternalities()
+        doesIFrameHaveSharedJS = true;
+    }
+}
 
 
 

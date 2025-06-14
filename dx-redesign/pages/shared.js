@@ -6,11 +6,13 @@ window.onmessage = function(e) { onParentSendingMessageToIframe(e.data); };
 function onParentSendingMessageToIframe(message) {
     // Always return an array; the first item's the original message, the second item is the thing they asked for.
     switch(message) {
-        case "doesSharedExist":
-            sendMessageToParent(["doesSharedExist", true]);
-            break;
         case "sendHref":
             sendMessageToParent(["sendHref", window.location.href]);
+            console.log("I WAS TOLD TO SEND IT?? Well..... " + window.location.href)
+            break;
+        case "doesSharedExist":
+            console.log("YES IT DOES.");
+            sendMessageToParent(["doesSharedExist", true]);
             break;
 
 
