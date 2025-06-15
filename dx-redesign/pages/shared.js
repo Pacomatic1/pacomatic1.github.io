@@ -8,10 +8,8 @@ function onParentSendingMessageToIframe(message) {
     switch(message) {
         case "sendHref":
             sendMessageToParent(["sendHref", window.location.href]);
-            console.log("I WAS TOLD TO SEND IT?? Well..... " + window.location.href)
             break;
         case "doesSharedExist":
-            console.log("YES IT DOES.");
             sendMessageToParent(["doesSharedExist", true]);
             break;
 
