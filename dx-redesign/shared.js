@@ -5,7 +5,7 @@ const navBarItemLookupTable = [
 
     // If [0] is 0, it's a button.
         // [1] is the buttons's name. Note that there is no margin between the icon and the text, so you're gonna have to do it yourself using custom styling. Accessible mode has no margins, so don't add a space before the item's name.  
-        // [2] is exclusive to main mode and is the **relative path** to the button's icon, staring from this page. Keep in mind that this icon is done with the 'src' attribute of an <img> tag inside the button tag, so make sure that your icon is suppported by the <img>. If you don't want an icon, leave it blank. 
+        // [2] is exclusive to main mode and is the **relative path** to the button's icon, starting from this page. Keep in mind that this icon is done with the 'src' attribute of an <img> tag inside the button tag, so make sure that your icon is suppported by the <img>. If you don't want an icon, leave it blank. 
         // [3] and [4] control what the item does.
             // If [3] is 0, then it will be a button and [4] will be a link that gets opened inside the iframe.
             // If [3] is 1, then it will be a button and [4] will be a link that replaces the current tab and will get rid of this whole single-page thing. I repeat, it will open in the current tab and get rid of this site.
@@ -14,7 +14,7 @@ const navBarItemLookupTable = [
         
     // If [0] is 1, it's text and maybe a horizontal rule.
         // [1] is the text to be displayed. If you want to have no text, make it a blank string: ""
-        // [2] is the text's styling. "1" makes it a navBar section. If it's left as a blank string while [1] contains text, it won't have any sizing attached. If [1] is blank, this will be irrelevant. Exclusive to main mode.
+        // [2] is the text's styling. "1" makes it a navBar section. If it's left as a blank string while [1] contains text, it will be irrelevant. If [1] is blank, this will be irrelevant. Exclusive to main mode.
         // [3] is whether or not we should append a horizontal rule, using true or false. If you just want a horizontal rule, leave everything else blank.
         // Note that in accessible mode, just text or text and a horizontal rule will create a new option group. Breaking out of that option group is done by just creating a horizontal rule. 
     [0, "Landing Page", " ", 0, "./pages/landing/index.html", ""],
