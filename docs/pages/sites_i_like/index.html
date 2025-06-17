@@ -236,25 +236,40 @@
                 // titleText: This is the flavor text that you see when you hover over it. This is optional.
                 // altText: This is what screenreaders and people who couldn't load the image will replace it with. No flavor text!! If left empty this will just be the link.
                 // resultingLink: This is a link to the site that the button would, well, link to.
-                // filterMode: nearest/smooth --- This determines the filtering mode when scaled. If left empty, it will default to nearest. 
+                // filterMode: nearest/smooth --- This determines the filtering mode when scaled. If left empty, it will default to smooth. 
 
                 {
                     resultingLink: "https://medjed.nekoweb.org",
                     image: "./assets/sites/medjed-nekoweb.jpg",
+                    filterMode: "nearest"
                 },
                 {
-                    resultingLink: "https://melongking.net",
+                    resultingLink: "https://melonking.net",
                     image: "./assets/sites/melonking.gif",
                     altText: "Visit melonking.net!",
                     filterMode: "smooth"
+                },
+                {
+                    resultingLink: "https://melankorin.net/",
+                    image: "./assets/sites/melankorin.gif",
+                    filterMode: "nearest"
+                },
+                {
+                    resultingLink: "https://darkosparko.nekoweb.org",
+                    image:"./assets/sites/darkosparko.gif",
+                    filterMode: 'nearest',
+                    altText: "Rocket into the Spark-Web!"
+                },
+                {
+                    resultingLink: "https://dimden.dev/",
+                    image: "./assets/sites/dimden.gif",
+                    filterMode: 'nearest'
+                },
+                {
+                    resultingLink: "https://planetclue.com/",
+                    image: "./assets/sites/planetclue.gif",
+                    filterMode: 'smooth'
                 }
-
-                /*
-
-
-                <a target="_blank" href="https://melonking.net"><img alt="Visit Melonking.Net!" src="https://melonking.net/images/badges/MELON-BADGE-2.GIF" style="image-rendering: pixelated"></a>
-
-                */
             ];
             loadFeaturedSites(featuredSitesLookupTable, document.getElementById('featuredSitesContainer'));
             document.getElementById("archiveLoader").addEventListener("click", () => { loadSuperArchive(itemsLookupTable, document.getElementById('superArchiveContainer')) } ); // Calling an inline function was necessary 'cause I couldn't specifiy the args unless the function ran *before* you click the button (which defeats the purpose). This is good enough. 
@@ -314,13 +329,14 @@
                     imageTag.alt = lookupTable[i].altText;
                     imageTag.loading = "lazy";
                     imageTag.decoding = "async";
-                    if (lookupTable[i].filterMode == undefined) { lookupTable[i].filterMode = "nearest" }
+                    if (lookupTable[i].filterMode == undefined) { lookupTable[i].filterMode = "smooth" }
 
                     switch(lookupTable[i].filterMode) {
                         case "nearest":
                             imageTag.classList.add("archiveSite-nearestfilter");
                         case "smooth":
                             imageTag.classList.add("archiveSite-smoothfilter");
+
                     }
 
                     
