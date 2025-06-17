@@ -1,266 +1,59 @@
 <!DOCTYPE html>
-<html>
-<head>
-	<title>
-		Paco's Place
-	</title>
-	<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:100,200,300,400,500|Rubik:400|Ubuntu:300,400|Roboto+Condensed|Source+Sans+Pro:600">
-	<style>
-		.MainWhite {
-		text-align: center;
-		color: white;
-		font-family: 'Roboto', serif;
-		} /* Keep this at the top, as many classes use its properties but override some of them. */
-		
-		body {
-		margin:0;
-		background-image: url('./images/bg2.png');
-		background-repeat: no-repeat;
-		background-attachment: fixed;
-		background-size: 100% 100%;
-		background-size: cover;
-		}
-		.TheGigaDiv {
-		min-width: 470px;
-		max-width: 52em;
-		margin-inline:auto;
-		background-color: #00000050;
-		vertical-align:bottom;
-		backdrop-filter: blur(10px);
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="./7.css">
+        <link rel="icon" type="image/x-icon" href="./assets/favicon.png">
+        <title>
+            Are ya ready?
+        </title>
+        <meta name="description" content="Paco's Corner of the Internet">
 
-		}
-		.PacoTitleImage {
-		border-radius:10px;
-		margin-top:8px;
-		margin-bottom:8px;
-		height:2em;
-		width:auto;
-		vertical-align: middle;
-		}
-		.GeneralSlightlyPadded {
-		margin-inline: 0.6em;
-		}
-		.PacoTitleText {
-		font-size:2em;
-		font-weight:500;
-		margin-top:0px;
-		}
-		.MicroscopicText {
-		font-size: 0.8em;
-		font-family: 'Source Sans Pro';
-		font-weight:600;
-		}
-		.TeenyTiny {
-		font-size: 1.2em;
-		font-weight:300;
-		}
-		.MyLinksDivOverall {
-		margin-inline: auto;
-		}
-		.MyLinksDivActualLinks {
-		text-align: center;
-		font-family: 'Source Sans Pro';
-		font-weight:600; 
-		margin-top: 1em;
-		margin-bottom: 0px;
-		background-color: #0000005D;
-		color: #ffffff;
-		position:relative;
-		padding: 5px;
-		border-radius:10px;
-		}
-		.MyLinksDivSingleLink{
-		width:auto;
-		height:2em;
-		}
-		.WindowIntoBG {
-		margin-left:0px;
-		margin-right:0px;
-		margin-top:0px;
-		margin-bottom:0px;
-		background-repeat: no-repeat;
-		background-attachment: fixed;
-		background-size: 100% 100%;
-		background-size: cover;
-		padding-bottom: 0px;
-		padding-top: 0px;
-		background-color: #121212;
-		max-width: 100%;
-		}
-		.PortfolioIndividualSection {
-		height: 6em;
-		width:25%;
-		margin: 0%;
-		float: left;
-		}
-		.TextInPortfolioIndividualSection {
-		font-family: 'Source Sans Pro';
-		font-weight:600; 
-		text-align: center;
-		position: relative;
-		top: 1.2em;
-		font-size: 2em;
-		color: white;
-		}
-		.LinkInTextInPortfolioIndividualSection {color:white;text-decoration: none;}
-		.LinkInTextInPortfolioIndividualSection:link {color:white;text-decoration: none;}
-		.LinkInTextInPortfolioIndividualSection:active {color:white;text-decoration: none;}
-		.LinkInTextInPortfolioIndividualSection:visited {color:white;text-decoration: none;}
-		.LinkInTextInPortfolioIndividualSection:hover {color:#e0e0e0;text-decoration: none;}
-		.ProjectListMenu {
-		list-style: none;
-		text-align: center;
-		background-color: #0000005D;
-		margin: 0px;
-		padding:0px;
-		font-family: Ubuntu;
-		font-weight: 400;
-		color: #FFFFFF;
-		font-size:1.1em;
-		}
-		.ProjectSearchBarClass {
-		font-family: 'Source Sans Pro';
-		border-radius:10px;
-		padding: 3px;
-		text-align: center;
-		background-color: #00000062;
-		margin-bottom: 0.1em;
-		font-size:1.3em;
-		min-width:20em;
-		}
-		.BarAtTheTop {
-		margin-top:0px;
-		margin-bottom:0px;
-		text-align:left;
-		color:white;
-		font-family: 'Rubik';
-		font-weight:400;
-		background-color: #121212;
-		min-width:400px;
-		}
-		.CreditsSection {
-		margin-top:0px;
-		margin-bottom:0px;
-		padding-top:0em;
-		color:white;
-		background-color: #121212;
-		}
-		.background-video {
-	    width: 100vw;
-	    height: 100vh;
-	    object-fit: cover;
-	    position: fixed;
-	    left: 0;
-	    right: 0;
-	    top: 0;
-	    bottom: 0;
-		z-index: -100;
-		}
-		.BlursBackground {
-		backdrop-filter: blur(10px);
-		}
+        <style>
+            body {
+                margin:0px;
+                padding:0px;
+                height: 100vh;
+                width: 100vw;
+                display:flex;
+                background-image: url("./assets/bg-optimized.jpg");
+                background-position: 0%;
+                background-size: cover;
+                background-attachment: fixed;
+                background-repeat: no-repeat;
 
-	</style>
-</head>
-<body>
-
-	<!-- This <p> is the top bar. -->
-	<p class="MainWhite TeenyTiny BarAtTheTop">
-		Version 1.3.2<a class="LinkInTextInPortfolioIndividualSection" href="https://github.com/Pacomatic1/pacomatic1.github.io">&nbsp;&nbsp;&nbsp; GitHub Repo</a><!-- Top bar with version -->
-	</p>
-	
-	<div class="TheGigaDiv">
-		<div style="background-image: url('./images/bg2.png');" class="WindowIntoBG"> 	<!-- This is the very top.-->
-			<div class="MainWhite WindowIntoBG"; style="margin-top:0px; margin-bottom:0px; color:white; background-image: url('./images/bg2.png');"> <!-- This has a the profile picture and name. -->
-				<p class="PacoTitleText "> <!-- Although wrapping things in a million tags is bad, here it's because the div is the WindowIntoBG and this is dedicated to the image and text. -->
-					<img src="./images/paco-pfp-square.png " alt="My Profile Picture." class="PacoTitleImage"/> Pacomatic
-				</p>
-			</div>
-		</div>
-	
-		<div class="MainWhite TeenyTiny";>
-			<p>
-				Welcome to my website! This has all my stuff! <br>
-				Most of my stuff can be found in the links below.
-			</p>
-			<div class="MyLinksDivActualLinks GeneralSlightlyPadded BlursBackground"> <!-- This is the thingy with all the social media links and whatnot. -->
-				<a href="https://www.reddit.com/user/Pacomatic" title='u/Pacomatic, that is me.'><img src="./images/reddit_logo.png" alt="Reddit" class="MyLinksDivSingleLink"/></a>
-				<a href="https://www.youtube.com/user/AmmarZawar"title='Durrani Kids! That is my channel.'><img src="./images/youtube_icon.svg" alt="YouTube" class="MyLinksDivSingleLink"/></a>
-				<a href="https://scratch.mit.edu/users/Pacomatic33/" title='Scratch is more powerful than you think, so I have an account there.'><img src="./images/scratch_logo.png" alt="Scratch" class="MyLinksDivSingleLink"/></a>
-				<a href="https://www.pixilart.com/pacomatic" title='Pixel Art. A relatively new art form. This is my pixilart account.'><img src="./images/pixilart_logo.webp" class="MyLinksDivSingleLink" alt="Pixil Art"/></a>
-				<a href="https://indreams.me/Pacomatic1" title="My Dreams profile! Dreams has more ability than one may assume; we just haven't used it."><img src="./images/dreams_imp_img.svg"  class="MyLinksDivSingleLink"style="filter: brightness(7);" alt="Dreams"/></a>
-				<a href="https://pacomatic1.itch.io/" title="My itch.io profile, where you can find many of my games."><img src="./images/itchio-logo.svg"  class="MyLinksDivSingleLink" alt="Itch.io"/></a>
-				<a href="https://github.com/pacomatic1/" title="My GitHub, which includes this site! It's a programmer's favourite place, so I obviously have something there."><img src="./images/github-logo.png"  class="MyLinksDivSingleLink" alt="GitHub"/></a>
-				<a href="https://rec.net/user/Pacomatic1" title="My Rec Room account, which I use for fooling around. I find it quite enjoyable, as if it's another world."><img src="./images/recroom_logo.png"  class="MyLinksDivSingleLink" alt="Rec Room"/></a>
-				<a href="https://steamcommunity.com/id/Pacomatic1/" title="My Steam account. I use this to do gaming. One of the best PC plaforms around."><img src="./images/steam_logo.png"  class="MyLinksDivSingleLink" alt="Steam"/></a>
-				<a href="https://retroachievements.org/user/Pacomatic" title="My account on RetroAcheivements. I love acheivements, so having them on older games is epic."><img src="./images/retroacheivements_logo.png"  class="MyLinksDivSingleLink" alt="RetroAcheivements"/></a>
-				<a href="https://pastebin.com/u/Pacomatic" title="My profile on Pastebin. It's a great place for temporary information."><img src="./images/pastebin-logo.png"  class="MyLinksDivSingleLink" alt="Pastebin"/></a>
-				<a href="https://archive.org/details/@pacomatic" title="Internet Archive. Preserving history is important, and for that I love them."><img src="./images/internet_archive_logo.svg"  class="MyLinksDivSingleLink" alt="Internet Archive" style="padding-left:2px"/></a>
-				<a href="https://bsky.app/profile/pacomatic.bsky.social" title="It took me an astoundingly long time to get an account for social media that isn't Reddit or YouTube. Ain't that a thing?"><img src="./images/bksy_logo.png"  class="MyLinksDivSingleLink" alt="Bluesky"/></a>
-			</div>
-			<p>
-				With that said, there are some things you cannot find elsewhere, or whose main pages are on my site. So you'll find them here.
-			</p>
-		</div> <!-- Now for all those projects I just mentioned. -->
-		<div>
-			<div style="text-align:center;"> <!-- This is the search bar, and centering it is most easily done by a div. This breaks with a width under 460px, so find a better way to center it that doesn't do that. -->
-				<input type="text" id="ProjectsSearchBar" onkeyup="SearchForProjects()" placeholder="Search" title="Type in the name of one of my projects." class="ProjectSearchBarClass MainWhite GeneralSlightlyPadded BlursBackground">
-			</div>
-			<ul id="ProjMenu" class="ProjectListMenu BlursBackground TeenyTiny">
-				<li>
-					<a class="LinkInTextInPortfolioIndividualSection"href="./projects/clicking_palace/index.html" title="Want some keyboard ASMR?">Clicking Palace</a>
-				</li>
-				<li>
-					<a class="LinkInTextInPortfolioIndividualSection"href="./projects/custom_div/index.html" title="A nice little toy for you to customize.">The Customizeable Div</a>
-				</li>
-				<li>
-					<a class="LinkInTextInPortfolioIndividualSection"href="./projects/the_story_of_thelemon/index.html" title="When life gives you lemons, give 'em back!">Lemons</a>
-				</li>
-				<li>
-					<a class="LinkInTextInPortfolioIndividualSection"href="./projects/the_story_of_the_lemonade_stand/index.html" title="When life gives you lemons, give 'em back!">The Lemonade Stand</a>
-				</li>
-			</ul>
-		</div>
-		<div class="MainWhite TeenyTiny";>
-			<p>
-				Hey there! I'm currently redesigning my site. Lucky for you, I'm not a moron, so you can still access the old site while the new one's being built.<br>If you want to check out the development of the new site, go to the GitHub repo at the top. I'd give you guide on where it is but it's too obvious to miss.
-			</p>
-		</div>
-		<div class="MainWhite MicroscopicText CreditsSection";>
-			<p>
-				Credits go to AYZAK 94 for the background.
-			</p>
-		</div>
-	</div>
-	
-	
-	
-	<video class="background-video" autoplay loop muted disablePictureInPicture poster="./images/ps3_xmb_bg_thumb.jpg" style="pointer-events: none;">
-		<source src="./images/ps3_xmb_bg.webm" type="video/webm">
-	<video>
-	
-	<script>
-		function SearchForProjects() {    //This script is used for the search bar, which has all my projects.
-			// Declare variables
-			var input, filter, ul, li, a, i;
-			input = document.getElementById("ProjectsSearchBar");
-			filter = input.value.toUpperCase();
-			ul = document.getElementById("ProjMenu");
-			li = ul.getElementsByTagName("li");
-			// Loop through all list items, and hide those who don't match the search query
-			for (i = 0; i < li.length; i++) {
-				a = li[i].getElementsByTagName("a")[0];
-				if (a.innerHTML.toUpperCase().indexOf(filter) > -1){
-					li[i].style.display = "";
-				} else {
-					li[i].style.display = "none";
-				}
-				
-			  }
-			if (filter == "SUPERSIGMA") {
-				history.replaceState({}, "", "./dx-redesign/index.html");
-			}
-		}
-	</script>
-</body>
+            }
+            .window-body {
+                text-align: center;
+            }
+            #mainWindow {
+                width: 30rem;
+                margin: auto;
+                display:block;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="window active" id="mainWindow">
+            <div class="title-bar">
+            <div class="title-bar-text">Your worst mistake has yet to come...</div>
+            <div class="title-bar-controls">
+                <button aria-label="Minimize"></button>
+                <button aria-label="Maximize"></button>
+                <button aria-label="Close"></button>
+            </div>
+            </div>
+            <div class="window-body has-space">
+                <p>
+                    I'm quite excited to see you enter my site! The view counter going up is truly... euphoric.
+                </p>
+                <hr>
+                <p>
+                    This site uses lots of iframes, modern Javascript, WebAssembly, and autoplaying audio. As such, this should be viewed in a modern broswer. <br>
+                    If possible, view this using a desktop or laptop on main mode. This is the intended experience. <br>
+                    If you use assistive technologies, use a phone, prefer the extra space, need to save on battery, or if main mode runs badly, you might prefer fullscreen mode. Even so, do this <b>after</b> trying main mode. Main mode is better, in my opinion.
+                </p>
+                <a href="./main.html"><button> Main Mode </button></a> <a href="./accessible.html"><button> Fullscreen Mode </button></a>
+            </div>
+        </div>
+    </body>
 </html>
