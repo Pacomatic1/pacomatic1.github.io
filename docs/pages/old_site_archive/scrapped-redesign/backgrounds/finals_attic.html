@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <style>
+            #scanline_overlay {
+				position: fixed; /* Sit on top of the page content */
+				display: block; /* Hidden by default */
+				width: 100%; /* Full width (cover the whole page) */
+				height: 100%; /* Full height (cover the whole page) */
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				background-image: url("./assets/scanline_overlay.png"); /* Black background with opacity */
+				z-index: -50; /* Specify a stack order in case you're using a different order for other elements */
+				pointer-events:none;
+			}
+			#static_overlay {
+				position: fixed; /* Sit on top of the page content */
+				display: block; /* Hidden by default */
+				width: 100%; /* Full width (cover the whole page) */
+				height: 100%; /* Full height (cover the whole page) */
+				top: 0;
+				left: 0;
+				right: 0;
+				bottom: 0;
+				background-repeat: no-repeat;
+				background-attachment: fixed;
+				background-size: 100% 100%;
+				background-image: url("./assets/static_overlay.gif"); /* Black background with opacity */
+				opacity:.3;
+				pointer-events:none;
+				z-index: -75; /* Specify a stack order in case you're using a different order for other elements */
+			}
+
+            body {
+                background-image: url('./assets/finals_attic.jpg');
+                background-size: cover;
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+
+            }
+        </style>
+    </head>
+    <body>
+        <div id="scanline_overlay"></div>
+        <div id="static_overlay"></div>
+    </body>
+</html>

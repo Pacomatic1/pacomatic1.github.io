@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+
+<html>
+    <head>
+        <!-- Refer to implementation.txt. You're gonna need it.-->
+        <script src="iframe_script.js"> </script>
+
+        <style>
+          #pageHero {    
+            margin-inline: auto;
+            width: 98%;
+            height: 10em;
+            background-repeat: no-repeat;
+            background-size: 100%;
+            background-position: center;
+            background-image: url("assets/home/ps3_xmb.png");
+            margin-bottom: 1em;
+          }
+
+          #heroImage {
+            image-rendering: pixelated;
+            height:100%;
+            width: auto;
+            filter: drop-shadow(0px 0px 5px black);
+            z-index: -90;
+          }
+        </style>
+
+
+
+    </head>
+    <body>
+      <div style="height:1em"></div> <!-- Using this to make some space because margin-top breaks it. SO NICE. -->
+      <div class="rounded-box" id="pageHero">
+        <img id="heroImage" src="./assets/home/pacomatic-hero-2x.png" decoding="async" alt="Image of Pacomatic's OC"> </img>
+      </div>
+
+      <div style="width:300px" class = "separatingBox">
+        <p> 
+          Hey guys, nya. I gots text for ya!
+          <br>Perhaps you seek it? This piece is 300px wide.
+        </p>
+          <hr>
+        <p>
+          That stupid div! <a href="https://pacomatic1.github.io">What da helll?????</a>
+        </p>
+        </div>
+        <button onclick="load()">HELP</button>
+        <script>
+          function load() {
+            const url = new URL("projects","https://pacomatic1.github.io");
+            url.searchParams.set("foo", "bar");
+            history.pushState({}, "", url);
+
+
+          }
+
+
+        </script>
+    </body>
+</html>
