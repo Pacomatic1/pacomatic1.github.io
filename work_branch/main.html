@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Paco's Place - Main Mode</title>
+        <link rel="icon" type="image/x-icon" href="./assets/favicon.png">
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&display=swap');
+            /* .noto-sans-<uniquifier> {
+                font-family: "Noto Sans", sans-serif;
+                font-optical-sizing: auto;
+                font-weight: <weight>; Anything from 100 to 900.
+                font-style: normal;
+                font-variation-settings:
+                    "wdth" 100;
+            } */
+
+            :root {
+                --default-bg-color: #313131;
+                --default-text-color: #ffffff;
+                --default-font: 9pt "Noto Sans", sans-serif;
+            }
+
+            /* NAVIGATION BAR */
+            hr.navBarSeparator {
+                margin-top:0px;
+            }
+            .navBarTitle {
+                color: var(--default-text-color);
+                font-size: 1.5rem;
+                margin: 0px;
+                text-align: center;
+            }
+            .navBarSection {
+                color: var(--default-text-color);
+                font-size: 1.1rem;
+                margin: 0px;
+                font-weight: 600;
+                text-align: center;
+                margin-top: 1rem;
+            }
+            .navBarButton {
+                width: 100%;
+                text-align:left;
+                background: #232323;
+                margin-bottom: 2px;
+                box-shadow: none;
+                border: none;
+            }
+            .navBarButton:hover:not(:disabled):not(:active) {
+                background: linear-gradient(to bottom, #454545, #3a3a3a);
+                border: 1px solid #232323;
+                border-radius: 4px;
+                box-shadow: inset 0 0 0 1px #5B5B5B;
+            }
+
+
+            /* LAYOUT BUILDING BLOCKS */
+            #gigaDiv {
+                min-height: 20em;
+                min-width: 30em;
+                width: 100vw;
+                height: 100vh;
+
+                display: grid;
+                grid-template-columns: 10.1em auto;
+				grid-template-rows: 3em auto;
+				grid-template-areas: 
+				"leftSide topSide"
+                "leftSide mainIframeContainer"
+				;
+                margin: 0px;
+                padding: 0px;
+            }
+            #leftSide {
+                grid-area: leftSide;
+                background-color: var(--default-bg-color);
+                font: var(--default-font);
+                color: var(--default-text-color);
+                margin: 0px;
+                padding-inline: .5rem;
+                border-right: solid 2px #5B5B5B;
+            }
+            #topSide {
+                grid-area: topSide;
+                background-color: #00000020;
+                font: var(--default-font);
+                margin: 0px;
+                padding: 0px;
+                backdrop-filter: blur(3px);
+                border-bottom: solid 2px #FFFFFF3F;
+                display: grid;
+                grid-template-columns: minmax(min-content, max-content) minmax(min-content, max-content) auto;
+                grid-template-rows: auto;
+				grid-template-areas: 
+				"socialMediaButtons vr";
+            }
+            #mainIframeContainer {
+                grid-area: mainIframeContainer;
+                font: var(--default-font);
+                padding: 1.2em; 
+            }
+            #mainIframe {
+                width: 100%;
+                height: 100%;
+                border: solid 2px #5B5B5B;
+                border-radius: .5em;
+                display: block;
+                background-color: #FFFFFF;
+                z-index: 900;
+            }
+            #backgroundIframe {
+				display: block;
+				position: fixed;
+				height: 100vh; /* Using vw and vh causes bugs on certain aspect ratios. As such, stick to percents. */
+				width: 100vw;
+				z-index: -300;
+                border: none;
+            }
+            
+
+            /* TOP SIDE CONTENTS*/
+            #socialMediaButtonContainer {
+                grid-area: 'socialMediaButtons';
+                overflow: clip;
+                margin: 0px;
+                padding: 0px;
+            }
+
+            #swapModesButtonContainer {
+                grid-area: 'swapModesButton';
+                overflow: clip;
+                margin: 0px;
+                padding: 0px;
+            }
+
+            /* SOCIAL MEDIA BUTTONS */
+            .socialMediaButton {
+                height: 100%;
+                background: #FFFFFF00;
+                background-repeat: no-repeat;
+                margin-bottom: 2px;
+                box-shadow: none;
+                border: none;
+            } .socialMediaButton:hover:not(:disabled):not(:active) {
+                background: none;
+                border: 1px solid #232323;
+                border-radius: 4px;
+                box-shadow: inset 0 0 0 1px #5B5B5B;
+                
+            }
+            .socialMediaButtonImage {
+                height: 3em;
+                width: auto;
+                margin-inline: auto;
+            }
+
+
+            /* BUTTONS */
+            button {
+                background: linear-gradient(to bottom, #454545, #3a3a3a);
+                border: 1px solid #232323;
+                border-radius: 4px;
+                box-shadow: inset 0 0 0 1px #5B5B5B;
+                color: var(--default-text-color);
+                font: var(--default-font);
+                min-height: 23px;
+                min-width: 75px;
+                padding: 0 12px;
+                position: relative;
+                text-align: center;
+            } button:hover:not(:disabled):not(:active) {
+                border-color: #9ED868;
+                box-shadow: inset 0 0 0 1px #7dad50;
+                background: linear-gradient(to bottom, #4b4e48, #434a3d);
+            } button:disabled {
+                background: #f4f4f4;
+                box-shadow: inset 0 0 0 0px;
+                border-color: #b4b4b4;
+                border-width: 2px;
+                color: #838383;
+            } button:active {
+                border: 1px solid #9ED868;
+                box-shadow: inset 0 0 0 1px #7dad50;
+                background: linear-gradient(to bottom, #5f6f50, #555d4d);
+            }
+
+
+            /* SWAP MODES BUTTON */
+
+            #swapModesButton {
+                --main-margin: .3em;
+
+                vertical-align: top;
+                background: linear-gradient(to bottom, #454545, #3a3a3a);
+                border: 1px solid #232323;
+                border-radius: 4px;
+                box-shadow: inset 0 0 0 1px #5B5B5B;
+                color: var(--default-text-color);
+                font: var(--default-font);
+                min-height: 23px;
+                padding: 0 12px;
+                position: relative;
+                text-align: center;
+
+                height: calc(100% - calc( var(--main-margin) * 2 ) );
+                margin: var(--main-margin);
+            } #swapModesButton:hover:not(:disabled):not(:active) {
+                border-color: #9ED868;
+                box-shadow: inset 0 0 0 1px #7dad50;
+                background: linear-gradient(to bottom, #4b4e48, #434a3d);
+            } #swapModesButton:disabled {
+                background: #f4f4f4;
+                box-shadow: inset 0 0 0 0px;
+                border-color: #b4b4b4;
+                border-width: 2px;
+                color: #838383;
+            } #swapModesButton:active {
+                border: 1px solid #9ED868;
+                box-shadow: inset 0 0 0 1px #7dad50;
+                background: linear-gradient(to bottom, #5f6f50, #555d4d);
+            }
+
+            /* EXTRAS */
+            u {
+                border-bottom: .5px solid #b9b9b9;
+                text-decoration: none;
+            }
+            hr {
+                border: 0px;
+                max-width: 90%;
+                min-width: 10px;
+                height: 1px;
+                margin-inline: auto;
+                margin-top: 5px;
+                margin-bottom: 5px;
+                background-image: linear-gradient(to right, #FFFFFF00, #FFFFFFDf, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFFDf, #FFFFFF00); /* You may notice that there are a copious amount of gradient stops - It sucks, but it works and that's all I ask of it.*/
+            } 
+            .vr { /* Vertical Rules don't exist, sadly. If they ever do, please replace all instances of this with the real thing. */
+                grid-area: 'vr';
+                border: 0px;
+                height: 100%;
+                margin-inline: 5px;
+                min-height: 10px;
+                width: 1px;
+                background-image: linear-gradient(to bottom, #FFFFFF00, #FFFFFF00, #FFFFFFDf, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFFDf, #FFFFFF00, #FFFFFF00); /* You may notice that there are a copious amount of gradient stops - It sucks, but it works and that's all I ask of it.*/
+            }
+        </style>
+    
+    
+    </head>
+    <body style="margin: 0; padding: 0;">
+        <div id="mainModeIdentifier"></div> <!-- The javascript needs this to exist so that it knows you're on main mode. Unless you plan on refactoring the javascript, DO NOT REMOVE THIS.-->
+        <iframe id="backgroundIframe" title="Background Iframe"></iframe> <!-- THIS IS FOR THE BACKGROUND. NOT THE PAGE. DO NOT GET THESE MIXED UP! -->
+        <div id="gigaDiv">
+            <div id="leftSide">
+                <h4 class="navBarTitle">Paco's Place</h4>
+                <hr> <!-- It's the easiest thing to do, okay? -->
+                <div id="navBarItemContainer">
+                    <!-- All the buttons and their respective icons are inserted via Javascript and a list that's contained in, well, the Javascript. Normally I'd be doing it manually but there's a LOT of buttons and because of this it's gonna be data-driven. -->
+                </div>
+            </div>
+
+            <div id="topSide">
+                <div id="socialMediaButtonContianer">
+                    <!-- All the buttons and their respective icons are inserted via Javascript and a list that's contained in, well, the Javascript. Normally I'd be doing it manually but there's a LOT of buttons and because of this it's gonna be data-driven. -->
+                </div>
+                <div class="vr"></div>
+                <div id="swapModesButtonContainer">
+                    <button id="swapModesButton">Swap Modes</button>
+                    <!-- swapModesButton has some stuff done with shared.js. The id is important, and it having a click event is twice as important. -->
+                </div>
+            </div>
+            
+            <div id="mainIframeContainer"> <!-- Just so that future me can remember, opening a link from an iframe will automatically open the link inside the iframe. That is to say, the system melonking uses requires 0 effort on your end. All you gotta do is tell the link to open in the current tab and you're good. -->
+                <iframe id="mainIframe" title="Main Iframe" allow="autoplay" allowtransparency="false"></iframe> <!-- The default source page is selected by the javascript. -->
+
+            </div>
+        </div>
+
+
+
+        <script src="./shared.js"> </script> 
+    </body>
+</html>

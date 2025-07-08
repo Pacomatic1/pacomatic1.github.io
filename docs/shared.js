@@ -20,7 +20,7 @@ const navBarItemLookupTable = [
     [0, "Landing Page", " ", 0, "./pages/landing/index.html", ""],
     [0, "Home", "assets/navbar-icons/3ds-home-menu-icon.svg", 0, "./pages/home/index.html", "margin-bottom:-2px; height: auto; width: 16px; margin-right: 4px;"],
     [0, "Sites I Like", "", 0, "./pages/sites_i_like/index.html", ""],
-    [0, "Projects", "", 0, "./pages/projects/index.html", ""]
+    // [0, "Projects", "", 0, "./pages/projects/index.html", ""]
 ];
 
 const socialLinksItemLookupTable = [

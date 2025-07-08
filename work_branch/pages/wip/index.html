@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <script src="../shared.js"> </script>
+        <link rel="stylesheet" href="./7.css">
+        <link rel="icon" type="image/x-icon" href="./favicon.png">
+        <title>
+            Sumimasen!
+        </title>
+
+        <style>
+            body {
+                margin:0px;
+                padding:0px;
+                height: 100vh;
+                width: 100vw;
+                display:flex;
+                background-image: url("./bg-optimized.jpg");
+                background-position: 0%;
+                background-size: cover;
+                background-attachment: fixed;
+                background-repeat: no-repeat;
+            }
+            .window-body {
+                text-align: center;
+            }
+            #mainWindow {
+                width: 30rem;
+                margin: auto;
+                display:block;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="window active" id="mainWindow">
+            <div class="title-bar">
+            <div class="title-bar-text">Sorry dude.</div>
+            <div class="title-bar-controls">
+                <button aria-label="Minimize"></button>
+                <button aria-label="Maximize"></button>
+                <button aria-label="Close"></button>
+            </div>
+            </div>
+            <div class="window-body has-space">
+                <p>
+                    Sorry! This page is under construction. Please contact the webmaster in the guestbook.
+                </p>
+                <a href="../guestbook/index.html"><button> Guestbook </button></a>
+            </div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,1 @@
+For reasons that I don't want to elaborate on, each mode 7 background is it's own, completely separate codebase. If you update one and want that update to come to everything else, please put that update in mode7_template and copy it to all the other pages.

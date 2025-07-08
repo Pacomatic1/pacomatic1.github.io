@@ -1,0 +1,549 @@
+<html>
+    <head>
+
+        <script src="../shared.js"> </script>
+
+        <style>
+            @import url('7_scrollbar.css');
+            @import url('7.scoped.css');
+            @import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+            /* .noto-sans-<uniquifier> {
+                font-family: "Noto Sans", sans-serif;
+                font-optical-sizing: auto;
+                font-weight: <weight>; Anything from 100 to 900.
+                font-style: normal;
+                font-variation-settings:
+                    "wdth" 100;
+            } */
+
+
+            body {
+                background-color: #350a0a;
+                margin:0px;
+                padding:0px;
+
+            }
+
+            #gigaDiv {
+                min-width: 40em;
+            }
+
+
+
+
+            /* GIGACLASSES */
+
+            .WindowIntoBG {
+                margin-left:0px;
+                margin-right:0px;
+                margin-top:0px;
+                margin-bottom:0px;
+                background-repeat: no-repeat;
+                background-attachment: fixed;
+                background-size: 100% 100%;
+                background-size: cover;
+                padding-bottom: 0px;
+                padding-top: 0px;
+                background-color: #121212;
+                max-width: 100%;
+            }
+            .standardText {
+                font: 12pt "Ubuntu", sans-serif;
+                font-weight: 400;
+                color: #ffffff;
+                filter: drop-shadow(0px 0px 1rem black);
+            } a.standardText {
+                color:rgb(125, 135, 212);   
+            } a.standardText:visited {
+                color: #b087dc
+            }
+
+
+            /* INDIVIDUAL ELEMENTS */
+            #topWindow {
+                width: 100%;
+                height: 20em;
+                background-image: url('./assets/backgrounds/mc_pc_optimized.webp');
+                background-position: bottom;
+                position: relative;   
+                /* DO NOT SET THE Z-INDEX TO A NEGATIVE NUMBER. This will cause all of its contents to become unclickable and require JS or 'Tab/Enter mode' which is anything but ideal. */
+                margin: 0px;
+            }
+
+            #gradientAtBottomOftopWindow {
+                width: 100%;
+                height:5em;
+                background-image: linear-gradient(to top, #000000FF, #00000000);
+                margin: 0px;
+                position:absolute;
+                bottom:0;
+            }
+
+            #heroSection {
+                width: 100%;
+                height: 6em;
+                padding-inline: auto;
+                margin: 0px;
+                text-align: center;
+                font: 3em "Ubuntu", sans-serif;
+                font-weight: 400;
+                color: #ffffff;
+                text-shadow:#000000 0px 0px 10px;
+                position: absolute;
+                bottom:0;
+            }
+            #pacoHeroImage {
+                height: 100%;
+                width: auto;
+                margin:0px;
+                margin-inline: auto;
+                filter: drop-shadow(0px 0px 5px black);
+            }
+            #pageContentsSection {
+                background-image: url('./assets/backgrounds/pixel_bg_a_4x.png');
+                margin: 0px;
+                padding-top: 10px;
+                z-index: 0;
+                display: grid;
+                grid-template-columns: auto 25em;
+				grid-template-areas: 
+                "basePageContents featuredPageContents"
+                ;
+            }
+            #introText {
+                margin: 0px;
+                padding-inline: 1rem;
+            }
+            #pacoStatsBody {
+                background-color: rgb(240,240,240);
+            }
+            #pacoStatsContainer {
+                width: 300px;
+            }
+            #statsWindow {
+                border: none;      
+                width: 100%;      
+                margin-inline: auto; 
+                height: 11em;
+                grid-area: statsWindow;
+            }
+            #bskyEmbed {
+                border: none;      
+                width: 100%;      
+                margin-inline: auto; 
+                height: 4.2em;
+                grid-area: bskyEmbed;
+            }
+            #basePageContents {
+                grid-area: basePageContents;
+            }
+            #featuredPageContents {
+                grid-area: featuredPageContents;
+                padding-inline: 10px;
+                display: grid;
+                row-gap: .5em;
+                grid-template-rows: min-content min-content;
+				grid-template-areas: 
+                "statsWindow" "bskyEmbed"
+                ;
+            }
+
+            #oldSiteArchiveButton {
+                background: linear-gradient(to bottom, #282828, #161616);
+                border: 1px solid #232323;
+                border-radius: 0px 4px 4px 0px;
+                box-shadow: inset 0 0 0 1px #3e3e3e;
+                color: #ffffff;
+                font: 9pt "Noto Sans", sans-serif;
+                
+                min-height: 23px;
+                min-width: 75px;
+                padding: 0 12px;
+                text-align: center;
+                overflow: clip;
+            } #oldSiteArchiveButton:hover:not(:active) {
+                background: linear-gradient(to bottom,  #474747, #262626);
+            } #oldSiteArchiveButton:active {
+                border: 1px solid #9ED868;
+                box-shadow: inset 0 0 0 1px #7dad50;
+                background: linear-gradient(to bottom, #5f6f50, #555d4d);
+            }
+            #oldSiteArchiveButtonImage {
+                background: linear-gradient(to bottom, #712828, #511515);
+                border: 1px solid #350a0a;
+                border-radius: 4px 0px 0px 4px;
+                box-shadow: inset 0 0 0 1px rgb(98, 35, 35);
+                color: #ffffff;
+                font: 9pt "Noto Sans", sans-serif;
+                min-height: 23px;
+                width: 23px;
+                padding: 0 0px;
+                text-align: center;
+                overflow: clip;
+                display:flex;
+            }
+            #oldSiteArchiveButtonLink {
+                display: flex;
+                z-index:10;
+                position:absolute;
+                bottom:0;
+                text-align:right;
+                margin-inline: 10px;
+                margin-bottom: 10px;
+                text-decoration: none;
+            }
+            #oldSiteArchiveButtonLink img {
+                width: 70%;
+                height: auto; 
+                margin-inline:auto;
+            }
+
+            #songPlayingText {
+                margin: 1rem;
+                position:absolute;
+                bottom:0;
+                right:0;
+                z-index: 100;
+            }
+
+            #YTembedContainer {
+                width: 23.5em;
+                height: 4em;
+                background-color: #0F0F0F;
+                border: 1px solid #3F3F3F;
+                border-radius: 3px;
+                margin-inline: auto;
+                margin-bottom: 10px;
+                padding: none;
+                display: grid;
+                grid-template-columns: minmax(min-content, max-content) auto;
+                grid-template-areas: "profilePic embedText";
+            } #YTembedContainer:hover {
+                background-color: #1a1a1a;
+            } #YTembedContainer:active {
+                background-color: #2a2a2a;
+            } #YTembedContainer img {
+                width: 3em;
+                height: auto;
+                border-radius: 50%;
+                margin-inline: auto;
+                margin: 0.5em;
+                grid-area: profilePic;
+
+            } #YTembedContainer p {
+                font: 8pt "Roboto", sans-serif;
+                color: #ffffff;
+                margin: 0px;
+                padding-top: 10px;
+                padding-bottom: 10px;
+                text-align: left;
+                grid-area: embedText;
+            } #YTembedName {
+                font-size: 1.3rem;
+                font-weight: 700;
+                color: #ffffff;
+                grid-area: YTembedName;
+                margin-top: auto;
+                margin-bottom: 0px;
+            } #YTembedHandle {
+                font-size: 0.8rem;
+                font-weight: 400;
+                color: #ffffff;
+                grid-area: YTembedHandle;
+                margin-top: 0px;
+                margin-bottom: auto;
+            } a.YTembedLink, a.YTembedLink:visited {
+                text-decoration: none;
+                color: inherit;
+                outline: 0;
+                cursor: auto;
+            } a.YTembedLink:hover, a.YTembedLink:focus, a.YTembedLink:active {
+                text-decoration: underline;
+                color: #ffffff;
+                cursor: pointer;
+            }
+            
+
+
+
+
+            #mcItemLinkGrid {
+                display:grid;
+                grid-template-columns: minmax(min-content, max-content);
+                grid-template-areas: "whyIMadeThis sitesILike";
+                padding:1em;
+            }
+            .mcItemLinkContainer {
+                height: auto;
+                width: 8em;
+                margin: 0px;
+                white-space: nowrap; 
+            } .mcItemLinkContainer p {
+                font: 9pt "Ubuntu", sans-serif;
+                font-weight: 400;
+                color: #ffffff;
+                filter: drop-shadow(0px 0px 1rem black);
+                text-align: center;
+                margin: 0px;
+                margin-bottom: 0.1rem;
+                padding: 0px;
+            } .mcItemLinkContainer div {
+                width: 100%;
+                height: 8em;
+                border: 0px;
+                padding: 0px;
+                background-image: url('./assets/images/mc_hotbar_frame_16x.png');
+                background-size: 8em 8em;
+            } .mcItemLinkContainer div button {
+                height: 100%;
+                width: 100%;
+                background: none;
+                padding: 0px;
+                border: 0px;
+                transition: 50ms ease-out 50ms;
+                overflow: visible;
+            } .mcItemLinkContainer div button:hover {
+                transform:scale(1.2);
+            } .mcItemLinkContainer div button img {
+                width: 60%;
+                height: auto;
+                /* image-rendering: pixelated; Looks really bad on low-res screens, and high-res when not using integer scale */
+                filter: drop-shadow(0px 0px 1rem black);
+            }
+
+
+
+
+
+            /* SOCIAL MEDIA BUTTONS */
+            #socialMediaButtonContainer {
+                margin: 0px;
+                padding: 0px;
+                height:3em;
+                background-color: #000000CC;
+                color: #ffffff;
+                position:fixed;
+            }
+            .socialMediaButton {
+                height: 3em;
+                background-repeat: no-repeat;
+                margin-bottom: 2px;
+                box-shadow: none;
+                border: none;
+                display: inline-block;
+                background-color: #000000DD;
+            } .socialMediaButton:hover:not(:disabled):not(:active) {
+                border: 1px solid #5B5B5B;
+            }
+            .socialMediaButtonImage {
+                height: 2em;
+                width: auto;
+                margin-inline: auto;
+            }
+            #finalButtonInButtonList {
+                border-bottom-right-radius: 12px;
+            }
+
+
+
+        </style>
+
+
+
+
+    </head>
+
+    <body class="has-scrollbar">
+        <audio src="./assets/rafflesia_plaza.mp3" autoplay loop></audio>
+        <div id="gigaDiv"> <!-- You'd be surprised by how often a gigaDiv comes in handy. -->
+            
+            <div class="windowIntoBG" id="topWindow">
+                <div id="socialMediaButtonContianer">
+                    <!-- Contents are injected via javascript. -->
+                </div>
+                <div id="heroSection">
+                    <img src="./assets/images/pacomatic-hero-4x.png" id="pacoHeroImage" decoding="async" loading="lazy" alt="Big text saying 'Pacomatic.'"/> <!-- As slow as it is, using an image that was upscaled by Nearest Neighbor and then rendered via Bilinear is the simplest way to provide maximum quality. The quality gains are good enough that I can justify the loading times. -->
+                </div>
+                <a id="oldSiteArchiveButtonLink" href="../old_site_archive/index.html">
+                    <div id="oldSiteArchiveButtonImage"> 
+                        <img src="./assets/socialmedia-icons/internet_archive_logo.svg" alt="Old Site Archive" title="Old Site Archive"/>
+                    </div>
+                    <button id="oldSiteArchiveButton">
+                        Old Site Archive
+                    </button>
+                </a>
+                <p class="standardText" id="songPlayingText">Now playing: Rafflesia Online - Plaza</p>    
+                <div id="gradientAtBottomOftopWindow"></div>
+            </div>
+
+
+
+
+            <div id="pageContentsSection">
+                <div id="basePageContents">
+                    <p class="standardText" id="introText">
+                        Welcome! This is my site, my own personal corner of the internet. <br>
+                        This place is amazing, simply because it being a website means I can do whatever I want! <br>
+                        Seriously, this stuff is awesome. Go make your own site, you'll see what I mean.
+                    </p>
+
+                    <div id=mcItemLinkGrid>
+
+
+                        <div class="mcItemLinkContainer" style='grid-area: whyIMadeThis;'>
+                            <p>Story of the Site</p>
+                            <div>
+                                <a href="../story_of_the_site/index.html">
+                                    <button>
+                                        <img src="./assets/images/mc_written_book_16x.png" alt="Minecraft Book Icon" decoding="async" loading="lazy">
+                                    </button>
+                                </a>
+                            </div>
+                        </div>
+
+                        <!-- <div class="mcItemLinkContainer" style="grid-area: sitesILike;">
+                            <p>Sites I like</p>
+                            <div>
+                                <a href="../sites_i_like/index.html">
+                                    <button>
+                                        <img src="./assets/images/mc-compass/mc-compass-animated.png" alt="Minecraft Compass Icon" decoding="async" loading="lazy">
+                                    </button>
+                                </a>
+                            </div>
+                        </div> Removed, felt unfitting for the home page since the thing was on the navbar anyways. But if you ever wanna re-add it, it'll be here. Waiting ever so patiently.-->
+                    
+                    
+                    </div>
+                    <!-- <iframe id="theCorporationYTEmbed" src="https://www.youtube.com/embed/6v8e7dUwq_Q" title="The Corporation | in HD  | Feature Documentary" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe> -->
+                </div>
+                <div id="featuredPageContents">
+                    <iframe id="statsWindow" src="stats_iframe.html" allowtransparency="true" tabindex="-1"><!-- I hate this so much. If 7.css's scoped version wasn't so picky, I would do this with a div like a smart person. Alas, I don't have the patience to fix this problem. Forgive me. --></iframe>
+                    <iframe id="bskyEmbed" src="https://pacomatic1.github.io/Goofy-ahh-Bsky-Profile-Embed/?profile=pacomatic.bsky.social" allowtransparency="true"></iframe> <!-- I went on a sidequest for this 💀 -->
+                    <div id="YTembedContainer"> <!-- I was gonna make an actual embed, but stupid YouTube needs an authentication key to access public information. Doing this on a static site sucks. They should be more like Bluesky. -->
+                         <img src="./assets/images/yt_pfp_optimized.jpg">
+                         <p>
+                            <a class="YTembedLink" id="YTembedName">Pacomatic</a> <br>
+                            <a class="YTembedLink" id="YTembedHandle">@Pacomatic</a>
+                         </p>     
+                    </div>
+
+
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+        <script>
+            const socialLinksItemLookupTable = [
+                // This is an array of arrays. The contents of each array are as follows:
+                // [0] is the type. This determines the values of everything afterwards.
+
+                // If [0] is 0, it's a button.
+                    // [1] is the buttons's name. Note that there is no margin between the icon and the text, so you're gonna have to do it yourself using custom styling or a space before the text starts.
+                    // [2] is the **relative path** to the button's icon, staring from this page. Keep in mind that this icon is done with the 'src' attribute of an <img> tag inside the button tag, so make surethat your icon is suppported by the <img>. If you don't want an icon, 
+                    // [3] and [4] control what the item does.
+                        // If [3] is 0, nothing will happen. It is unused.
+                        // If [2] is 1, then it will open inside the iframe.
+                        // If [3] is 2, then it will be a button and [3] will be a link that opens in a new tab.
+                    // [5] is the per-button styling applied to the image within the button. Just so you have a loose idea of what's what, the result will look like <img [other stuff] style="whatever you put inside 5">. As you may have guessed, this has no support for classes or anything so only use it for things that apply to one button and nobody else. If you have nothing to style with, then leave it as a blank string: ""
+                    // [6] is the title of the button. It's what appears when you hover over it.
+                    // [7] is the alt of the button. It's what you see when the image fails to load or if the user needs assistive technology.
+
+                // If it wasn't immediately obvious, this is based onthe navBar system.
+                [0, "", "assets/images/downarrow_4x_optimized.webp", 1, "#pageContentsSection", "", "If you don't have a mouse, these icons suck. So here you go.", "Skip"],
+                [0, "", "assets/socialmedia-icons/youtube_icon.svg", 2, "https://www.youtube.com/user/AmmarZawar", "", "Pacomatic! That is my channel.", "YouTube"],
+                [0, "", "assets/socialmedia-icons/bsky_logo.svg", 2, "https://bsky.app/profile/pacomatic.bsky.social", "", "It took me an astoundingly long time to get an account for social media that isn't Reddit or YoiTube. Ain't that a thing?", "Bluesky"],
+                [0, "", "assets/socialmedia-icons/github_logo.svg", 2, "https://github.com/pacomatic1/", "", "If I open-source dode, it's usually here. ", "GitHub"],
+                [0, "", "assets/socialmedia-icons/reddit_logo.svg", 2, "https://www.reddit.com/user/Pacomatic", "transform: scale(1.5);", "u/Pacomatic, that is me.", "Reddit"],
+                [0, "", "assets/socialmedia-icons/itch_logo.svg", 2, "https://pacomatic1.itch.io/", "", "I sometimes make games here. It's a very nice service.", "Itch.io"],
+                [0, "", "assets/socialmedia-icons/steam_logo.svg", 2, "https://steamcommunity.com/id/Pacomatic1/", "transform: scale(1.9);", "It's not an addiction, I promise! It's simply one of the best services in PC gaming.", "Steam"],
+                [0, "", "assets/socialmedia-icons/internet_archive_logo.svg", 2, "https://archive.org/details/@pacomatic", "", "Internet Archive. Preserving history is important, and for that I love them.", "Internet Archive"],
+                [0, "", "assets/socialmedia-icons/scratch_logo.png", 2, "https://scratch.mit.edu/users/Pacomatic33/", "", "Scratch is powerful, dude!", "Scratch"],
+                [0, "", "assets/socialmedia-icons/pixilart_logo.webp", 2, "https://pixilart.com/pacomatic", "", "It's spelled 'Pixil', not 'Pixel'. Big difference.", "Pixil Art"],
+                [0, "", "assets/socialmedia-icons/dreams_imp_img.svg", 2, "https://indreams.me/Pacomatic1", "", "I wish this game had lved longer. It could have been Roblox but with the shovelware all buried at the bottom!", "Dreams"],
+                [0, "", "assets/socialmedia-icons/recroom_logo.png", 2, "https://rec.net/user/Pacomatic1", "", "My Rec Room account. it's like VR Chat but with public lobbies that aren't full of freaksters.", "Rec Room"],
+                [0, "", "assets/socialmedia-icons/retroacheivements_logo.svg", 2, "https://retroachievements.org/user/Pacomatic", "", "Achievement hunters rejoice!", "RetroAcheivements"],
+                [0, "", "assets/socialmedia-icons/pastebin-logo.png", 2, "https://pastebin.com/u/Pacomatic", "", "It's a nice thing to have, you know.", "Pastebin"]
+            ];
+            
+
+
+
+            propagateSocialMediaList();
+            addYTembedLinks();
+
+
+            function addYTembedLinks() {
+                var allElementsToSetYTLinkOn = document.getElementsByClassName("YTembedLink");
+                for(let i = 0; i < allElementsToSetYTLinkOn.length; i++) {
+                    var elementToModify = allElementsToSetYTLinkOn[i];
+                    elementToModify.href = "https://www.youtube.com/user/AmmarZawar";
+                    elementToModify.target = "_blank";
+                }
+                document.getElementById("YTembedContainer").addEventListener('click', function (event) {
+                    open("https://www.youtube.com/user/AmmarZawar", "_blank");
+                });
+            }
+
+            function propagateSocialMediaList() {
+                const socialMediaContainer = document.getElementById("socialMediaButtonContianer");
+                for (let i = 0; i < socialLinksItemLookupTable.length; i++) {
+                    // In order to understand this, you need to understand socialLinksItemLookupTable.
+                    // Since everything depends on the type, I'll at least tell you this: socialLinksItemLookupTable[i][0] is the item's type.
+                    if (socialLinksItemLookupTable[i][0] == 1) {
+                        console.log('ack')
+                    };
+                    if (socialLinksItemLookupTable[i][0] == 0) { // 0 or 1, if its one then it's handled inisde the if. Otherwise it'll be treated as a 0.
+                        var anchorThatSurroundsTheButton = document.createElement("a"); // This <a> tag is crucial for adding interactivity. No interactivity = useless buttons, so use this.
+
+                        var buttonToCreate = document.createElement("button");
+                        buttonToCreate.className = "socialMediaButton";
+                        buttonToCreate.type = "button";
+
+                        // For the contents of the button, I want to add the text after the image and its custom styling, and that's best done via appending. As such, I'm doing all the complicated image stuff and THEN doing the text stuff.
+                        var imageWithinTheButton = document.createElement("img");
+                        imageWithinTheButton.loading = "lazy";
+                        imageWithinTheButton.decoding = "async";
+                        imageWithinTheButton.src = socialLinksItemLookupTable[i][2];
+                        imageWithinTheButton.style = socialLinksItemLookupTable[i][5];
+                        imageWithinTheButton.className = "socialMediaButtonImage";
+                        buttonToCreate.appendChild(imageWithinTheButton);
+                        buttonToCreate.innerHTML += socialLinksItemLookupTable[i][1]; 
+                        
+                        anchorThatSurroundsTheButton.title = socialLinksItemLookupTable[i][6];
+                        imageWithinTheButton.alt = socialLinksItemLookupTable[i][7];
+
+
+                        // "What does the button do?"
+                        switch(socialLinksItemLookupTable[i][3]) {
+                            case 0:
+                                console.log("This button is supposed to do nothing, you buffoon!")
+                                break;
+                            case 1:
+                                anchorThatSurroundsTheButton.href = socialLinksItemLookupTable[i][4];
+                                break;
+                            case 2:
+                                anchorThatSurroundsTheButton.href = socialLinksItemLookupTable[i][4];
+                                anchorThatSurroundsTheButton.target = "_blank";
+                                break;
+                        }
+                        if (i == socialLinksItemLookupTable.length - 1) {
+                            buttonToCreate.id = "finalButtonInButtonList";
+                        }
+                        socialMediaContainer.appendChild(anchorThatSurroundsTheButton);
+                        anchorThatSurroundsTheButton.appendChild(buttonToCreate);
+                    }
+                }
+
+
+            }
+
+        </script>
+    </body>
+
+
+</html>
