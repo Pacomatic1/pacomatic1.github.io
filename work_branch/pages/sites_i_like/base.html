@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html>
+    <!-- IF YOU WANT TO MODIFY THIS, YOU MUST INSTEAD MODIFY compile_node.js AND base.html. THIS IS BECAUSE THE GIFS ARE DONE WITH A PURPOSE-BUILT STATIC SITE GENERATOR SO ANY CHANGES ON index.html ARE USELESS. -->
+    <head>
+        <title>Bye-bye bandwidth!</title>
+        <script src="../shared.js"> </script>
+        <style>
+            @import url('./assets/7_scrollbar.css');
+            @import url('https://fonts.googleapis.com/css2?family=Cal+Sans&display=swap');
+            @font-face {
+                font-family: "Segoe UI";
+                src:
+                    local("Segoe UI"),
+                    url("./assets/segoe-ui/segoeuithis.ttf") format("truetype")
+            }
+
+            :root {
+                color:#ffffff;
+                size: 12pt;
+                text-shadow: 1px 1px 3px #000000;
+                font-family: 'Segoe UI';
+                
+            }
+
+            body {
+                margin: 0px;
+                padding: 0px;
+                background-color: #403239;
+            }
+
+            #megaContainer {
+                
+
+            }
+            .basicText {
+                text-align: center;
+            }
+
+            #superArchiveContainer {
+                padding: 0.5em;
+            }
+
+
+            #startingText {
+            }
+
+
+            .archiveSite {
+                margin: .08em;
+            }
+
+            .archiveSite-nearestfilter {
+                image-rendering: pixelated;
+            }
+            .archiveSite-smoothfilter {
+                image-rendering: smooth;
+            }
+
+
+
+
+
+
+
+
+            #sitesILikeBanner {
+                width:100%;
+                text-align: center;
+                color: #ffffff;
+                font: 30pt 'Cal Sans', 'sans-serif';  /* Other stuff within is styled in em, so change the font and you change the image too */
+                /* Centering */
+                display: flex;
+                flex-flow: right nowrap;
+                align-items: center;
+                justify-content: center;
+            }
+            #sitesILikeBanner p {
+                margin: 0px;
+                padding: 0px;
+            }
+            #sitesILikeBanner div {
+                height: 100%;
+                /* Centering */
+                display: flex;
+                /* Width is intentionally unspecified; leave that to the image. */
+                margin-inline: .2em;
+            }
+            #sitesILikeBanner div img {
+                width: 2em;
+                height: auto;
+            }
+
+
+
+
+            #featuredSitesContainer {
+                padding: .2rem;
+                background-color: #34292e;
+                text-align: center;
+            }
+
+            .featuredSite {
+                min-width: auto;
+                height: 6em;
+                padding: .2em;
+            }
+
+
+
+
+            button {
+                vertical-align: top;
+                background: linear-gradient(to bottom, #454545, #3a3a3a);
+                border: 1px solid #232323;
+                border-radius: 4px;
+                box-shadow: inset 0 0 0 1px #5B5B5B;
+                color: #ffffff;
+                font-family: 'Segoe UI';
+                min-height: 23px;
+                min-width: 75px;
+                padding: 0 12px;
+                position: relative;
+                text-align: center;
+            } button:hover:not(:disabled):not(:active) {
+                border-color: #9ED868;
+                box-shadow: inset 0 0 0 1px #7dad50;
+                background: linear-gradient(to bottom, #4b4e48, #434a3d);
+            } button:disabled {
+                background: #f4f4f4;
+                box-shadow: inset 0 0 0 0px;
+                border-color: #b4b4b4;
+                border-width: 2px;
+                color: #838383;
+            } button:active {
+                border: 1px solid #9ED868;
+                box-shadow: inset 0 0 0 1px #7dad50;
+                background: linear-gradient(to bottom, #5f6f50, #555d4d);
+            }
+      
+
+            .musicCredits {
+                /*height: 100vh;
+                width: 100vw;*/
+                text-align: right;
+                color: white;
+                font-size: 0.8em;
+                font-family: 'Segoe UI';
+                font-weight:600;
+                position: fixed;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                margin-left:0px;
+                margin-right:2em;
+                z-index: 100;
+            }
+
+        </style>
+    </head>
+    <body class="has-scrollbar">
+        <audio src="./assets/c418dreiton.mp3" autoplay loop></audio>
+
+        <div id="megaContainer">
+            <div class="musicCredits">
+                <p>
+                    Now playing: C418 - Dreiton
+                </p>
+            </div>
+
+
+            <div id="sitesILikeBanner"> 
+                <p>Sites I like</p>
+                <div>
+                    <img src="./assets/mc-compass/mc-compass-animated.png">
+                </div>
+            </div>
+
+            <div id="startingText" class="basicText">
+                <p>
+                    The web is full of unique and wonderful websites, and I gotta shout 'em out. Come on, it's only fair.
+                </p>
+            </div>
+
+            <div id="featuredSitesContainer">
+                <!-- The contents of this container are generated in Javascript. See featuredSitesLookupTable. -->
+            </div>
+
+            <!-- The contents of this container are pre-compiled using an external python script. So that really odd-loking text inside the div is 100 intentional, if you wanna touch it please check the Node.js script first. I know the ID looks odd but that's intentional because this will NEVER APPEAR ELSEWHERE IN THE ENTIRE REST OF THIS FILE. GOT IT????? -->
+            <div id="superArchiveContainer" class="basicText">
+                NODEJS-IDENTIFIER-UNIQUENESS-893429874892374923874
+            </div>
+        </div>
+        <!-- Layout:
+            - "Hey! This WILL consume your bandwidth" 
+            - Add my 88x31 button! PS. Make sure to set scaling to nearest by default (in the provided code)
+            - Webcomics I like (Sabrina Online, Loading Artist, XKCD, Exocomics, Nyazche)
+            - 88x31 archive (this is probably gonna be huge. MAKE IT COME LAST!)
+        -->
+
+        <script>
+            var featuredSitesLookupTable = [
+                // This is an array of JS objects. Assume all properties are mandatory unless explicitly specified. Within is:
+                
+                // image: This is a RELATIVE PATH to the image you seek.
+                // unoptimizedImage: If the image is an optimized version, then put down the unoptimized version. This is currently unused, but I would like to make 'Open Image in New Tab' link to the unoptimiized version. Maybe. That's a feature for later. In the event the thing you already have is optimized, don't put anything here.
+                // resultingLink: Where should you go when you click on the image?
+                // altText: Used for screen reader and when the image doesn't load. DO NOT ADD FLAVOR TEXT, see titleText.
+                // titleText: This is the tooltip of every image. Add all the flavor text you want. 
+                {
+                    image: "./assets/sites/extraordinary_comics.jpg",
+                    resultingLink: "https://exocomics.com",
+                    alt: "ExoComics",
+                    titleText:"'Extraordinary' Comics. Short and sweet, kind of like a snack."
+                },
+                {
+                    image: "./assets/sites/sabrina_online.webp",
+                    unoptimizedImage: "assets/sites/unoptimized/sabrina_online.png",
+                    resultingLink: "https://www.sabrina-online.com",
+                    alt: "Sabrina Online.",
+                    titleText: "Sabrina Online. It's freaky but right (or left? i don't know) hand to God it's not exclusively for one-handed reading."
+                },
+                {
+                    image: "./assets/sites/theloadingartist.png",
+                    resultingLink: "https://loadingartist.com/",
+                    alt: "The Loading Artist.",
+                    titleText: "The Loading Artist. Spam that random button and you'll be fed for years."
+                },
+            ];
+        
+            loadFeaturedSites(featuredSitesLookupTable, document.getElementById('featuredSitesContainer'));
+
+            // This is an optimization.
+            var imageTags = document.querySelectorAll('img');
+            for (let i = 0; i < imageTags.length; i++) {
+                var tagToMod = imageTags[i]; 
+                // They only load when they're on-screen, and they don't lag you when they decode (since there's a million of 'em)
+                tagToMod.loading = "lazy";
+                tagToMod.decoding = "async";
+            }
+
+
+
+            function loadFeaturedSites(lookupTable, placeToPutStuff) { // placeToPutStuff uses innerHTML and modifies the tag directly. Just thought I'd mention that.
+                // See featuredSitesLookupTable for documentation on how this stupid format works. You're gonna need it if you want to understand this. 
+
+                for (var i = 0; i < lookupTable.length; i++) {
+                    var containerAnchor = document.createElement('a');
+                    var imageTag = document.createElement('img');
+                    imageTag.classList.add("featuredSite");
+                    
+                    imageTag.src = lookupTable[i].image;
+                    // unoptimizedImage is unused. But this is a reminder that it exists in case you need it sometime ;)
+                    imageTag.alt = lookupTable[i].altText;
+                    imageTag.loading = "lazy";
+                    imageTag.decoding = "async";
+
+                    
+                    containerAnchor.title = lookupTable[i].titleText;
+                    containerAnchor.href = lookupTable[i].resultingLink;
+                    containerAnchor.target = "_blank";
+                    
+                    // We have to put the image inside an anchor tag because images can't lead to links. Oh well, it's less of a hacky workaround and more of 'an established precedent' that was established before I was born. What the hell man??? 
+                    containerAnchor.appendChild(imageTag);
+                    placeToPutStuff.appendChild(containerAnchor);
+                }
+            }
+
+        </script>
+    </body>
+</html>

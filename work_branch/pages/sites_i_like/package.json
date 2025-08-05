@@ -1,0 +1,15 @@
+{
+  "name": "sites-i-like-compiler",
+  "version": "1.0.0",
+  "description": "Compiles this page because loading all these gifs via JS will kill the end user, and manually making them will kill me.",
+  "license": "ISC",
+  "author": "Pacomatic",
+  "type": "commonjs",
+  "main": "compile_node.js",
+  "scripts": {
+    "compile": "node compile_node.js"
+  },
+  "dependencies": {
+    "detect-file-encoding-and-language": "^2.4.0"
+  }
+}

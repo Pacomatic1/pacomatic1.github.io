@@ -6,6 +6,6 @@ Here are some things you NEED to know. Don't skip this stuff!
 
 2. This website is mostly written in hand-made HTML, no compilation needed.
     Sadly, 'mostly' is a thing I had to add for a reason.
-    That's because some of this site *is* statically compiled! However, the compilation in question is in several self-contained 'codebases'; for example, one thing'll use a hyper-specific purpose-built python script, another will use 11ty, and another will use a totally seperate version of 11ty.
+    That's because some of this site *is* statically compiled! However, the compilation in question is in several self-contained 'codebases'; for example, one thing'll use a hyper-specific purpose-built python script, another will use 11ty, another will use a totally seperate version of 11ty, and another will use Node.js.
     To make this slightly easier on you, I have a single python script that does all of this at once; see compile.py.
     You will need Python and Node.js, using the latest versions (as of August 2025).

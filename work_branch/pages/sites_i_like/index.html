@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html>
+    <!-- IF YOU WANT TO MODIFY THIS, YOU MUST INSTEAD MODIFY compile_node.js AND base.html. THIS IS BECAUSE THE GIFS ARE DONE WITH A PURPOSE-BUILT STATIC SITE GENERATOR SO ANY CHANGES ON index.html ARE USELESS. -->
     <head>
         <title>Bye-bye bandwidth!</title>
         <script src="../shared.js"> </script>
@@ -184,9 +185,9 @@
                 <!-- The contents of this container are generated in Javascript. See featuredSitesLookupTable. -->
             </div>
 
-            <!-- The contents of this container are pre-compiled using an external python script. So that really odd-loking text inside the div is 100 intentional, if ou wanna touch it please check the python script first. I know the ID looks like crap but that's fine because this will NEVER APPEAR ELSEWHERE IN THE ENTIRE REST OF THIS FILE. GOT IT????? -->
+            <!-- The contents of this container are pre-compiled using an external python script. So that really odd-loking text inside the div is 100 intentional, if you wanna touch it please check the Node.js script first. I know the ID looks odd but that's intentional because this will NEVER APPEAR ELSEWHERE IN THE ENTIRE REST OF THIS FILE. GOT IT????? -->
             <div id="superArchiveContainer" class="basicText">
-                PYTHON-IDENTIFIER-UNIQUENESS-893429874892374923874
+                <a title="https://medjed.nekoweb.org" href="https://medjed.nekoweb.org" target="_blank"><img class="archiveSite archiveSite-nearestfilter" src="./assets/sites/medjed-nekoweb.jpg" loading="lazy" decoding="async" alt="https://medjed.nekoweb.org"><a title="Visit melonking.net!" href="https://melonking.net" target="_blank"><img class="archiveSite archiveSite-smoothfilter" src="./assets/sites/melonking.gif" loading="lazy" decoding="async" alt="Visit melonking.net!"><a title="https://melankorin.net/" href="https://melankorin.net/" target="_blank"><img class="archiveSite archiveSite-nearestfilter" src="./assets/sites/melankorin.gif" loading="lazy" decoding="async" alt="https://melankorin.net/"><a title="Rocket into the Spark-Web!" href="https://darkosparko.nekoweb.org" target="_blank"><img class="archiveSite archiveSite-nearestfilter" src="./assets/sites/darkosparko.gif" loading="lazy" decoding="async" alt="Rocket into the Spark-Web!"><a title="https://dimden.dev/" href="https://dimden.dev/" target="_blank"><img class="archiveSite archiveSite-nearestfilter" src="./assets/sites/dimden.gif" loading="lazy" decoding="async" alt="https://dimden.dev/"><a title="https://planetclue.com/" href="https://planetclue.com/" target="_blank"><img class="archiveSite archiveSite-smoothfilter" src="./assets/sites/planetclue.gif" loading="lazy" decoding="async" alt="https://planetclue.com/"><a title="button by nepeta.pet" href="https://nekoweb.org" target="_blank"><img class="archiveSite archiveSite-nearestfilter" src="./assets/sites/nekoweb.gif" loading="lazy" decoding="async" alt="button by nepeta.pet"><a title="thinliquid's button" href="https://thinliquid.dev" target="_blank"><img class="archiveSite archiveSite-nearestfilter" src="./assets/sites/thinliquid.png" loading="lazy" decoding="async" alt="thinliquid's button"><a title="https://joo.sh" href="https://joo.sh" target="_blank"><img class="archiveSite archiveSite-smoothfilter" src="./assets/sites/joosh.gif" loading="lazy" decoding="async" alt="https://joo.sh"><a title="https://bomberfish.ca" href="https://bomberfish.ca" target="_blank"><img class="archiveSite archiveSite-nearestfilter" src="./assets/sites/bomberfish.gif" loading="lazy" decoding="async" alt="https://bomberfish.ca">
             </div>
         </div>
         <!-- Layout:
@@ -225,72 +226,7 @@
                     titleText: "The Loading Artist. Spam that random button and you'll be fed for years."
                 },
             ];
-            
-            var itemsLookupTable = [
-                // This is an array of JS objects. Assume all properties are mandatory unless explicitly specified. Within is:
-
-                // image: This is, well, the image. I dunno what to say.
-                // unoptimizedImage: If the image is an optimized version, then put down the unoptimized version. This is currently unused, but I would like to make 'Open Image in New Tab' link to the unoptimiized version. Maybe. That's a feature for later. In the event the thing you already have is optimized, don't put anything here.
-                // titleText: This is the flavor text that you see when you hover over it. This is optional.
-                // altText: This is what screenreaders and people who couldn't load the image will replace it with. No flavor text!! If left empty this will just be the link.
-                // resultingLink: This is a link to the site that the button would, well, link to.
-                // filterMode: nearest/smooth --- This determines the filtering mode when scaled. If left empty, it will default to smooth. 
-
-                {
-                    resultingLink: "https://medjed.nekoweb.org",
-                    image: "./assets/sites/medjed-nekoweb.jpg",
-                    filterMode: "nearest"
-                },
-                {
-                    resultingLink: "https://melonking.net",
-                    image: "./assets/sites/melonking.gif",
-                    altText: "Visit melonking.net!",
-                    filterMode: "smooth"
-                },
-                {
-                    resultingLink: "https://melankorin.net/",
-                    image: "./assets/sites/melankorin.gif",
-                    filterMode: "nearest"
-                },
-                {
-                    resultingLink: "https://darkosparko.nekoweb.org",
-                    image:"./assets/sites/darkosparko.gif",
-                    filterMode: 'nearest',
-                    altText: "Rocket into the Spark-Web!"
-                },
-                {
-                    resultingLink: "https://dimden.dev/",
-                    image: "./assets/sites/dimden.gif",
-                    filterMode: 'nearest'
-                },
-                {
-                    resultingLink: "https://planetclue.com/",
-                    image: "./assets/sites/planetclue.gif",
-                    filterMode: 'smooth'
-                },
-                {
-                    resultingLink: "https://nekoweb.org",
-                    image: "./assets/sites/nekoweb.gif",
-                    altText: "button by nepeta.pet",
-                    filterMode: 'nearest'
-                },
-                {
-                    resultingLink: "https://thinliquid.dev",
-                    image: "./assets/sites/thinliquid.png",
-                    altText: "thinliquid's button",
-                    filterMode: 'nearest'
-                },
-                {
-                    resultingLink: "https://joo.sh",
-                    image: "./assets/sites/joosh.gif",
-                    filterMode: 'smooth'
-                },
-                {
-                    resultingLink: "https://bomberfish.ca",
-                    image: "./assets/sites/bomberfish.gif",
-                    filterMode: "nearest"
-                }
-            ];
+        
             loadFeaturedSites(featuredSitesLookupTable, document.getElementById('featuredSitesContainer'));
 
             // This is an optimization.
