@@ -1,0 +1,56 @@
+[
+    {
+        "resultingLink": "https://medjed.nekoweb.org",
+        "image": "./assets/sites/medjed-nekoweb.jpg",
+        "filterMode": "nearest"
+    },
+    {
+        "resultingLink": "https://melonking.net",
+        "image": "./assets/sites/melonking.gif",
+        "altText": "Visit melonking.net!",
+        "filterMode": "smooth"
+    },
+    {
+        "resultingLink": "https://melankorin.net/",
+        "image": "./assets/sites/melankorin.gif",
+        "filterMode": "nearest"
+    },
+    {
+        "resultingLink": "https://darkosparko.nekoweb.org",
+        "image":"./assets/sites/darkosparko.gif",
+        "filterMode": "nearest",
+        "altText": "Rocket into the Spark-Web!"
+    },
+    {
+        "resultingLink": "https://dimden.dev/",
+        "image": "./assets/sites/dimden.gif",
+        "filterMode": "nearest"
+    },
+    {
+        "resultingLink": "https://planetclue.com/",
+        "image": "./assets/sites/planetclue.gif",
+        "filterMode": "smooth"
+    },
+    {
+        "resultingLink": "https://nekoweb.org",
+        "image": "./assets/sites/nekoweb.gif",
+        "altText": "button by nepeta.pet",
+        "filterMode": "nearest"
+    },
+    {
+        "resultingLink": "https://thinliquid.dev",
+        "image": "./assets/sites/thinliquid.png",
+        "altText": "thinliquid's button",
+        "filterMode": "nearest"
+    },
+    {
+        "resultingLink": "https://joo.sh",
+        "image": "./assets/sites/joosh.gif",
+        "filterMode": "smooth"
+    },
+    {
+        "resultingLink": "https://bomberfish.ca",
+        "image": "./assets/sites/bomberfish.gif",
+        "filterMode": "nearest"
+    }
+]
