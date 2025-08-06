@@ -3,10 +3,23 @@
 @import url(7_scrollbar.css);  /* This only applies to elements with .has-scrollbar. */
 
 /* LAYOUT */
+:root {
+    --childPageWidth: 40em;
+}
+
+
+
+#bannerContainer {
+    margin-inline: auto;
+    width: var(--childPageWidth);
+    margin-top: 2em;
+}
+
+
 #megaContainer {
     margin-inline: auto;
     display: grid;
-    grid-template-columns: 10em auto 10em;
+    grid-template-columns: auto var(--childPageWidth) auto;
     width: 60em;
     border-radius: 12pt;
     grid-template-areas: 
@@ -31,10 +44,11 @@
     border-top-left-radius: 0px;
     border-bottom-left-radius: 0px;
     margin-top: 5pt;
-
+    
     height: min-content;
-}
 
+    opacity: 0;
+}
 
 #childPage {
     z-index: 0;
@@ -64,6 +78,7 @@
     overflow-wrap: break-word;
     overflow-y: visible;
     margin: 0px;
+    padding: 1em;
     
     background: linear-gradient(to bottom, #3a3a3a, #313131);
     border: 2px solid #232323;
@@ -74,15 +89,22 @@
 
 h1:not(.ignore-master-css) {
     font-size: 5rem;
+    margin: 0px;
 }
 h2:not(.ignore-master-css) {
     font-size: 2.5rem;
+    margin: 0px;
+
 }
 h3:not(.ignore-master-css) {
     font-size: 2rem;
+    margin: 0px;
+
 }
 h4:not(.ignore-master-css) {
     font-size: 1.5rem;
+    margin: 0px;
+
 }
 u:not(.ignore-master-css) {
     border-bottom: .5px solid #b9b9b9;
@@ -93,7 +115,7 @@ code:not(.ignore-master-css), code *:not(.ignore-master-css) {
 }
 
 p:not(.ignore-master-css) {
-    padding-inline: 1rem;
+    /* padding-inline: 1rem; */
     
     margin-top: 0px;
     margin-bottom: 0px;
@@ -113,11 +135,6 @@ hr:not(.ignore-master-css) {
     background-image: linear-gradient(to right, #FFFFFF00, #FFFFFFDf, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFFDf, #FFFFFF00); /* You may notice that there are a copious amount of gradient stops - It sucks, but it works and that's all I ask of it.*/
 } 
 /* Funny story: I had these exact properties in div:not(.ignore-master-css).horizontalPageSeparator, but gave up and used a standard hr. GitHub Copilot noticed this and the suggestion it gave was to copy and paste all of my code, which was **exactly what I was going to do.** How many people have tried what I did and gave up?? */
-
-
-
-
-
 
 
 
@@ -157,45 +174,18 @@ button:active:not(.ignore-master-css) {
     background: linear-gradient(to bottom, #5f6f50, #555d4d);
 }
 
+:not(.ignore-master-css).searchBar {
+    font-family: Segoe UI, SegoeUI, Noto Sans, sans-serif;
+    color: #ffffff;
+    background: linear-gradient(to bottom, #363636, #313131);
+    border: 1px solid #232323;
+    border-radius: 4px;
+    padding: .4rem;
+    box-shadow: inset 0 0 0 1px #5B5B5B;
 
-
-
-
-
-/* Custom elements go here. Things that require a specific class or something. */
-
-div:not(.ignore-master-css).inset-box {
-    background-color: #222222;
-    border: 2px solid #404040;
+} :not(.ignore-master-css).searchBar::placeholder {
+    color:#a9a9a9;
 }
-
-div:not(.ignore-master-css).rounded-box {
-    background-color: #222222;
-    border: 2px solid #404040;
-    border-radius: 8px;
-} /* This doesn't play well with the scrollbar as the scrollbar renders on top of the rounded parts (so 1 or 2 sides aren't rounded). I agree, it's a greek tragedy. */
-
-
-:not(.ignore-master-css).fitBgBoilerPlate {
-    background-repeat: no-repeat;
-    background-size: 100% 100%;
-    background-size: cover;
-} /* This requires background-image to actually do... something. */
-
-:not(.ignore-master-css).text-align-middle {
-    text-align: center;
-} /* Seems stupid right now, but some limit of HTML is gonna pop up and it's gonna necessitate this. **Trust the process.** */
-
-div:not(.ignore-master-css).separatingBox {
-    border: 2px solid #404040;
-    background-color: #222222;
-
-
-
-}
-
-
-
 
 
 

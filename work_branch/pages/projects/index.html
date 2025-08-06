@@ -7,20 +7,43 @@
         </style>
     </head>
     <body class="has-scrollbar">
+        <div id="bannerContainer">
+            <p>HAWK</p>
+        </div>
+
         <div id="megaContainer">
             <div id="leftSide" class="bigContainerStyling">
-                <p>This is some beautiful test text.</p>
-            </div>
-            <div id="childPage" class="bigContainerStyling">
-                <p>I'm testing, mom! Get out!
-                    <br>
-                    SOK??? Like, the footwear?
-                    <br> That stupid thingy only gives me +1 DEF! What the heck!
+                <p>
+                    <h3>Eh?</h3>
+                    This is where you can find many of my smaller projects. Some of them are on this site, some of them are not.
                 </p>
             </div>
+            <div id="childPage" class="bigContainerStyling">
+                <p></p>
+                <input type="text" id="ProjectsSearchBar" onkeyup="SearchForProjects()" placeholder="Search by Name" title="Type in the name of one of my projects." class="searchBar">
+            </div>
             <div id="rightSide" class="bigContainerStyling">
-                <p>Testing with my friends. So fun, innit?</p>
+                <p>This thing was disabled with CSS. So... yeah.</p>
             </div>
         </div>
+        <script>
+            function SearchForProjects() {    //This script is used for the search bar, which has all my projects.
+                // Declare variables
+                var input, filter, ul, li, a, i;
+                input = document.getElementById("ProjectsSearchBar");
+                filter = input.value.toUpperCase();
+                ul = document.getElementById("ProjMenu");
+                li = ul.getElementsByTagName("li");
+                // Loop through all list items, and hide those who don't match the search query
+                for (i = 0; i < li.length; i++) {
+                    a = li[i].getElementsByTagName("a")[0];
+                    if (a.innerHTML.toUpperCase().indexOf(filter) > -1){
+                        li[i].style.display = "";
+                    } else {
+                        li[i].style.display = "none";
+                    }
+                }
+		    }
+        </script>
     </body>
 </html>
