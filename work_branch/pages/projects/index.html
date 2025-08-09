@@ -3,12 +3,12 @@
         <title>Projects</title>
         <script src="../shared.js"> </script>
         <style>
-            @import url("./prism.css");
+            @import url("./style.css");
         </style>
     </head>
     <body class="has-scrollbar">
         <div id="bannerContainer">
-            <p>HAWK</p>
+            <p>So... here I haveth, a lasere pointere...</p>
         </div>
 
         <div id="megaContainer">
@@ -20,18 +20,113 @@
             </div>
             <div id="childPage" class="bigContainerStyling">
                 <input type="text" id="ProjectsSearchBar" onkeyup="SearchForProjects()" placeholder="Search by Name" title="Type in the name of one of my projects." class="searchBar">
+                
                 <div id="projectListingContainer">
                     <div class="projectListing">
                         <div class="projectTitle">
-                            <h3 class="ignore-master-css">Clicking Palace</h3>
+                            <p class="ignore-master-css projectTitleText"><b>This is a project!</b></p>
                         </div>
-                        <div class="projectBanner"></div>
+                        <div class="projectBanner" style=""></div>
                         <div class="projectDescription">
-                            <p class="ignore-master-css">ACK!!</p>
+                            <p class="ignore-master-css">This is my 100% safe and kosher template description! What a beautiful summary... innit?</p>
+                        </div>
+                        <div class="projectDate">
+                            <p class="ignore-master-css">2024 - present</p>
+                        </div>
+                    </div>
+
+                    <div class="projectListing">
+                        <div class="projectTitle">
+                            <p class="ignore-master-css projectTitleText"><b>This is a project!</b></p>
+                        </div>
+                        <div class="projectBanner" style=""></div>
+                        <div class="projectDescription">
+                            <p class="ignore-master-css">This is my 100% safe and kosher template description! What a beautiful summary... innit?</p>
+                        </div>
+                        <div class="projectDate">
+                            <p class="ignore-master-css">2024 - present</p>
+                        </div>
+                    </div>
+
+                                        <div class="projectListing">
+                        <div class="projectTitle">
+                            <p class="ignore-master-css projectTitleText"><b>This is a project!</b></p>
+                        </div>
+                        <div class="projectBanner" style=""></div>
+                        <div class="projectDescription">
+                            <p class="ignore-master-css">This is my 100% safe and kosher template description! What a beautiful summary... innit?</p>
+                        </div>
+                        <div class="projectDate">
+                            <p class="ignore-master-css">2024 - present</p>
+                        </div>
+                    </div>
+
+                                        <div class="projectListing">
+                        <div class="projectTitle">
+                            <p class="ignore-master-css projectTitleText"><b>This is a project!</b></p>
+                        </div>
+                        <div class="projectBanner" style=""></div>
+                        <div class="projectDescription">
+                            <p class="ignore-master-css">This is my 100% safe and kosher template description! What a beautiful summary... innit?</p>
+                        </div>
+                        <div class="projectDate">
+                            <p class="ignore-master-css">2024 - present</p>
+                        </div>
+                    </div>
+
+                    <div class="projectListing">
+                        <div class="projectTitle">
+                            <p class="ignore-master-css projectTitleText"><b>This is a project!</b></p>
+                        </div>
+                        <div class="projectBanner" style=""></div>
+                        <div class="projectDescription">
+                            <p class="ignore-master-css">This is my 100% safe and kosher template description! What a beautiful summary... innit?</p>
+                        </div>
+                        <div class="projectDate">
+                            <p class="ignore-master-css">2024 - present</p>
+                        </div>
+                    </div>
+
+
+                                        <div class="projectListing">
+                        <div class="projectTitle">
+                            <p class="ignore-master-css projectTitleText"><b>This is a project!</b></p>
+                        </div>
+                        <div class="projectBanner" style=""></div>
+                        <div class="projectDescription">
+                            <p class="ignore-master-css">This is my 100% safe and kosher template description! What a beautiful summary... innit?</p>
+                        </div>
+                        <div class="projectDate">
+                            <p class="ignore-master-css">2024 - present</p>
+                        </div>
+                    </div>
+
+                                        <div class="projectListing">
+                        <div class="projectTitle">
+                            <p class="ignore-master-css projectTitleText"><b>This is a project!</b></p>
+                        </div>
+                        <div class="projectBanner" style=""></div>
+                        <div class="projectDescription">
+                            <p class="ignore-master-css">This is my 100% safe and kosher template description! What a beautiful summary... innit?</p>
+                        </div>
+                        <div class="projectDate">
+                            <p class="ignore-master-css">2024 - present</p>
+                        </div>
+                    </div>
+
+                                        <div class="projectListing">
+                        <div class="projectTitle">
+                            <p class="ignore-master-css projectTitleText"><b>This is a project!</b></p>
+                        </div>
+                        <div class="projectBanner" style=""></div>
+                        <div class="projectDescription">
+                            <p class="ignore-master-css">This is my 100% safe and kosher template description! What a beautiful summary... innit?</p>
+                        </div>
+                        <div class="projectDate">
+                            <p class="ignore-master-css">2024 - present</p>
                         </div>
                     </div>
                 </div>
-
 
             </div>
             <div id="rightSide" class="bigContainerStyling">
@@ -40,23 +135,35 @@
         </div>
         <script>
 
-            function SearchForProjects() { // This code is purly for reference. Since we're gonna do something that isn't just an unordered list of hyperlinks, you should change this wen you figure out what you wanna do. 
+            function SearchForProjects() { // This code is purely for reference. Since we're gonna do something that isn't just an unordered list of hyperlinks, you should change this wen you figure out what you wanna do. 
+                var inputElement = document.getElementById("ProjectsSearchBar");
+                var filteredValue = inputElement.value.toUpperCase();
+                
+                var listOfElements = Array.from(document.getElementsByClassName("projectListing"));
+                console.log(listOfElements);
+
+
+
+
+
+
                 // Declare variables
-                var input, filter, ul, li, a, i;
-                input = document.getElementById("ProjectsSearchBar");
-                filter = input.value.toUpperCase();
-                ul = document.getElementById("ProjMenu");
-                li = ul.getElementsByTagName("li");
-                // Loop through all list items, and hide those who don't match the search query
-                for (i = 0; i < li.length; i++) {
-                    a = li[i].getElementsByTagName("a")[0];
-                    if (a.innerHTML.toUpperCase().indexOf(filter) > -1){
-                        li[i].style.display = "";
-                    } else {
-                        li[i].style.display = "none";
-                    }
-                }
+                // var input, filter, ul, li, a, i;
+                // input = document.getElementById("ProjectsSearchBar");
+                // filter = input.value.toUpperCase();
+                // ul = document.getElementById("ProjMenu");
+                // li = ul.getElementsByTagName("li");
+                // // Loop through all list items, and hide those who don't match the search query
+                // for (i = 0; i < li.length; i++) {
+                //     a = li[i].getElementsByTagName("a")[0];
+                //     if (a.innerHTML.toUpperCase().indexOf(filter) > -1){
+                //         li[i].style.display = "";
+                //     } else {
+                //         li[i].style.display = "none";
+                //     }
+                // }
 		    }
+
         </script>
     </body>
 </html>
