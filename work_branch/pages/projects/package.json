@@ -1,0 +1,15 @@
+{
+  "name": "pacositeprojectspage",
+  "version": "1.0.0",
+  "description": "Static site generator, but stupid.",
+  "license": "ISC",
+  "author": "Pacomatic",
+  "type": "commonjs",
+  "main": "compile_node.js",
+  "scripts": {
+    "compile": "node compile_node.js"
+  },
+  "dependencies": {
+    "detect-file-encoding-and-language": "^2.4.0"
+  }
+}
