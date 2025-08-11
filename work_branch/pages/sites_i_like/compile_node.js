@@ -182,6 +182,5 @@ languageEncoding("./base.html").then((fileInfo) => {
     // The spot we'll replace is based on a tiny little important piece of text in the base.html, which says 'NODEJS-IDENTIFIER-UNIQUENESS-893429874892374923874'. This is the thing we replace, it (should) never appear anywhere else in that file. 
     var finalHTMLString = baseHTMLString.replace("NODEJS-IDENTIFIER-UNIQUENESS-893429874892374923874", web_buttons_final);
     fs.writeFileSync('./index.html', finalHTMLString);
+    console.log("Sites I Like: Done");
 })
-
-console.log("Sites I Like: Done")
