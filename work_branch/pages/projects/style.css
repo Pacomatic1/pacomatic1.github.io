@@ -5,6 +5,7 @@
 /* LAYOUT */
 :root {
     --childPageWidth: 50em;
+    --projectListingGradient: linear-gradient(to bottom, #454545, #3a3a3a);
 }
 
 
@@ -198,13 +199,14 @@ button:active:not(.ignore-master-css) {
     display: inline-block;
     margin: 12pt;
 }
+
 :not(.ignore-master-css).projectListing p {
     margin: 0;
     padding: 0;
 }
 :not(.ignore-master-css).projectListing .projectTitle {
     font-size: 12pt;
-    background: linear-gradient(to bottom, #454545, #3a3a3a);
+    background: var(--projectListingGradient);
     border: 1px solid #232323;
     border-radius: 4px 4px 0 0;
     box-shadow: inset 0 0 0 1px #5B5B5B;
@@ -223,7 +225,7 @@ button:active:not(.ignore-master-css) {
     background-image: url("./assets/banners/template.png");
 }
 :not(.ignore-master-css).projectListing .projectDescription {
-    background: linear-gradient(to bottom, #454545, #3a3a3a);
+    background: var(--projectListingGradient);
     border: 1px solid #232323;
     box-shadow: inset 0 0 0 1px #5B5B5B;
     height: 3rem;
@@ -233,7 +235,7 @@ button:active:not(.ignore-master-css) {
     margin: 0;
 }
 :not(.ignore-master-css).projectListing .projectDate {
-    background: linear-gradient(to bottom, #454545, #3a3a3a);
+    background: var(--projectListingGradient);
     border: 1px solid #232323;
     border-radius: 0 0 4px 4px;
     box-shadow: inset 0 0 0 1px #5B5B5B;

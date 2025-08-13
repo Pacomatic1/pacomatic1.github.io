@@ -21,23 +21,8 @@ var project_listings_final = "";
 
 for (var i = 0; i < project_listings_json.length; i++) {
 
-    //  <div class="projectListing">
-    //     <div class="projectTitle">
-    //         <p class="ignore-master-css projectTitleText"><b>This is a project!</b></p>
-    //     </div>
-    //     <a href="https://example.com" target="_blank">
-    //         <div class="projectBanner" style=""></div>
-    //     </a>
-    //     <div class="projectDescription">
-    //         <p class="ignore-master-css">This is my 100% safe and kosher template description! What a beautiful summary... innit?</p>
-    //     </div>
-    //     <div class="projectDate">
-    //         <p class="ignore-master-css">2024 - present</p>
-    //     </div>
-    // </div>
+    // ok so i decided to do accentcolor later because it's destroying me from the inside. come back l8er.
 
-    // Just so you remember: You have yet to implement accentColor.
-    // But once you do that the rest of this should be smooth sailing.
     var finalString = `
     <div class="projectListing">
         <div class="projectTitle">
