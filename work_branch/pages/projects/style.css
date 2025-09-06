@@ -8,7 +8,10 @@
     --projectListingGradient: linear-gradient(to bottom, #454545, #3a3a3a);
 }
 
-
+body {
+    margin: 0;
+    padding: 0;
+}
 
 #bannerContainer {
     margin-inline: auto;
@@ -47,8 +50,6 @@
     margin-top: 5pt;
     
     height: min-content;
-
-    opacity: 0;
 }
 
 #childPage {
@@ -123,7 +124,7 @@ hr:not(.ignore-master-css) {
     background-image: linear-gradient(to right, #FFFFFF00, #FFFFFFDf, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFFDf, #FFFFFF00); /* You may notice that there are a copious amount of gradient stops - It sucks, but it works and that's all I ask of it.*/
 } 
 /* Funny story: I had these exact properties in div:not(.ignore-master-css).horizontalPageSeparator, but gave up and used a standard hr. GitHub Copilot noticed this and the suggestion it gave was to copy and paste all of my code, which was **exactly what I was going to do.** How many people have tried what I did and gave up?? */
-
+a {}
 
 
 
@@ -168,6 +169,7 @@ button:active:not(.ignore-master-css) {
 
 
 
+
 :not(.ignore-master-css).searchBar {
     font-family: Segoe UI, SegoeUI, Noto Sans, sans-serif;
     color: #ffffff;
@@ -180,6 +182,7 @@ button:active:not(.ignore-master-css) {
 } :not(.ignore-master-css).searchBar::placeholder {
     color:#a9a9a9;
 }
+
 
 
 :not(.ignore-master-css)#projectListingContainer {
@@ -245,6 +248,23 @@ button:active:not(.ignore-master-css) {
     padding-inline: .4rem;
     margin: 0;
 }
+
+
+#backgroundAnimation {
+    width: 100vw;
+    height: 100vh;
+    object-fit: cover;
+    position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    pointer-events: none;
+    z-index: -100;
+}
+
+
+
 
 
 /* 

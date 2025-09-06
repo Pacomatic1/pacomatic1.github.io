@@ -7,6 +7,9 @@
         </style>
     </head>
     <body class="has-scrollbar">
+        <!-- I do not know how to do a plain old GLSL shader. Perhaps I can do this later, when my programming skills have improved. -->
+        <iframe frameborder="0" src="https://www.shadertoy.com/embed/XXtBRr?gui=false&t=10&paused=false&muted=false" allowfullscreen loading="lazy" id="backgroundAnimation"></iframe>
+
         <div id="bannerContainer">
             <p>So... here I haveth, a lasere pointere...</p>
         </div>
@@ -20,7 +23,6 @@
             </div>
             <div id="childPage" class="bigContainerStyling">
                 <p>Click on a project's image to go there!</p>
-
                 <input type="text" id="ProjectsSearchBar" onkeyup="SearchForProjects()" placeholder="Search by Name" title="Type in the name of one of my projects." class="searchBar">
                 
                 <div id="projectListingContainer">
@@ -29,27 +31,13 @@
 
                     NODEJS-UNIQUENESS-IDENTIFIER-HOWEEEEAAWWEEEEEEEEE2198732987926758239084617235239847
                     <!-- There are a lot of project listings and we'd rather not generate them with Javascript 'cause performance. As such, it's static site generator time, baby! 
-                    This identifier will be deleted and replaced with our project listings, so you should take exquisite care not to include that string anywhere else in the file. Ever. Never ever, you will be doomed like Newton and the box.-->
-                    <div class="projectListing">
-                        <div class="projectTitle">
-                            <p class="ignore-master-css projectTitleText"><b>This is a project!</b></p>
-                        </div>
-                        <a href="https://example.com" target="_blank">
-                            <div class="projectBanner" style=""></div>
-                        </a>
-                        <div class="projectDescription">
-                            <p class="ignore-master-css">This is my 100% safe and kosher template description! What a beautiful summary... innit?</p>
-                        </div>
-                        <div class="projectDate">
-                            <p class="ignore-master-css">2024 - present</p>
-                        </div>
-                    </div>
+                    This identifier will be deleted and replaced with our project listings, so you should take exquisite care not to include that string anywhere else in the file. Ever. Never ever, you will be doomed like Newton (the lightbulb) and the box.-->
 
 
                 </div>
             </div>
             <div id="rightSide" class="bigContainerStyling">
-                <p>This thing was disabled with CSS. So... yeah.</p>
+                <p>Background comes from <a href="https://www.shadertoy.com/view/XXtBRr">here.</a></p>
             </div>
         </div>
         <script>
@@ -82,7 +70,7 @@
                 //     }
                 // }
 		    }
-
         </script>
+
     </body>
 </html>
