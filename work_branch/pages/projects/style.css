@@ -33,7 +33,7 @@ body {
 
 
 #leftSide {
-    z-index: -1;
+    z-index: 0;
     border-right: 0px;
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
@@ -43,7 +43,7 @@ body {
 }
 
 #rightSide {
-    z-index: -1;
+    z-index: 0;
     border-left: 0px;
     border-top-left-radius: 0px;
     border-bottom-left-radius: 0px;
@@ -53,7 +53,7 @@ body {
 }
 
 #childPage {
-    z-index: 0;
+    z-index: 1;
 }
 
 
@@ -124,7 +124,11 @@ hr:not(.ignore-master-css) {
     background-image: linear-gradient(to right, #FFFFFF00, #FFFFFFDf, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFF, #FFFFFFDf, #FFFFFF00); /* You may notice that there are a copious amount of gradient stops - It sucks, but it works and that's all I ask of it.*/
 } 
 /* Funny story: I had these exact properties in div:not(.ignore-master-css).horizontalPageSeparator, but gave up and used a standard hr. GitHub Copilot noticed this and the suggestion it gave was to copy and paste all of my code, which was **exactly what I was going to do.** How many people have tried what I did and gave up?? */
-a {}
+a:not(.ignore-masyer-css) {
+    color:#7dad50;
+} a::after(.ignore-master-css) {
+    color:#7ab445;
+}
 
 
 
