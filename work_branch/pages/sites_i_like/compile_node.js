@@ -50,6 +50,11 @@ languageEncoding("./base.html").then((fileInfo) => {
     // If they ever allow top-level awaits, please refactor this.
     encoding = fileInfo.encoding;
     var baseHTMLString = fs.readFileSync("./base.html", encoding);
+
+    // First, a quick thingy at the start of the file to warn everyone editing index.html that they should actually be editing base.html and compiling afterwards.
+    baseHTMLString = "<!-- HEY!!!!! This is the COMPILED version of this page. If you want to make eny edits, you should instead edit base.html, and then compile it. -->\n" + baseHTMLString;
+
+
     // The spot we'll replace is based on a tiny little important piece of text in the base.html, which says 'NODEJS-IDENTIFIER-UNIQUENESS-893429874892374923874'. This is the thing we replace, it (should) never appear anywhere else in that file. 
     var finalHTMLString = baseHTMLString.replace("NODEJS-IDENTIFIER-UNIQUENESS-893429874892374923874", web_buttons_final);
     fs.writeFileSync('./index.html', finalHTMLString);

@@ -1,3 +1,4 @@
+<!-- HEY!!!!! This is the COMPILED version of this page. If you want to make eny edits, you should instead edit base.html, and then compile it. -->
 <html>
     <head>
         <title>Projects</title>
@@ -7,7 +8,8 @@
         </style>
     </head>
     <body class="has-scrollbar">
-        <canvas id="backgroundCanvas" width="150" height="150"></canvas>
+        <!-- I do not know how to do a plain old GLSL shader. Perhaps I can do this later, when my programming skills have improved. -->
+        <iframe frameborder="0" src="https://www.shadertoy.com/embed/XXtBRr?gui=false&t=10&paused=false&muted=false" allowfullscreen loading="lazy" id="backgroundAnimation"></iframe>
 
         <div id="bannerContainer">
             <p>So... here I haveth, a lasere pointere...</p>
@@ -22,7 +24,6 @@
             </div>
             <div id="childPage" class="bigContainerStyling">
                 <p>Click on a project's image to go there!</p>
-
                 <input type="text" id="ProjectsSearchBar" onkeyup="SearchForProjects()" placeholder="Search by Name" title="Type in the name of one of my projects." class="searchBar">
                 
                 <div id="projectListingContainer">
@@ -52,7 +53,7 @@
                 </div>
             </div>
             <div id="rightSide" class="bigContainerStyling">
-                <p>This thing was disabled with CSS. So... yeah.</p>
+                <p>Background comes from <a href="https://www.shadertoy.com/view/XXtBRr" target="_blank">here.</a></p>
             </div>
         </div>
         <script>
@@ -85,14 +86,7 @@
                 //     }
                 // }
 		    }
-
-
-
-            const background = document.getElementById("backgroundCanvas");
-            const canvasContext = canvas.getContext("2d");
-
-            // If the background cannot be loaded, kill it and make it an image. Also grey out the button.
-
         </script>
+
     </body>
 </html>
