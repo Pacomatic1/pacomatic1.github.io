@@ -113,6 +113,10 @@ p:not(.ignore-master-css) {
     padding-top: 0px;
 }
 
+b:not(.ignore-master-css) {
+    font-weight: bold;
+}
+
 hr:not(.ignore-master-css) {
     border: 0px;
     max-width: 90%;
@@ -213,6 +217,7 @@ button:active:not(.ignore-master-css) {
 }
 :not(.ignore-master-css).projectListing .projectTitle {
     font-size: 12pt;
+    font-weight: bold;
     background: var(--projectListingGradient);
     border: 1px solid #232323;
     border-radius: 4px 4px 0 0;

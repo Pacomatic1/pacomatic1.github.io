@@ -1,8 +1,10 @@
 [
-    {
+    {   
+        "type": "project_entry",
+
         "banner": "./assets/banners/template.png",
         "title": "AROOOGA!",
-        "bannerAlt": "This is a template. What in the name of HTTPS did youy expect?",
+        "bannerAlt": "This is a template. What in the name of HTTPS did you expect?",
         "link": "https://example.com",
         "accentColor": "#ff00ff",
         "description": "This is the description. What must I say?",

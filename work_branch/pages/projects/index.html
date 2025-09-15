@@ -33,7 +33,7 @@
                     
     <div class="projectListing">
         <div class="projectTitle">
-            <p class="ignore-master-css projectTitleText"><b>AROOOGA!</b></p>
+            <p class="ignore-master-css projectTitleText">AROOOGA!</p>
         </div>
         <a href="https://example.com" target="_blank">
             <div class="projectBanner" style="background-image: url('./assets/banners/template.png');"></div>
@@ -56,37 +56,7 @@
                 <p>Background comes from <a href="https://www.shadertoy.com/view/XXtBRr" target="_blank">here.</a></p>
             </div>
         </div>
-        <script>
-
-            function SearchForProjects() { // This code is purely for reference. Since we're gonna do something that isn't just an unordered list of hyperlinks, you should change this wen you figure out what you wanna do. 
-                var inputElement = document.getElementById("ProjectsSearchBar");
-                var filteredValue = inputElement.value.toUpperCase();
-                
-                var listOfElements = Array.from(document.getElementsByClassName("projectListing"));
-                console.log(listOfElements);
-
-
-
-
-
-
-                // Declare variables
-                // var input, filter, ul, li, a, i;
-                // input = document.getElementById("ProjectsSearchBar");
-                // filter = input.value.toUpperCase();
-                // ul = document.getElementById("ProjMenu");
-                // li = ul.getElementsByTagName("li");
-                // // Loop through all list items, and hide those who don't match the search query
-                // for (i = 0; i < li.length; i++) {
-                //     a = li[i].getElementsByTagName("a")[0];
-                //     if (a.innerHTML.toUpperCase().indexOf(filter) > -1){
-                //         li[i].style.display = "";
-                //     } else {
-                //         li[i].style.display = "none";
-                //     }
-                // }
-		    }
-        </script>
-
+        
+        <script src="./projects_page.js"> </script> 
     </body>
 </html>

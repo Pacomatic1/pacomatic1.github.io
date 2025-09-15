@@ -1,9 +1,10 @@
 echo "Time to compile! You should read README.txt. That's, like, her whole purpose."
 echo "Also make sure you're located in the same directory in this file! Otherwise, you will die."
-echo "...I have so many regrets."
+echo ""
+echo "I have so many regrets."
+echo ""
+echo ""
 
-echo ""
-echo ""
 
 
 cd "./pages/sites_i_like/"
