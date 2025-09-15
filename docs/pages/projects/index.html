@@ -1,219 +1,81 @@
-<!DOCTYPE html>
-<html lang="en">
-<!-- Hello! If you're looking through my code to do something, just know that this is also a public GutHub repo and that it's better to see my code from there.
-For help, here's the gist of it: This is a single-page application, and the thingy in the middle (the only part of the page that changes on certain links) is an iframe. The background is also an iframe. In this SPA, I use query strings at the end of the URL to determine what page you're on; if you're on a separate page that isn't part of this mess, it won't bother with the iframes at all and will be its own, completely separate thing. -->
-	
-	<head>
-		<title>Paco's Place</title>
+<!-- HEY!!!!! This is the COMPILED version of this page. If you want to make eny edits, you should instead edit base.html, and then compile it. -->
+<html>
+    <head>
+        <title>Projects</title>
+        <script src="../shared.js"> </script>
+        <style>
+            @import url("./style.css");
+        </style>
+    </head>
+    <body class="has-scrollbar">
+        <!-- I do not know how to do a plain old GLSL shader. Perhaps I can do this later, when my programming skills have improved. -->
+        <iframe frameborder="0" src="https://www.shadertoy.com/embed/XXtBRr?gui=false&t=10&paused=false&muted=false" allowfullscreen loading="lazy" id="backgroundAnimation"></iframe>
 
-		<link rel="stylesheet" href="./resources/7_scrollbar.css">
+        <div id="bannerContainer">
+            <div id="banner">
+                <h2>Projects</h2>
 
+            </div>
+        </div>
 
-		<style>
-
-			:root {
-				--min-height-of-childpage: 0em; /* The body refuses to stretch to the minimum height. I don't know why, though. */
-			}
-
-			.plainIframe {
-				border: none;
-				margin: 0px;
-				padding: 0px;
-			}
-
-			#childPageIframe {
-				width:100%;
-				min-height: var(--min-height-of-childpage); 
-				grid-template: childPageIframe;
-			}
-
-			#bgIframe {
-				display: block;
-				position: fixed;
-				height: 100%; /* Using vw and vh causes bugs on certain aspect ratios. As such, stick to percents. */
-				width: 100%;
-				z-index: -300;
-			}
-
-			#gigaDiv {
-				margin-inline: auto;
-				width:80em;
-			}
-
-			#gridDiv {
-				margin-inline: auto;
-				display: grid;
-				grid-template-columns: 10em auto 10em;
-				width: 80em;
-				
-				grid-template-areas: 
-				"leftSideExtras" "childPageIframe" "rightSideExtras"
-				;
-			} 
-
-			#leftSideExtras {
-				grid-template: leftSideExtras;
-				
-				overflow-wrap: break-word;
-			}
-
-			#rightSideExtras {
-				grid-template: rightSideExtras;
-				overflow-wrap: break-word;	
-			}
-
-			#heroIframe {
-				grid-template: heroIframe;
-				width: 100%;
-			}
+        <div id="megaContainer">
+            <div id="leftSide" class="bigContainerStyling">
+                <p>
+                    <h3>Eh?</h3>
+                    This is where you can find many of my other projects. Some of them are on this site, some of them are not.
+                </p>
+            </div>
+            <div id="childPage" class="bigContainerStyling">
+                <p>Click on a project's image to go there!</p>
+                <br>
+                <input type="text" id="ProjectsSearchBar" onkeyup="SearchForProjects()" placeholder="Search by Name" title="Type in the name of one of my projects." class="searchBar">
+                
+                <div id="projectListingContainer">
+                    
 
 
-		</style>
-
-		
-	</head>
-	<body style="margin:0;" class="has-scrollbar">
-
-
-			<iframe id="bgIframe" class="plainIframe" allowtransparency="false" title="Background"></iframe> <!-- Contains the background and everything within. -->
-
-			<div id="gigaDiv">
-				<div id="gridDiv">
-
-					<div id="leftSideExtras">
-						<!-- <style> @import url(./iframe-pages/resources/iframe_styling.css); </style> -->
-						<p> oskosksojdousahdksamx</p>
-					</div>
-					
-					<iframe id="childPageIframe" class="plainIframe" allowtransparency="true" title="Main Content"></iframe>
-					<!-- This is where all the child page's contents go. Also note the following:
-					If the body of the iframe doesn't have .ignore-master-css, JS will add the .childPageIframeWhoseBodyAllowsMasterCss class to this. -->
-					
-					<div id="rightSideExtras">
-						<p>
-							yeduhwj8y7wyuji
-							<a href="https://pacomatic1.github.io">What da helll?????</a> 
-							<br> <a href="?page=home"> No. </a>
-							<br> <a href="?page=themetest"> No. </a>
-						</p>
-					</div>
-					<!-- The bottom of the grid.-->
-				</div>
-			</div>
-
-
-
+                    
+    <div class="projectListing">
+        <div class="projectTitle">
+            <p class="ignore-master-css projectTitleText">GD Soundboard.</p>
+        </div>
+        <a href="https://github.com/Pacomatic1/Pacos_Simple_GD_Soundboard/" target="_blank">
+            <div class="projectBanner" style="background-image: url('./assets/banners/amogus.png');"></div>
+        </a>
+        <div class="projectDescription">
+            <p class="ignore-master-css">Too heavy for what it does, but decently stable. Made in Godot.</p>
+        </div>
+        <div class="projectDate">
+            <p class="ignore-master-css">2023</p>
+        </div>
+    </div>
+    
+    <div class="projectListing">
+        <div class="projectTitle">
+            <p class="ignore-master-css projectTitleText">Oh dear.</p>
+        </div>
+        <a href="../wip/index.html" target="_self">
+            <div class="projectBanner" style="background-image: url('./assets/banners/amogus.png');"></div>
+        </a>
+        <div class="projectDescription">
+            <p class="ignore-master-css">I don't actually have any projects, save for the other one over there. Oops.</p>
+        </div>
+        <div class="projectDate">
+            <p class="ignore-master-css">2021 - 2022</p>
+        </div>
+    </div>
+    
+                    <!-- There are a lot of project listings and we'd rather not generate them with Javascript 'cause performance. As such, it's static site generator time, baby! 
+                    This identifier will be deleted and replaced with our project listings, so you should take exquisite care not to include that string anywhere else in the file. Ever. Never ever, you will be doomed like Newton (the lightbulb) and the box.-->
 
 
-
-
-
-
-		<script src="./resources/iframe-resizer.parent.js"></script>
-		<script>
-			// pageNameAndUrlLookupTable is an array of stringarrays containing 3 elements:
-			// [0] is the pageName, like what would be inputted via the query string.
-			// [1] is the URL of said name, which is... you know... the location of the file.
-			// [2] is the background name. As for which names get which url, that's what the other lookup table is for.
-			// This lookup table must be updated with every page added, though all things considered this isn't too bad.
-			const pageNameAndUrlLookupTable = [
-				["home", "./iframe-pages/home.html", "randomStuffOutlookBg",],
-				["themetest", "./iframe-pages/theme_test.html", "ps3XmbBg",],
-
-			];
-
-			// bgNameAndUrlLookupTable is an array of stringarrays containing 2 elements: the name of the background, and the url of the background.
-			// This lookup table must be updated with every background added, though all things considered this isn't too bad.
-			const bgNameAndUrlLookupTable = [
-				["ps3XmbBg", "./backgrounds/ps3Xmb.html"], 
-				["finalsAtticBg", "./backgrounds/finals_attic.html"],
-				["randomStuffOutlookBg", "./backgrounds/random_stuff_outlook.html"],
-
-			];
-
-			// If it wasn't obvious, I like lookup tables. They're very... useful.
-			var bgIframe = document.getElementById("bgIframe");
-			var childPageIframe = document.getElementById("childPageIframe");
-			const fallbackPageNameIfNoPageWasSelected = "home"; // The site finds the page you want via query strings. If none of the query strings have the page key, we don't want to 404 them, we want to bring them to a fallback. Where does the fallback lead? Well, the page name defined by this! Consider it the landing page.
-
-			// We find what page you're on and then bring you there,
-			var pageName = findValueOfKeyFromQueryStringInUrl("page"); 
-			if (pageName == null) {pageName = fallbackPageNameIfNoPageWasSelected;}; // If the query strings define no page key, then we bring them wherever the fallback wants.
-			
-			var pageUrl = findUrlOfPageName(pageName);
-			if (pageUrl == null) {window.location.replace("404.html");}; // Since we handled the case in which a page key doesn't exist, if a page key does exist but its value isn't on the lookup table, it's probably nonexistent. In that case, 404 them.  
-			childPageIframe.src = pageUrl;
-
-			// Now for the much simpler background iframe.
-			var bgName = findBgNameOfPageName(pageName);
-			var bgUrl = findUrlOfBgName(bgName);
-			bgIframe.src = bgUrl;
-
-			resizeIframeToFitContent(childPageIframe);
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-			function findValueofNthItemInArrayOfMultiItemArraysAssumingYouKnowWhatTheFirstItemIs(valueOfFirstItem, arrayOfArraysToLookThrough, indiceOfNthItem) { // This finds the value of an item within an array of multi-item arrays assuming you already know what the first item is. This seems oddly specific, but it has uses; refer to the lookup table and the query string shenanigans.
-				var foundValue;
-				for (let i = 0; i < arrayOfArraysToLookThrough.length; i++) { // For every array in the top array,
-					for (let j = 0; j <= arrayOfArraysToLookThrough[i].length; j++) { // see if the first value is what you seek.
-						if (arrayOfArraysToLookThrough[i][0] == valueOfFirstItem) { // If it is, iterate to find nth item and, if found, set foundValue to it.
-							foundValue = arrayOfArraysToLookThrough[i][indiceOfNthItem];
-						};
-					};
-				};
-				return foundValue;
-				// You know, the code for this used to make multiple arrays and sort through them. It sucked. This is faster. And with far less bugs.
-				// I'm glad I refactored this.
-			};
-
-			function findValueOfKeyFromQueryStringInUrl(keyToFindValueOf) { // Gets the URl, looks at the query strings, and finds the corresponding the value for the key you want. If the key doesn't exist, it returns null.
-					const url = window.location.href; 
-					const searchParams = new URL(url).searchParams; 
-					const urlSearchParams = new URLSearchParams(searchParams);
-					const queryStringArray = Array.from(urlSearchParams.entries()); // Returns an array of arrays. Each array corresponds to one key/value pair, the key being [0] and value being [1].
-					// We need to find an array (inside this one) whose [0]	is the key we seek.
-					// Good thing I made a highly specific functon for that!
-					return findValueofNthItemInArrayOfMultiItemArraysAssumingYouKnowWhatTheFirstItemIs(keyToFindValueOf, queryStringArray, 1);
-			}
-
-
-
-
-
-			// Keep these buried down here, this is stuff I'm likely never gonna change again and it clutters the code.  
-			function findUrlOfPageName(pageName) {
-				return findValueofNthItemInArrayOfMultiItemArraysAssumingYouKnowWhatTheFirstItemIs(pageName, pageNameAndUrlLookupTable, 1);
-			}
-			function findBgNameOfPageName(pageName) {
-				return findValueofNthItemInArrayOfMultiItemArraysAssumingYouKnowWhatTheFirstItemIs(pageName, pageNameAndUrlLookupTable, 2);
-			}
-			function findUrlOfBgName(bgName) {
-				return findValueofNthItemInArrayOfMultiItemArraysAssumingYouKnowWhatTheFirstItemIs(bgName, bgNameAndUrlLookupTable, 1);
-			}
-			function findHeroNameOfPageName(pageName) {
-				return findValueofNthItemInArrayOfMultiItemArraysAssumingYouKnowWhatTheFirstItemIs(pageName, pageNameAndUrlLookupTable, 3);
-			}
-			function findUrlOfHeroName(heroName) {
-				return findValueofNthItemInArrayOfMultiItemArraysAssumingYouKnowWhatTheFirstItemIs(heroName, heroNameAndUrlLookupTable, 1);
-			}
-			function resizeIframeToFitContent(iframe) {
-				iframeResize( { license: 'GPLv3', waitForLoad: false }, iframe );
-			}
-
-		</script>
-	</body>
+                </div>
+            </div>
+            <div id="rightSide" class="bigContainerStyling">
+                <p>Background comes from <a href="https://www.shadertoy.com/view/XXtBRr" target="_blank">here.</a></p>
+            </div>
+        </div>
+        
+        <script src="./projects_page.js"> </script> 
+    </body>
 </html>

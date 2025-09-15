@@ -39,7 +39,7 @@
             <div class="title-bar-controls">
                 <button aria-label="Minimize"></button>
                 <button aria-label="Maximize"></button>
-                <button aria-label="Close"></button>
+                <button aria-label="Close" id="close"></button>
             </div>
             </div>
             <div class="window-body has-space">
@@ -50,10 +50,20 @@
                 <p>
                     This site uses lots of iframes, modern Javascript, WebAssembly, and autoplaying audio. As such, this should be viewed in a modern broswer. <br>
                     If possible, view this using a desktop or laptop on main mode. This is the intended experience. <br>
-                    If you use assistive technologies, use a phone, prefer the extra space, need to save on battery, or if main mode runs badly, you might prefer fullscreen mode. Even so, do this <b>after</b> trying main mode. Main mode is better, in my opinion.
+                    If you use assistive technologies, use a phone, prefer the extra space, need to save on battery, or if main mode runs badly, you might prefer accessible mode. Even so, do this <b>after</b> trying main mode. Main mode is better, in my opinion.
                 </p>
-                <a href="./main.html"><button> Main Mode </button></a> <a href="./accessible.html"><button> Fullscreen Mode </button></a>
+                <a href="./main.html"><button> Main Mode </button></a> <a href="./accessible.html"><button> Accessible Mode </button></a>
             </div>
         </div>
+        <script>
+            document.getElementById("close").addEventListener("click", closeTab);
+            function closeTab() {
+                // close();
+                // When you press the X button on the window, the tab closes.
+                // At least, that's what I want. Sadly, security stuffs mean that tabs can't close themselves unless they're opened by Javascript (which is unlikely for this page in particular).
+                // But Johanneson provided an alternative: Redirect to a picture of a MadCat. Perfect.
+                location.href = "./assets/you_close_ze_tab.png";
+            }
+        </script>
     </body>
 </html>
