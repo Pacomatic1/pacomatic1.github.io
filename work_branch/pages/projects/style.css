@@ -15,7 +15,7 @@ body {
 
 #bannerContainer {
     margin-inline: auto;
-    width: var(--childPageWidth);
+    width: 70em;
     margin-top: 2em;
 }
 
@@ -193,6 +193,28 @@ button:active:not(.ignore-master-css) {
 
 
 
+#banner {
+    color: #ffffff;
+    margin-inline: auto;
+    background-color: #00000090;
+    font-family: Segoe UI, SegoeUI, Noto Sans, sans-serif;
+
+    border-radius: 12px 12px 0px 0px;
+    font-size: 9pt;
+
+    text-align: center;
+    width: 30em;
+
+}
+
+
+
+
+
+
+
+
+
 :not(.ignore-master-css)#projectListingContainer {
     margin-top: 10pt;
     margin-bottom: 10pt;
@@ -207,7 +229,7 @@ button:active:not(.ignore-master-css) {
     font-size: 9pt;
     width: 17em;
     box-shadow: 0px 0px 18px 0px #000000;
-    display: inline-block;
+    display: inline-block; /* You should make sure that this is the same value as the javascript. */
     margin: 12pt;
 }
 

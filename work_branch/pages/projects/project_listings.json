@@ -2,12 +2,25 @@
     {   
         "type": "project_entry",
 
-        "banner": "./assets/banners/template.png",
-        "title": "AROOOGA!",
-        "bannerAlt": "This is a template. What in the name of HTTPS did you expect?",
-        "link": "https://example.com",
+        "banner": "./assets/banners/amogus.png",
+        "title": "GD Soundboard.",
+        "bannerAlt": "Spam the voice chat! Ruin everything with meaningless noise! Do it! Do it now!!!",
+        "link": "https://github.com/Pacomatic1/Pacos_Simple_GD_Soundboard/",
         "accentColor": "#ff00ff",
-        "description": "This is the description. What must I say?",
-        "date": "2001 - present"
+        "description": "Too heavy for what it does, but decently stable. Made in Godot.",
+        "date": "2023",
+        "target": "external"
+    },
+    {   
+        "type": "project_entry",
+
+        "banner": "./assets/banners/amogus.png",
+        "title": "Oh dear.",
+        "bannerAlt": "Oh dear.",
+        "link": "../wip/index.html",
+        "accentColor": "#ff00ff",
+        "description": "I don't actually have any projects, save for the other one over there. Oops.",
+        "date": "2021 - 2022",
+        "target": "internal"
     }
 ]
