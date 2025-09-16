@@ -1,3 +1,6 @@
+// TODO: generateMainModeNavbarInternalSiteItemLinks() is trying to access a 6th(?) a tag which does not exist. Fix.
+
+
 // Lookup tables forever!
 const navBarItemLookupTable = [
     // This is an array of arrays. The contents of each array are as follows:
@@ -16,7 +19,7 @@ const navBarItemLookupTable = [
         // [1] is the text to be displayed. If you want to have no text, make it a blank string: ""
         // [2] is the text's styling. "1" makes it a navBar section. If it's left as a blank string while [1] contains text, it will be irrelevant. If [1] is blank, this will be irrelevant. Exclusive to main mode.
         // [3] is whether or not we should append a horizontal rule, using true or false. If you just want a horizontal rule, leave everything else blank.
-        // Note that in accessible mode, just text or text and a horizontal rule will create a new option group. Breaking out of that option group is done by just creating a horizontal rule. 
+        // Note that in accessible mode, just text or text and a horizontal rule will create a new option group. Breaking out of that option group is done by just creating a horizontal rule. I do not recommend nesting them.
     [0, "Landing Page", " ", 0, "./pages/landing/index.html", ""],
     [0, "Home", "assets/navbar-icons/3ds-home-menu-icon.svg", 0, "./pages/home/index.html", "margin-bottom:-2px; height: auto; width: 16px; margin-right: 4px;"],
     [0, "Sites I Like", "", 0, "./pages/sites_i_like/index.html", ""],
@@ -57,13 +60,13 @@ const absoluteToRelativePathLookupTable = [
     // [0] is mode.
         // If set to 0, find the first instance of [1], delete everything that precedes it, and replace it with [2]. 
 
-    // Note that order matters. The first array here is the first one that we do stuff with, then the second, then the third.
+    // Note that order matters. The first array here is the first one that we do stuff with, then the second, then the third. This also has the funny side effect of making these find/replace operations stack. Be careful.
     [0, "/pages/", "./pages/"],
 ];
 var doesIFrameHaveSharedJS = false; // Check this before asking the iframe for any favors.
 var pageMode;
 
-if ( window.location.href.includes("file:") ) { console.log("Some stuff on the site, like three.js, doesn't like being run locally. If you want to see the site in all its glory, get Node.js + http-server."); } // This also has the funny side effect that, because you're still going from PC to router to PC and not just loading from the hard drive, you get to see a glimpse into the network performance of the site. Perfect for network optimization; epic wins all around!
+if ( window.location.href.includes("file:") ) { console.log("Some stuff on the site, like three.js, doesn't like being run locally. If you want to see the site in all its glory, get Node.js + http-server."); } // This also has the funny side effect that, because you're still going from PC to router to PC and not just loading from the hard drive, you get to see a glimpse into the network performance of the site. Perfect for network optimization. At least, I think that's how this works. I could be dead wrong. 
 const mainIframe = document.getElementById("mainIframe");
 pageMode = determinePageMode(); // "main" or "accessible"
 
@@ -84,6 +87,7 @@ function preparePage() {
         case "main":
             populateMainModeNavBar();
             populateMainModeSocialMediaList();
+            generateMainModeNavbarInternalSiteItemLinks();
             break;
         case "accessible":
             populateAccessibleNavBar();
@@ -110,8 +114,6 @@ function initializeIframePage(relativePathToDefaultPage) {
     if (currentPage == null) { loadNewPageInIframe(relativePathToDefaultPage); }
     else {loadNewPageInIframe(currentPage);}
 
-
-
     // It will always send an array. The original message is [0], and [1] contains the thing you asked for. 
     window.addEventListener('message', function(event) {
         onIframeSeindingMessageToParent(event);
@@ -120,8 +122,6 @@ function initializeIframePage(relativePathToDefaultPage) {
 
 function handleIframeExternalities() { // Currently, it handles query strings. This is to happen AFTER the iframe has loaded.
     // Handling of the Iframe's link. Does things like this because we have to wait for the response before we can do anything.
-    var IframePagePath;
-    var windowURL = window.location.href;
     window.onmessage = null;
 
     mainIframe.contentWindow.postMessage('sendHref', '*');
@@ -178,17 +178,24 @@ function onIframeSeindingMessageToParent(event) {
         IframePagePath = convertAbsoluteIframePagePathToRelativePath(IframePagePath);    
         var windowURL = window.location.href;
         windowURL = new URL(replaceValueInKeyValuePairInUrlQueryStringBasedOnKey('page', IframePagePath, windowURL));
-        history.replaceState({}, "Paco's Place", windowURL);
+        changeWindowURL(windowURL);
     } else if (event.data[0] == "doesSharedExist") { // Sent when the page first loads. See handleIframeExternalities()
         doesIFrameHaveSharedJS = true;
     }
 }
 
+function changeWindowURL(newURL) { // Use in place of history.replaceState().
+    // While I would have instead used an event listener that fires when the URL changes, that does not exist, and my only other option is to constantly poll for when the link has changed. That is slow. (This was in Sept. 2025. I know about the navigation API, but that is experimental. Once support grows, I can remove this function and use history.replaceState while running the eventListeners. So keep an eye on that, future me. It could prove useful.) 
+    // There is also the problem of the iframe changing the URL, since I can see some cool puzzles being done with it (like carrying an item by 'storing' it in the query string) so I'd like to use that someday. However, iframes aren't allowed to change the link of their parents unless they reload the entire page, and I don't want to reload the entire page, so I'll probably do that using postMessages. This comes with the lovely side effect of shared.js having to handle the message and THEN change the URL, so we can make it point to this function while we're there.
+    
+    history.replaceState({}, "Paco's Place", newURL); // First, the thing we came here for.
+    generateMainModeNavbarInternalSiteItemLinks();
+}
 
 
 // MATH AND MISCELLANEOUS
 
-function findValueofNthItemInArrayOfMultiItemArraysAssumingYouKnowWhatAndWhereTheRthItemIs(valueOfRthItem, indiceOfRthItem, arrayOfArraysToLookThrough, indiceOfNthItem) { // This finds the value of an item within an array of multi-item arrays assuming you already know what another item is. This seems oddly specific (because it is), but it has its uses; refer to the query string shenanigans.
+function findValueofNthItemInArrayOfMultiItemArraysAssumingYouKnowWhatAndWhereTheRthItemIs(valueOfRthItem, indiceOfRthItem, arrayOfArraysToLookThrough, indiceOfNthItem) { // This finds the value of an item within an array of multi-item arrays assuming you already know what another item is. This seems oddly specific (because it is), but it has its uses; refer to the query string shenanigans and the main mode NavBar link generator.
     var foundValue = null;
     for (let i = 0; i < arrayOfArraysToLookThrough.length; i++) { // For every array in the top array,
         for (let j = 0; j <= arrayOfArraysToLookThrough[i].length; j++) { // see if the rth value is what you seek.
@@ -322,11 +329,14 @@ function populateMainModeNavBar() {
             // "What does the button do?"
             switch(navBarItemLookupTable[i][3]) {
                 case 0:
-                    // REFACTOR. FIX. openPageInIframeFromNavbar().
-                    buttonToCreate.addEventListener("click", () => {
+                    // I want to make this poor thing support middle clicks and CTRL/CMD clicks and 'Open link in new tab', so that's why this is so odd. Just trust the process, my man.
+
+                    // The anchors are supposed to have links, but generateMainModeNavbarInternalSiteItemLinks() does this long after the whole navbar is populated. So go there.
+
+                    anchorThatSurroundsTheButton.addEventListener("click", (event) => {
+                        event.preventDefault();
                         openPageInIframeFromNavbar(navBarItemLookupTable[i][4]);
                     });
-                    // anchorThatSurroundsTheButton.href = navBarItemLookupTable[i][4]; keeping this in case. However, adding an href will make the anchor do stuff so idk
                     break;
                 case 1:
                     anchorThatSurroundsTheButton.href = navBarItemLookupTable[i][4];
@@ -390,6 +400,7 @@ function populateAccessibleNavBar() { // This also handles the social media link
                     break;     
                 default:
                     console.log("Error: The Social Media lookup table has a button that uses unimplemented funtionality in accessibility mode! Either the table is wrong or accessibility mode needs updating.");
+                    break;
             }
             newOptionArray.push(""); // This value is irrelevant
             // There are other values in the social media lookup table but they're irrelevant.
@@ -404,7 +415,6 @@ function populateAccessibleNavBar() { // This also handles the social media link
     for (let i = socialMediaItemsArray.length - 1; i > -1; i--) {
         newNavBarItemLookupTable.unshift(socialMediaItemsArray[i]);
     }
-
 
 
 
@@ -453,6 +463,7 @@ function populateAccessibleNavBar() { // This also handles the social media link
     
 }
 
+
 function accessibleModeNavBarSelected() { // This is called when the user presses the "Go to Page" button in accessible mode. This is because using event handlers for every option seems difficult and makes the ever-annoying misclick easier. (Addendum: It wasn't that hard. Still removed it though, 'cause mislicks) 
     const navBarSelector = document.getElementById("navBarDropDown");
     var optionActionType = findValueofNthItemInArrayOfMultiItemArraysAssumingYouKnowWhatAndWhereTheRthItemIs(navBarSelector.value, 1, navBarItemLookupTable, 3);
@@ -478,7 +489,30 @@ function accessibleModeNavBarSelected() { // This is called when the user presse
 
 }
 
+async function generateMainModeNavbarInternalSiteItemLinks() {
+    //  Due to me allowing the user to open the buttons in a new tab, we have to regenerate the links for these items every time we do anything at all to the browser's URL. This sucks... but oh well. Keep in mind that I only do this because there are pieces to the link beyond just the page.
+    var navBar = document.getElementById("navBarItemContainer");
+    var navBarButtons = navBar.getElementsByClassName('navBarButton');
+    var navBarLinks = [];
+    for (let i = 0; i < navBarButtons.length; i++) {
+        navBarLinks.push(navBarButtons[i].closest("a"));
+    }
 
+    // Make a navbar lookup table with nothing but valid buttons.
+    // I did not want to do this, but my original idea caused my webpage to hang, sometimes, for reasons I didn't understand because it hung. I'm not about to deal with that.
+    // Perhaps I may come back when I am more proficient.
+
+    var navBarLinkList = [];
+    for (let i = 0; i < navBarItemLookupTable.length; i++) {
+        if (navBarItemLookupTable[i][0] == 0 && navBarItemLookupTable[i][3] == 0) {
+            navBarLinkList.push(navBarItemLookupTable[i][4]);
+        }
+    }
+
+    for (let i = 0; i < navBarLinks.length; i++) {
+        navBarLinks[i].href = navBarLinkList[i];
+    }
+}
 
 
 
@@ -503,15 +537,14 @@ function replaceValueInKeyValuePairInUrlQueryStringBasedOnKey(keyToSelect, newVa
     url.search = params.toString();
     
     // params.toString() converts everything to percent-based encoding, converting every slash into a %2F. This sucks!
-    // As such, I'm going to convert these back to slashes, since having slashes in your query string has no issues.
+    // As such, I'm going to convert these back to slashes, sincze having slashes in your query string has no issues.
     // One might immediately assume that I'm gonna use decodeURIComponent(). As much as I'd love to, this is a bad idea since it decodes things that aren't slashes, and that's bad. Time to do it myself!
     url = convertPercentEncodedQueryStringToFinalQueryString(url.toString());
     return url;
 }
 
-function convertPercentEncodedQueryStringToFinalQueryString(percentEncodedQueryString) { // Include the leading 
+function convertPercentEncodedQueryStringToFinalQueryString(percentEncodedQueryString) { // Include the leading thingies.
     var newText = percentEncodedQueryString;
     newText = newText.replaceAll("%2F", "/");
     return newText;
 }
-
