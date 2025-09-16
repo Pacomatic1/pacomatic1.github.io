@@ -1,6 +1,3 @@
-// TODO: generateMainModeNavbarInternalSiteItemLinks() is trying to access a 6th(?) a tag which does not exist. Fix.
-
-
 // Lookup tables forever!
 const navBarItemLookupTable = [
     // This is an array of arrays. The contents of each array are as follows:
@@ -185,7 +182,8 @@ function onIframeSeindingMessageToParent(event) {
 }
 
 function changeWindowURL(newURL) { // Use in place of history.replaceState().
-    // While I would have instead used an event listener that fires when the URL changes, that does not exist, and my only other option is to constantly poll for when the link has changed. That is slow. (This was in Sept. 2025. I know about the navigation API, but that is experimental. Once support grows, I can remove this function and use history.replaceState while running the eventListeners. So keep an eye on that, future me. It could prove useful.) 
+    // While I would have instead used an event listener that fires when the URL changes, that does not exist, and my only other option is to constantly poll for when the link has changed. That is slow. (This was in Sept. 2025. I know about the navigation API, but that is experimental. Once support grows, I can remove this function and use history.replaceState while running the eventListeners. So keep an eye on that, future me. It could prove useful.
+            // If [3] is 0, then it will be a button and [3]) 
     // There is also the problem of the iframe changing the URL, since I can see some cool puzzles being done with it (like carrying an item by 'storing' it in the query string) so I'd like to use that someday. However, iframes aren't allowed to change the link of their parents unless they reload the entire page, and I don't want to reload the entire page, so I'll probably do that using postMessages. This comes with the lovely side effect of shared.js having to handle the message and THEN change the URL, so we can make it point to this function while we're there.
     
     history.replaceState({}, "Paco's Place", newURL); // First, the thing we came here for.
