@@ -187,7 +187,9 @@ function changeWindowURL(newURL) { // Use in place of history.replaceState().
     // There is also the problem of the iframe changing the URL, since I can see some cool puzzles being done with it (like carrying an item by 'storing' it in the query string) so I'd like to use that someday. However, iframes aren't allowed to change the link of their parents unless they reload the entire page, and I don't want to reload the entire page, so I'll probably do that using postMessages. This comes with the lovely side effect of shared.js having to handle the message and THEN change the URL, so we can make it point to this function while we're there.
     
     history.replaceState({}, "Paco's Place", newURL); // First, the thing we came here for.
-    generateMainModeNavbarInternalSiteItemLinks();
+    if (pageMode == "main") {
+        generateMainModeNavbarInternalSiteItemLinks();
+    }
 }
 
 
@@ -377,7 +379,6 @@ function populateAccessibleNavBar() { // This also handles the social media link
     for (let i = 0; i < socialLinksItemLookupTable.length; i++) {
         // We're gonna make a brand new button and push() that into the social media table.
         var newOptionArray = [];
-
         switch (socialLinksItemLookupTable[i][0]) {
             case 0: // Type: Button
             newOptionArray.push(0); // Why read from the var, it's already guaranteed to be 0
