@@ -1,7 +1,11 @@
-// Initialize project search.
-var projectElementList = Array.from(document.getElementsByClassName("projectListing"));
+BGToggle = document.getElementById('shaderBGToggle');
+BGIframe = document.getElementById('backgroundAnimation');
+BGToggle.addEventListener("click", toggleBG);
 
-function SearchForProjects() { // This code is purely for reference. Since we're gonna do something that isn't just an unordered list of hyperlinks, you should change this wen you figure out what you wanna do. 
+var projectElementList = Array.from(document.getElementsByClassName("projectListing")); // Initialize project search.
+
+
+async function SearchForProjects() {
     var inputElement = document.getElementById("ProjectsSearchBar");
     var filteredValue = inputElement.value.toUpperCase();
 
@@ -16,5 +20,14 @@ function SearchForProjects() { // This code is purely for reference. Since we're
             projectElementList[i].style.display = "none";
         }
     }
-
 }
+
+function toggleBG() { // Destroy the iframe if it exists, bring it back if it doesn't (hence the cloning).
+console.log("click!")
+    if (!document.body.contains(BGIframe)) {
+        document.body.appendChild(BGIframe);
+    } else {
+        BGIframe.remove();
+    }
+}
+

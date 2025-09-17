@@ -43,7 +43,8 @@ for (var i = 0; i < project_listings_json.length; i++) {
             <p class="ignore-master-css projectTitleText">${project_listings_json[i].title}</p>
         </div>
         <a href="${project_listings_json[i].link}" target="${linkTarget}">
-            <div class="projectBanner" style="background-image: url('${project_listings_json[i].banner}');"></div>
+            <div class="projectBanner" style="background-image: url('${project_listings_json[i].banner}');">
+            </div>
         </a>
         <div class="projectDescription">
             <p class="ignore-master-css">${project_listings_json[i].description}</p>
