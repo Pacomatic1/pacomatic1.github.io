@@ -503,7 +503,9 @@ async function generateMainModeNavbarInternalSiteItemLinks() {
     var navBarLinkList = [];
     for (let i = 0; i < navBarItemLookupTable.length; i++) {
         if (navBarItemLookupTable[i][0] == 0 && navBarItemLookupTable[i][3] == 0) {
-            navBarLinkList.push(navBarItemLookupTable[i][4]);
+            // Get current URL, replace the page key with the site path.
+            var newURL = new URL(replaceValueInKeyValuePairInUrlQueryStringBasedOnKey('page', navBarItemLookupTable[i][4], window.location.href));
+            navBarLinkList.push(newURL);
         }
     }
 
