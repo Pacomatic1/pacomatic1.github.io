@@ -270,7 +270,7 @@ button:active:not(.ignore-master-css) {
     background: var(--projectListingGradient);
     border: 1px solid #232323;
     box-shadow: inset 0 0 0 1px #5B5B5B;
-    height: 3rem;
+    height: 3.5rem;
 
     padding: .1rem;
     padding-inline: .4rem;
