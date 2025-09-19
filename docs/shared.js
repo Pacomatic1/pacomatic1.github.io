@@ -106,18 +106,18 @@ function preparePage() {
 
 function initializeIframePage(relativePathToDefaultPage) {
     mainIframe.addEventListener("load", onIframePageSwap);
-    var currentPage = findValueOfKeyFromQueryStringInUrl('page');
+    var currentPage = findValueFromQueryStringInUrl('page');
 
     if (currentPage == null) { loadNewPageInIframe(relativePathToDefaultPage); }
     else {loadNewPageInIframe(currentPage);}
 
     // It will always send an array. The original message is [0], and [1] contains the thing you asked for. 
     window.addEventListener('message', function(event) {
-        onIframeSeindingMessageToParent(event);
+        onIframeSendingMessageToParent(event);
     });
 }
 
-function handleIframeExternalities() { // Currently, it handles query strings. This is to happen AFTER the iframe has loaded.
+function handleIframeExternalities() { // This is to happen AFTER the iframe has loaded.
     // Handling of the Iframe's link. Does things like this because we have to wait for the response before we can do anything.
     window.onmessage = null;
 
@@ -169,7 +169,9 @@ function convertAbsoluteIframePagePathToRelativePath(absolutePath) { // Bro tryi
 
 }
 
-function onIframeSeindingMessageToParent(event) { 
+function onIframeSendingMessageToParent(event) { 
+    // Check shared.js for the iframes. It'll provide some much-needed context.
+
     if(event.data[0] == "sendHref") { // Sent when the page first loads. See handleIframeExternalities()
         IframePagePath = event.data[1]; 
         IframePagePath = convertAbsoluteIframePagePathToRelativePath(IframePagePath);    
@@ -178,13 +180,16 @@ function onIframeSeindingMessageToParent(event) {
         changeWindowURL(windowURL);
     } else if (event.data[0] == "doesSharedExist") { // Sent when the page first loads. See handleIframeExternalities()
         doesIFrameHaveSharedJS = true;
+    } else if (event.data[0] == "changeQueryString") {
+        windowURL = new URL(replaceValueInKeyValuePairInUrlQueryStringBasedOnKey(event.data[1], event.data[2], window.location.href));
+        changeWindowURL(windowURL);
     }
 }
 
 function changeWindowURL(newURL) { // Use in place of history.replaceState().
     // While I would have instead used an event listener that fires when the URL changes, that does not exist, and my only other option is to constantly poll for when the link has changed. That is slow. (This was in Sept. 2025. I know about the navigation API, but that is experimental. Once support grows, I can remove this function and use history.replaceState while running the eventListeners. So keep an eye on that, future me. It could prove useful.
             // If [3] is 0, then it will be a button and [3]) 
-    // There is also the problem of the iframe changing the URL, since I can see some cool puzzles being done with it (like carrying an item by 'storing' it in the query string) so I'd like to use that someday. However, iframes aren't allowed to change the link of their parents unless they reload the entire page, and I don't want to reload the entire page, so I'll probably do that using postMessages. This comes with the lovely side effect of shared.js having to handle the message and THEN change the URL, so we can make it point to this function while we're there.
+    // There is also the problem of the iframe changing the URL, since I can see some cool puzzles being done with it (like carrying an item by 'storing' it in the query string) so I'd like to use that someday. However, iframes aren't allowed to change the link of their parents unless they reload the entire page, and I don't want to reload the entire page, so I'm doing that using postMessages. This comes with the lovely side effect of shared.js having to handle the message and THEN change the URL, so we can make it point to this function while we're there.
     
     history.replaceState({}, "Paco's Place", newURL); // First, the thing we came here for.
     if (pageMode == "main") {
@@ -519,14 +524,14 @@ async function generateMainModeNavbarInternalSiteItemLinks() {
 
 // QUERY STRING SHENANIGANS
 
-function findValueOfKeyFromQueryStringInUrl(keyToFindValueOf) { // Gets the URL, looks at the query strings, and finds the corresponding the value for the key you want. If the key doesn't exist, it returns null.
+function findValueFromQueryStringInUrl(key) { // Gets the URL, looks at the query strings, and finds the corresponding the value for the key you want. If the key doesn't exist, it returns null.
         const url = window.location.href; 
         const searchParams = new URL(url).searchParams; 
         const urlSearchParams = new URLSearchParams(searchParams);
         const queryStringArray = Array.from(urlSearchParams.entries()); // Returns an array of arrays. Each array corresponds to one key/value pair, the key being [0] and value being [1].
         // We need to find an array (inside this one) whose [0]	is the key we seek.
         // Good thing I made a highly specific functon for that!
-        return findValueofNthItemInArrayOfMultiItemArraysAssumingYouKnowWhatAndWhereTheRthItemIs(keyToFindValueOf, 0, queryStringArray, 1);
+        return findValueofNthItemInArrayOfMultiItemArraysAssumingYouKnowWhatAndWhereTheRthItemIs(key, 0, queryStringArray, 1);
 }
 
 function replaceValueInKeyValuePairInUrlQueryStringBasedOnKey(keyToSelect, newValue, url) {

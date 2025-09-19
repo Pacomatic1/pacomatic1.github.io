@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang=en>
+    <head>
+
+        <script src="../shared.js" type="module"></script>
+
+        <style>
+            body {
+                /* background-image: url('./lbp_space.png');
+                background-repeat: no-repeat;
+                background-size: 100% 100%;
+                background-size:cover; */
+                background-color: #000000;
+
+            }
+
+            #tree {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                width: 18em;
+                height: auto;
+            }
+        </style>
+    </head>
+    <body>
+        <audio src="./man.ogg" autoplay loop></audio>
+
+        <img src="./tree.gif" alt="A tree, from DELTARUNE Chapter 1. It has pinkish black wood, and pink leaves. It moves delicately in the wind." title="Well, there is a man here." id="tree"></button>
+
+    </body>
+
+    <script>
+        import("../shared.js")
+        document.getElementById('tree').addEventListener('click', mistake);
+        var getNoise = new Audio('egg.wav');
+        
+
+        function mistake() {
+            sharedJS_global_changeQueryString("tree_egg", "true");    
+            document.getElementById('tree').title = "Well, there is not a man here."
+            getNoise.play();
+        }
+    </script>
+</html>
