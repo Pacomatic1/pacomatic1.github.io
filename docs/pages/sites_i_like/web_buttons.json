@@ -52,5 +52,10 @@
         "resultingLink": "https://bomberfish.ca",
         "image": "./assets/sites/bomberfish.gif",
         "filterMode": "nearest"
+    }, 
+    {
+        "resultingLink": "https://wearr.dev",
+        "image": "./assets/sites/wearr.gif",
+        "filterMode": "nearest"
     }
 ]
