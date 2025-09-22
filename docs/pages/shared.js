@@ -4,8 +4,9 @@
 window.onmessage = function(e) { onParentSendingMessageToIframe(e.data); };
 
 // Now for the global functions. I want to use imports, but this stuff will often be called by <script> tags so I cannot do that. And that maketh me sad. Make sure that all of these have 'sharedJS_global_' at the start. That way I'm less likely to accidentally overwrite them or something.
-window.sharedJS_global_changeQueryString = changeQueryString;
+// NOTICE: These functions are not immediately availiable, especially for built-in script tags. If you want to use then, **WAIT FOR WINDOW.LOAD.**
 window.sharedJS_global_getQueryStringValue = getQueryStringValue; 
+window.sharedJS_global_changeQueryString = changeQueryString;
 window.sharedJS_global_sendMessageToParent = sendMessageToParent;
 
 
@@ -31,12 +32,6 @@ function onParentSendingMessageToIframe(message) {
 
 // GLOBAL FUNCTIONS, SEE THE DECLARATIONS AT THE START OF THE FILE FOR MORE DETAILS
 
-function changeQueryString(key, value) {
-    // Give it a key and a value. If the key does not exist in the URL, a new key with that value is made. If it does exist, then the old value is overwritten with this one. If you give it null, the key and value will be removed from the URL
-    // Had to say this in case you couldn't infer.
-    sendMessageToParent(["changeQueryString", key, value]);
-}
-
 function getQueryStringValue(key) {
     // Gets a value from the query string. Simply feed it a key and, if it exists, it will retrun the corresponding value. If the key does not exist, it will return null.
     const url = top.location.href; 
@@ -46,6 +41,12 @@ function getQueryStringValue(key) {
     // We need to find an array (inside this one) whose [0]	is the key we seek.
     // Good thing I made a highly specific functon for that!
     return findValueofNthItemInArrayOfMultiItemArraysAssumingYouKnowWhatAndWhereTheRthItemIs(key, 0, queryStringArray, 1);
+}
+
+function changeQueryString(key, value) {
+    // Give it a key and a value. If the key does not exist in the URL, a new key with that value is made. If it does exist, then the old value is overwritten with this one. If you give it null, the key and value will be removed from the URL
+    // Had to say this in case you couldn't infer.
+    sendMessageToParent(["changeQueryString", key, value]);
 }
 
 function sendMessageToParent(message, parentOrigin) { // If parentOrigin is empty, it will be sent, no matter who the parent is. 

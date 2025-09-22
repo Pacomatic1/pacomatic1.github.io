@@ -34,13 +34,22 @@
     <script>
         import("../shared.js")
         document.getElementById('tree').addEventListener('click', mistake);
+        window.addEventListener('load', init);
         var getNoise = new Audio('egg.wav');
         
 
         function mistake() {
-            sharedJS_global_changeQueryString("tree_egg", "true");    
-            document.getElementById('tree').title = "Well, there is not a man here."
-            getNoise.play();
+            if (sharedJS_global_getQueryStringValue("tree_egg") != "true") {
+                sharedJS_global_changeQueryString("tree_egg", "true");    
+                getNoise.play();
+                document.getElementById('tree').title = "Well, there is not a man here.";    
+            }
+        }
+        
+        function init() {
+            if (sharedJS_global_getQueryStringValue("tree_egg") == "true") {
+                            document.getElementById('tree').title = "Well, there is not a man here.";
+            }    
         }
     </script>
 </html>
