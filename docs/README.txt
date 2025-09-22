@@ -6,7 +6,7 @@ Here are some things you NEED to know. Don't skip this stuff!
 
 2. This website is mostly written in hand-made HTML, no compilation needed.
     Sadly, 'mostly' is a thing I had to add for a reason.
-    That's because some of this site *is* statically compiled! However, the compilation in question is in several self-contained 'codebases'; for example, one thing'll use a hyper-specific purpose-built python script, another will use 11ty, another will use a totally seperate version of 11ty, and another will use a purpose-built Node.js script.
+    That's because some of this site *is* statically compiled! However, the compilation in question is in several self-contained 'codebases'; for example, one thing'll use a hyper-specific purpose-built python script, another will use 11ty, another will use a totally seperate install of 11ty, and another will use a purpose-built Node.js script.
     To make this slightly easier on you, I have a single shell script that does all of this at once; see compile.sh.
     You will need Python and Node.js, using the latest versions (as of August 2025).
-    If you are on Windows, you should use WSL, with the dependencies mentioned above.
+    If you are on Windows, you should use WSL, with the dependencies mentioned above. Just go to the folder using Powershell, enter WSL while there, and run the script like usual.
