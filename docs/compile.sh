@@ -17,6 +17,12 @@ cd "./pages/projects/"
 node "./compile_node.js" &
 cd ../../
 
+cd "./pages/blog/source/"
+echo "Blog: Started"
+rm -r "./_site/"
+npx @11ty/eleventy &
+echo "Blog: Done"
+cd ../../
 
 # Close once everything is done, since we ran some stuff asynchronously and other things might have finished too soon.
 wait
