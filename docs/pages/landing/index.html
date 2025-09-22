@@ -29,6 +29,15 @@
         </style>
     </head>
     <body>
-        <a href="../ominous_tree/index.html"><img src="./miku.webp" alt="Miku." id="miku"></a>
+        <a href="../ominous_tree/index.html" id="mistake"><img src="./miku.webp" alt="Miku." id="miku"></a>
     </body>
+
+    <script>
+        window.addEventListener('load', () => {
+            if (sharedJS_global_getQueryStringValue("tree_egg") == 'true') {
+                document.getElementById('miku').style.filter = 'grayscale(100%)';
+                document.getElementById('mistake').href = "";
+            }
+        })
+    </script>
 </html>
