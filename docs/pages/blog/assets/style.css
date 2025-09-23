@@ -1,0 +1,31 @@
+@import url(7_scrollbar.css); /* This only applies to elements with .has-scrollbar. */
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
+:root {
+    font-size: 12pt;
+}
+
+body {
+    margin: 0;
+    padding: 0;
+}
+
+.baseText {
+    font-family: 'Inter', 'Arial';
+    font-weight: 300;
+    font-size: 12pt;
+    margin-inline: auto;
+    /* color: #000000; */
+}
+
+
+#homepageContainer {
+    color: #ffffff;
+}
+
+
+
+#articleContent {
+    padding-inline: .3em;
+    max-width: 50em;
+
+}

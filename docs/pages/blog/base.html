@@ -1,60 +1,35 @@
-
 <!doctype html>
 <html lang="en">
   <head>
+    <script src="../shared.js" type=module></script>
     <style>
-      /* @import url("./style.css"); */
-      /* @import url(7_scrollbar.css);  This only applies to elements with .has-scrollbar. */
-      @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
-      :root {
-        font-size: 12pt;
-      }
-
-      body {
-        margin: 0;
-        padding: 0;
-      }
-
-      #articleContainer {
-        font-family: 'Inter', 'Arial';
-        font-weight: 300;
-        font-size: 12pt;
-        max-width: 50em;
-        margin-inline: auto;
-        padding-inline: .3em;
-        
-      } #articleContainer img {
-        max-width: 100%;
-      } #articleContainer p {
-        /* margin: 1em; */
-      }
-
+      @import url('./assets/style.css');
     </style>
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Paco's Ramblings</title>
+  
   </head>
   <body class="has-scrollbar">
-    <div id="articleContainer">
-      This, right here, is the title of the post. So sigma, I know. <br>
-      Mon Sep 22 2025 20:00:00 GMT-0400 (Eastern Daylight Saving Time)
-      <p>This is a test post.
-<em>italic</em>. <strong>bold</strong>.
-|| Hidden ||</p>
-<h2>Small.</h2>
-<h1>Big.</h1>
-<h3>Smaller.</h3>
-<h4>Smaller?</h4>
-<p>Reg.iuhsuhsuhsuhsus<br>
-aisjdiasjdiajsdiajdsij</p>
-<p><a href="https://example.com">!link</a></p>
-<p><a href="https://example.com">!lext</a></p>
-<p><img src="https://pacomatic1.github.io/pages/story_of_the_site/assets/melonking_showcase.png" alt="int"></p>
 
+      <hr>
+      <div id="homepageContent" class="baseText">
+        This is markdown, for real, on god.<br>
+        <h1>sij</h1>
+        <h2>suh</h2>
+        <h3>er</h2>
+        <h4>okso</h4>
+        <h5>ijsid</h5>
+      </div>
     </div>
+  
   </body>
 
   <script>
+    // We will move this to the compiler soon.
+    // Soon. Not yet.
+    
     // This first section is the "post-processor". However, none of this has any good reason to be done client-side. It'd be a lot nicer if you did this through 11ty instead. So do that, please. This'd be a lot easier if you did.
 
     // Make all images load using async.

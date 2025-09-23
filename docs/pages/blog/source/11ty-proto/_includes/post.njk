@@ -1,9 +1,11 @@
+---
+title: Paco's Best Mistake
+---
 
 <!doctype html>
 <html lang="en">
   <head>
     <style>
-      /* @import url("./style.css"); */
       /* @import url(7_scrollbar.css);  This only applies to elements with .has-scrollbar. */
       @import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap');
       :root {
@@ -16,44 +18,40 @@
       }
 
       #articleContainer {
+
+      }
+
+      #articleHead {
+
+      }
+
+      #article {
         font-family: 'Inter', 'Arial';
         font-weight: 300;
         font-size: 12pt;
         max-width: 50em;
         margin-inline: auto;
         padding-inline: .3em;
-        
-      } #articleContainer img {
+      } #article img {
         max-width: 100%;
-      } #articleContainer p {
-        /* margin: 1em; */
       }
 
     </style>
+
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Paco's Ramblings</title>
   </head>
   <body class="has-scrollbar">
     <div id="articleContainer">
-      Heading <br>
-      Mon Sep 22 2025 20:00:00 GMT-0400 (Eastern Daylight Saving Time)
-      
-This is a test post. <br>
-*italic*. **bold**. <br>
-|| Hidden ||<br>
-<h2> Small. </h2>
-<h1> Big. </h1>
-<h3> Smaller. </h3>
-<h4> Smaller? </h4> 
-Reg.iuhsuhsuhsuhsus<br>
-aisjdiasjdiajsdiajdsij
-<br>
-[!link](https://example.com)<br>
-
-[!lext](https://example.com)<br>
-
-![int](https://pacomatic1.github.io/pages/story_of_the_site/assets/melonking_showcase.png)
+      <header id="articleHead">
+        <div id="articleTitle">{{ title }}</div>
+        <div id="articleDate">{{ date | safe }}</div>
+      </header>
+      <hr>
+      <div id="article">
+        {{ content | safe }}
+      </div>
     </div>
   </body>
 

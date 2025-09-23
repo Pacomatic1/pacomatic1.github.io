@@ -17,12 +17,18 @@ cd "./pages/projects/"
 node "./compile_node.js" &
 cd ../../
 
-cd "./pages/blog/source/"
-echo "Blog: Started"
-rm -r "./_site/"
-npx @11ty/eleventy &
-echo "Blog: Done"
-cd ../../
+# I was doing some stuff with 11ty for the blog. In the event I come back, this is for me to pick up.
+# cd "./pages/blog/source/"
+# echo "Blog: Started"
+# rm -r "./_site/"
+# npx @11ty/eleventy &
+# echo "Blog: Done"
+# cd ../../
+
+cd "./pages/blog/"
+
+cd "../../"
+
 
 # Close once everything is done, since we ran some stuff asynchronously and other things might have finished too soon.
 wait
