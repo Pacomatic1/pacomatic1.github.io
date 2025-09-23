@@ -1,12 +1,9 @@
 ---
 layout: post.njk
 
-title: Heading
-# date: HELP
+title: This, right here, is the title of the post. So sigma, I know.
+date: 2025-09-23
 ---
-{{ title }}
-<!-- {{ date }} -->
-
 This is a test post.
 *italic*. **bold**. 
 || Hidden ||
@@ -14,6 +11,11 @@ This is a test post.
 # Big.
 ### Smaller.
 #### Smaller?
-Reg.
+Reg.iuhsuhsuhsuhsus  
+aisjdiasjdiajsdiajdsij
 
-[link](https://example.com)
+[!link](https://example.com)
+
+[!lext](https://example.com)
+
+![int](https://pacomatic1.github.io/pages/story_of_the_site/assets/melonking_showcase.png)
