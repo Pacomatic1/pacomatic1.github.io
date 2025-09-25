@@ -1,8 +1,9 @@
 @import url(7_scrollbar.css); /* This only applies to elements with .has-scrollbar. */
-@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=PT+Sans+Caption:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&family=PT+Sans+Caption:wght@400;700&family=Ubuntu+Condensed&display=swap');
 
 :root {
     font-size: 12pt;
+    --big-text-font: 'Ubuntu Condensed'
 }
 
 body {
@@ -14,9 +15,9 @@ body {
     color: #ffffff;
     background-color: #000000e2;
 
-    width: 40em;
-    max-width: 40em;
-    min-width: 40em;
+    width: 50em;
+    max-width: 50em;
+    min-width: 50em;
     margin-inline: auto;
 }
 
@@ -62,18 +63,31 @@ body {
     margin-bottom: 5px;
     background-image: linear-gradient(to right, #FFFFFF00, #FFFFFFDf, #FFFFFF 5%,#FFFFFF 95%, #FFFFFFDf, #FFFFFF00);
 } .baseText h1 {
-    font-family: 'Inter';
-    font-size: 1.6em;
+    font-family: 'Ubuntu Condensed';
+    font-size: 1.7em;
+    margin-top: 0;
+    margin-bottom: 0;
 } .baseText h2 {
-    font-family: 'Inter';
-    font-size: 1.4em;
+    font-family: 'Ubuntu Condensed';
+    font-size: 1.6em;
+    margin-top: 0;
+    margin-bottom: 0;
 } .baseText h3 {
-    font-family: 'Inter';
-    font-size: 1.3em;
+    font-family: 'Ubuntu Condensed';
+    font-size: 1.4em;
+    font-weight: normal;
+    margin-top: 0;
+    margin-bottom: 0;
 } .baseText h4 {
-    font-family: 'Inter';
+    font-family: 'Ubuntu Condensed';
     font-size: 1.2em;
+    font-weight: normal;
+    margin-top: 0;
+    margin-bottom: 0;
 } .baseText h5 {
-    font-family: 'Inter';
+    font-family: 'Ubuntu Condensed';
     font-size: 1.1em;
+    font-weight: normal;
+    margin-top: 0;
+    margin-bottom: 0;
 }
