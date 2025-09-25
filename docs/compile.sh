@@ -25,7 +25,7 @@ cd ../../
 # echo "Blog: Done"
 # cd ../../
 
-cd "./pages/blog/"
+cd "./pages/ramblings/"
 
 cd "../../"
 
