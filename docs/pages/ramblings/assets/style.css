@@ -10,7 +10,7 @@
 body {
     margin:0; 
     padding:0; 
-    background-color:  var(--default-bg-color);
+    background-color: #721c1c;
 }
 
 .tinymargin {
@@ -22,17 +22,22 @@ body {
 
 
 #contentContainer {
-    max-width: 70em;
+    background-color:  var(--default-bg-color);
+    min-width: 30em;
+    max-width: 50em;
     margin-inline: auto;
     font: var(--default-font);
     color: var(--default-text-color);
-    padding: .3rem;
+    padding: .4rem;
+    min-height: 100vh;
+    box-shadow: 0px 0px 23px 9px rgba(0, 0, 0, 0.36);
+
 }
 
 #contentContainer hr {
     background-image: linear-gradient(to right, #18181800, #181818Df, #181818 5%,#181818 95%, #181818Df, #18181800);
     border: 0px;
-    max-width: 94%;
+    max-width: 100%;
     min-width: 10px;
     height: 2px;
     margin-inline: auto;
