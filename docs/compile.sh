@@ -26,7 +26,7 @@ cd ../../
 # cd ../../
 
 cd "./pages/ramblings/"
-
+node "./compile_node.js" &
 cd "../../"
 
 
