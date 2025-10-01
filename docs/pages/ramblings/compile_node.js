@@ -16,35 +16,35 @@ console.log("Ramblings: Started");
 
 // Find files
 var homePagePath = "./base.html";
-var postFolderPath = "./posts/"
-var postPaths = [];
+var postFolderPath = "./posts/";
 
 // postFolders will, if unmodified, return files too. We do not want this. As such, we gotta get rid of everything that isn't a folder.
-var postFolders = fs.readdirSync(postFolderPath, {withFileTypes: true});
-var postFoldersTempArray = [];
-for (const index in postFolders) {    
-    if ( postFolders[index].isDirectory() ) {
-        postFoldersTempArray.push(postFolders[index]);
+var postFolders = [];
+for (const index in fs.readdirSync(postFolderPath, {withFileTypes: true})) {
+    var list = fs.readdirSync(postFolderPath, {withFileTypes: true});    
+    if ( list[index].isDirectory() ) {
+        postFolders.push(list[index]);
     }
 }
-postFolders = postFoldersTempArray;
 
+// Generate posts, and make an event listener for every post you generate. Store these event listeners in an array, so that we can start doing the home page after all of them are done.
+for (const index in postFolders) {
+    var actualPath = postFolders[index].path + postFolders[index].name + "/" 
+    generatePost(actualPath);
 
-await toString();
-console.log("AUSHSUH")
-
-async function toString() {
-    console.log("sijsi")
 }
 
 
 
 
 
-
-
-
-
+async function generatePost(postFolderPath) {
+    // First, we find all files.
+    // Remove only the files we'll generate. index.html and whatnot.
+    // Next, do the thing. you know, run post.adoc through asciidoctor, stuff that in base_template.html.
+    // Use JSDoc for handling titles, dates, and post-proessing.
+    // Place the item and its relevant data in the array of all the posts. make sure the date of the post as added alongside the post. 
+}
 
 
 
