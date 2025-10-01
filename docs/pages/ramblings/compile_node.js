@@ -7,11 +7,9 @@
 
 
 
-
-
-const Asciidoctor = require('asciidoctor');
-const asciidoctor = Asciidoctor();     // Using this is done through assciidoctor.convert(content: string).
-const fs = require("node:fs");
+// Using this is done through assciidoctor.convert(content: string).
+import * as asciidoctor from "asciidoctor";
+import * as fs from 'node:fs';
 
 
 console.log("Ramblings: Started");
@@ -21,7 +19,7 @@ var homePagePath = "./base.html";
 var postFolderPath = "./posts/"
 var postPaths = [];
 
-// postFolders will, if unmodified, return files too. We do not want this. As such, we gotta get rid of 'em.
+// postFolders will, if unmodified, return files too. We do not want this. As such, we gotta get rid of everything that isn't a folder.
 var postFolders = fs.readdirSync(postFolderPath, {withFileTypes: true});
 var postFoldersTempArray = [];
 for (const index in postFolders) {    
@@ -32,11 +30,12 @@ for (const index in postFolders) {
 postFolders = postFoldersTempArray;
 
 
+await toString();
+console.log("AUSHSUH")
 
-
-
-
-
+async function toString() {
+    console.log("sijsi")
+}
 
 
 
