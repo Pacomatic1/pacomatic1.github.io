@@ -43,7 +43,13 @@ async function generatePost(postFolderPath) {
     // Remove only the files we'll generate. index.html and whatnot.
     // Next, do the thing. you know, run post.adoc through asciidoctor, stuff that in base_template.html.
     // Use JSDoc for handling titles, dates, and post-proessing.
-    // Place the item and its relevant data in the array of all the posts. make sure the date of the post as added alongside the post. 
+    // Place the item and its relevant data in the array of all the posts. make sure the date of the post as added alongside the post.
+
+    var fileDirEntryList = fs.readdirSync(postFolderPath, {withFileTypes: true});
+    var fileNameList = fs.readdirSync(postFolderPath, {withFileTypes: false});
+    for (const index in fileDirEntryList) {
+        
+    }
 }
 
 
