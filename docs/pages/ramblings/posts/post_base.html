@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <script src="../../../shared.js" type=module></script>
+        <style>
+            @import url('../style.css');
+        </style>
+
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Paco's Ramblings</title>
+
+    </head>
+    <body class="has-scrollbar">
+        <div id="contentContainer">
+            <div id="titlePiece">
+                NODEJS-UNIQUENESS-65327128234
+                <!-- This is to be replaced by the compiler, so this should never appear anywhere else. This is the article. -->
+            </div>
+            <hr>
+            <div>
+                <div id="articleContainer">
+                    NODEJS-UNIQUENESS-65327128234
+                    <!-- This is to be replaced by the compiler, so this should never appear anywhere else. This is the article. -->
+                </div>
+            </div>
+        </div>
+    </body>
+
+    <script>
+    // We will move this to the compiler soon.
+    // Soon. Not yet.
+
+    // Note for later: JSDOM is a helpful-looking library. Might make my post-processing shenanigans less painful.
+
+    // Make all images load using async.
+    var imageTags = document.querySelectorAll('img');
+    for (let i = 0; i < imageTags.length; i++) {
+        var tagToMod = imageTags[i]; 
+        // They only load when they're on-screen, and they don't lag you when they decode (since there's a million of 'em)
+        tagToMod.loading = "lazy";
+        tagToMod.decoding = "async";
+    }
+
+    var linkTags = document.querySelectorAll('a');
+    for (let i = 0; i < linkTags.length; i++) {
+        var tagToMod = linkTags[i]; 
+
+        // If the content of the tag starts with an exclamation point (!), remove it and make the link open in a new tab. 
+        if (tagToMod.innerHTML.startsWith('!')) {
+            tagToMod.target = "_blank";
+            tagToMod.innerHTML = tagToMod.innerHTML.slice(1);
+        } else {
+            tagToMod.target = '_top';
+        }
+    }
+    </script>
+</html>

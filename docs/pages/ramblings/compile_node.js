@@ -8,11 +8,11 @@
 
 
 // Using this is done through assciidoctor.convert(content: string).
-const Asciidoctor = require('asciidoctor');
-asciidoctor = Asciidoctor();
 const fs = require('node:fs');
 const languageEncoding = require("detect-file-encoding-and-language");
 
+const Asciidoctor = require('asciidoctor');
+const asciidoctor = Asciidoctor();
 
 console.log("Ramblings: Started");
 
@@ -58,15 +58,33 @@ async function generatePost(postFolderPath) {
         var currentEntryPath = fileDirEntryList[index].parentPath + fileDirEntryList[index].name;
 
         if ( generatedFilesWithinAPostToDelete.includes(currentEntry.name) ) { fs.rmSync(currentEntryPath); }
-        if (currentEntry.name == 'post.adoc') {
-            // Get the encoding.
-            var fileEncoding = await languageEncoding(currentEntryPath); // This returns JS Object, but what we just want is fileEncoding.encoding.
+        if ( currentEntry.name == 'post.adoc') {
+            var asciiDocFileAsString = fs.readFileSync(currentEntryPath, { encoding: languageEncoding(currentEntryPath).encoding }); 
+            
+            // Get the file, and also make sure to remove any non-conforming newlines. This will make my work easier.
+
+            // We want to modify certain sections of the AsciiDoc file.
+
+            // First comes the header.
+            // Lucky me, this is actually pretty easy. The first line that isn't a comment or empty line and starts with an equals sign is guarateed to be the title, and the next 2 lines are guaranteed to be the date, version, author, and remark, as per my *own* specification. So, find the first occurence of an equals sign, and go from there.
+            var indexOfHeader = asciiDocFileAsString.indexOf("= ");
+            var headerLineNuumber = getLineNumFromCharIndexOfString(asciiDocFileAsString, indexOfHeader);
 
 
-            console.log(asciidoctor.convert( fs.readFileSync(currentEntryPath, { encoding: fileEncoding.encoding }) ));
 
 
 
+            var compiledAsciiDoc = asciidoctor.convert(asciiDocFileAsString);
         }
     }
+}
+
+
+
+function getLineNumFromCharIndexOfString(text, index) {
+    let line = 1;
+    for (let i = 0; i < index; i++) {
+        if (text[i] === '\n') { line++; }
+    }
+    return line;
 }

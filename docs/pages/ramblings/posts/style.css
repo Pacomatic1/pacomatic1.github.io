@@ -1,0 +1,79 @@
+@import url('./7_scrollbar.css'); /* This only applies to elements with .has-scrollbar. */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
+
+:root {
+    --default-text-color: #222;
+    --default-font: 9pt "Noto Sans", sans-serif;
+    --default-bg-color: #fafafa;
+}
+
+body {
+    margin:0; 
+    padding:0; 
+    background-color: #721c1c;
+}
+
+.tinymargin {
+    margin: .1rem;
+}
+.bigTextButNotAHeader {
+    font-size: 1.1rem;
+}
+
+
+#contentContainer {
+    background-color:  var(--default-bg-color);
+    min-width: 30em;
+    max-width: 50em;
+    margin-inline: auto;
+    font: var(--default-font);
+    color: var(--default-text-color);
+    padding: .4rem;
+    min-height: 100vh;
+    box-shadow: 0px 0px 23px 9px rgba(0, 0, 0, 0.36);
+
+}
+
+#contentContainer hr {
+    background-image: linear-gradient(to right, #18181800, #181818Df, #181818 5%,#181818 95%, #181818Df, #18181800);
+    border: 0px;
+    max-width: 100%;
+    min-width: 10px;
+    height: 2px;
+    margin-inline: auto;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    height: 1px;
+}
+
+#contentConatiner h1 {
+    font-family: 'Ubuntu', 'Arial';
+    font-size: 1.7rem;
+    margin-top: 0.1rem;
+    margin-bottom: .1rem;
+}
+
+#contentContainer h2 {
+    font-size: 1.5rem;
+    margin-top: 0.1rem;
+    margin-bottom: .1rem;
+}
+#contentContainer h6 {
+    font-size: .5rem;
+    margin-top: 0px;
+    margin-bottom: 0;
+}
+
+
+#contentContainer img {
+    max-width: 100%;
+}
+
+
+
+
+#titlePiece {
+    font-size: 2em;
+    font-weight: bold;
+    text-align: center;
+}
