@@ -8,20 +8,23 @@
 
 
 // Using this is done through assciidoctor.convert(content: string).
-import * as asciidoctor from "asciidoctor";
-import * as fs from 'node:fs';
+const Asciidoctor = require('asciidoctor');
+asciidoctor = Asciidoctor();
+const fs = require('node:fs');
+const languageEncoding = require("detect-file-encoding-and-language");
 
 
 console.log("Ramblings: Started");
 
-// Find files
+var generatedFilesWithinAPostToDelete = ['index.html']; // Array of file names, stored as strings. If a posts folder has any of these, the file will be deleted. this is intended to be used with generated files.
+
 var homePagePath = "./base.html";
 var postFolderPath = "./posts/";
 
 // postFolders will, if unmodified, return files too. We do not want this. As such, we gotta get rid of everything that isn't a folder.
 var postFolders = [];
 for (const index in fs.readdirSync(postFolderPath, {withFileTypes: true})) {
-    var list = fs.readdirSync(postFolderPath, {withFileTypes: true});    
+    var list = fs.readdirSync(postFolderPath, {withFileTypes: true});
     if ( list[index].isDirectory() ) {
         postFolders.push(list[index]);
     }
@@ -31,10 +34,14 @@ for (const index in fs.readdirSync(postFolderPath, {withFileTypes: true})) {
 for (const index in postFolders) {
     var actualPath = postFolders[index].path + postFolders[index].name + "/" 
     generatePost(actualPath);
-
+    
 }
 
 
+
+
+
+console.log("Ramblings: Done");
 
 
 
@@ -46,17 +53,20 @@ async function generatePost(postFolderPath) {
     // Place the item and its relevant data in the array of all the posts. make sure the date of the post as added alongside the post.
 
     var fileDirEntryList = fs.readdirSync(postFolderPath, {withFileTypes: true});
-    var fileNameList = fs.readdirSync(postFolderPath, {withFileTypes: false});
     for (const index in fileDirEntryList) {
-        
+        var currentEntry = fileDirEntryList[index];
+        var currentEntryPath = fileDirEntryList[index].parentPath + fileDirEntryList[index].name;
+
+        if ( generatedFilesWithinAPostToDelete.includes(currentEntry.name) ) { fs.rmSync(currentEntryPath); }
+        if (currentEntry.name == 'post.adoc') {
+            // Get the encoding.
+            var fileEncoding = await languageEncoding(currentEntryPath); // This returns JS Object, but what we just want is fileEncoding.encoding.
+
+
+            console.log(asciidoctor.convert( fs.readFileSync(currentEntryPath, { encoding: fileEncoding.encoding }) ));
+
+
+
+        }
     }
 }
-
-
-
-
-
-
-
-
-console.log("Ramblings: Done");

@@ -9,8 +9,10 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "module", 
+  "type": "commonjs",
   "dependencies": {
-    "asciidoctor": "^3.0.4"
+    "@asciidoctor/core": "^3.0.4",
+    "asciidoctor": "^3.0.4",
+    "detect-file-encoding-and-language": "^2.4.0"
   }
 }
