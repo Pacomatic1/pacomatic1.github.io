@@ -59,7 +59,14 @@ async function generatePost(postFolderPath) {
 
         if ( generatedFilesWithinAPostToDelete.includes(currentEntry.name) ) { fs.rmSync(currentEntryPath); }
         if ( currentEntry.name == 'post.adoc') {
-            var asciiDocFileAsString = fs.readFileSync(currentEntryPath, { encoding: languageEncoding(currentEntryPath).encoding }); 
+            // Error handling...
+            var fileEncoding = await encodingConvert(languageEncoding(currentEntryPath).encoding);
+            if (fileEncoding == null) { console.log(currentEntryPath) };
+            
+            console.log(languageEncoding(currentEntryPath))
+
+
+            var asciiDocFileAsString = fs.readFileSync(currentEntryPath, { encoding: fileEncoding }); 
             
             // Get the file, and also make sure to remove any non-conforming newlines. This will make my work easier.
 
@@ -68,8 +75,7 @@ async function generatePost(postFolderPath) {
             // First comes the header.
             // Lucky me, this is actually pretty easy. The first line that isn't a comment or empty line and starts with an equals sign is guarateed to be the title, and the next 2 lines are guaranteed to be the date, version, author, and remark, as per my *own* specification. So, find the first occurence of an equals sign, and go from there.
             var indexOfHeader = asciiDocFileAsString.indexOf("= ");
-            var headerLineNuumber = getLineNumFromCharIndexOfString(asciiDocFileAsString, indexOfHeader);
-
+            var headerLineNumber = getLineNumFromCharIndexOfString(asciiDocFileAsString, indexOfHeader);
 
 
 
@@ -87,4 +93,19 @@ function getLineNumFromCharIndexOfString(text, index) {
         if (text[i] === '\n') { line++; }
     }
     return line;
+}
+
+function encodingConvert(encoding) {
+    // The encoding we want is sometimes not communicated properly. So, we must convert them.
+    var finalEncoding;
+    switch(encoding) {
+        case 'UTF-8':
+            finalEncoding = 'utf8';
+            break;
+        default:
+            finalEncoding = null;
+            console.log("One of your files has an encoding we do not know! Please convert it to utf-8.")
+            break;
+    }
+    return finalEncoding;
 }
