@@ -9,7 +9,6 @@
 
 // Using this is done through assciidoctor.convert(content: string).
 const fs = require('node:fs');
-const languageEncoding = require("detect-file-encoding-and-language");
 
 const Asciidoctor = require('asciidoctor');
 const asciidoctor = Asciidoctor();
