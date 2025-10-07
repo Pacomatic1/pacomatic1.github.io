@@ -63,19 +63,14 @@ for (var i = 0; i < project_listings_json.length; i++) {
 // Alrighty, time to put this into our page.
 
 // First, I need to get the base bage. Node.js doesn't know what encoding our file uses and will return a buffer, but if I tell it the encoding it will return a string.
-// Sadly, I cannot guarantee my page uses a specific encoding. As such, a library will find it for us.
-// Sadlyer, this library ONLY has an async function. and I need a sync function. Due to my lackluster programming abilities, I will use this stupid hack. 
-languageEncoding("./base.html").then((fileInfo) => {
-    // Everything from hereon continues here.
-    // If they ever allow top-level awaits, please refactor this.
-    encoding = fileInfo.encoding;
-    var baseHTMLString = fs.readFileSync("./base.html", encoding);
+// Lucky me, I mandated a certain encoding. So we don't need any detection shenanigans.
 
-    // First, a quick thingy at the start of the file to warn everyone editing index.html that they should actually be editing base.html and compiling afterwards.
-    baseHTMLString = "<!-- HEY!!!!! This is the COMPILED version of this page. If you want to make eny edits, you should instead edit base.html, and then compile it. -->\n" + baseHTMLString;
+var baseHTMLString = fs.readFileSync("./base.html", 'utf8');
 
-    // The spot we'll replace is based on a tiny little important piece of text in the base.html, which says 'NODEJS-UNIQUENESS-IDENTIFIER-HOWEEEEAAWWEEEEEEEEE2198732987926758239084617235239847'. This is the thing we replace, it must never appear anywhere else in that file. 
-    var finalHTMLString = baseHTMLString.replace("NODEJS-UNIQUENESS-IDENTIFIER-HOWEEEEAAWWEEEEEEEEE2198732987926758239084617235239847", project_listings_final);
-    fs.writeFileSync('./index.html', finalHTMLString);
-    console.log("Projects Page: Done");
-})
+// First, a quick thingy at the start of the file to warn everyone editing index.html that they should actually be editing base.html and compiling afterwards.
+baseHTMLString = "<!-- HEY!!!!! This is the COMPILED version of this page. If you want to make eny edits, you should instead edit base.html, and then compile it. -->\n" + baseHTMLString;
+
+// The spot we'll replace is based on a tiny little important piece of text in the base.html, which says 'NODEJS-UNIQUENESS-IDENTIFIER-HOWEEEEAAWWEEEEEEEEE2198732987926758239084617235239847'. This is the thing we replace, it must never appear anywhere else in that file. 
+var finalHTMLString = baseHTMLString.replace("NODEJS-UNIQUENESS-IDENTIFIER-HOWEEEEAAWWEEEEEEEEE2198732987926758239084617235239847", project_listings_final);
+fs.writeFileSync('./index.html', finalHTMLString);
+console.log("Projects Page: Done");

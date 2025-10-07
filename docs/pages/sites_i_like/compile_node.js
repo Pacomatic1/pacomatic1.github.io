@@ -43,20 +43,14 @@ for (var i = 0; i < web_buttons_json.length; i++) {
 // Alrighty, time to put this into our page.
 
 // First, I need to get the base bage. Node.js doesn't know what encoding our file uses and will return a buffer, but if I tell it the encoding it will return a string.
-// Sadly, I cannot guarantee my page uses a specific encoding. As such, a library will find it for us.
-// Sadlyer, this library ONLY has an async function. and I need a sync function. Due to my lackluster programming abilities, I will use this stupid hack. 
-languageEncoding("./base.html").then((fileInfo) => {
-    // Everything from hereon continues here.
-    // If they ever allow top-level awaits, please refactor this.
-    encoding = fileInfo.encoding;
-    var baseHTMLString = fs.readFileSync("./base.html", encoding);
+// But I mandated using a certain encoding, so it's fine.
+var baseHTMLString = fs.readFileSync("./base.html", 'utf8');
 
-    // First, a quick thingy at the start of the file to warn everyone editing index.html that they should actually be editing base.html and compiling afterwards.
-    baseHTMLString = "<!-- HEY!!!!! This is the COMPILED version of this page. If you want to make eny edits, you should instead edit base.html, and then compile it. -->\n" + baseHTMLString;
+// First, a quick thingy at the start of the file to warn everyone editing index.html that they should actually be editing base.html and compiling afterwards.
+baseHTMLString = "<!-- HEY!!!!! This is the COMPILED version of this page. If you want to make eny edits, you should instead edit base.html, and then compile it. -->\n" + baseHTMLString;
 
 
-    // The spot we'll replace is based on a tiny little important piece of text in the base.html, which says 'NODEJS-IDENTIFIER-UNIQUENESS-893429874892374923874'. This is the thing we replace, it (should) never appear anywhere else in that file. 
-    var finalHTMLString = baseHTMLString.replace("NODEJS-IDENTIFIER-UNIQUENESS-893429874892374923874", web_buttons_final);
-    fs.writeFileSync('./index.html', finalHTMLString);
-    console.log("Sites I Like: Done");
-})
+// The spot we'll replace is based on a tiny little important piece of text in the base.html, which says 'NODEJS-IDENTIFIER-UNIQUENESS-893429874892374923874'. This is the thing we replace, it (should) never appear anywhere else in that file. 
+var finalHTMLString = baseHTMLString.replace("NODEJS-IDENTIFIER-UNIQUENESS-893429874892374923874", web_buttons_final);
+fs.writeFileSync('./index.html', finalHTMLString);
+console.log("Sites I Like: Done");

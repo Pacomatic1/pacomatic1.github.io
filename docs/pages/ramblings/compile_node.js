@@ -58,14 +58,7 @@ async function generatePost(postFolderPath) {
 
         if ( generatedFilesWithinAPostToDelete.includes(currentEntry.name) ) { fs.rmSync(currentEntryPath); }
         if ( currentEntry.name == 'post.adoc') {
-            // Error handling...
-            var fileEncoding = await encodingConvert(languageEncoding(currentEntryPath).encoding);
-            if (fileEncoding == null) { console.log(currentEntryPath) };
-            
-            console.log(languageEncoding(currentEntryPath))
-
-
-            var asciiDocFileAsString = fs.readFileSync(currentEntryPath, { encoding: fileEncoding }); 
+            var asciiDocFileAsString = fs.readFileSync(currentEntryPath, { encoding: 'utf8' }); 
             
             // Get the file, and also make sure to remove any non-conforming newlines. This will make my work easier.
 
@@ -92,19 +85,4 @@ function getLineNumFromCharIndexOfString(text, index) {
         if (text[i] === '\n') { line++; }
     }
     return line;
-}
-
-function encodingConvert(encoding) {
-    // The encoding we want is sometimes not communicated properly. So, we must convert them.
-    var finalEncoding;
-    switch(encoding) {
-        case 'UTF-8':
-            finalEncoding = 'utf8';
-            break;
-        default:
-            finalEncoding = null;
-            console.log("One of your files has an encoding we do not know! Please convert it to utf-8.")
-            break;
-    }
-    return finalEncoding;
 }
