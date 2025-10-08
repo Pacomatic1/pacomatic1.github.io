@@ -16,7 +16,6 @@
 
 
 const fs = require("node:fs");
-const languageEncoding = require("detect-file-encoding-and-language");
 
 console.log("Sites I Like: Started")
 

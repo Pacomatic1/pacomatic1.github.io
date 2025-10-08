@@ -13,7 +13,6 @@
 
 
 const fs = require("node:fs");
-const languageEncoding = require("detect-file-encoding-and-language");
 
 console.log("Projects Page: Started")
 

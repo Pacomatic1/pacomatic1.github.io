@@ -8,8 +8,5 @@
   "main": "compile_node.js",
   "scripts": {
     "compile": "node compile_node.js"
-  },
-  "dependencies": {
-    "detect-file-encoding-and-language": "^2.4.0"
   }
 }
