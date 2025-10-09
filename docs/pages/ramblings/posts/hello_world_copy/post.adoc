@@ -4,7 +4,7 @@ And then I started writing. It would feel weird if there was nothing, no?
 Here is some NOT text.
 more text.
 
-[%hardlinebreaks]
+[hardlinebreaks]
 Now for some
 NOT hard-line-broken
 NOT text. Soo good, right?

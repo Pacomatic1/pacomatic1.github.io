@@ -59,6 +59,10 @@ async function generatePost(postFolderPath) {
         // Don't add an if for post.json, that's handled with the adoc.
         if ( generatedFilesWithinAPostToDelete.includes(currentEntry.name) ) { fs.rmSync(currentEntryPath); }
         if ( currentEntry.name == 'post.adoc') {
+            var basePostPath = currentEntry.parentPath + "../post_base.html";
+            var compiledPostPath = currentEntry.parentPath + "index.html";
+
+            var basePostAsString = fs.readFileSync( basePostPath, { encoding: 'utf8' })
             var postJSON = JSON.parse( fs.readFileSync(currentEntry.parentPath + "post.json", { encoding: 'utf8' }) );
 
             var postTitle = postJSON.postTitle;
@@ -70,9 +74,15 @@ async function generatePost(postFolderPath) {
             var asciiDocFileAsString = fs.readFileSync(currentEntryPath, { encoding: 'utf8' }); 
             const asciiDocFileLineByLine = () => { var arr = asciiDocFileAsString.split('\n'); arr.unshift(''); return arr; }; // This is to make reading easier. I find this to be nicer than a standard variable, since you don't have to synchronize it all the time. This array's indeices are synchronized with the line numbers, so the content actually starts at [1].
 
-
-            // Now, we must modify certain sections of the AsciiDoc file.            
             var compiledAsciiDoc = asciidoctor.convert(asciiDocFileAsString);
+
+            var compiledPost = basePostAsString.replace("NODEJS-UNIQUENESS-86348753276982273", compiledAsciiDoc);
+
+
+            fs.writeFile(compiledPostPath, compiledPost, (err) => {
+                console.log("bluh")
+            });
+
         }
     }
 }
