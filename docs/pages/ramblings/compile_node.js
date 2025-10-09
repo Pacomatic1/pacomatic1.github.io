@@ -54,24 +54,33 @@ async function generatePost(postFolderPath) {
     var fileDirEntryList = fs.readdirSync(postFolderPath, {withFileTypes: true});
     for (const index in fileDirEntryList) {
         var currentEntry = fileDirEntryList[index];
-        var currentEntryPath = fileDirEntryList[index].parentPath + fileDirEntryList[index].name;
+        var currentEntryPath = currentEntry.parentPath + currentEntry.name;
 
+        // Don't add an if for post.json, that's handled with the adoc.
         if ( generatedFilesWithinAPostToDelete.includes(currentEntry.name) ) { fs.rmSync(currentEntryPath); }
         if ( currentEntry.name == 'post.adoc') {
+            var postJSON = JSON.parse( fs.readFileSync(currentEntry.parentPath + "post.json", { encoding: 'utf8' }) );
+
+            var postTitle = postJSON.postTitle;
+            var postVersion = postJSON.postVersion;
+            var postPublishDate = new Date(postJSON.postPublishDate);
+            var postLastUpdate = new Date(postJSON.postLastUpdate);
+            var postSubtitle = postJSON.postSubtitle;
+
+            console.log({
+postTitle,
+postVersion,
+postPublishDate,
+postLastUpdate,
+postSubtitle
+
+            })
+
             var asciiDocFileAsString = fs.readFileSync(currentEntryPath, { encoding: 'utf8' }); 
-            
-            // Get the file, and also make sure to remove any non-conforming newlines. This will make my work easier.
-
-            // We want to modify certain sections of the AsciiDoc file.
-
-            // First comes the header.
-            // Lucky me, this is actually pretty easy. The first line that isn't a comment or empty line and starts with an equals sign is guarateed to be the title, and the next 2 lines are guaranteed to be the date, version, author, and remark, as per my *own* specification. So, find the first occurence of an equals sign, and go from there.
-            var indexOfHeader = asciiDocFileAsString.indexOf("= ");
-            var headerLineNumber = getLineNumFromCharIndexOfString(asciiDocFileAsString, indexOfHeader);
+            const asciiDocFileLineByLine = () => { var arr = asciiDocFileAsString.split('\n'); arr.unshift(''); return arr; }; // This is to make reading easier. I find this to be nicer than a standard variable, since you don't have to synchronize it all the time. This array's indeices are synchronized with the line numbers, so the content actually starts at [1].
 
 
-
-
+            // Now, we must modify certain sections of the AsciiDoc file.            
             var compiledAsciiDoc = asciidoctor.convert(asciiDocFileAsString);
         }
     }
@@ -85,4 +94,4 @@ function getLineNumFromCharIndexOfString(text, index) {
         if (text[i] === '\n') { line++; }
     }
     return line;
-}
+} // https://stackoverflow.com/a/76855467
