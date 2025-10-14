@@ -40,7 +40,7 @@ for (const index in postFolders) {
 
 
 
-console.log("Ramblings: Done");
+// console.log("Ramblings: Done"); You gotta mod this such that it waits for everything to be done first.
 
 
 
@@ -80,7 +80,9 @@ async function generatePost(postFolderPath) {
 
 
             fs.writeFile(compiledPostPath, compiledPost, (err) => {
-                console.log("bluh")
+                if (err == null) {
+                    console.log(`Ramblings: Wrote post "${postTitle}" successfully!`)
+                }
             });
 
         }

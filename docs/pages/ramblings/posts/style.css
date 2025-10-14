@@ -34,7 +34,8 @@ body {
 
 }
 
-#contentContainer hr {
+
+#articleContainer hr {
     background-image: linear-gradient(to right, #18181800, #181818Df, #181818 5%,#181818 95%, #181818Df, #18181800);
     border: 0px;
     max-width: 100%;
@@ -46,29 +47,34 @@ body {
     height: 1px;
 }
 
-#contentConatiner h1 {
+#articleContainer h1 {
     font-family: 'Ubuntu', 'Arial';
     font-size: 1.7rem;
     margin-top: 0.1rem;
     margin-bottom: .1rem;
 }
 
-#contentContainer h2 {
-    font-size: 1.5rem;
+#articleContainer h2 {
+    font-size: 1.2rem;
     margin-top: 0.1rem;
     margin-bottom: .1rem;
+    padding-bottom: 0;
 }
-#contentContainer h6 {
+/* #articleContainer h6 {
     font-size: .5rem;
     margin-top: 0px;
     margin-bottom: 0;
-}
+    } */
+    
 
-
-#contentContainer img {
+#articleContainer img {
     max-width: 100%;
 }
 
+#articleContainer p {
+    font-size: .8rem;
+    margin: 0.1rem 0 .1rem 0;
+}
 
 
 
