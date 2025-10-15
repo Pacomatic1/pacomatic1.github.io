@@ -27,7 +27,7 @@ First of all, the post.adoc header is dead. Do not use a header. Everything you 
     postVersion: "1.0.0" - This is a version, using the usual semantic versioning. There is no specification, but it's good to stay consistent, so: 'Hotfix' versions are small grammatical corrections for things like typos, minor versions are for small bits of extra info or mentioning a newer article or mentioning that something is outdated or something, and major versions are best for a post that is continually updated unfinished sections and 'TBD's getting finished.
     postPublishDate: "Date" - This is when the post was first made. This is converted into a Date() or Temporal() object; so long as your text can be parsed by whichever API I'm using, we're good. **NEVER CHANGE THIS UNLESS IT'S BROKEN.** (date for now, I wanna do temporal but it's still experimental, so i do it later)
     postLastUpdate: "Date" - This is when the post was last updated. The format is the same as the publishDate, except that you change this every time you update something.... which really shouldn't come as a surprise.
-    postSubtitle: "Please god this is so obvious I don't wanna have to explain this"
+    postSubtitle: "Please god this is so obvious I don't wanna have to explain this" - Please god this is so obvious I don't wanna have to explain this
 }
 There is no author section, because there does not need to be. I may do it some other day, in which case you should proabably update all your past posts.
 

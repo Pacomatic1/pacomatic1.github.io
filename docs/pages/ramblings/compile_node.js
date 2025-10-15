@@ -76,8 +76,12 @@ async function generatePost(postFolderPath) {
 
             var compiledAsciiDoc = asciidoctor.convert(asciiDocFileAsString);
 
-            var compiledPost = basePostAsString.replace("NODEJS-UNIQUENESS-86348753276982273", compiledAsciiDoc);
 
+
+
+            var compiledPost;
+            compiledPost = basePostAsString.replace("NODEJS-UNIQUENESS-86348753276982273", compiledAsciiDoc);
+            compiledPost = compiledPost.replace("NODEJS-UNIQUENESS-65327128234", postTitle)
 
             fs.writeFile(compiledPostPath, compiledPost, (err) => {
                 if (err == null) {

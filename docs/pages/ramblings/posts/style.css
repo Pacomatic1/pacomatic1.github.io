@@ -13,13 +13,14 @@ body {
     background-color: #721c1c;
 }
 
+
+
 .tinymargin {
     margin: .1rem;
 }
 .bigTextButNotAHeader {
     font-size: 1.1rem;
 }
-
 
 #contentContainer {
     background-color:  var(--default-bg-color);
@@ -28,12 +29,14 @@ body {
     margin-inline: auto;
     font: var(--default-font);
     color: var(--default-text-color);
-    padding: .4rem;
     min-height: 100vh;
     box-shadow: 0px 0px 23px 9px rgba(0, 0, 0, 0.36);
-
+    
 }
 
+#articleContainer {
+    padding: .4rem;
+}
 
 #articleContainer hr {
     background-image: linear-gradient(to right, #18181800, #181818Df, #181818 5%,#181818 95%, #181818Df, #18181800);
@@ -65,7 +68,7 @@ body {
     margin-top: 0px;
     margin-bottom: 0;
     } */
-    
+
 
 #articleContainer img {
     max-width: 100%;
@@ -77,9 +80,24 @@ body {
 }
 
 
-
+#headerPiece {
+    background: #111111;
+    color: #FCFCFC;
+}
+#headerPiece hr {
+    max-width: 92%;
+    background-image: linear-gradient(to right, #CCCCCC00, #CCCCCCDf, #CCCCCC 5%,#CCCCCC 95%, #CCCCCCDf, #CCCCCC00);
+    border: 0px;
+    min-width: 10px;
+    margin-inline: auto;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    height: 1px;
+}
 #titlePiece {
-    font-size: 2em;
+    padding: .4rem;
+    font-size: 2rem;
     font-weight: bold;
-    text-align: center;
+    text-align: start;
+    font-family: 'Ubuntu';
 }
