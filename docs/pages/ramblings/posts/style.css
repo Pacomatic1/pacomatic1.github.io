@@ -96,8 +96,10 @@ body {
 }
 #titlePiece {
     padding: .4rem;
+    padding-bottom: 0px;
+    margin-bottom: 0px;
     font-size: 2rem;
     font-weight: bold;
-    text-align: start;
+    text-align: center;
     font-family: 'Ubuntu';
 }
