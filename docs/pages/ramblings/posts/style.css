@@ -103,3 +103,13 @@ body {
     text-align: center;
     font-family: 'Ubuntu';
 }
+#subtitlePiece {
+    margin-inline: auto;
+    max-width: 92%;
+    text-align: center;
+}
+#detailsPiece {
+    margin-inline: auto;
+    max-width: 92%;
+    text-align: center;
+}

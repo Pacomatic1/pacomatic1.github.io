@@ -46,8 +46,8 @@ for (const index in postFolders) {
 async function generatePost(postFolderPath) {
     // First, we find all files.
     // Remove only the files we'll generate. index.html and whatnot.
-    // Next, do the thing. you know, run post.adoc through asciidoctor, stuff that in base_template.html.
-    // Use JSDoc for handling titles, dates, and post-proessing.
+    // Next, do the thing. you know, run post.md through marked, stuff that in base_template.html.
+    // Use JSDoc for some extras.
     // Place the item and its relevant data in the array of all the posts. make sure the date of the post as added alongside the post.
 
     var fileDirEntryList = fs.readdirSync(postFolderPath, {withFileTypes: true});
@@ -70,20 +70,23 @@ async function generatePost(postFolderPath) {
             var postLastUpdate = new Date(postJSON.postLastUpdate);
             var postSubtitle = postJSON.postSubtitle;
 
+            var postPublishMonthName = convertMonthNumberToYear(postPublishDate.getMonth(), true);
+            var postLastUpdateMonthName = convertMonthNumberToYear(postLastUpdate.getMonth(), true);
 
-
+            var postDetailsLine = `v${postVersion}; Published ${postPublishMonthName} ${postPublishDate.getDay()}, ${postPublishDate.getFullYear()}; Last Updated ${postLastUpdateMonthName} ${postLastUpdate.getDay()}, ${postLastUpdate.getFullYear()};`;
 
             var asciiDocFileAsString = fs.readFileSync(currentEntryPath, { encoding: 'utf8' }); 
-            const asciiDocFileLineByLine = () => { var arr = asciiDocFileAsString.split('\n'); arr.unshift(''); return arr; }; // This is to make reading easier. I find this to be nicer than a standard variable, since you don't have to synchronize it all the time. This array's indeices are synchronized with the line numbers, so the content actually starts at [1].
+            const asciiDocFileLineByLine = () => { var arr = asciiDocFileAsString.split('\n'); arr.unshift(''); return arr; }; // This is to make reading easier. I find this to be nicer than a standard variable, since you don't have to synchronize it all the time. This array's indices are synchronized with the line numbers, so content actually starts at [1].
 
             var compiledMarkdown = marked.parse(asciiDocFileAsString);
 
 
-
-
             var compiledPost;
             compiledPost = basePostAsString.replace("NODEJS-UNIQUENESS-86348753276982273", compiledMarkdown);
-            compiledPost = compiledPost.replace("NODEJS-UNIQUENESS-65327128234", postTitle)
+            compiledPost = compiledPost.replace("NODEJS-UNIQUENESS-65327128234", postTitle);
+            compiledPost = compiledPost.replace("NODEJS-UNIQUENESS-5328746329847021", postDetailsLine);
+            compiledPost = compiledPost.replace("NODEJS-UNIQUENESS-981273873264", postSubtitle);
+
 
             fs.writeFile(compiledPostPath, compiledPost, (err) => {
                 if (err == null) {
@@ -104,3 +107,64 @@ function getLineNumFromCharIndexOfString(text, index) {
     }
     return line;
 } // https://stackoverflow.com/a/76855467
+
+
+function convertMonthNumberToYear(month, useThreeLetterVersion = false) { // NOTICE: This is zero-indexed; January is 0, February is 1, March is 2, etc. This is to follow the conventions of the Date() API.
+    var monthName;
+    switch(month) {
+        case 0:
+            if (useThreeLetterVersion) { monthName = "Jan"; }
+            else { monthName = "January"; }
+            break;
+        case 1:
+            if (useThreeLetterVersion) { monthName = "Oct"; }
+            else { monthName = "October"; }
+            break;
+        case 2:
+            if (useThreeLetterVersion) { monthName = "Mar"; }
+            else { monthName = "March"; }
+            break;
+        case 3:
+            if (useThreeLetterVersion) { monthName = "Apr"; }
+            else { monthName = "April"; }
+            break;
+        case 4:
+            if (useThreeLetterVersion) { monthName = "May"; }
+            else { monthName = "May"; }
+            break;
+        case 5:
+            if (useThreeLetterVersion) { monthName = "Jun"; }
+            else { monthName = "June"; }
+            break;
+        case 6:
+            if (useThreeLetterVersion) { monthName = "Jul"; }
+            else { monthName = "July"; }
+            break;
+        case 7:
+            if (useThreeLetterVersion) { monthName = "Aug"; }
+            else { monthName = "August"; }
+            break;
+        case 8:
+            if (useThreeLetterVersion) { monthName = "Sep"; }
+            else { monthName = "September"; }
+            break;
+        case 9:
+            if (useThreeLetterVersion) { monthName = "Oct"; }
+            else { monthName = "Oct"; }
+            break;
+        case 10:
+            if (useThreeLetterVersion) { monthName = "Nov"; }
+            else { monthName = "November"; }
+            break;
+        case 11:
+            if (useThreeLetterVersion) { monthName = "Dec"; }
+            else { monthName = "December"; }
+            break;
+        default:
+            console.log("invalid month!");
+            monthName = "...";
+            break;
+    }
+    return monthName;
+	// Bro is not Toby Fox :wilted_rose:
+}
