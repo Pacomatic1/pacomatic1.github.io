@@ -78,6 +78,11 @@ async function generatePost(postFolderPath) {
             var asciiDocFileAsString = fs.readFileSync(currentEntryPath, { encoding: 'utf8' }); 
             const asciiDocFileLineByLine = () => { var arr = asciiDocFileAsString.split('\n'); arr.unshift(''); return arr; }; // This is to make reading easier. I find this to be nicer than a standard variable, since you don't have to synchronize it all the time. This array's indices are synchronized with the line numbers, so content actually starts at [1].
 
+
+            marked.use({
+                gfm: true,
+                breaks: true,
+            });
             var compiledMarkdown = marked.parse(asciiDocFileAsString);
 
 
