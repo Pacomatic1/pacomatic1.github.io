@@ -10,8 +10,7 @@
 // Using this is done through assciidoctor.convert(content: string).
 const fs = require('node:fs');
 
-const Asciidoctor = require('asciidoctor');
-const asciidoctor = Asciidoctor();
+const { marked } = require('marked');
 
 console.log("Ramblings: Started");
 
@@ -58,7 +57,7 @@ async function generatePost(postFolderPath) {
 
         // Don't add an if for post.json, that's handled with the adoc.
         if ( generatedFilesWithinAPostToDelete.includes(currentEntry.name) ) { fs.rmSync(currentEntryPath); }
-        if ( currentEntry.name == 'post.adoc') {
+        if ( currentEntry.name == 'post.md') {
             var basePostPath = currentEntry.parentPath + "../post_base.html";
             var compiledPostPath = currentEntry.parentPath + "index.html";
 
@@ -71,16 +70,19 @@ async function generatePost(postFolderPath) {
             var postLastUpdate = new Date(postJSON.postLastUpdate);
             var postSubtitle = postJSON.postSubtitle;
 
+
+
+
             var asciiDocFileAsString = fs.readFileSync(currentEntryPath, { encoding: 'utf8' }); 
             const asciiDocFileLineByLine = () => { var arr = asciiDocFileAsString.split('\n'); arr.unshift(''); return arr; }; // This is to make reading easier. I find this to be nicer than a standard variable, since you don't have to synchronize it all the time. This array's indeices are synchronized with the line numbers, so the content actually starts at [1].
 
-            var compiledAsciiDoc = asciidoctor.convert(asciiDocFileAsString);
+            var compiledMarkdown = marked.parse(asciiDocFileAsString);
 
 
 
 
             var compiledPost;
-            compiledPost = basePostAsString.replace("NODEJS-UNIQUENESS-86348753276982273", compiledAsciiDoc);
+            compiledPost = basePostAsString.replace("NODEJS-UNIQUENESS-86348753276982273", compiledMarkdown);
             compiledPost = compiledPost.replace("NODEJS-UNIQUENESS-65327128234", postTitle)
 
             fs.writeFile(compiledPostPath, compiledPost, (err) => {

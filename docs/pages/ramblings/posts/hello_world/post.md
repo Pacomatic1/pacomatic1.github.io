@@ -1,18 +1,17 @@
 Here is some text.
 more text.
 
-[%hardlinebreaks]
+# Nande?
 Now for some
 hard-line-broken
 text. Soo good, right?
 
-Now another paragraph.
-The thing should no longer apply.
+Now another paragraph. The thing should no longer apply.
 So peak.
 
 ---
 AUGH!
 What was that!
 
-== Subheading..?
+## Subheading..?
 Here is some more stuff.

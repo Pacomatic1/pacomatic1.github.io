@@ -11,8 +11,6 @@
   "license": "ISC",
   "type": "commonjs",
   "dependencies": {
-    "@asciidoctor/core": "^3.0.4",
-    "asciidoctor": "^3.0.4",
-    "detect-file-encoding-and-language": "^2.4.0"
+    "marked": "^16.4.1"
   }
 }
