@@ -9,8 +9,10 @@
 
 // Using this is done through assciidoctor.convert(content: string).
 const fs = require('node:fs');
-
 const { marked } = require('marked');
+const jsdom = require("jsdom");
+const { JSDOM } = jsdom;
+const path = require('node:path');
 
 console.log("Ramblings: Started");
 
@@ -58,12 +60,14 @@ async function generatePost(postFolderPath) {
         // Don't add an if for post.json, that's handled with the adoc.
         if ( generatedFilesWithinAPostToDelete.includes(currentEntry.name) ) { fs.rmSync(currentEntryPath); }
         if ( currentEntry.name == 'post.md') {
+            // File loading
             var basePostPath = currentEntry.parentPath + "../post_base.html";
             var compiledPostPath = currentEntry.parentPath + "index.html";
 
             var basePostAsString = fs.readFileSync( basePostPath, { encoding: 'utf8' })
             var postJSON = JSON.parse( fs.readFileSync(currentEntry.parentPath + "post.json", { encoding: 'utf8' }) );
 
+            // Post data? Metadata? Title Data? What do we call this, exactly?
             var postTitle = postJSON.postTitle;
             var postVersion = postJSON.postVersion;
             var postPublishDate = new Date(postJSON.postPublishDate);
@@ -79,29 +83,50 @@ async function generatePost(postFolderPath) {
             const asciiDocFileLineByLine = () => { var arr = asciiDocFileAsString.split('\n'); arr.unshift(''); return arr; }; // This is to make reading easier. I find this to be nicer than a standard variable, since you don't have to synchronize it all the time. This array's indices are synchronized with the line numbers, so content actually starts at [1].
 
 
+            // Compiling the markdown.
             marked.use({
                 gfm: true,
                 breaks: true,
             });
             var compiledMarkdown = marked.parse(asciiDocFileAsString);
 
-
+            // HTML Injection.
             var compiledPost;
             compiledPost = basePostAsString.replace("NODEJS-UNIQUENESS-86348753276982273", compiledMarkdown);
             compiledPost = compiledPost.replace("NODEJS-UNIQUENESS-65327128234", postTitle);
             compiledPost = compiledPost.replace("NODEJS-UNIQUENESS-5328746329847021", postDetailsLine);
             compiledPost = compiledPost.replace("NODEJS-UNIQUENESS-981273873264", postSubtitle);
 
+            // Post processing.
+            var postProcessingDOM = new JSDOM(compiledPost, {
+                url: "file://" + path.resolve(compiledPostPath),
+                contentType: "text/html",
+                includeNodeLocations: true,
+                storageQuota: 10000000
+            });
 
+            console.log( postProcessingDOM.window.document.style)
+            
+            // When all is said and done, our generated file shall be written.
             fs.writeFile(compiledPostPath, compiledPost, (err) => {
                 if (err == null) {
                     console.log(`Ramblings: Wrote post "${postTitle}" successfully!`)
                 }
             });
+            
 
         }
     }
 }
+
+
+
+
+
+
+
+
+
 
 
 
