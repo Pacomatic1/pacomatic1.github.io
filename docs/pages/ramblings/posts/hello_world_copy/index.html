@@ -1,7 +1,5 @@
-<!doctype html>
-<html lang="en">
-    <head>
-        <script src="../../../shared.js" type=module></script>
+<!DOCTYPE html><html lang="en"><head>
+        <script src="../../../shared.js" type="module"></script>
         <style>
             @import url('../style.css');
         </style>
@@ -43,34 +41,5 @@
                 </div>
             </div>
         </div>
-    </body>
-
-    <script>
-    // We will move this to the compiler soon.
-    // Soon. Not yet.
-
-    // Note for later: JSDOM is a helpful-looking library. Might make my post-processing shenanigans less painful.
-
-    // Make all images load using async.
-    var imageTags = document.querySelectorAll('img');
-    for (let i = 0; i < imageTags.length; i++) {
-        var tagToMod = imageTags[i]; 
-        // They only load when they're on-screen, and they don't lag you when they decode (since there's a million of 'em)
-        tagToMod.loading = "lazy";
-        tagToMod.decoding = "async";
-    }
-
-    var linkTags = document.querySelectorAll('a');
-    for (let i = 0; i < linkTags.length; i++) {
-        var tagToMod = linkTags[i]; 
-
-        // If the content of the tag starts with an exclamation point (!), remove it and make the link open in a new tab. 
-        if (tagToMod.innerHTML.startsWith('!')) {
-            tagToMod.target = "_blank";
-            tagToMod.innerHTML = tagToMod.innerHTML.slice(1);
-        } else {
-            tagToMod.target = '_top';
-        }
-    }
-    </script>
-</html>
+    
+</body></html>

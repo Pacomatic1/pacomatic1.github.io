@@ -105,7 +105,31 @@ async function generatePost(postFolderPath) {
                 storageQuota: 10000000
             });
 
-            console.log( postProcessingDOM.window.document.style)
+
+            // Make all images load using async.
+            var imageTags = postProcessingDOM.window.document.querySelectorAll('img');
+            for (let i = 0; i < imageTags.length; i++) {
+                var tagToMod = imageTags[i]; 
+                // They only load when they're on-screen, and they don't lag you when they decode (since there's a million of 'em)
+                tagToMod.loading = "lazy";
+                tagToMod.decoding = "async";
+            }
+
+
+            var linkTags = postProcessingDOM.window.document.body.querySelectorAll('a');
+            for (let i = 0; i < linkTags.length; i++) {
+                var tagToMod = linkTags[i]; 
+
+                // If the content of the tag starts with an exclamation point (!), remove it and make the link open in a new tab. 
+                if (tagToMod.href.startsWith('!')) {
+                    tagToMod.target = "_blank";
+                    tagToMod.href = tagToMod.href.slice(1);
+                } else {
+                    tagToMod.target = '_top';
+                }
+            }
+
+            compiledPost = postProcessingDOM.serialize();
             
             // When all is said and done, our generated file shall be written.
             fs.writeFile(compiledPostPath, compiledPost, (err) => {
