@@ -31,7 +31,7 @@ First of all, the post's title and whatnot is some stuff you must put in post.js
 
 post.md is a modified version of markdown.
 We parse it through marked, so it carries all the quirks of that. This also means unsanitized HTML, so go wild if you want to.
-All hyperlinks prepended with an exclamation mark will open in a new tab.
+All hyperlinks appeneded with an exclamation mark will open in a new tab.
 There is now the <wavy> tag. I'll get there soon~
 
 

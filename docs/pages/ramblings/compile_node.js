@@ -97,6 +97,7 @@ async function generatePost(postFolderPath) {
             compiledPost = compiledPost.replace("NODEJS-UNIQUENESS-5328746329847021", postDetailsLine);
             compiledPost = compiledPost.replace("NODEJS-UNIQUENESS-981273873264", postSubtitle);
 
+            
             // Post processing.
             var postProcessingDOM = new JSDOM(compiledPost, {
                 url: "file://" + path.resolve(compiledPostPath),
@@ -104,31 +105,17 @@ async function generatePost(postFolderPath) {
                 includeNodeLocations: true,
                 storageQuota: 10000000
             });
-
-
+            
+            
             // Make all images load using async.
-            var imageTags = postProcessingDOM.window.document.querySelectorAll('img');
+            var imageTags = postProcessingDOM.window.document.body.querySelectorAll('img');
             for (let i = 0; i < imageTags.length; i++) {
                 var tagToMod = imageTags[i]; 
                 // They only load when they're on-screen, and they don't lag you when they decode (since there's a million of 'em)
                 tagToMod.loading = "lazy";
                 tagToMod.decoding = "async";
             }
-
-
-            var linkTags = postProcessingDOM.window.document.body.querySelectorAll('a');
-            for (let i = 0; i < linkTags.length; i++) {
-                var tagToMod = linkTags[i]; 
-
-                // If the content of the tag starts with an exclamation point (!), remove it and make the link open in a new tab. 
-                if (tagToMod.href.startsWith('!')) {
-                    tagToMod.target = "_blank";
-                    tagToMod.href = tagToMod.href.slice(1);
-                } else {
-                    tagToMod.target = '_top';
-                }
-            }
-
+            
             compiledPost = postProcessingDOM.serialize();
             
             // When all is said and done, our generated file shall be written.
@@ -137,8 +124,6 @@ async function generatePost(postFolderPath) {
                     console.log(`Ramblings: Wrote post "${postTitle}" successfully!`)
                 }
             });
-            
-
         }
     }
 }

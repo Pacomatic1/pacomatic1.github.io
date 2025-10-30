@@ -36,5 +36,25 @@
                 </div>
             </div>
         </div>
+
+        <script>
+            // There was some stuff that I could not fit into the compiler because of oddities surrounding stuff like JSDOM.
+            // This is the... uhhh..... runtime.... processor. Sure, that works.
+            // Either way, let's try to add as few things into this as we can.
+
+            var linkTags = document.querySelectorAll('a');
+            for (let i = 0; i < linkTags.length; i++) {
+                if (linkTags[i].href.endsWith('!') || linkTags[i].href.endsWith('!/')) {
+                    var sliceAmount = 0;
+                    if (linkTags[i].href.endsWith('!')) {sliceAmount = 1};
+                    if (linkTags[i].href.endsWith('!/')) {sliceAmount = 2};
+
+                    linkTags[i].target = "_blank";
+                    linkTags[i].href = linkTags[i].href.substring(0, linkTags[i].href.length - sliceAmount);
+                }
+            }
+            
+
+        </script>
     </body>
 </html>
