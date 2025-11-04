@@ -123,9 +123,9 @@ async function generatePost(postFolderPath) {
             var imageTags = postProcessingDOM.window.document.querySelectorAll('img');
             for (let i = 0; i < imageTags.length; i++) { 
                 // They only load when they're on-screen, and they don't lag you when they decode (since there's a million of 'em)
-                postProcessingDOM.window.document.querySelectorAll('img')[i].loading = "lazy";
-                postProcessingDOM.window.document.querySelectorAll('img')[i].decoding = "async";
-                console.log(postProcessingDOM.window.document.querySelectorAll('img'))
+                imageTags[i].loading = "lazy";
+                imageTags[i].decoding = "async";
+                console.log(imageTags[i])
             }
             
             compiledPost = postProcessingDOM.serialize();
