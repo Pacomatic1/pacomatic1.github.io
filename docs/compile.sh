@@ -30,5 +30,5 @@ node "./compile_node.js" &
 cd "../../"
 
 
-# Close once everything is done, since we ran some stuff asynchronously and other things might have finished too soon.
+# Close after everything is done, since we ran some stuff asynchronously and they may have taken too long.
 wait

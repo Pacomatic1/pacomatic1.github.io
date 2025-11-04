@@ -16,7 +16,7 @@ const path = require('node:path');
 
 console.log("Ramblings: Started");
 
-var generatedFilesWithinAPostToDelete = ['index.html']; // Array of file names, stored as strings. If a posts folder has any of these, the file will be deleted. this is intended to be used with generated files.
+var generatedFilesWithinAPostToDelete = ['index.html']; // Array of file names, stored as strings. If a posts folder has any of these, the file will be deleted. this is intended to be used with generated files. be very careful with this, mm'kay?
 
 var homePagePath = "./base.html";
 var postFolderPath = "./posts/";
@@ -106,14 +106,26 @@ async function generatePost(postFolderPath) {
                 storageQuota: 10000000
             });
             
+
+            var linkTags = postProcessingDOM.window.document.querySelectorAll('a');
+            for (let i = 0; i < linkTags.length; i++) {
+                if (linkTags[i].href.endsWith('!') || linkTags[i].href.endsWith('!/')) {
+                    var sliceAmount = 0;
+                    if (linkTags[i].href.endsWith('!')) {sliceAmount = 1};
+                    if (linkTags[i].href.endsWith('!/')) {sliceAmount = 2};
+
+                    linkTags[i].target = "_blank";
+                    linkTags[i].href = linkTags[i].href.substring(0, linkTags[i].href.length - sliceAmount);
+                }
+            }
             
             // Make all images load using async.
-            var imageTags = postProcessingDOM.window.document.body.querySelectorAll('img');
-            for (let i = 0; i < imageTags.length; i++) {
-                var tagToMod = imageTags[i]; 
+            var imageTags = postProcessingDOM.window.document.querySelectorAll('img');
+            for (let i = 0; i < imageTags.length; i++) { 
                 // They only load when they're on-screen, and they don't lag you when they decode (since there's a million of 'em)
-                tagToMod.loading = "lazy";
-                tagToMod.decoding = "async";
+                postProcessingDOM.window.document.querySelectorAll('img')[i].loading = "lazy";
+                postProcessingDOM.window.document.querySelectorAll('img')[i].decoding = "async";
+                console.log(postProcessingDOM.window.document.querySelectorAll('img'))
             }
             
             compiledPost = postProcessingDOM.serialize();
