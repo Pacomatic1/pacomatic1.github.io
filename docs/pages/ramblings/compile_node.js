@@ -30,13 +30,13 @@ for (const index in fs.readdirSync(postFolderPath, {withFileTypes: true})) {
     }
 }
 
-// Generate posts, and make an event listener for every post you generate. Store these event listeners in an array, so that we can start doing the home page after all of them are done.
+// Generate everything, and make an event listener for every post you generate. Store these event listeners in an array, so that we can start doing the home page after all of them are done.
+var postGenerationPromises = [];
+
 for (const index in postFolders) {
     var actualPath = postFolders[index].path + postFolders[index].name + "/" 
-    generatePost(actualPath);
-    
+    postGenerationPromises.push( generatePost(actualPath) );
 }
-
 
 
 
