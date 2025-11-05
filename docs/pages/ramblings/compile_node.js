@@ -97,7 +97,7 @@ async function generatePost(postFolderPath) {
             compiledPost = compiledPost.replace("NODEJS-UNIQUENESS-5328746329847021", postDetailsLine);
             compiledPost = compiledPost.replace("NODEJS-UNIQUENESS-981273873264", postSubtitle);
 
-            
+
             // Post processing.
             var postProcessingDOM = new JSDOM(compiledPost, {
                 url: "file://" + path.resolve(compiledPostPath),
@@ -105,8 +105,8 @@ async function generatePost(postFolderPath) {
                 includeNodeLocations: true,
                 storageQuota: 10000000
             });
-            
 
+            // Links that end with an exclamation mark will be opened in a new tab.
             var linkTags = postProcessingDOM.window.document.querySelectorAll('a');
             for (let i = 0; i < linkTags.length; i++) {
                 if (linkTags[i].href.endsWith('!') || linkTags[i].href.endsWith('!/')) {
@@ -118,22 +118,25 @@ async function generatePost(postFolderPath) {
                     linkTags[i].href = linkTags[i].href.substring(0, linkTags[i].href.length - sliceAmount);
                 }
             }
-            
+
             // Make all images load using async.
             var imageTags = postProcessingDOM.window.document.querySelectorAll('img');
             for (let i = 0; i < imageTags.length; i++) { 
                 // They only load when they're on-screen, and they don't lag you when they decode (since there's a million of 'em)
                 imageTags[i].loading = "lazy";
                 imageTags[i].decoding = "async";
-                console.log(imageTags[i])
             }
             
+            // Custom tags are implemented in the webpage itself.
+
             compiledPost = postProcessingDOM.serialize();
             
             // When all is said and done, our generated file shall be written.
             fs.writeFile(compiledPostPath, compiledPost, (err) => {
                 if (err == null) {
                     console.log(`Ramblings: Wrote post "${postTitle}" successfully!`)
+                } else {
+                    console.log(`Ramlbings: There was a problem trying to write "${postTitle}". It is, "${err}".`)
                 }
             });
         }
