@@ -38,10 +38,7 @@ for (const index in postFolders) {
     postGenerationPromises.push( generatePost(actualPath) );
 }
 
-
-
-
-// console.log("Ramblings: Done"); You gotta mod this such that it waits for everything to be done first.
+// console.log("Ramblings: Done");// You gotta mod this such that it waits for everything to be done first.
 
 
 
@@ -51,6 +48,9 @@ async function generatePost(postFolderPath) {
     // Next, do the thing. you know, run post.md through marked, stuff that in base_template.html.
     // Use JSDoc for some extras.
     // Place the item and its relevant data in the array of all the posts. make sure the date of the post as added alongside the post.
+
+
+    var postFailedPromise = new Promise()
 
     var fileDirEntryList = fs.readdirSync(postFolderPath, {withFileTypes: true});
     for (const index in fileDirEntryList) {
@@ -139,6 +139,8 @@ async function generatePost(postFolderPath) {
                     console.log(`Ramlbings: There was a problem trying to write "${postTitle}". It is, "${err}".`)
                 }
             });
+
+            // return 0;
         }
     }
 }
