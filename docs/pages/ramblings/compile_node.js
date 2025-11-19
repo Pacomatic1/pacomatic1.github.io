@@ -50,7 +50,7 @@ async function generatePost(postFolderPath) {
     // Place the item and its relevant data in the array of all the posts. make sure the date of the post as added alongside the post.
 
 
-    var postFailedPromise = new Promise()
+    // var postFailedPromise = new Promise()
 
     var fileDirEntryList = fs.readdirSync(postFolderPath, {withFileTypes: true});
     for (const index in fileDirEntryList) {
@@ -127,6 +127,9 @@ async function generatePost(postFolderPath) {
                 imageTags[i].decoding = "async";
             }
             
+            console.log(postProcessingDOM.window.document.getElementsByTagName('wavy')[0].time)
+
+
             // Custom tags are implemented in the webpage itself.
 
             compiledPost = postProcessingDOM.serialize();
