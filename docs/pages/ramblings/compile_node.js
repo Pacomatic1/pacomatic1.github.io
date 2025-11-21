@@ -86,11 +86,9 @@ async function generatePost(postFolderPath) {
 
 
             // First come the <wavy> tags!
-            // asciiDocFileAsString = asciiDocFileAsString.replaceAll( /<\//+/wavy/+/>/, "</span>")
-            asciiDocFileAsString = asciiDocFileAsString.replaceAll( "</wavy>", "</span>");
-
-
-
+            asciiDocFileAsString = asciiDocFileAsString.replaceAll( new RegExp(/<\/\s*wavy\s*>/g), "</span>")
+            // asciiDocFileAsString = asciiDocFileAsString.replaceAll( "</wavy>", "</span>");
+            console.log(asciiDocFileAsString)
 
 
             // Compiling the markdown.
