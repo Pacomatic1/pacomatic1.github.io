@@ -82,6 +82,16 @@ async function generatePost(postFolderPath) {
             var asciiDocFileAsString = fs.readFileSync(currentEntryPath, { encoding: 'utf8' }); 
             const asciiDocFileLineByLine = () => { var arr = asciiDocFileAsString.split('\n'); arr.unshift(''); return arr; }; // This is to make reading easier. I find this to be nicer than a standard variable, since you don't have to synchronize it all the time. This array's indices are synchronized with the line numbers, so content actually starts at [1].
 
+            // Pre-processing.
+
+
+            // First come the <wavy> tags!
+            // asciiDocFileAsString = asciiDocFileAsString.replaceAll( /<\//+/wavy/+/>/, "</span>")
+            asciiDocFileAsString = asciiDocFileAsString.replaceAll( "</wavy>", "</span>");
+
+
+
+
 
             // Compiling the markdown.
             marked.use({
@@ -127,7 +137,8 @@ async function generatePost(postFolderPath) {
                 imageTags[i].decoding = "async";
             }
             
-            console.log(postProcessingDOM.window.document.getElementsByTagName('wavy')[0].time)
+            
+
 
 
             // Custom tags are implemented in the webpage itself.
