@@ -13,6 +13,7 @@ const { marked } = require('marked');
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 const path = require('node:path');
+const { monitorEventLoopDelay } = require('node:perf_hooks');
 
 console.log("Ramblings: Started");
 
@@ -38,7 +39,7 @@ for (const index in postFolders) {
     postGenerationPromises.push( generatePost(actualPath) );
 }
 
-// console.log("Ramblings: Done");// You gotta mod this such that it waits for everything to be done first.
+// console.log("Ramblings: Done"); // You gotta mod this such that it waits for everything to be done first.
 
 
 
@@ -79,24 +80,28 @@ async function generatePost(postFolderPath) {
 
             var postDetailsLine = `v${postVersion}; Published ${postPublishMonthName} ${postPublishDate.getDay()}, ${postPublishDate.getFullYear()}; Last Updated ${postLastUpdateMonthName} ${postLastUpdate.getDay()}, ${postLastUpdate.getFullYear()};`;
 
-            var asciiDocFileAsString = fs.readFileSync(currentEntryPath, { encoding: 'utf8' }); 
-            const asciiDocFileLineByLine = () => { var arr = asciiDocFileAsString.split('\n'); arr.unshift(''); return arr; }; // This is to make reading easier. I find this to be nicer than a standard variable, since you don't have to synchronize it all the time. This array's indices are synchronized with the line numbers, so content actually starts at [1].
+            var markdownFileAsString = fs.readFileSync(currentEntryPath, { encoding: 'utf8' }); 
+            const markdownFileLineByLine = () => { var arr = markdownFileAsString.split('\n'); arr.unshift(''); return arr; }; // This is to make reading easier. I find this to be nicer than a standard variable, since you don't have to synchronize it all the time. This array's indices are synchronized with the line numbers, so content actually starts at [1]. [0] can be considered undefined bahviour or something. This also means that, If you want the total linecount, you can use 'markdownFileLineByLine.length - 1'.
 
             // Pre-processing.
-
-
-            // First come the <wavy> tags!
-            asciiDocFileAsString = asciiDocFileAsString.replaceAll( new RegExp(/<\/\s*wavy\s*>/g), "</span>")
-            // asciiDocFileAsString = asciiDocFileAsString.replaceAll( "</wavy>", "</span>");
-            console.log(asciiDocFileAsString)
-
-
+            markdownFileAsString = markdownFileAsString.replaceAll( new RegExp(/<\s*\/\s*wavy\s*>/g), "</span>") // <wavy> tags get replaced by <span>, so we need to swap all the <wavy> enders with <span> enders. I ♥️ regular expressions
+            var indicesOfWavyTags = [...markdownFileAsString.matchAll( /<\s*wavy\s/g )]; // This'll be fixed soon.
+            
+            if (indicesOfWavyTags.length > 0) {
+                let tempArray = [];
+                for (let i = 0; i < indicesOfWavyTags.length; i++) {
+                    tempArray.push(indicesOfWavyTags[i].index);
+                }
+                indicesOfWavyTags = tempArray;
+                tempArray = [];
+                console.log(indicesOfWavyTags)
+            }
             // Compiling the markdown.
             marked.use({
                 gfm: true,
                 breaks: true,
             });
-            var compiledMarkdown = marked.parse(asciiDocFileAsString);
+            var compiledMarkdown = marked.parse(markdownFileAsString);
 
             // HTML Injection.
             var compiledPost;
