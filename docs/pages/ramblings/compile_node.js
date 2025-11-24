@@ -45,10 +45,11 @@ for (const index in postFolders) {
 
 async function generatePost(postFolderPath) {
     // First, we find all files.
-    // Remove only the files we'll generate. index.html and whatnot.
+    // Remove only the files that get generated. index.html and whatnot.
+    // Next, pre-process; deal with custom tags and such.
     // Next, do the thing. you know, run post.md through marked, stuff that in base_template.html.
     // Use JSDoc for some extras.
-    // Place the item and its relevant data in the array of all the posts. make sure the date of the post as added alongside the post.
+    // Place the item and its relevant data in the array of all the posts. Make sure the date of the post as added alongside the post.
 
 
     // var postFailedPromise = new Promise()
@@ -83,19 +84,40 @@ async function generatePost(postFolderPath) {
             var markdownFileAsString = fs.readFileSync(currentEntryPath, { encoding: 'utf8' }); 
             const markdownFileLineByLine = () => { var arr = markdownFileAsString.split('\n'); arr.unshift(''); return arr; }; // This is to make reading easier. I find this to be nicer than a standard variable, since you don't have to synchronize it all the time. This array's indices are synchronized with the line numbers, so content actually starts at [1]. [0] can be considered undefined bahviour or something. This also means that, If you want the total linecount, you can use 'markdownFileLineByLine.length - 1'.
 
+
             // Pre-processing.
-            markdownFileAsString = markdownFileAsString.replaceAll( new RegExp(/<\s*\/\s*wavy\s*>/g), "</span>") // <wavy> tags get replaced by <span>, so we need to swap all the <wavy> enders with <span> enders. I ♥️ regular expressions
-            var indicesOfWavyTags = [...markdownFileAsString.matchAll( /<\s*wavy\s/g )]; // This'll be fixed soon.
-            
-            if (indicesOfWavyTags.length > 0) {
+
+            // <wavy> tags
+            markdownFileAsString = markdownFileAsString.replaceAll( new RegExp(/[^\\]<\s*\/\s*wavy\s*>/g), "</span>") // <wavy> tags get replaced by <span>, so we need to swap all the <wavy> enders with <span> enders. We also mkae sure to exclude anything with a backslash in or before it, because that means they were escaped, and we have to respect that. I ♥️ regular expressions
+            var startingIndicesOfWavyTags = [...markdownFileAsString.matchAll( /<\s*wavy\s/g )];
+            if (startingIndicesOfWavyTags.length > 0) { // If there are no wavy tags, it will crash; this is to handle such edge cases by simply doing nothing if there are none.
+                // startingIndicesOfWavyTags is quite odd, and not just a regular number array lke we want it to be. First order of business: Changing that.
+
                 let tempArray = [];
-                for (let i = 0; i < indicesOfWavyTags.length; i++) {
-                    tempArray.push(indicesOfWavyTags[i].index);
+                for (let i = 0; i < startingIndicesOfWavyTags.length; i++) {
+                    tempArray.push(startingIndicesOfWavyTags[i].index);
                 }
-                indicesOfWavyTags = tempArray;
-                tempArray = [];
-                console.log(indicesOfWavyTags)
+                startingIndicesOfWavyTags = tempArray; // This variable contains the index of the < character.
+                tempArray = []; // Reset it, so that we may perhaps use it for something else later on. Also, RAM savings.
+                
+                // Get the ending indices of these wavy tags; these ending indices are going to the indices of the > characters.
+                var endingIndicesOfWavyTags = [];
+                for (let i = 0; i < startingIndicesOfWavyTags.length; i++) {
+                    endingIndicesOfWavyTags.push( markdownFileAsString.indexOf( ">", startingIndicesOfWavyTags[i]) )
+                }
+                
+                // Get the contents of the tags into a bunch of strings, and figure out what it is we need to replace from there.
+                wavyTagSubStrings = [];
+                for (let i = 0; i < startingIndicesOfWavyTags.length; i++) {
+                    wavyTagSubStrings.push( markdownFileAsString.substring(startingIndicesOfWavyTags[i], endingIndicesOfWavyTags[i]) )
+                }
+                console.log(wavyTagSubStrings)
+
+                // We now have the tags' text. We will replace the text within the tags, then put that inside the actual file. We will do that from end-to-start, becuase start-to-end would break our stating indices and we would otherwise be forced to recalculate them over and over.
+
             }
+
+
             // Compiling the markdown.
             marked.use({
                 gfm: true,
