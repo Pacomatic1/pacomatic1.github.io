@@ -90,13 +90,11 @@ async function generatePost(postFolderPath) {
             // <wavy> tags
             markdownFileAsString = markdownFileAsString.replaceAll( new RegExp(/[^\\]<\s*\/\s*wavy\s*>/g), "</span>") // <wavy> tags get replaced by <span>, so we need to swap all the <wavy> enders with <span> enders. We also mkae sure to exclude anything with a backslash in or before it, because that means they were escaped, and we have to respect that. I ♥️ regular expressions
             var wavyTagSubStrings = getAllContentsOfTags("wavy", markdownFileAsString);
-            // We will replace the text in the array, then put that inside the actual file. We will do that from end-to-start, becuase start-to-end would break our stating indices and we'd be forced to recalculate them over and over.
-
+            // We will replace the text in the array, then put that inside the actual file. We will do that from end-to-start, becuase start-to-end would break our starting indices and we'd be forced to recalculate them over and over.
             for (let i = 0; i < wavyTagSubStrings.length; i++) {
                 var currentTagTimeProperty
                 var currentTagDistanceProperty
             }
-
 
             // Compiling the markdown.
             marked.use({
@@ -120,6 +118,8 @@ async function generatePost(postFolderPath) {
                 includeNodeLocations: true,
                 storageQuota: 10000000
             });
+
+
 
             // Links that end with an exclamation mark will be opened in a new tab.
             var linkTags = postProcessingDOM.window.document.querySelectorAll('a');
@@ -166,19 +166,9 @@ async function generatePost(postFolderPath) {
 
 
 
-
 function getAllContentsOfTags(tagName, stringToSearchIn) { // Returns an array of strings, containing the insides of the tags. Does not include the closing arrow.
-    var startingIndicesOfSearchTags = [...stringToSearchIn.matchAll( new RegExp(String.raw`<\s*${tagName}\s*`, "gi") )];
-    if (startingIndicesOfSearchTags.length > 0) { // If there are no wavy tags, it will crash; this is to handle such edge cases by simply doing nothing if there are none.
-        // startingIndicesOfSearchTags is quite odd, and not just a regular number array lke we want it to be. First order of business: Changing that.
-
-        let tempArray = [];
-        for (let i = 0; i < startingIndicesOfSearchTags.length; i++) {
-            tempArray.push(startingIndicesOfSearchTags[i].index);
-        }
-        startingIndicesOfSearchTags = tempArray; // This variable contains the index of the < character.
-        tempArray = []; // Reset it, so that we may perhaps use it for something else later on. Also, RAM savings.
-        
+    var startingIndicesOfSearchTags = getStartingIndicesOfTags(tagName, stringToSearchIn);
+    if (startingIndicesOfSearchTags.length > 0) { // startingIndicesOfSearchTags is quite odd, and not just a regular number array lke we want it to be. First, we change that.
         // Get the ending indices of these wavy tags; these ending indices are going to the indices of the > characters.
         var endingIndicesOfSearchTags = [];
         for (let i = 0; i < startingIndicesOfSearchTags.length; i++) {
@@ -191,12 +181,21 @@ function getAllContentsOfTags(tagName, stringToSearchIn) { // Returns an array o
             searchTagSubStrings.push( stringToSearchIn.substring(startingIndicesOfSearchTags[i], endingIndicesOfSearchTags[i]) )
         }
 
-        console.log(searchTagSubStrings)
         return searchTagSubStrings;
     } else { return []; }
 }
 
 
+function getStartingIndicesOfTags(tagName, stringToSearchIn) {
+    var startingIndicesOfSearchTags = [...stringToSearchIn.matchAll( new RegExp(String.raw`<\s*${tagName}\s*`, "gi") )];
+    if (startingIndicesOfSearchTags.length > 0) { 
+        let finalArray = [];
+        for (let i = 0; i < startingIndicesOfSearchTags.length; i++) {
+            finalArray.push(startingIndicesOfSearchTags[i].index);
+        }
+        return finalArray; // This variable contains the index of the < character.
+    } else { return []; }
+}
 
 function getLineNumFromCharIndexOfString(text, index) {
     let line = 1;
