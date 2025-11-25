@@ -89,32 +89,12 @@ async function generatePost(postFolderPath) {
 
             // <wavy> tags
             markdownFileAsString = markdownFileAsString.replaceAll( new RegExp(/[^\\]<\s*\/\s*wavy\s*>/g), "</span>") // <wavy> tags get replaced by <span>, so we need to swap all the <wavy> enders with <span> enders. We also mkae sure to exclude anything with a backslash in or before it, because that means they were escaped, and we have to respect that. I ♥️ regular expressions
-            var startingIndicesOfWavyTags = [...markdownFileAsString.matchAll( /<\s*wavy\s/g )];
-            if (startingIndicesOfWavyTags.length > 0) { // If there are no wavy tags, it will crash; this is to handle such edge cases by simply doing nothing if there are none.
-                // startingIndicesOfWavyTags is quite odd, and not just a regular number array lke we want it to be. First order of business: Changing that.
+            var wavyTagSubStrings = getAllContentsOfTags("wavy", markdownFileAsString);
+            // We will replace the text in the array, then put that inside the actual file. We will do that from end-to-start, becuase start-to-end would break our stating indices and we'd be forced to recalculate them over and over.
 
-                let tempArray = [];
-                for (let i = 0; i < startingIndicesOfWavyTags.length; i++) {
-                    tempArray.push(startingIndicesOfWavyTags[i].index);
-                }
-                startingIndicesOfWavyTags = tempArray; // This variable contains the index of the < character.
-                tempArray = []; // Reset it, so that we may perhaps use it for something else later on. Also, RAM savings.
-                
-                // Get the ending indices of these wavy tags; these ending indices are going to the indices of the > characters.
-                var endingIndicesOfWavyTags = [];
-                for (let i = 0; i < startingIndicesOfWavyTags.length; i++) {
-                    endingIndicesOfWavyTags.push( markdownFileAsString.indexOf( ">", startingIndicesOfWavyTags[i]) )
-                }
-                
-                // Get the contents of the tags into a bunch of strings, and figure out what it is we need to replace from there.
-                wavyTagSubStrings = [];
-                for (let i = 0; i < startingIndicesOfWavyTags.length; i++) {
-                    wavyTagSubStrings.push( markdownFileAsString.substring(startingIndicesOfWavyTags[i], endingIndicesOfWavyTags[i]) )
-                }
-                console.log(wavyTagSubStrings)
-
-                // We now have the tags' text. We will replace the text within the tags, then put that inside the actual file. We will do that from end-to-start, becuase start-to-end would break our stating indices and we would otherwise be forced to recalculate them over and over.
-
+            for (let i = 0; i < wavyTagSubStrings.length; i++) {
+                var currentTagTimeProperty
+                var currentTagDistanceProperty
             }
 
 
@@ -187,11 +167,34 @@ async function generatePost(postFolderPath) {
 
 
 
+function getAllContentsOfTags(tagName, stringToSearchIn) { // Returns an array of strings, containing the insides of the tags. Does not include the closing arrow.
+    var startingIndicesOfSearchTags = [...stringToSearchIn.matchAll( new RegExp(String.raw`<\s*${tagName}\s*`, "gi") )];
+    if (startingIndicesOfSearchTags.length > 0) { // If there are no wavy tags, it will crash; this is to handle such edge cases by simply doing nothing if there are none.
+        // startingIndicesOfSearchTags is quite odd, and not just a regular number array lke we want it to be. First order of business: Changing that.
 
+        let tempArray = [];
+        for (let i = 0; i < startingIndicesOfSearchTags.length; i++) {
+            tempArray.push(startingIndicesOfSearchTags[i].index);
+        }
+        startingIndicesOfSearchTags = tempArray; // This variable contains the index of the < character.
+        tempArray = []; // Reset it, so that we may perhaps use it for something else later on. Also, RAM savings.
+        
+        // Get the ending indices of these wavy tags; these ending indices are going to the indices of the > characters.
+        var endingIndicesOfSearchTags = [];
+        for (let i = 0; i < startingIndicesOfSearchTags.length; i++) {
+            endingIndicesOfSearchTags.push( stringToSearchIn.indexOf( ">", startingIndicesOfSearchTags[i]) )
+        }
+        
+        // Get the contents of the tags into a bunch of strings, and figure out what it is we need to replace from there.
+        searchTagSubStrings = [];
+        for (let i = 0; i < startingIndicesOfSearchTags.length; i++) {
+            searchTagSubStrings.push( stringToSearchIn.substring(startingIndicesOfSearchTags[i], endingIndicesOfSearchTags[i]) )
+        }
 
-
-
-
+        console.log(searchTagSubStrings)
+        return searchTagSubStrings;
+    } else { return []; }
+}
 
 
 
@@ -256,8 +259,8 @@ function convertMonthNumberToYear(month, useThreeLetterVersion = false) { // NOT
             else { monthName = "December"; }
             break;
         default:
-            console.log("invalid month!");
-            monthName = "...";
+            console.log("Invalid month!");
+            monthName = "なんだこれ????";
             break;
     }
     return monthName;
