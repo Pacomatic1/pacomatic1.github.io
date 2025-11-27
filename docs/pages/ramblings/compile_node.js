@@ -15,6 +15,9 @@ const { JSDOM } = jsdom;
 const path = require('node:path');
 const { monitorEventLoopDelay } = require('node:perf_hooks');
 
+
+
+
 console.log("Ramblings: Started");
 
 var generatedFilesWithinAPostToDelete = ['index.html']; // Array of file names, stored as strings. If a posts folder has any of these, the file will be deleted. this is intended to be used with generated files. be very careful with this, mm'kay?
@@ -92,8 +95,15 @@ async function generatePost(postFolderPath) {
             var wavyTagSubStrings = getAllContentsOfTags("wavy", markdownFileAsString);
             // We will replace the text in the array, then put that inside the actual file. We will do that from end-to-start, becuase start-to-end would break our starting indices and we'd be forced to recalculate them over and over.
             for (let i = 0; i < wavyTagSubStrings.length; i++) {
-                var currentTagTimeProperty
-                var currentTagDistanceProperty
+                // First, we want to grab all the attributes we seek.
+                var currentTagTimeProperty = getAttributeValueFromTagSubstring(wavyTagSubStrings[i], "time");
+                var currentTagDistanceProperty = getAttributeValueFromTagSubstring(wavyTagSubStrings[i], "distance");
+
+                console.log(currentTagDistanceProperty)
+                console.log(currentTagTimeProperty)
+
+                wavyTagSubStrings[i]
+
             }
 
             // Compiling the markdown.
@@ -165,8 +175,42 @@ async function generatePost(postFolderPath) {
 }
 
 
+/* TODO: Make sure "find attribute index" skips over the name of the tag! (start from the first instance of a " " whitespace.)*/
+/**  Give it the substring of a tag, including the name, and give it the name of an attribute. If the desired attribute exists, we'll return its contents, raw and unfiltered. If it does not, we give you a null. */
+function getAttributeValueFromTagSubstring(substring, attributeName) {
+    // Find the part where the atttribute name ends, and the quotation marks start.
+    var indexOfAttribute = new RegExp(String.raw`\s*${attributeName}\s*=`, "g").exec(substring).index;
+    if (indexOfAttribute == null) { return null; } // In case there was nothing in the first place.
 
-function getAllContentsOfTags(tagName, stringToSearchIn) { // Returns an array of strings, containing the insides of the tags. Does not include the closing arrow.
+    var indexOfDataStart = 0; // Using 0 as a null value, since the attribute, and its quotation mark, cannot possibly be at index 0; index 0 is the tag name or "<", asfter all!
+    let findAttributeDataIterator = indexOfAttribute; // Just grab the first quotation mark we see!
+    while (indexOfDataStart == 0) {
+        if (findAttributeDataIterator >= substring.length) { 
+            console.log("getAttributeValueFromTagSubstring's while loop broke! Either your tag is malformed, or you gave it some wrong code, or... something! Get on that! Oh, right, and here's the substring:" + substring);
+            break;
+        } // in case the thing cannot be found, return null and yell at the user because something's wrong here.
+        if ( substring.charAt(findAttributeDataIterator) == '"' || substring.charAt(findAttributeDataIterator) == "'" ) { // single colon or double colon, just saying that here because it looks really confusing, and adding spaces will cause it to look for something different.
+            indexOfDataStart = findAttributeDataIterator;
+            break;
+        } // we did it, we can leave now. In fact, we *have* to leave, because not doing so will make us keep going and potentially grab a different, unrelated equals sign.
+        findAttributeDataIterator++;
+    }
+    
+    // Find the end of the data. This is the next quotation mark, BUT! The quote in question must be the same type (" or ') as the starting quote, and it must not have a backslash before it (because it would then be escaped, so the actual one is elsewhere and we have the wrong indice.)
+    
+
+
+    // return the contents of the qutoes, keeping in mind things like escape characters.
+}
+
+
+
+/*
+TODO: Modify the "stop searching for string" trigger. As is stands, it looks for ">", but what happens if that's part of an attribute, like in CSS or something?
+So, get on that sometime.
+*/
+/** Returns an array of strings, containing the insides of the tags. Does not include the closing arrow. */
+function getAllContentsOfTags(tagName, stringToSearchIn) { 
     var startingIndicesOfSearchTags = getStartingIndicesOfTags(tagName, stringToSearchIn);
     if (startingIndicesOfSearchTags.length > 0) { // startingIndicesOfSearchTags is quite odd, and not just a regular number array lke we want it to be. First, we change that.
         // Get the ending indices of these wavy tags; these ending indices are going to the indices of the > characters.
@@ -205,8 +249,8 @@ function getLineNumFromCharIndexOfString(text, index) {
     return line;
 } // https://stackoverflow.com/a/76855467
 
-
-function convertMonthNumberToYear(month, useThreeLetterVersion = false) { // NOTICE: This is zero-indexed; January is 0, February is 1, March is 2, etc. This is to follow the conventions of the Date() API.
+/** NOTICE: This is zero-indexed; January is 0, February is 1, March is 2, etc. This is to follow the conventions of the Date() API. Also note that this isa language thing, so if you ever localize the blog, you'll be forced to translate the function.*/
+function convertMonthNumberToYear(month, useThreeLetterVersion = false) {
     var monthName;
     switch(month) {
         case 0:
@@ -265,3 +309,4 @@ function convertMonthNumberToYear(month, useThreeLetterVersion = false) { // NOT
     return monthName;
 	// Bro is not Toby Fox :wilted_rose:
 }
+
