@@ -10,7 +10,7 @@
     <body class="has-scrollbar">
         <audio src="./assets/bgm.ogg" autoplay loop></audio>
         <!-- I do not know how to do a plain old GLSL shader. Perhaps I can do this later, when my programming skills have improved. -->
-        <iframe frameborder="0" src="https://www.shadertoy.com/embed/XXtBRr?gui=false&t=10&paused=false&muted=false" allowfullscreen loading="lazy" id="backgroundAnimation"></iframe>
+        <!-- <iframe frameborder="0" src="https://www.shadertoy.com/embed/XXtBRr?gui=false&t=10&paused=false&muted=false" allowfullscreen loading="lazy" id="backgroundAnimation"></iframe>   ShaderToy has disabled iframe embeds, which is weird because they literally offer an iframe code. I have no idea as yo why they did this. Also make sure to handle the CSS, if you re-enable it; bring back rightSide.  -->
 
         <div id="bannerContainer">
             <div id="banner">
@@ -77,9 +77,11 @@
             <div id="rightSide" class="bigContainerStyling">
                 <p>The music comes from Balatro's internal files, but for some reason the internal files are super sped-up. Oh well. It sounds cool, so I'm not complaining.</p>
                 <br>
-                <p>Background comes from <a href="https://www.shadertoy.com/view/XXtBRr" target="_blank">here.</a> Sadly, some devices are weak. If yours is one of them, you may find running this page a struggle.</p>
-                <br>
-                <button id="shaderBGToggle">Toggle Power-saving</button>
+                <div id="backgroundButtonSection">
+                    <p>Background comes from <a href="https://www.shadertoy.com/view/XXtBRr" target="_blank">here.</a> Sadly, some devices are weak. If yours is one of them, you may find running this page a struggle.</p>
+                    <br>
+                    <button id="shaderBGToggle">Toggle Power-saving</button>
+                </div>
             </div>
         </div>
         
