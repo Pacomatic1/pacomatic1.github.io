@@ -94,13 +94,11 @@ async function generatePost(postFolderPath) {
             // We will replace the text in the array, then put that inside the actual file. We will do that from end-to-start, becuase start-to-end would break our starting indices and we'd be forced to recalculate them over and over.
             for (let i = 0; i < wavyTagSubStrings.length; i++) {
                 // First, we want to grab all the attributes we seek.
+                console.log(wavyTagSubStrings[i])
                 var currentTagTimeProperty = getAttributeValueFromTagSubstring(wavyTagSubStrings[i], "time");
                 var currentTagDistanceProperty = getAttributeValueFromTagSubstring(wavyTagSubStrings[i], "distance");
 
-                console.log(currentTagDistanceProperty)
-                console.log(currentTagTimeProperty)
-
-                wavyTagSubStrings[i]
+                
 
             }
 
@@ -173,12 +171,30 @@ async function generatePost(postFolderPath) {
 }
 
 
-/* TODO: Make sure "find attribute index" skips over the name of the tag! (start from the first instance of a " " whitespace.)*/
+/* TODO: Make sure "find attribute index" skips over the name of the tag! (start from the first instance of a " " whitespace.) Also, make sure it skips things that are part of another attribute. */
 /**  Give it the substring of a tag, including the name, and give it the name of an attribute. If the desired attribute exists, we'll return its contents, raw and unfiltered. If it does not, we give you a null. */
 function getAttributeValueFromTagSubstring(substring, attributeName) {
     // Find the part where the atttribute name ends, and the quotation marks start.
-    var indexOfAttribute = new RegExp(String.raw`\s*${attributeName}\s*=`, "g").exec(substring).index;
+    
+    /* In order to make sure that we do not accidentally catch any attribute names that happen to be part of an attribute (eg. search for "distance", substring says <thingy time="5" text="distance =" distance="4">), we start at the first whitepsace (to avoid any tag name/attribute name conflicts) and march through the string,keeping track of every quotation mark we see.
+    Once we hit a single or double quote that doesn't have a backslash in front of it, currentlyInsideAttribute is set to true, and we record which type of quote we hit. We then proceed to ignore everything we see until we hit another quote of the same type that isn't preceeded by a backslash. currentlyInsideAttribute gets set to false.
+
+    Keep going like this until we find our attribute name, and make sure that, when we do, currentlyInsideAttribute is set to false. If it is set to true, skip right past it.
+    If we hit the end of the substring, set indexOfAttribute to null.
+    */ 
+    var indexOfAttribute = 0;
+    if ( substring.indexOf(" ", 0) != -1) { // Start after tag name ends, and also catch the edge case in which there are no attributes (eg. <b>, <wavy>)
+        indexOfAttribute = substring.indexOf(" ", 0);
+    } else { indexOfAttribute = null; return null; } // No attributes, we're done here.
+
+    // OLD REGEX FOR FINDING THE ATTRIBUTE. PERHAPS WE MAY REPURPOSE THIS? new RegExp(String.raw`\s*${attributeName}\s*=`, "g").exec(substring).index;
+    
+    
+    
+    
     if (indexOfAttribute == null) { return null; } // In case there was nothing in the first place.
+
+    // console.log(new RegExp(String.raw`\s*${attributeName}\s*=`, "g").exec(substring))
 
     var indexOfDataStart = 0; // Using 0 as a null value, since the attribute, and its quotation mark, cannot possibly be at index 0; index 0 is the tag name or "<", asfter all!
     let findAttributeDataIterator = indexOfAttribute; // Just grab the first quotation mark we see!
