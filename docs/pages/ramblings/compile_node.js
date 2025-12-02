@@ -176,31 +176,33 @@ async function generatePost(postFolderPath) {
 function getAttributeValueFromTagSubstring(substring, attributeName) {
     // Find the part where the atttribute name ends, and the quotation marks start.
     
-    /* In order to make sure that we do not accidentally catch any attribute names that happen to be part of an attribute (eg. search for "distance", substring says <thingy time="5" text="distance =" distance="4">), we start at the first whitepsace (to avoid any tag name/attribute name conflicts) and march through the string,keeping track of every quotation mark we see.
-    Once we hit a single or double quote that doesn't have a backslash in front of it, currentlyInsideAttribute is set to true, and we record which type of quote we hit. We then proceed to ignore everything we see until we hit another quote of the same type that isn't preceeded by a backslash. currentlyInsideAttribute gets set to false.
+    /* In order to make sure that we do not accidentally catch any attribute names that happen to be part of an attribute (eg. search for "distance", substring says <thingy time="5" text="distance =" distance="4">), we find out thing with a regex, and then march *backwards* through the string.
+    Once we hit a single or double quote that doesn't have a backslash in front of it, currentlyInsideAttribute is set to true, and we record which type of quote we hit. We then proceed to march until we hit another quote of the same type that isn't preceeded by a backslash. currentlyInsideAttribute gets set to false, we leave. If we instead hit an equals that isn't preceeded by a backslash, then the thing is inside an atrribute, so we set indexOfAttribute to null and cut the string such that this instance of the attribute is gone. Repeat the loop. If we hit the start of the string, then we are not in an attribute so we do not care.
 
-    Keep going like this until we find our attribute name, and make sure that, when we do, currentlyInsideAttribute is set to false. If it is set to true, skip right past it.
+    Keep going like this until we hit our attribute's index, and make sure that, when we do, currentlyInsideAttribute is set to false. If it is set to true, then cut the string to destroy the attribute name, and keep going.
+
     If we hit the end of the substring, set indexOfAttribute to null.
     */ 
-    var indexOfAttribute = 0;
-    if ( substring.indexOf(" ", 0) != -1) { // Start after tag name ends, and also catch the edge case in which there are no attributes (eg. <b>, <wavy>)
-        indexOfAttribute = substring.indexOf(" ", 0);
-    } else { indexOfAttribute = null; return null; } // No attributes, we're done here.
+    var regexForFindingAttribute = new RegExp(String.raw`\s*${attributeName}\s*=`, "g"); //.exec(substring).index for the actual index we seek.
+    var indexOfAttribute = regexForFindingAttribute.exec(substring);
 
-    // OLD REGEX FOR FINDING THE ATTRIBUTE. PERHAPS WE MAY REPURPOSE THIS? new RegExp(String.raw`\s*${attributeName}\s*=`, "g").exec(substring).index;
-    
-    
-    
-    
-    if (indexOfAttribute == null) { return null; } // In case there was nothing in the first place.
+    if ( indexOfAttribute != null ) { // Start at index, and also catch the edge case in which there are no attributes (eg. <b  >, < wavy >)
+        indexOfAttribute = indexOfAttribute.index;
+        var regexForUnescapedQuote = new RegExp(String.raw``)
 
-    // console.log(new RegExp(String.raw`\s*${attributeName}\s*=`, "g").exec(substring))
+
+
+
+
+
+
+    } else { return null; } // In case there was nothing in the first place.
 
     var indexOfDataStart = 0; // Using 0 as a null value, since the attribute, and its quotation mark, cannot possibly be at index 0; index 0 is the tag name or "<", asfter all!
     let findAttributeDataIterator = indexOfAttribute; // Just grab the first quotation mark we see!
     while (indexOfDataStart == 0) {
         if (findAttributeDataIterator >= substring.length) { 
-            console.log("getAttributeValueFromTagSubstring's while loop broke! Either your tag is malformed, or you gave it some wrong code, or... something! Get on that! Oh, right, and here's the substring:" + substring);
+            console.log("getAttributeValueFromTagSubstring's while loop broke! Either your tag is malformed, or you gave it some wrong code, or... something! Get on that! Oh, right, and here's the substring: " + substring);
             break;
         } // in case the thing cannot be found, return null and yell at the user because something's wrong here.
         if ( substring.charAt(findAttributeDataIterator) == '"' || substring.charAt(findAttributeDataIterator) == "'" ) { // single colon or double colon, just saying that here because it looks really confusing, and adding spaces will cause it to look for something different.
