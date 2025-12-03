@@ -14,7 +14,7 @@ const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 const path = require('node:path');
 const { monitorEventLoopDelay } = require('node:perf_hooks');
-
+const xml2js = require('xml2js');
 
 
 
@@ -102,6 +102,7 @@ async function generatePost(postFolderPath) {
 
             }
 
+
             // Compiling the markdown.
             marked.use({
                 gfm: true,
@@ -148,8 +149,6 @@ async function generatePost(postFolderPath) {
                 imageTags[i].decoding = "async";
             }
             
-            
-
 
 
             // Custom tags are implemented in the webpage itself.
@@ -171,52 +170,33 @@ async function generatePost(postFolderPath) {
 }
 
 
-/* TODO: Make sure "find attribute index" skips over the name of the tag! (start from the first instance of a " " whitespace.) Also, make sure it skips things that are part of another attribute. */
+
 /**  Give it the substring of a tag, including the name, and give it the name of an attribute. If the desired attribute exists, we'll return its contents, raw and unfiltered. If it does not, we give you a null. */
-function getAttributeValueFromTagSubstring(substring, attributeName) {
-    // Find the part where the atttribute name ends, and the quotation marks start.
+async function getAttributeValueFromTagSubstring(substring, attributeName) {
+    // First, we handle the cases in which the tag does not have the ending or starting arrows.
+    if ( !substring.endsWith(">") ) { substring = substring + ">"; }
+    if ( !substring.startsWith("<") ) { substring = "<" + substring; }
     
-    /* In order to make sure that we do not accidentally catch any attribute names that happen to be part of an attribute (eg. search for "distance", substring says <thingy time="5" text="distance =" distance="4">), we find out thing with a regex, and then march *backwards* through the string.
-    Once we hit a single or double quote that doesn't have a backslash in front of it, currentlyInsideAttribute is set to true, and we record which type of quote we hit. We then proceed to march until we hit another quote of the same type that isn't preceeded by a backslash. currentlyInsideAttribute gets set to false, we leave. If we instead hit an equals that isn't preceeded by a backslash, then the thing is inside an atrribute, so we set indexOfAttribute to null and cut the string such that this instance of the attribute is gone. Repeat the loop. If we hit the start of the string, then we are not in an attribute so we do not care.
+    // We use xml2js under the hood, but xml2js demands that all tags end properly (eg. "<b>" is not allowed, but "<b></b>" is fine.)
+        
+    // So, we find the tag's name. Find the index of the first whitespace or ending arrow; everything between it and the starting arrow (which is guaranteed to be substring[1]) is the tag's name.
 
-    Keep going like this until we hit our attribute's index, and make sure that, when we do, currentlyInsideAttribute is set to false. If it is set to true, then cut the string to destroy the attribute name, and keep going.
+    // But wait! What if there is whitespace between the starting arrow and the  
+    var substringForTagFind = substring.substring(1);
+    substringForTagFind = substringForTagFind.trimStart();
+    // Yes, this stuff changed the indices such that the indices for the tag name are now different.
+    // But, that is fine, because we are going to be pulling from substringForTagFind, whose indices align with our found indices. Once we have that, we pull the tag name, and then forget the variable ever existed.
 
-    If we hit the end of the substring, set indexOfAttribute to null.
-    */ 
-    var regexForFindingAttribute = new RegExp(String.raw`\s*${attributeName}\s*=`, "g"); //.exec(substring).index for the actual index we seek.
-    var indexOfAttribute = regexForFindingAttribute.exec(substring);
-
-    if ( indexOfAttribute != null ) { // Start at index, and also catch the edge case in which there are no attributes (eg. <b  >, < wavy >)
-        indexOfAttribute = indexOfAttribute.index;
-        var regexForUnescapedQuote = new RegExp(String.raw``)
-
-
-
-
-
-
-
-    } else { return null; } // In case there was nothing in the first place.
-
-    var indexOfDataStart = 0; // Using 0 as a null value, since the attribute, and its quotation mark, cannot possibly be at index 0; index 0 is the tag name or "<", asfter all!
-    let findAttributeDataIterator = indexOfAttribute; // Just grab the first quotation mark we see!
-    while (indexOfDataStart == 0) {
-        if (findAttributeDataIterator >= substring.length) { 
-            console.log("getAttributeValueFromTagSubstring's while loop broke! Either your tag is malformed, or you gave it some wrong code, or... something! Get on that! Oh, right, and here's the substring: " + substring);
-            break;
-        } // in case the thing cannot be found, return null and yell at the user because something's wrong here.
-        if ( substring.charAt(findAttributeDataIterator) == '"' || substring.charAt(findAttributeDataIterator) == "'" ) { // single colon or double colon, just saying that here because it looks really confusing, and adding spaces will cause it to look for something different.
-            indexOfDataStart = findAttributeDataIterator;
-            break;
-        } // we did it, we can leave now. In fact, we *have* to leave, because not doing so will make us keep going and potentially grab a different, unrelated equals sign.
-        findAttributeDataIterator++;
-    }
+    // We classify it, like a government secret.
+    var tagNameEndingIndice = substringForTagFind.indexOf(" ");
+    if ( tagNameEndingIndice == -1 ) { tagNameEndingIndice = substringForTagFind.indexOf(">"); }
     
-    // Find the end of the data. This is the next quotation mark, BUT! The quote in question must be the same type (" or ') as the starting quote, and it must not have a backslash before it (because it would then be escaped, so the actual one is elsewhere and we have the wrong indice.)
-    
+    var tagName = substringForTagFind.substring(0, tagNameEndingIndice);
 
+    await xml2js.parseString(substring + `</${tagName}>`, function(err, result) {
+        console.log(result)
+    });
 
-    // return the contents of the qutoes, keeping in mind things like escape characters.
 }
 
 
