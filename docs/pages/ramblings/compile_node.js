@@ -94,11 +94,12 @@ async function generatePost(postFolderPath) {
             // We will replace the text in the array, then put that inside the actual file. We will do that from end-to-start, becuase start-to-end would break our starting indices and we'd be forced to recalculate them over and over.
             for (let i = 0; i < wavyTagSubStrings.length; i++) {
                 // First, we want to grab all the attributes we seek.
-                console.log(wavyTagSubStrings[i])
-                var currentTagTimeProperty = getAttributeValueFromTagSubstring(wavyTagSubStrings[i], "time");
-                var currentTagDistanceProperty = getAttributeValueFromTagSubstring(wavyTagSubStrings[i], "distance");
+                var currentTagTimeProperty = await getAttributeValueFromTagSubstring(wavyTagSubStrings[i], "time");
+                var currentTagDistanceProperty = await getAttributeValueFromTagSubstring(wavyTagSubStrings[i], "distance");
 
-                
+                console.log(currentTagDistanceProperty);
+                console.log(currentTagTimeProperty);
+
 
             }
 
@@ -171,7 +172,7 @@ async function generatePost(postFolderPath) {
 
 
 
-/**  Give it the substring of a tag, including the name, and give it the name of an attribute. If the desired attribute exists, we'll return its contents, raw and unfiltered. If it does not, we give you a null. */
+/**  Give it the substring of a tag, including the name, and give it the name of an attribute. If the desired attribute exists, we'll return its contents. If it does not, we return null. */
 async function getAttributeValueFromTagSubstring(substring, attributeName) {
     // First, we handle the cases in which the tag does not have the ending or starting arrows.
     if ( !substring.endsWith(">") ) { substring = substring + ">"; }
@@ -185,18 +186,23 @@ async function getAttributeValueFromTagSubstring(substring, attributeName) {
     var substringForTagFind = substring.substring(1);
     substringForTagFind = substringForTagFind.trimStart();
     // Yes, this stuff changed the indices such that the indices for the tag name are now different.
-    // But, that is fine, because we are going to be pulling from substringForTagFind, whose indices align with our found indices. Once we have that, we pull the tag name, and then forget the variable ever existed.
-
-    // We classify it, like a government secret.
+    // But, that is fine, because we are going to be pulling from substringForTagFind, whose indices align with our found indices. Once we have that, we pull the tag name, and then forget the variable ever existed. We classify it, like a government secret.
     var tagNameEndingIndice = substringForTagFind.indexOf(" ");
     if ( tagNameEndingIndice == -1 ) { tagNameEndingIndice = substringForTagFind.indexOf(">"); }
     
     var tagName = substringForTagFind.substring(0, tagNameEndingIndice);
 
+    var tagAttributes;
     await xml2js.parseString(substring + `</${tagName}>`, function(err, result) {
-        console.log(result)
+        tagAttributes = result;
     });
 
+    // Gotta do some if statements in the event the attribute does not exist.
+    if ( Object.hasOwn(tagAttributes[tagName], "$") ) {
+        if ( Object.hasOwn(tagAttributes[tagName]["$"], attributeName) ) {
+            return tagAttributes[tagName]["$"][attributeName];
+        }
+    } else { return null; }
 }
 
 
