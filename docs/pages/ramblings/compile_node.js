@@ -186,7 +186,7 @@ async function getAttributeValueFromTagSubstring(substring, attributeName) {
     var substringForTagFind = substring.substring(1);
     substringForTagFind = substringForTagFind.trimStart();
     // Yes, this stuff changed the indices such that the indices for the tag name are now different.
-    // But, that is fine, because we are going to be pulling from substringForTagFind, whose indices align with our found indices. Once we have that, we pull the tag name, and then forget the variable ever existed. We classify it, like a government secret.
+    // But, that is fine, because we are going to be pulling from substringForTagFind, whose indices align with our found indices. Once we have that, we pull the tag name, and then forget the variable ever existed.
     var tagNameEndingIndice = substringForTagFind.indexOf(" ");
     if ( tagNameEndingIndice == -1 ) { tagNameEndingIndice = substringForTagFind.indexOf(">"); }
     
@@ -224,7 +224,7 @@ function getAllContentsOfTags(tagName, stringToSearchIn) {
         // Get the contents of the tags into a bunch of strings, and figure out what it is we need to replace from there.
         searchTagSubStrings = [];
         for (let i = 0; i < startingIndicesOfSearchTags.length; i++) {
-            searchTagSubStrings.push( stringToSearchIn.substring(startingIndicesOfSearchTags[i], endingIndicesOfSearchTags[i]) )
+            searchTagSubStrings.push( stringToSearchIn.substring(startingIndicesOfSearchTags[i], endingIndicesOfSearchTags[i]) );
         }
 
         return searchTagSubStrings;
