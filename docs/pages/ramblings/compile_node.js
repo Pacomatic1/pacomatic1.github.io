@@ -91,7 +91,7 @@ async function generatePost(postFolderPath) {
             // <wavy> tags
             markdownFileAsString = markdownFileAsString.replaceAll( new RegExp(/[^\\]<\s*\/\s*wavy\s*>/g), "</span>") // <wavy> tags get replaced by <span>, so we need to swap all the <wavy> enders with <span> enders. We also mkae sure to exclude anything with a backslash in or before it, because that means they were escaped, and we have to respect that. I ♥️ regular expressions
             var wavyTagSubStrings = getAllContentsOfTags("wavy", markdownFileAsString);
-            // We will replace the text in the array, then put that inside the actual file. We will do that from end-to-start, becuase start-to-end would break our starting indices and we'd be forced to recalculate them over and over.
+            var replacedWavyTagSubstrings = [];
             for (let i = 0; i < wavyTagSubStrings.length; i++) {
                 // First, we want to grab all the attributes we seek.
                 var currentTagTimeProperty = await getAttributeValueFromTagSubstring(wavyTagSubStrings[i], "time");
@@ -99,9 +99,16 @@ async function generatePost(postFolderPath) {
 
                 console.log(currentTagDistanceProperty);
                 console.log(currentTagTimeProperty);
+                
+                var stringToAddToReplaceArray = `<span class="wavyText" style=" --distance: ${currentTagDistanceProperty}; --time: ${currentTagTimeProperty};">`;
 
-
+                replacedWavyTagSubstrings.push(stringToAddToReplaceArray);
             }
+            for (let i = 0; i < replacedWavyTagSubstrings.length; i++) {
+                markdownFileAsString = markdownFileAsString.replace(wavyTagSubStrings[i], replacedWavyTagSubstrings[i])
+            }
+            
+            
 
 
             // Compiling the markdown.
@@ -224,7 +231,7 @@ function getAllContentsOfTags(tagName, stringToSearchIn) {
         // Get the contents of the tags into a bunch of strings, and figure out what it is we need to replace from there.
         searchTagSubStrings = [];
         for (let i = 0; i < startingIndicesOfSearchTags.length; i++) {
-            searchTagSubStrings.push( stringToSearchIn.substring(startingIndicesOfSearchTags[i], endingIndicesOfSearchTags[i]) );
+            searchTagSubStrings.push( stringToSearchIn.substring(startingIndicesOfSearchTags[i], endingIndicesOfSearchTags[i]) + ">" ); // This pushes them *without* the ending arrows, so we add those in real quick.
         }
 
         return searchTagSubStrings;

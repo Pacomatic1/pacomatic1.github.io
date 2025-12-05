@@ -38,6 +38,14 @@ body {
     padding: .4rem;
 }
 
+
+
+
+
+
+
+
+
 #articleContainer hr {
     background-image: linear-gradient(to right, #18181800, #181818Df, #181818 5%,#181818 95%, #181818Df, #18181800);
     border: 0px;
@@ -80,6 +88,27 @@ body {
     line-height: .94rem;
 }
 
+#articleContainer .wavyText {
+    display: inline-block;
+    animation: wavyAnimation var(--time) ease-in-out infinite;
+} #articleContainer .wavyText span:nth-child(n) { animation-delay: nd ms }
+
+
+
+@keyframes wavyAnimation {
+    0% {
+        transform: translateY(0px);
+    }
+
+    25% {
+        transform: translateY(-20px);
+    }
+
+    75% {
+        transform: translateY(20px)
+    }
+
+}
 
 
 #headerPiece {
