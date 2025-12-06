@@ -95,7 +95,11 @@ async function generatePost(postFolderPath) {
             for (let i = 0; i < wavyTagSubStrings.length; i++) {
                 // First, we want to grab all the attributes we seek.
                 var currentTagTimeProperty = await getAttributeValueFromTagSubstring(wavyTagSubStrings[i], "time");
+                if ( currentTagDistanceProperty  == null) { currentTagDistanceProperty = "0"; }
+
                 var currentTagDistanceProperty = await getAttributeValueFromTagSubstring(wavyTagSubStrings[i], "distance");
+                if ( currentTagTimeProperty  == null) { currentTagTimeProperty = "1s"; }
+
 
                 console.log(currentTagDistanceProperty);
                 console.log(currentTagTimeProperty);
