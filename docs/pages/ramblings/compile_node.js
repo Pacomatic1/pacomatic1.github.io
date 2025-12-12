@@ -89,7 +89,12 @@ async function generatePost(postFolderPath) {
             // Pre-processing.
 
             // <wavy> tags
-            markdownFileAsString = markdownFileAsString.replaceAll( new RegExp(/[^\\]<\s*\/\s*wavy\s*>/g), "</span>") // <wavy> tags get replaced by <span>, so we need to swap all the <wavy> enders with <span> enders. We also mkae sure to exclude anything with a backslash in or before it, because that means they were escaped, and we have to respect that. I ♥️ regular expressions
+
+            // TODO: An instance of  "</span></wavy>" is broken, as this line does not do it correctly and turns it into "</span</span" and not "</span></span>". I likely did something wrong in this very spot.
+            markdownFileAsString = markdownFileAsString.replaceAll( new RegExp(/[^\\]\s*<\s*\/\s*wavy\s*>\s*/g), "</span>") // <wavy> tags get replaced by <span>, so we need to swap all the <wavy> enders with <span> enders. We also make sure to exclude anything with a backslash in or before it, because that means they were escaped, and we have to respect that. I ♥️ regular expressions
+            
+            console.log(markdownFileAsString)
+            
             var wavyTagSubStrings = getAllContentsOfTags("wavy", markdownFileAsString);
             var replacedWavyTagSubstrings = [];
             for (let i = 0; i < wavyTagSubStrings.length; i++) {
@@ -121,6 +126,7 @@ async function generatePost(postFolderPath) {
                 breaks: true,
             });
             var compiledMarkdown = marked.parse(markdownFileAsString);
+            console.log(compiledMarkdown);
 
             // HTML Injection.
             var compiledPost;
