@@ -91,7 +91,9 @@ async function generatePost(postFolderPath) {
             // <wavy> tags
 
             // TODO: An instance of  "</span></wavy>" is broken, as this line does not  do it correctly and turns it into "</span</span" and not "</span></span>". I likely did something wrong in this very spot.
-            markdownFileAsString = markdownFileAsString.replaceAll( new RegExp(/[^\\]<\/wavy\s*>/g), "</span>") // <wavy> tags get replaced by <span>, so we need to swap all the <wavy> enders with <span> enders. We also make sure to exclude anything with a backslash in or before it, because that means they were escaped, and we have to respect that. I ♥️ regular expressions
+            
+            // for some god forsaken reason, the [^\\] is causing the bug. Why, exactly? No clue.
+            markdownFileAsString = replaceAllTagEndersOfType(markdownFileAsString, "wavy", "</span>"); // <wavy> tags get replaced by <span>, so we need to swap all the <wavy> enders with <span> enders. We also make sure to exclude anything with a backslash in or before it, because that means they were escaped, and we have to respect that. I ♥️ regular expressions
             
             console.log(markdownFileAsString)
             
@@ -186,6 +188,54 @@ async function generatePost(postFolderPath) {
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/** Replaces tag enders of the specified name with a string of your choosing. If you want all "</wavy>"s to be replaced with "</span>", you'd use arguments ("wavy", "</span>"). */
+function replaceAllTagEndersOfType(stringToReplaceTagEndersIn, tagName, stringToReplaceItWith) {
+    // Normally I would use the regex on its own, but the regex seems to capture one character before it . I don't know why, but fine, whatever, I will fix that myself.
+    // If I 
+    var regexToUse = new RegExp(String.raw`[^\\]<\/${tagName}\s*>`, "g");
+    var allInstancesOfTagEnder = Array.from( stringToReplaceTagEndersIn.matchAll(regexToUse) );
+    
+    for (let i = 0; i < allInstancesOfTagEnder.length, i++;) {
+        var capturedString = allInstancesOfTagEnder[i][0]
+    }
+    
+    
+    var newString = stringToReplaceTagEndersIn.replaceAll( allInstancesOfTagEnder, stringToReplaceItWith);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
