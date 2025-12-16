@@ -212,6 +212,8 @@ function replaceAllTagEndersOfType(stringToReplaceTagEndersIn, tagName, stringTo
     var regexToUse = new RegExp(String.raw`[^\\]<\/${tagName}\s*>`, "g");
     var allInstancesOfTagEnder = Array.from( stringToReplaceTagEndersIn.matchAll(regexToUse) );
     
+    console.log(allInstancesOfTagEnder)
+
     for (let i = 0; i < allInstancesOfTagEnder.length, i++;) {
         var capturedString = allInstancesOfTagEnder[i][0]
     }
@@ -278,6 +280,9 @@ async function getAttributeValueFromTagSubstring(substring, attributeName) {
 TODO: Modify the "stop searching for string" trigger. As is stands, it looks for ">", but what happens if that's part of an attribute, like in CSS or something?
 So, get on that sometime.
 */
+
+// https://frontendinterviewquestions.medium.com/how-to-replace-html-tags-from-string-in-javascript-c86e40936eb0
+
 /** Returns an array of strings, containing the insides of the tags. Does not include the closing arrow. */
 function getAllContentsOfTags(tagName, stringToSearchIn) { 
     var startingIndicesOfSearchTags = getStartingIndicesOfTags(tagName, stringToSearchIn);
@@ -298,7 +303,7 @@ function getAllContentsOfTags(tagName, stringToSearchIn) {
     } else { return []; }
 }
 
-
+// TODO: Avoid a capture if it has a backslash at any point in it.
 function getStartingIndicesOfTags(tagName, stringToSearchIn) {
     var startingIndicesOfSearchTags = [...stringToSearchIn.matchAll( new RegExp(String.raw`<\s*${tagName}\s*`, "gi") )];
     if (startingIndicesOfSearchTags.length > 0) { 
