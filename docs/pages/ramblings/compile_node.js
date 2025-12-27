@@ -13,6 +13,7 @@ const { marked } = require('marked');
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
 const path = require('node:path');
+const util = require('node:util');
 const { monitorEventLoopDelay } = require('node:perf_hooks');
 const xml2js = require('xml2js');
 
@@ -71,6 +72,7 @@ async function generatePost(postFolderPath) {
             var postJSON = JSON.parse( fs.readFileSync(currentEntry.parentPath + "post.json", { encoding: 'utf8' }) );
 
             // Post data? Metadata? Title Data? What do we call this, exactly?
+            // ...post data. Sure.
             var postTitle = postJSON.postTitle;
             var postVersion = postJSON.postVersion;
             var postPublishDate = new Date(postJSON.postPublishDate);
@@ -82,21 +84,30 @@ async function generatePost(postFolderPath) {
 
             var postDetailsLine = `v${postVersion}; Published ${postPublishMonthName} ${postPublishDate.getDay()}, ${postPublishDate.getFullYear()}; Last Updated ${postLastUpdateMonthName} ${postLastUpdate.getDay()}, ${postLastUpdate.getFullYear()};`;
 
+
+
             var markdownFileAsString = fs.readFileSync(currentEntryPath, { encoding: 'utf8' }); 
             const markdownFileLineByLine = () => { var arr = markdownFileAsString.split('\n'); arr.unshift(''); return arr; }; // This is to make reading easier. I find this to be nicer than a standard variable, since you don't have to synchronize it all the time. This array's indices are synchronized with the line numbers, so content actually starts at [1]. [0] can be considered undefined bahviour or something. This also means that, If you want the total linecount, you can use 'markdownFileLineByLine.length - 1'.
 
 
             // Pre-processing.
 
+
+            // console.log(postTitle)
+            // var markdownFileAsJSONifiedXML;
+            // await xml2js.parseString(    "<superwrapper>" + markdownFileAsString + "</superwrapper>"    , function(err, result) {
+            //     markdownFileAsJSONifiedXML = result;
+            //     if (err) { console.log(err); }
+            // });
+
+            // console.log( util.inspect(markdownFileAsJSONifiedXML, false, null) );
+
             // <wavy> tags
 
-            // TODO: An instance of  "</span></wavy>" is broken, as this line does not  do it correctly and turns it into "</span</span" and not "</span></span>". I likely did something wrong in this very spot.
-            
-            // for some god forsaken reason, the [^\\] is causing the bug. Why, exactly? No clue.
-            markdownFileAsString = replaceAllTagEndersOfType(markdownFileAsString, "wavy", "</span>"); // <wavy> tags get replaced by <span>, so we need to swap all the <wavy> enders with <span> enders. We also make sure to exclude anything with a backslash in or before it, because that means they were escaped, and we have to respect that. I ♥️ regular expressions
-            
-            console.log(markdownFileAsString)
-            
+
+
+
+            /*
             var wavyTagSubStrings = getAllContentsOfTags("wavy", markdownFileAsString);
             var replacedWavyTagSubstrings = [];
             for (let i = 0; i < wavyTagSubStrings.length; i++) {
@@ -111,15 +122,8 @@ async function generatePost(postFolderPath) {
                 console.log(currentTagDistanceProperty);
                 console.log(currentTagTimeProperty);
                 
-                var stringToAddToReplaceArray = `<span class="wavyText" style=" --distance: ${currentTagDistanceProperty}; --time: ${currentTagTimeProperty};">`;
-
-                replacedWavyTagSubstrings.push(stringToAddToReplaceArray);
             }
-            for (let i = 0; i < replacedWavyTagSubstrings.length; i++) {
-                markdownFileAsString = markdownFileAsString.replace(wavyTagSubStrings[i], replacedWavyTagSubstrings[i])
-            }
-            
-            
+            */
 
 
             // Compiling the markdown.
@@ -127,7 +131,7 @@ async function generatePost(postFolderPath) {
                 gfm: true,
                 breaks: true,
             });
-            var compiledMarkdown = marked.parse(markdownFileAsString);
+            var compiledMarkdown = await marked.parse(markdownFileAsString);
             console.log(compiledMarkdown);
 
             // HTML Injection.
@@ -188,55 +192,6 @@ async function generatePost(postFolderPath) {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-/** Replaces tag enders of the specified name with a string of your choosing. If you want all "</wavy>"s to be replaced with "</span>", you'd use arguments ("wavy", "</span>"). */
-function replaceAllTagEndersOfType(stringToReplaceTagEndersIn, tagName, stringToReplaceItWith) {
-    // Normally I would use the regex on its own, but the regex seems to capture one character before it . I don't know why, but fine, whatever, I will fix that myself.
-    // If I 
-    var regexToUse = new RegExp(String.raw`[^\\]<\/${tagName}\s*>`, "g");
-    var allInstancesOfTagEnder = Array.from( stringToReplaceTagEndersIn.matchAll(regexToUse) );
-    
-    console.log(allInstancesOfTagEnder)
-
-    for (let i = 0; i < allInstancesOfTagEnder.length, i++;) {
-        var capturedString = allInstancesOfTagEnder[i][0]
-    }
-    
-    
-    var newString = stringToReplaceTagEndersIn.replaceAll( allInstancesOfTagEnder, stringToReplaceItWith);
-}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
