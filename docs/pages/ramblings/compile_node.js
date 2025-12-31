@@ -177,6 +177,8 @@ async function generatePost(postFolderPath) {
 
             compiledPost = postProcessingDOM.serialize();
             
+            console.log("------------------------------------------")
+
             // When all is said and done, our generated file shall be written.
             fs.writeFile(compiledPostPath, compiledPost, (err) => {
                 if (err == null) {
@@ -209,19 +211,37 @@ async function generatePost(postFolderPath) {
 
 /** Replaces tag enders of the specified name with a string of your choosing. If you want all "</wavy>"s to be replaced with "</span>", you'd use arguments ("wavy", "</span>"). */
 function replaceAllTagEndersOfType(stringToReplaceTagEndersIn, tagName, stringToReplaceItWith) {
-    // Normally I would use the regex on its own, but the regex seems to capture one character before it . I don't know why, but fine, whatever, I will fix that myself.
+    // Normally I would use the regex on its own, but the regex seems to capture one character before it; removing the "no \" clause fixes this, but I cannot remove that. I don't know why the regex team did this, but fine, whatever, I will fix that myself.
     // If I ever find a regex that does NOT do this, I will replace the whole function with that.
     var regexToUse = new RegExp(String.raw`[^\\]<\/${tagName}\s*>`, "g");
     var allInstancesOfTagEnder = Array.from( stringToReplaceTagEndersIn.matchAll(regexToUse) );
     
-    console.log(allInstancesOfTagEnder)
+    var allInstancesOfCorrectedTagEnder = []; // array of js objects; see the for loop below for syntax
 
-    for (let i = 0; i < allInstancesOfTagEnder.length, i++;) {
-        var capturedString = allInstancesOfTagEnder[i][0]
+    for (let i = 0; i < allInstancesOfTagEnder.length; i++) {
+        allInstancesOfCorrectedTagEnder.unshift({ // Yes, I used unshift(). Yes, they are now backwards (final instance to first instance). This is 100% intentional.
+            stringToReplace: allInstancesOfTagEnder[i][0].substring(1),
+            capturedIndex: allInstancesOfTagEnder[i]["index"] + 1
+        });
     }
     
+    console.log(allInstancesOfCorrectedTagEnder);
+
+
+    // We are now going to replace every single instance of the thingies in allInstancesOfCorrectedTagEnder. To avoid many issues, we will be working backwards.
+
+    for (let i = 0; i < allInstancesOfCorrectedTagEnder.length; i++) { // I am going forwards through the array, because the array is already last-to-first.
+        // allInstancesOfCorrectedTagEnder[i] = { stringToReplace: string, capturedIndex: int }
+        
+        // We are going to "replace string after a certain point". I shall:
+        //     Cut the string into two pieces, at our index.
+        //     Replace the thing.
+        //     Merge the strings back together.
+    }
+
+
     
-    var newString = stringToReplaceTagEndersIn.replaceAll( allInstancesOfTagEnder, stringToReplaceItWith);
+
 }
 
 
