@@ -9,11 +9,13 @@
 
 // Using this is done through assciidoctor.convert(content: string).
 const fs = require('node:fs');
+const path = require('node:path');
+
 const { marked } = require('marked');
+
 const jsdom = require("jsdom");
 const { JSDOM } = jsdom;
-const path = require('node:path');
-const { monitorEventLoopDelay } = require('node:perf_hooks');
+
 const xml2js = require('xml2js');
 
 
@@ -224,24 +226,23 @@ function replaceAllTagEndersOfType(stringToReplaceTagEndersIn, tagName, stringTo
             capturedIndex: allInstancesOfTagEnder[i]["index"] + 1
         });
     }
-    
-    console.log(allInstancesOfCorrectedTagEnder);
-
 
     // We are now going to replace every single instance of the thingies in allInstancesOfCorrectedTagEnder. To avoid many issues, we will be working backwards.
 
+    var replacedString = stringToReplaceTagEndersIn;
     for (let i = 0; i < allInstancesOfCorrectedTagEnder.length; i++) { // I am going forwards through the array, because the array is already last-to-first.
         // allInstancesOfCorrectedTagEnder[i] = { stringToReplace: string, capturedIndex: int }
-        
-        // We are going to "replace string after a certain point". I shall:
+
         //     Cut the string into two pieces, at our index.
         //     Replace the thing.
         //     Merge the strings back together.
+
+        var stringHalves = splitStringAtIndex( replacedString, allInstancesOfCorrectedTagEnder[i].capturedIndex );
+        stringHalves[1] = stringHalves[1].replace( allInstancesOfCorrectedTagEnder[i].stringToReplace, stringToReplaceItWith);
+        replacedString = stringHalves[0] + stringHalves[1];
     }
 
-
-    
-
+    return replacedString;
 }
 
 
@@ -252,8 +253,10 @@ function replaceAllTagEndersOfType(stringToReplaceTagEndersIn, tagName, stringTo
 
 
 
-
-
+/** Splits a string in two, at the given index. Returns an array of both halves of the string. */
+function splitStringAtIndex(stringToSplit, index) {
+    return [ stringToSplit.slice(0, index), stringToSplit.slice(index, stringToSplit.length) ];
+}
 
 
 
