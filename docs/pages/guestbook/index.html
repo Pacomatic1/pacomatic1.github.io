@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Responsive Flex Table</title>
+<script src="../shared.js"></script>
+
+
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+  }
+
+  .flex-table {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    border: 1px solid #ccc;
+  }
+
+  /* Header row */
+  .flex-table-header,
+  .flex-table-row {
+    display: flex;
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .flex-table-header {
+    background: #f5f5f5;
+    font-weight: bold;
+  }
+
+  /* Each cell */
+  .flex-table-cell {
+    flex: 1;
+    padding: 8px 10px;
+  }
+
+  /* Responsive stacking */
+  @media (max-width: 600px) {
+    .flex-table-header {
+      display: none; /* Hide header on small screens */
+    }
+
+    .flex-table-row {
+      flex-direction: column;
+      border: 1px solid #ddd;
+      margin-bottom: 10px;
+    }
+
+    .flex-table-cell {
+      display: flex;
+      justify-content: space-between;
+      padding: 8px 10px;
+      border-bottom: 1px solid #eee;
+    }
+
+    .flex-table-cell::before {
+      content: attr(data-label);
+      font-weight: bold;
+      margin-right: 10px;
+    }
+
+    .flex-table-cell:last-child {
+      border-bottom: none;
+    }
+  }
+</style>
+</head>
+
+    <body>
+
+    <div class="flex-table" id="overallContainer">
+        <div class="flex-table-header">
+            <div class="flex-table-cell">Name</div>
+            <div class="flex-table-cell">Website</div>
+            <div class="flex-table-cell">Comment</div>
+        </div>
+    </div>
+
+
+    <hr>
+
+    <form onSubmit="return whenPostCreated(event)" >
+        Username: <input type="text" name="Username" placeholder="Enter a username."/> <br/>
+        Website: <input type="text" name="Website" placeholder="If you have a website, where is it?"/> <br/>
+        Comment: <input type="text" name="Comment" placeholder="What rude things are you going to say to me?"/> <br/>
+
+        <input type="submit"/>
+
+    </form>
+
+
+    <script>
+
+        function whenPostCreated( event ) {
+            alert("Good one.")
+
+            const formData = new FormData(event.target);
+
+            console.log(formData)
+
+
+            
+            // 4. Convert the FormData entries into a plain JavaScript object
+            const plainObject = Object.fromEntries(formData.entries());
+
+            // 5. Convert the plain object into a JSON string
+            const jsonString = JSON.stringify(plainObject);
+
+            // You can now send the jsonString to your server using fetch or other methods
+            console.log(jsonString);
+
+              // Example: send data to a server
+            const response = fetch("https://micron-hkhngybkgyaff2d0.canadacentral-01.azurewebsites.net/api/Notes", {
+                method: "POST",
+                body: jsonString
+            });
+
+            const result = response;
+            console.log(result)
+
+            return false;
+        }
+
+
+
+
+
+        window.onload = function () {
+            console.log("Page fully loaded!");
+            
+
+            fetch("https://micron-hkhngybkgyaff2d0.canadacentral-01.azurewebsites.net/api/Notes")
+                .then(response => response.json())
+                .then(data => {
+                    console.log("Fetched data:", data);
+                    createTableEntries(data)
+                })
+                .catch(error => {
+                console.error("Error fetching data:", error);
+                });
+        };
+
+
+        function createTableEntries( dataArray ) {
+            /*
+            [
+                {
+                    Username: "John Doe", Website: "https://example.com", Comment: "This is a sample comment." 
+                },
+                etc.
+            ]
+            */
+
+
+            for (let i = 0; i < dataArray.length; i++) {
+                // dataArray[i].blahblahblah;
+                var currentDataSet = dataArray[i];
+            
+                var divContainer = document.createElement("div");
+                divContainer.classList.add("flex-table-row");
+                
+                var nameContainer = document.createElement("div");
+                var siteContainer = document.createElement("div");
+                var commentContainer = document.createElement("div"); 
+                
+                nameContainer.classList.add("flex-table-cell");
+                siteContainer.classList.add("flex-table-cell");
+                commentContainer.classList.add("flex-table-cell");
+
+                divContainer.appendChild(nameContainer);
+                divContainer.appendChild(siteContainer);
+                divContainer.appendChild(commentContainer);
+
+
+                nameContainer.innerText = currentDataSet.Username;
+                siteContainer.innerText = currentDataSet.Website;
+                commentContainer.innerText = currentDataSet.Comment;
+
+                
+                document.getElementById("overallContainer").appendChild(divContainer);
+            }
+
+            
+        }
+        
+        /* <div class="flex-table-row">
+            <div class="flex-table-cell" data-label="Header One">Row 1, Col 1</div>
+            <div class="flex-table-cell" data-label="Header Two">Row 1, Col 2</div>
+            <div class="flex-table-cell" data-label="Header Three">Row 1, Col 3</div>
+        </div> */
+    </script>
+
+    </body>
+</html>

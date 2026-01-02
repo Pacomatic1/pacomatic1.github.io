@@ -200,17 +200,6 @@ async function generatePost(postFolderPath) {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
 /** Replaces tag enders of the specified name with a string of your choosing. If you want all "</wavy>"s to be replaced with "</span>", you'd use arguments ("wavy", "</span>"). */
 function replaceAllTagEndersOfType(stringToReplaceTagEndersIn, tagName, stringToReplaceItWith) {
     // Normally I would use the regex on its own, but the regex seems to capture one character before it; removing the "no \" clause fixes this, but I cannot remove that. I don't know why the regex team did this, but fine, whatever, I will fix that myself.
@@ -245,26 +234,10 @@ function replaceAllTagEndersOfType(stringToReplaceTagEndersIn, tagName, stringTo
     return replacedString;
 }
 
-
-
-
-
-
-
-
-
 /** Splits a string in two, at the given index. Returns an array of both halves of the string. */
 function splitStringAtIndex(stringToSplit, index) {
     return [ stringToSplit.slice(0, index), stringToSplit.slice(index, stringToSplit.length) ];
 }
-
-
-
-
-
-
-
-
 
 /**  Give it the substring of a tag, including the name, and give it the name of an attribute. If the desired attribute exists, we'll return its contents. If it does not, we return null. */
 async function getAttributeValueFromTagSubstring(substring, attributeName) {
