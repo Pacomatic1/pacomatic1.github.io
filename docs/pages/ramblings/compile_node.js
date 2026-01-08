@@ -112,6 +112,7 @@ async function generatePost(postFolderPath) {
             console.log(compiledMarkdown)
             
             var wavyTagSubStrings = getAllContentsOfTags("wavy", markdownFileAsString);
+            var startingIndicesOfWavyTags = getStartingIndicesOfTags("wavy", markdownFileAsString);
             var replacedWavyTagSubstrings = [];
             for (let i = 0; i < wavyTagSubStrings.length; i++) {
                 // First, we want to grab all the attributes we seek.
@@ -129,7 +130,7 @@ async function generatePost(postFolderPath) {
 
                 replacedWavyTagSubstrings.push(stringToAddToReplaceArray);
             }
-            for (let i = 0; i < replacedWavyTagSubstrings.length; i++) {
+            for (let i = replacedWavyTagSubstrings; i < replacedWavyTagSubstrings.length; i++) {
                 markdownFileAsString = markdownFileAsString.replace(wavyTagSubStrings[i], replacedWavyTagSubstrings[i])
             }
 
@@ -201,7 +202,7 @@ async function generatePost(postFolderPath) {
 
 
 
-
+// TODO: Using replaceAllTagEndersOfType(), make a new replaceStringsWithBackwardsStartingIndices() function
 
 
 
@@ -245,26 +246,10 @@ function replaceAllTagEndersOfType(stringToReplaceTagEndersIn, tagName, stringTo
     return replacedString;
 }
 
-
-
-
-
-
-
-
-
 /** Splits a string in two, at the given index. Returns an array of both halves of the string. */
 function splitStringAtIndex(stringToSplit, index) {
     return [ stringToSplit.slice(0, index), stringToSplit.slice(index, stringToSplit.length) ];
 }
-
-
-
-
-
-
-
-
 
 /**  Give it the substring of a tag, including the name, and give it the name of an attribute. If the desired attribute exists, we'll return its contents. If it does not, we return null. */
 async function getAttributeValueFromTagSubstring(substring, attributeName) {
