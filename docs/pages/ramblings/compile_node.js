@@ -85,12 +85,12 @@ async function generatePost(postFolderPath) {
             var postDetailsLine = `v${postVersion}; Published ${postPublishMonthName} ${postPublishDate.getDay()}, ${postPublishDate.getFullYear()}; Last Updated ${postLastUpdateMonthName} ${postLastUpdate.getDay()}, ${postLastUpdate.getFullYear()};`;
 
             var markdownFileAsString = fs.readFileSync(currentEntryPath, { encoding: 'utf8' }); 
-            const markdownFileLineByLine = () => { var arr = markdownFileAsString.split('\n'); arr.unshift(''); return arr; }; // This is to make reading easier. I find this to be nicer than a standard variable, since you don't have to synchronize it all the time. This array's indices are synchronized with the line numbers, so content actually starts at [1]. [0] can be considered undefined bahviour or something. This also means that, If you want the total linecount, you can use 'markdownFileLineByLine.length - 1'.
+            const markdownFileLineByLine = () => { var arr = markdownFileAsString.split('\n'); arr.unshift(''); return arr; }; // This is to make reading easier. I find this to be nicer than a standard variable, since you don't have to synchronize it all the time. This array's indices are synchronized with the line numbers, so content actually starts at [1]. [0] can be considered undefined behaviour or something. This also means that, If you want the total linecount, you can use 'markdownFileLineByLine.length - 1'.
 
 
             // Pre-processing.
 
-            
+            // wow, such empty
             
 
 
@@ -100,7 +100,6 @@ async function generatePost(postFolderPath) {
                 breaks: true,
             });
             var compiledMarkdown = marked.parse(markdownFileAsString);
-            console.log(compiledMarkdown);
 
 
             // <wavy> tags
@@ -108,32 +107,46 @@ async function generatePost(postFolderPath) {
             // TODO: An instance of  "</span></wavy>" is broken, as this line does not  do it correctly and turns it into "</span</span" and not "</span></span>". I likely did something wrong in this very spot.
             // for some god forsaken reason, the [^\\] is causing the bug. Why, exactly? No clue.
             compiledMarkdown = replaceAllTagEndersOfType(compiledMarkdown, "wavy", "</span>"); // <wavy> tags get replaced by <span>, so we need to swap all the <wavy> enders with <span> enders. We also make sure to exclude anything with a backslash in or before it, because that means they were escaped, and we have to respect that. I ♥️ regular expressions
-            
-            console.log(compiledMarkdown)
-            
+                        
+
             var wavyTagSubStrings = getAllContentsOfTags("wavy", markdownFileAsString);
             var startingIndicesOfWavyTags = getStartingIndicesOfTags("wavy", markdownFileAsString);
             var replacedWavyTagSubstrings = [];
+
             for (let i = 0; i < wavyTagSubStrings.length; i++) {
                 // First, we want to grab all the attributes we seek.
                 var currentTagTimeProperty = await getAttributeValueFromTagSubstring(wavyTagSubStrings[i], "time");
-                if ( currentTagDistanceProperty  == null) { currentTagDistanceProperty = "0"; }
-
-                var currentTagDistanceProperty = await getAttributeValueFromTagSubstring(wavyTagSubStrings[i], "distance");
-                if ( currentTagTimeProperty  == null) { currentTagTimeProperty = "1s"; }
-
-
-                console.log(currentTagDistanceProperty);
-                console.log(currentTagTimeProperty);
+                if ( currentTagTimeProperty == null) { currentTagTimeProperty = "1s"; }
                 
+                var currentTagDistanceProperty = await getAttributeValueFromTagSubstring(wavyTagSubStrings[i], "distance");
+                if ( currentTagDistanceProperty == null) { currentTagDistanceProperty = "0"; }
+                
+                // currentTagDistanceProperty = "null"; // THIS IS FOR TESTING. KILL LATER.
+
+
                 var stringToAddToReplaceArray = `<span class="wavyText" style=" --distance: ${currentTagDistanceProperty}; --time: ${currentTagTimeProperty};">`;
 
                 replacedWavyTagSubstrings.push(stringToAddToReplaceArray);
             }
-            for (let i = replacedWavyTagSubstrings; i < replacedWavyTagSubstrings.length; i++) {
-                markdownFileAsString = markdownFileAsString.replace(wavyTagSubStrings[i], replacedWavyTagSubstrings[i])
+            
+            console.log(startingIndicesOfWavyTags);
+            console.log(wavyTagSubStrings);
+            console.log(replacedWavyTagSubstrings);
+
+            // error check.
+            // These had all BETTER be the same length!
+            if ( !(wavyTagSubStrings.length == startingIndicesOfWavyTags.length && startingIndicesOfWavyTags.length == replacedWavyTagSubstrings.length) ) {
+                console.log(`For some reason, the length of wavyTagSubStrings, startingIndicesOfWavyTags, and replacedWavyTagSubstrings are not all equal. This is bad. Fix it now.\nwavyTagSubStrings: ${wavyTagSubStrings}\nstartingIndicesOfWavyTags: ${startingIndicesOfWavyTags}\nreplacedWavyTagSubstrings: ${replacedWavyTagSubstrings}`);
             }
 
+
+            // startingIndicesOfWavyTags includes our starting and ending arrows. HOW CONVENIENT!!!
+            // We will use this to aid in our replacement, and we will also make sure to make use of those starting indices so as to avoid friendly fire.
+            for (let i = replacedWavyTagSubstrings.length - 1; i > 0; i--) { // We go backwards, as going forwards means recalculating indices over and over (waste of time, both for the programmer and the computer)
+                compiledMarkdown = replaceFirstSubstringInStringAfterACertainPoint(compiledMarkdown, wavyTagSubStrings[i], replacedWavyTagSubstrings[i], startingIndicesOfWavyTags[i]);
+            }
+
+            console.log(compiledMarkdown);
 
             // HTML Injection.
             var compiledPost;
@@ -150,7 +163,6 @@ async function generatePost(postFolderPath) {
                 includeNodeLocations: true,
                 storageQuota: 10000000
             });
-
 
 
             // Links that end with an exclamation mark will be opened in a new tab.
@@ -175,12 +187,9 @@ async function generatePost(postFolderPath) {
             }
             
 
-
-            // Custom tags are implemented in the webpage itself.
-
             compiledPost = postProcessingDOM.serialize();
             
-            console.log("------------------------------------------")
+            console.log("------------------------------------------");
 
             // When all is said and done, our generated file shall be written.
             fs.writeFile(compiledPostPath, compiledPost, (err) => {
@@ -198,21 +207,25 @@ async function generatePost(postFolderPath) {
 
 
 
+// TODO: Indices on splitting the string are broken!
 
 
 
 
-// TODO: Using replaceAllTagEndersOfType(), make a new replaceStringsWithBackwardsStartingIndices() function
+/** Suppose we have a string. We want to replace a substring within it, but there are multiple instances of the substring! Well, that's where this function comes in handy; we can specify an indice for where to start looking, with the first (and only the first!) instance of the substring being replaced. */
+function replaceFirstSubstringInStringAfterACertainPoint(stringToModify, substringToReplace, stringYouAreReplacingItWIth, indiceOfWhereToStartLooking) { 
+        //     Cut the string into two pieces, at our index.
+        //     Replace the thing.
+        //     Merge the strings back together.
+        var stringHalves = splitStringAtIndex( stringToModify, indiceOfWhereToStartLooking );
+        console.log( stringToModify.charAt(indiceOfWhereToStartLooking) )
+        console.log(stringHalves)
+        stringHalves[1] = stringHalves[1].replace( substringToReplace, stringYouAreReplacingItWIth);
+        return stringHalves[0] + stringHalves[1];
+}
 
 
-
-
-
-
-
-
-
-/** Replaces tag enders of the specified name with a string of your choosing. If you want all "</wavy>"s to be replaced with "</span>", you'd use arguments ("wavy", "</span>"). */
+/** Replaces tag enders of the specified name with a string of your choosing. If you want all "\</wavy>"s to be replaced with "\</span>", you'd use arguments (blahblahblah, "wavy", "\</span>"). */
 function replaceAllTagEndersOfType(stringToReplaceTagEndersIn, tagName, stringToReplaceItWith) {
     // Normally I would use the regex on its own, but the regex seems to capture one character before it; removing the "no \" clause fixes this, but I cannot remove that. I don't know why the regex team did this, but fine, whatever, I will fix that myself.
     // If I ever find a regex that does NOT do this, I will replace the whole function with that.
@@ -222,7 +235,7 @@ function replaceAllTagEndersOfType(stringToReplaceTagEndersIn, tagName, stringTo
     var allInstancesOfCorrectedTagEnder = []; // array of js objects; see the for loop below for syntax
 
     for (let i = 0; i < allInstancesOfTagEnder.length; i++) {
-        allInstancesOfCorrectedTagEnder.unshift({ // Yes, I used unshift(). Yes, they are now backwards (final instance to first instance). This is 100% intentional.
+        allInstancesOfCorrectedTagEnder.unshift({ // Yes, I used unshift(). Yes, they are now backwards (final instance to first instance). This is 100% intentional. I could form the array normally and then use reverse() but this seems simpler.
             stringToReplace: allInstancesOfTagEnder[i][0].substring(1),
             capturedIndex: allInstancesOfTagEnder[i]["index"] + 1
         });
@@ -233,14 +246,7 @@ function replaceAllTagEndersOfType(stringToReplaceTagEndersIn, tagName, stringTo
     var replacedString = stringToReplaceTagEndersIn;
     for (let i = 0; i < allInstancesOfCorrectedTagEnder.length; i++) { // I am going forwards through the array, because the array is already last-to-first.
         // allInstancesOfCorrectedTagEnder[i] = { stringToReplace: string, capturedIndex: int }
-
-        //     Cut the string into two pieces, at our index.
-        //     Replace the thing.
-        //     Merge the strings back together.
-
-        var stringHalves = splitStringAtIndex( replacedString, allInstancesOfCorrectedTagEnder[i].capturedIndex );
-        stringHalves[1] = stringHalves[1].replace( allInstancesOfCorrectedTagEnder[i].stringToReplace, stringToReplaceItWith);
-        replacedString = stringHalves[0] + stringHalves[1];
+        replacedString = replaceFirstSubstringInStringAfterACertainPoint(replacedString, allInstancesOfCorrectedTagEnder[i].stringToReplace, stringToReplaceItWith, allInstancesOfCorrectedTagEnder[i].capturedIndex);
     }
 
     return replacedString;
@@ -293,7 +299,7 @@ So, get on that sometime.
 
 // https://frontendinterviewquestions.medium.com/how-to-replace-html-tags-from-string-in-javascript-c86e40936eb0
 
-/** Returns an array of strings, containing the insides of the tags. Does not include the closing arrow. */
+/** Returns an array of strings, containing the insides of the tags. Includes the both the opening and closing arrows, but those should be easy to remove if need be. */
 function getAllContentsOfTags(tagName, stringToSearchIn) { 
     var startingIndicesOfSearchTags = getStartingIndicesOfTags(tagName, stringToSearchIn);
     if (startingIndicesOfSearchTags.length > 0) { // startingIndicesOfSearchTags is quite odd, and not just a regular number array lke we want it to be. First, we change that.
@@ -314,6 +320,7 @@ function getAllContentsOfTags(tagName, stringToSearchIn) {
 }
 
 // TODO: Avoid a capture if it has a backslash at any point in it.
+/** Gets the starting indices of all tags of a specified type; this is the indice of the starting arrow "<", by the way. */
 function getStartingIndicesOfTags(tagName, stringToSearchIn) {
     var startingIndicesOfSearchTags = [...stringToSearchIn.matchAll( new RegExp(String.raw`<\s*${tagName}\s*`, "gi") )];
     if (startingIndicesOfSearchTags.length > 0) { 
@@ -333,7 +340,7 @@ function getLineNumFromCharIndexOfString(text, index) {
     return line;
 } // https://stackoverflow.com/a/76855467
 
-/** NOTICE: This is zero-indexed; January is 0, February is 1, March is 2, etc. This is to follow the conventions of the Date() API. Also note that this isa language thing, so if you ever localize the blog, you'll be forced to translate the function.*/
+/** NOTICE: This is zero-indexed; January is 0, February is 1, March is 2, etc. This is to follow the conventions of the Date() API. Also note that this is a language thing, so if you ever localize the blog, you'll be forced to translate the function.*/
 function convertMonthNumberToYear(month, useThreeLetterVersion = false) {
     var monthName;
     switch(month) {

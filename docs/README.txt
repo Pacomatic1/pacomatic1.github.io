@@ -11,4 +11,4 @@ Here are some things you NEED to know. Don't skip this stuff!
     You will need Python and Node.js, using the latest versions (as of August 2025).
     If you are on Windows, you should use WSL, with the dependencies mentioned above. Just go to the folder using Powershell, enter WSL while there, and run the script like usual.
 
-3. UTF-8, Linux line endings. NOTHING ELSE. Trying to deal with every possible encoding and every possible line ending has caused so many unneeded headaches.
+3. UTF-8, Linux line endings. NOTHING ELSE. Trying to deal with every possible encoding and every possible line ending has caused so many unneeded headaches. 
