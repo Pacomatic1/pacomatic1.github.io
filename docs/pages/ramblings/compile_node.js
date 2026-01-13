@@ -223,6 +223,7 @@ function replaceFirstSubstringInStringAfterACertainPoint(stringToModify, substri
         //     Cut the string into two pieces, at our index.
         //     Replace the thing.
         //     Merge the strings back together.
+        
         var stringHalves = splitStringAtIndex( stringToModify, indiceOfWhereToStartLooking );
         console.log( stringToModify.charAt(indiceOfWhereToStartLooking) )
         console.log(stringHalves)
@@ -260,7 +261,32 @@ function replaceAllTagEndersOfType(stringToReplaceTagEndersIn, tagName, stringTo
 
 /** Splits a string in two, at the given index. Returns an array of both halves of the string. */
 function splitStringAtIndex(stringToSplit, index) {
-    return [ stringToSplit.slice(0, index), stringToSplit.slice(index, stringToSplit.length) ];
+    // Little problem: Each newline actually counts as 3 characters, which goes against every single "find indice" function ever. I don't know why.
+    // This means that, when we are doing our index stuff, the spot where it's split is far behind where we're supposed to split it.
+    
+    // Using an actual newline actually removes the need for handling backslashes ourselves! How convenient!
+    var newLineRegex = new RegExp(String.raw`\n`, "g");
+    var newLineArrayHelper = [ ...stringToSplit.matchAll(newLineRegex) ];
+    
+    // console.log(newLineArrayHelper)
+
+    // The index we're given aligns with whatever indexes we use inside newLineArrayHelper.
+    // So, we can iterate through each entry until the array's index is greater than our given index. Then we move it backwards one because we are currently on the first newline AFTER the given index.
+    var newLineArrayHelperTextIndex = 0;
+    var newLineArrayHelperArrayIndex = 0;
+    loop: for (let i = 0; i < newLineArrayHelper.length; i++) {
+        if (newLineArrayHelper[i].index >= index) { // More than/equal to, because equal to would mean that the index is at the very end of a line; that'd make the newline come right AFTER it.
+            newLineArrayHelperTextIndex = newLineArrayHelper[i].index;
+            newLineArrayHelperArrayIndex = i;
+            break loop;
+        }
+    }
+
+    var newLineCount = newLineArrayHelperArrayIndex;
+
+    index = index + (3 * newLineCount);
+
+    return [ stringToSplit.substring(0, index), stringToSplit.substring(index, stringToSplit.length) ];
 }
 
 /**  Give it the substring of a tag, including the name, and give it the name of an attribute. If the desired attribute exists, we'll return its contents. If it does not, we return null. */
@@ -330,8 +356,7 @@ function getAllContentsOfTags(tagName, stringToSearchIn) {
 function getStartingIndicesOfTags(tagName, stringToSearchIn) {
     var startingIndicesOfSearchTags = [...stringToSearchIn.matchAll( new RegExp(String.raw`<\s*${tagName}\s*`, "gi") )];
 
-    console.log(startingIndicesOfSearchTags
-    )
+    // console.log(startingIndicesOfSearchTags)
 
     if (startingIndicesOfSearchTags.length > 0) { 
         let finalArray = [];
