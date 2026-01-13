@@ -8,16 +8,17 @@
 
 
 // Using this is done through assciidoctor.convert(content: string).
-const fs = require('node:fs');
-const path = require('node:path');
+import * as fs from 'node:fs';
+import * as path from 'node:path';
 
-const { marked } = require('marked');
+import { marked } from 'marked';
 
-const jsdom = require("jsdom");
-const { JSDOM } = jsdom;
 
-const xml2js = require('xml2js');
+// import * as jsdom from "jsdom";
+import { JSDOM } from "jsdom";
 
+import xml2js from 'xml2js';
+// const { xml2js } = xml2js;
 
 
 console.log("Ramblings: Started");
@@ -99,6 +100,7 @@ async function generatePost(postFolderPath) {
                 gfm: true,
                 breaks: true,
             });
+
             var compiledMarkdown = marked.parse(markdownFileAsString);
 
 
@@ -129,9 +131,9 @@ async function generatePost(postFolderPath) {
                 replacedWavyTagSubstrings.push(stringToAddToReplaceArray);
             }
             
-            console.log(startingIndicesOfWavyTags);
-            console.log(wavyTagSubStrings);
-            console.log(replacedWavyTagSubstrings);
+            // console.log(startingIndicesOfWavyTags);
+            // console.log(wavyTagSubStrings);
+            // console.log(replacedWavyTagSubstrings);
 
             // error check.
             // These had all BETTER be the same length!
@@ -146,7 +148,7 @@ async function generatePost(postFolderPath) {
                 compiledMarkdown = replaceFirstSubstringInStringAfterACertainPoint(compiledMarkdown, wavyTagSubStrings[i], replacedWavyTagSubstrings[i], startingIndicesOfWavyTags[i]);
             }
 
-            console.log(compiledMarkdown);
+            // console.log(compiledMarkdown);
 
             // HTML Injection.
             var compiledPost;
@@ -191,8 +193,12 @@ async function generatePost(postFolderPath) {
             
             console.log("------------------------------------------");
 
+
+            // WE ADRE CURRENTLY USING THE MARKDOWN AND NOT THE ACTUAL POST. BE CAREFUL!!!!!!!!!!!
+            // SWAP ARG 2 WITH compiledPost!!!
+
             // When all is said and done, our generated file shall be written.
-            fs.writeFile(compiledPostPath, compiledPost, (err) => {
+            fs.writeFile(compiledPostPath, compiledMarkdown, (err) => {
                 if (err == null) {
                     console.log(`Ramblings: Wrote post "${postTitle}" successfully!`)
                 } else {
@@ -310,7 +316,7 @@ function getAllContentsOfTags(tagName, stringToSearchIn) {
         }
         
         // Get the contents of the tags into a bunch of strings, and figure out what it is we need to replace from there.
-        searchTagSubStrings = [];
+        var searchTagSubStrings = [];
         for (let i = 0; i < startingIndicesOfSearchTags.length; i++) {
             searchTagSubStrings.push( stringToSearchIn.substring(startingIndicesOfSearchTags[i], endingIndicesOfSearchTags[i]) + ">" ); // This pushes them *without* the ending arrows, so we add those in real quick.
         }
@@ -323,6 +329,10 @@ function getAllContentsOfTags(tagName, stringToSearchIn) {
 /** Gets the starting indices of all tags of a specified type; this is the indice of the starting arrow "<", by the way. */
 function getStartingIndicesOfTags(tagName, stringToSearchIn) {
     var startingIndicesOfSearchTags = [...stringToSearchIn.matchAll( new RegExp(String.raw`<\s*${tagName}\s*`, "gi") )];
+
+    console.log(startingIndicesOfSearchTags
+    )
+
     if (startingIndicesOfSearchTags.length > 0) { 
         let finalArray = [];
         for (let i = 0; i < startingIndicesOfSearchTags.length; i++) {
