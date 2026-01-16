@@ -353,7 +353,6 @@ function replaceFirstSubstringInStringAfterACertainPoint(stringToModify, substri
         return stringHalves[0] + stringHalves[1];
 }
 
-
 /** Splits a string in two, at the given index. Returns an array of both halves of the string. */
 function splitStringAtIndex(stringToSplit, index) {
     return [ stringToSplit.substring(0, index), stringToSplit.substring(index, stringToSplit.length) ];
@@ -394,9 +393,18 @@ function getAttributeValueFromTagSubstring(substring, attributeName) {
 
 
 
+
+
+
+
+
+
+
 /*
 TODO: Modify the "stop searching for string" trigger. As is stands, it looks for ">", but what happens if that's part of an attribute, like in CSS or something?
 So, get on that sometime.
+
+Future me here. Perhaps you could make use of that string marcher? It already handles all the edge cases anyways, may as well use it.
 */
 
 // https://frontendinterviewquestions.medium.com/how-to-replace-html-tags-from-string-in-javascript-c86e40936eb0
