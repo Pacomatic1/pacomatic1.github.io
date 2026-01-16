@@ -40,8 +40,10 @@ for (const index in fs.readdirSync(postFolderPath, {withFileTypes: true})) {
 var postGenerationPromises = [];
 
 for (const index in postFolders) {
-    var actualPath = postFolders[index].parentPath + postFolders[index].name + "/" 
-    postGenerationPromises.push( generatePost(actualPath) );
+    var actualPath = postFolders[index].parentPath + postFolders[index].name + "/";
+    // postGenerationPromises.push( generatePost(actualPath) );
+
+    await generatePost(actualPath);
 }
 
 // console.log("Ramblings: Done"); // You gotta mod this such that it waits for everything to be done first.
@@ -66,14 +68,14 @@ async function generatePost(postFolderPath) {
         // Don't add an if for post.json, that's handled with the adoc.
         if ( generatedFilesWithinAPostToDelete.includes(currentEntry.name) ) { fs.rmSync(currentEntryPath); }
         if ( currentEntry.name == 'post.md') {
-            // File loading
+            // File loading --------------------------------
             var basePostPath = currentEntry.parentPath + "../post_base.html";
             var compiledPostPath = currentEntry.parentPath + "index.html";
 
             var basePostAsString = fs.readFileSync( basePostPath, { encoding: 'utf8' })
             var postJSON = JSON.parse( fs.readFileSync(currentEntry.parentPath + "post.json", { encoding: 'utf8' }) );
 
-            // Post data? Metadata? Title Data? What do we call this, exactly?
+            // Post data? Metadata? Title Data? What do we call this, exactly? -----------------------------------
             var postTitle = postJSON.postTitle;
             var postVersion = postJSON.postVersion;
             var postPublishDate = new Date(postJSON.postPublishDate);
@@ -89,7 +91,7 @@ async function generatePost(postFolderPath) {
             const markdownFileLineByLine = () => { var arr = markdownFileAsString.split('\n'); arr.unshift(''); return arr; }; // This is to make reading easier. I find this to be nicer than a standard variable, since you don't have to synchronize it all the time. This array's indices are synchronized with the line numbers, so content actually starts at [1]. [0] can be considered undefined behaviour or something. This also means that, If you want the total linecount, you can use 'markdownFileLineByLine.length - 1'.
 
 
-            // Pre-processing.
+            // Pre-processing ------------------------
 
             // wow, such empty
             
@@ -102,15 +104,42 @@ async function generatePost(postFolderPath) {
             });
 
             var compiledMarkdown = marked.parse(markdownFileAsString);
-
-
-            // <wavy> tags
             
-            // TODO: An instance of  "</span></wavy>" is broken, as this line does not  do it correctly and turns it into "</span</span" and not "</span></span>". I likely did something wrong in this very spot.
-            // for some god forsaken reason, the [^\\] is causing the bug. Why, exactly? No clue.
-            compiledMarkdown = replaceAllTagEndersOfType(compiledMarkdown, "wavy", "</span>"); // <wavy> tags get replaced by <span>, so we need to swap all the <wavy> enders with <span> enders. We also make sure to exclude anything with a backslash in or before it, because that means they were escaped, and we have to respect that. I ♥️ regular expressions
-                        
 
+
+            console.log(compiledMarkdown);
+
+
+
+            // We are going to march through the string.
+            
+            // First, we are going to store any persistent variables.
+
+
+
+            compiledMarkdown = marchThroughHTMLString(compiledMarkdown, {
+                forEveryTagWeHit: function (tagSubstring, index) {
+                    if (tagSubstring.startsWith("<wavy")) {
+                        var currentTagTimeProperty = await getAttributeValueFromTagSubstring(wavyTagSubStrings[i], "time");
+                        if ( currentTagTimeProperty == null) { currentTagTimeProperty = "1s"; }
+                        
+                        var currentTagDistanceProperty = await getAttributeValueFromTagSubstring(wavyTagSubStrings[i], "distance");
+                        if ( currentTagDistanceProperty == null) { currentTagDistanceProperty = "0"; }
+
+                    }
+
+
+                    return null;
+                },
+                forEveryTagEnderWeHit: function (tagSubstring, index) {
+                    if ( tagSubstring.includes("wavy") ) {
+                        return "</span>"
+                    } else { return null; }
+                }
+            });
+
+
+/*
             var wavyTagSubStrings = getAllContentsOfTags("wavy", markdownFileAsString);
             var startingIndicesOfWavyTags = getStartingIndicesOfTags("wavy", markdownFileAsString);
             var replacedWavyTagSubstrings = [];
@@ -141,16 +170,16 @@ async function generatePost(postFolderPath) {
                 console.log(`For some reason, the length of wavyTagSubStrings, startingIndicesOfWavyTags, and replacedWavyTagSubstrings are not all equal. This is bad. Fix it now.\nwavyTagSubStrings: ${wavyTagSubStrings}\nstartingIndicesOfWavyTags: ${startingIndicesOfWavyTags}\nreplacedWavyTagSubstrings: ${replacedWavyTagSubstrings}`);
             }
 
-
             // startingIndicesOfWavyTags includes our starting and ending arrows. HOW CONVENIENT!!!
             // We will use this to aid in our replacement, and we will also make sure to make use of those starting indices so as to avoid friendly fire.
             for (let i = replacedWavyTagSubstrings.length - 1; i > 0; i--) { // We go backwards, as going forwards means recalculating indices over and over (waste of time, both for the programmer and the computer)
                 compiledMarkdown = replaceFirstSubstringInStringAfterACertainPoint(compiledMarkdown, wavyTagSubStrings[i], replacedWavyTagSubstrings[i], startingIndicesOfWavyTags[i]);
             }
+*/
 
             // console.log(compiledMarkdown);
 
-            // HTML Injection.
+            // HTML Injection. ------------------------------
             var compiledPost;
             compiledPost = basePostAsString.replace("NODEJS-UNIQUENESS-86348753276982273", compiledMarkdown);
             compiledPost = compiledPost.replace("NODEJS-UNIQUENESS-65327128234", postTitle);
@@ -158,7 +187,7 @@ async function generatePost(postFolderPath) {
             compiledPost = compiledPost.replace("NODEJS-UNIQUENESS-981273873264", postSubtitle);
 
 
-            // Post processing.
+            // Post processing. -------------------------------
             var postProcessingDOM = new JSDOM(compiledPost, {
                 url: "file://" + path.resolve(compiledPostPath),
                 contentType: "text/html",
@@ -213,10 +242,103 @@ async function generatePost(postFolderPath) {
 
 
 
-// TODO: Indices on splitting the string are broken!
+
+// TODO: find a way to make getAttributeValueFromTagSubstring() synchronous.
 
 
 
+
+
+
+
+
+/** Generic handler for marching through a markup string.
+ * Run this function and it will march through your string. When we run through your string, we get to run a few functions along the way. These are contained in your JS Object containing the needed functions.
+ * 
+ * @param {string} stringToMarchThrough - The string you're marching through. 
+ * @param {json} functionsToRun - A JS Object containing some functions that will be run at specific points. Its contents are described above.
+ * @param {function} functionsToRun.forEveryTagWeHit - Function with 2 args: string containing only the tag (arrows included), and a number denoting the tag's starting index. return value: the string that will replace the tag. Note that the function will then march right through your newly-replaced tag. If you don't want to have a function, do NOT define this as "null" or "undefined"; just don't define it. If you don't want to replace anything, return null.
+ * @param {function} functionsToRun.forEveryTagEnderWeHit - Function with 2 args: string containing only the tag (arrows included), and a number denoting the tag's starting index. return value: the string that will replace the tag. Note that the function will then march right through your newly-replaced tag. If you don't want to have a function, do NOT define this as "null" or "undefined", don't define anything. If you don't want to replace anything, return null.
+ * 
+ */
+function marchThroughHTMLString(stringToMarchThrough, functionsToRun) {
+    var isNextCharacterEscaped = false;
+    var tagAttributeQuoteType = ""; // This is going to be hella confusing to read, but. " or ' mean that we're in an attribute, and an empty string means we're not.
+    
+    var currentlyInsideTag = false;
+    var currentTagStartingIndex = -1; // -1 is our "null value". That said, you should be cross-checking this with currentlyInsideTag.  
+    var currentTagEndingIndex = -1; // -1 is our "null value". That said, you should be cross-checking this with currentlyInsideTag.
+
+    // Fun and extremely vital fact: This does NOT cache the string's length; if we make the string longer, the for loop will abide without hesitation. 
+    overallTextIterator: for (let i = 0; i < stringToMarchThrough.length; i++) {
+        var currentChar = stringToMarchThrough.charAt(i);
+
+        // First, deal with whether or not the character is escaped. Also keep in mind a "\\", in which case we just want to skip everything here because it's a normal backslash and is totally irrelevant.
+        if ( isNextCharacterEscaped ) {
+            isNextCharacterEscaped = false;
+            continue overallTextIterator;
+        }
+        if ( !isNextCharacterEscaped && currentChar == "\\") {
+            isNextCharacterEscaped = true;
+            continue overallTextIterator;
+        }
+        // Assuming I did this right, we will never have to worry about escaped characters ever again :)
+        // If I did it wrong... Well, we both know who's gonna be fixing it.
+
+        // ...it'll be me. I'm the one who will be fixing it. I'm going to have to fix everything here.
+
+        if (currentChar == "<" && tagAttributeQuoteType == "") { // So. We've hit one of them arrows and we aren't in an attribute? Well golly gosh, looks like a tag (ender) just started! {
+            currentlyInsideTag = true;
+            currentTagStartingIndex = i;
+        }
+        if ( currentlyInsideTag ) {
+
+            if ( currentChar == "\"" || currentChar == "'" ) { // We have hit the beginning/end of a tag attribute.
+                if ( tagAttributeQuoteType == "") { // If we do not already think we are inside an attribute, we have hit the beginning.
+                    tagAttributeQuoteType = currentChar; // Say that we now inside of one.
+                    continue overallTextIterator;
+                }
+                if ( tagAttributeQuoteType == currentChar) { // If we were inside an attribute earlier and hit the same ender, we have likely hit the end. Now, we'd best say so.
+                    tagAttributeQuoteType = ""; // Say that we are done, because we have hit the end.
+                    continue overallTextIterator;
+                }
+
+                // Handling of specific attributes go here. Keep in mind that most, if not all custom tags are going to be completely replaced, so there may be no point in doing this.
+                // I can only imagine this to be useful in the edge case of a vanilla (regular html) tag whose attributes you want to modify. But, again, that kind of stuff can happen.
+            }
+
+            if (currentChar == ">" && tagAttributeQuoteType == "") { // We hit one of them arrows and we are not inside of an attribute? By golly, we must be at the end of the tag (ender)!
+                currentlyInsideTag = false;
+                currentTagEndingIndex = i;
+
+                // Alright, time to handle our idiotic custom tag dealings.
+                // We are going to do the replacement *during* the for loop, which also means modifying the for loop's iterator.                
+                var currentTagSubstring = stringToMarchThrough.slice(currentTagStartingIndex, currentTagEndingIndex + 1) ;
+                var isTagEnder = false;
+                if (currentTagSubstring.startsWith("</")) { isTagEnder = true;  console.log("AAAAUGH/")}
+                var stringToReplaceCurrentTag = null; // If we do not need any replacement, this will be null.
+
+                if ( Object.hasOwn(functionsToRun, "forEveryTagWeHit") && !isTagEnder) {
+                    stringToReplaceCurrentTag = functionsToRun.forEveryTagWeHit(currentTagSubstring, currentTagStartingIndex);
+                }
+                if ( Object.hasOwn(functionsToRun, "forEveryTagEnderWeHit") && isTagEnder) {
+                    stringToReplaceCurrentTag = functionsToRun.forEveryTagEnderWeHit(currentTagSubstring, currentTagStartingIndex);
+                    console.log(stringToReplaceCurrentTag)
+                }
+
+                if (stringToReplaceCurrentTag != null) { // If the tag needs replacement...
+                    i = currentTagStartingIndex; // The string marcher will now march right through our new tag ender.
+                    stringToMarchThrough = replaceFirstSubstringInStringAfterACertainPoint(stringToMarchThrough, currentTagSubstring, stringToReplaceCurrentTag, currentTagStartingIndex);
+                }
+
+
+
+            }
+        }
+    }
+
+    return stringToMarchThrough;
+}
 
 /** Suppose we have a string. We want to replace a substring within it, but there are multiple instances of the substring! Well, that's where this function comes in handy; we can specify an indice for where to start looking, with the first (and only the first!) instance of the substring being replaced. */
 function replaceFirstSubstringInStringAfterACertainPoint(stringToModify, substringToReplace, stringYouAreReplacingItWIth, indiceOfWhereToStartLooking) { 
@@ -225,72 +347,20 @@ function replaceFirstSubstringInStringAfterACertainPoint(stringToModify, substri
         //     Merge the strings back together.
         
         var stringHalves = splitStringAtIndex( stringToModify, indiceOfWhereToStartLooking );
-        console.log( stringToModify.charAt(indiceOfWhereToStartLooking) )
-        console.log(stringHalves)
+        // console.log( stringToModify.charAt(indiceOfWhereToStartLooking) )
+        // console.log(stringHalves)
         stringHalves[1] = stringHalves[1].replace( substringToReplace, stringYouAreReplacingItWIth);
         return stringHalves[0] + stringHalves[1];
 }
 
 
-/** Replaces tag enders of the specified name with a string of your choosing. If you want all "\</wavy>"s to be replaced with "\</span>", you'd use arguments (blahblahblah, "wavy", "\</span>"). */
-function replaceAllTagEndersOfType(stringToReplaceTagEndersIn, tagName, stringToReplaceItWith) {
-    // Normally I would use the regex on its own, but the regex seems to capture one character before it; removing the "no \" clause fixes this, but I cannot remove that. I don't know why the regex team did this, but fine, whatever, I will fix that myself.
-    // If I ever find a regex that does NOT do this, I will replace the whole function with that.
-    var regexToUse = new RegExp(String.raw`[^\\]<\/${tagName}\s*>`, "g");
-    var allInstancesOfTagEnder = Array.from( stringToReplaceTagEndersIn.matchAll(regexToUse) );
-    
-    var allInstancesOfCorrectedTagEnder = []; // array of js objects; see the for loop below for syntax
-
-    for (let i = 0; i < allInstancesOfTagEnder.length; i++) {
-        allInstancesOfCorrectedTagEnder.unshift({ // Yes, I used unshift(). Yes, they are now backwards (final instance to first instance). This is 100% intentional. I could form the array normally and then use reverse() but this seems simpler.
-            stringToReplace: allInstancesOfTagEnder[i][0].substring(1),
-            capturedIndex: allInstancesOfTagEnder[i]["index"] + 1
-        });
-    }
-
-    // We are now going to replace every single instance of the thingies in allInstancesOfCorrectedTagEnder. To avoid many issues, we will be working backwards.
-
-    var replacedString = stringToReplaceTagEndersIn;
-    for (let i = 0; i < allInstancesOfCorrectedTagEnder.length; i++) { // I am going forwards through the array, because the array is already last-to-first.
-        // allInstancesOfCorrectedTagEnder[i] = { stringToReplace: string, capturedIndex: int }
-        replacedString = replaceFirstSubstringInStringAfterACertainPoint(replacedString, allInstancesOfCorrectedTagEnder[i].stringToReplace, stringToReplaceItWith, allInstancesOfCorrectedTagEnder[i].capturedIndex);
-    }
-
-    return replacedString;
-}
-
 /** Splits a string in two, at the given index. Returns an array of both halves of the string. */
 function splitStringAtIndex(stringToSplit, index) {
-    // Little problem: Each newline actually counts as 3 characters, which goes against every single "find indice" function ever. I don't know why.
-    // This means that, when we are doing our index stuff, the spot where it's split is far behind where we're supposed to split it.
-    
-    // Using an actual newline actually removes the need for handling backslashes ourselves! How convenient!
-    var newLineRegex = new RegExp(String.raw`\n`, "g");
-    var newLineArrayHelper = [ ...stringToSplit.matchAll(newLineRegex) ];
-    
-    // console.log(newLineArrayHelper)
-
-    // The index we're given aligns with whatever indexes we use inside newLineArrayHelper.
-    // So, we can iterate through each entry until the array's index is greater than our given index. Then we move it backwards one because we are currently on the first newline AFTER the given index.
-    var newLineArrayHelperTextIndex = 0;
-    var newLineArrayHelperArrayIndex = 0;
-    loop: for (let i = 0; i < newLineArrayHelper.length; i++) {
-        if (newLineArrayHelper[i].index >= index) { // More than/equal to, because equal to would mean that the index is at the very end of a line; that'd make the newline come right AFTER it.
-            newLineArrayHelperTextIndex = newLineArrayHelper[i].index;
-            newLineArrayHelperArrayIndex = i;
-            break loop;
-        }
-    }
-
-    var newLineCount = newLineArrayHelperArrayIndex;
-
-    index = index + (3 * newLineCount);
-
     return [ stringToSplit.substring(0, index), stringToSplit.substring(index, stringToSplit.length) ];
 }
 
 /**  Give it the substring of a tag, including the name, and give it the name of an attribute. If the desired attribute exists, we'll return its contents. If it does not, we return null. */
-async function getAttributeValueFromTagSubstring(substring, attributeName) {
+function getAttributeValueFromTagSubstring(substring, attributeName) {
     // First, we handle the cases in which the tag does not have the ending or starting arrows.
     if ( !substring.endsWith(">") ) { substring = substring + ">"; }
     if ( !substring.startsWith("<") ) { substring = "<" + substring; }
@@ -299,11 +369,11 @@ async function getAttributeValueFromTagSubstring(substring, attributeName) {
         
     // So, we find the tag's name. Find the index of the first whitespace or ending arrow; everything between it and the starting arrow (which is guaranteed to be substring[1]) is the tag's name.
 
-    // But wait! What if there is whitespace between the starting arrow and the  
+    // But wait! What if there is whitespace between the starting arrow and the tag name?
     var substringForTagFind = substring.substring(1);
     substringForTagFind = substringForTagFind.trimStart();
     // Yes, this stuff changed the indices such that the indices for the tag name are now different.
-    // But, that is fine, because we are going to be pulling from substringForTagFind, whose indices align with our found indices. Once we have that, we pull the tag name, and then forget the variable ever existed.
+    // But, that is fine, because we are going to be pulling from substringForTagFind, whose indices align with our found indices. Once we have that, we pull the tag name, and then forget the variable ever existed. If this was C, I'd malloc() that thing.  (i think that's how this works? not too sure.)
     var tagNameEndingIndice = substringForTagFind.indexOf(" ");
     if ( tagNameEndingIndice == -1 ) { tagNameEndingIndice = substringForTagFind.indexOf(">"); }
     
@@ -351,10 +421,10 @@ function getAllContentsOfTags(tagName, stringToSearchIn) {
     } else { return []; }
 }
 
-// TODO: Avoid a capture if it has a backslash at any point in it.
+// TODO: Avoid a capture if it has a backslash at any point in it. I'm not doing this juuust yet because using a "no-capture group" has caused issues before.
 /** Gets the starting indices of all tags of a specified type; this is the indice of the starting arrow "<", by the way. */
 function getStartingIndicesOfTags(tagName, stringToSearchIn) {
-    var startingIndicesOfSearchTags = [...stringToSearchIn.matchAll( new RegExp(String.raw`<\s*${tagName}\s*`, "gi") )];
+    var startingIndicesOfSearchTags = [...stringToSearchIn.matchAll( new RegExp(String.raw`<\s  *${tagName}\s*`, "gi") )];
 
     // console.log(startingIndicesOfSearchTags)
 
@@ -362,11 +432,15 @@ function getStartingIndicesOfTags(tagName, stringToSearchIn) {
         let finalArray = [];
         for (let i = 0; i < startingIndicesOfSearchTags.length; i++) {
             finalArray.push(startingIndicesOfSearchTags[i].index);
+            console.log( charAt(startingIndicesOfSearchTags[i].index));
         }
+
+        console.log(finalArray)
         return finalArray; // This variable contains the index of the < character.
     } else { return []; }
 }
 
+/** Note that this is 1-indexed; first line is 1, not 0. */
 function getLineNumFromCharIndexOfString(text, index) {
     let line = 1;
     for (let i = 0; i < index; i++) {
