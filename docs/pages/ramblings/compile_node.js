@@ -120,10 +120,10 @@ async function generatePost(postFolderPath) {
             compiledMarkdown = marchThroughHTMLString(compiledMarkdown, {
                 forEveryTagWeHit: function (tagSubstring, index) {
                     if (tagSubstring.startsWith("<wavy")) {
-                        var currentTagTimeProperty = await getAttributeValueFromTagSubstring(wavyTagSubStrings[i], "time");
+                        var currentTagTimeProperty = getAttributeValueFromTagSubstring(tagSubstring, "time");
                         if ( currentTagTimeProperty == null) { currentTagTimeProperty = "1s"; }
                         
-                        var currentTagDistanceProperty = await getAttributeValueFromTagSubstring(wavyTagSubStrings[i], "distance");
+                        var currentTagDistanceProperty = getAttributeValueFromTagSubstring(tagSubstring, "distance");
                         if ( currentTagDistanceProperty == null) { currentTagDistanceProperty = "0"; }
 
                     }
@@ -264,9 +264,12 @@ async function generatePost(postFolderPath) {
 function marchThroughHTMLString(stringToMarchThrough, functionsToRun) {
     var isNextCharacterEscaped = false;
     var tagAttributeQuoteType = ""; // This is going to be hella confusing to read, but. " or ' mean that we're in an attribute, and an empty string means we're not.
+    var tagAttributeStartingIndex = -1; // -1 is our "null value". That said, you should be cross-checking this with tagAttributeQuoteType.
+    var tagAttributeEndingIndex = -1; // -1 is our "null value". That said, you should be cross-checking this with tagAttributeQuoteType.
     
+
     var currentlyInsideTag = false;
-    var currentTagStartingIndex = -1; // -1 is our "null value". That said, you should be cross-checking this with currentlyInsideTag.  
+    var currentTagStartingIndex = -1; // -1 is our "null value". That said, you should be cross-checking this with currentlyInsideTag.
     var currentTagEndingIndex = -1; // -1 is our "null value". That said, you should be cross-checking this with currentlyInsideTag.
 
     // Fun and extremely vital fact: This does NOT cache the string's length; if we make the string longer, the for loop will abide without hesitation. 
@@ -340,6 +343,12 @@ function marchThroughHTMLString(stringToMarchThrough, functionsToRun) {
     return stringToMarchThrough;
 }
 
+/**  Give it the substring of a tag, including the name, and give it the name of an attribute. If the desired attribute exists, we'll return its contents. If it does not, we return null. */
+function getAttributeValueFromTagSubstring(substring, attributeName) {
+
+}
+
+
 /** Suppose we have a string. We want to replace a substring within it, but there are multiple instances of the substring! Well, that's where this function comes in handy; we can specify an indice for where to start looking, with the first (and only the first!) instance of the substring being replaced. */
 function replaceFirstSubstringInStringAfterACertainPoint(stringToModify, substringToReplace, stringYouAreReplacingItWIth, indiceOfWhereToStartLooking) { 
         //     Cut the string into two pieces, at our index.
@@ -357,48 +366,6 @@ function replaceFirstSubstringInStringAfterACertainPoint(stringToModify, substri
 function splitStringAtIndex(stringToSplit, index) {
     return [ stringToSplit.substring(0, index), stringToSplit.substring(index, stringToSplit.length) ];
 }
-
-/**  Give it the substring of a tag, including the name, and give it the name of an attribute. If the desired attribute exists, we'll return its contents. If it does not, we return null. */
-function getAttributeValueFromTagSubstring(substring, attributeName) {
-    // First, we handle the cases in which the tag does not have the ending or starting arrows.
-    if ( !substring.endsWith(">") ) { substring = substring + ">"; }
-    if ( !substring.startsWith("<") ) { substring = "<" + substring; }
-    
-    // We use xml2js under the hood, but xml2js demands that all tags end properly (eg. "<b>" is not allowed, but "<b></b>" is fine.)
-        
-    // So, we find the tag's name. Find the index of the first whitespace or ending arrow; everything between it and the starting arrow (which is guaranteed to be substring[1]) is the tag's name.
-
-    // But wait! What if there is whitespace between the starting arrow and the tag name?
-    var substringForTagFind = substring.substring(1);
-    substringForTagFind = substringForTagFind.trimStart();
-    // Yes, this stuff changed the indices such that the indices for the tag name are now different.
-    // But, that is fine, because we are going to be pulling from substringForTagFind, whose indices align with our found indices. Once we have that, we pull the tag name, and then forget the variable ever existed. If this was C, I'd malloc() that thing.  (i think that's how this works? not too sure.)
-    var tagNameEndingIndice = substringForTagFind.indexOf(" ");
-    if ( tagNameEndingIndice == -1 ) { tagNameEndingIndice = substringForTagFind.indexOf(">"); }
-    
-    var tagName = substringForTagFind.substring(0, tagNameEndingIndice);
-
-    var tagAttributes;
-    await xml2js.parseString(substring + `</${tagName}>`, function(err, result) {
-        tagAttributes = result;
-    });
-
-    // Gotta do some if statements in the event the attribute does not exist.
-    if ( Object.hasOwn(tagAttributes[tagName], "$") ) {
-        if ( Object.hasOwn(tagAttributes[tagName]["$"], attributeName) ) {
-            return tagAttributes[tagName]["$"][attributeName];
-        }
-    } else { return null; }
-}
-
-
-
-
-
-
-
-
-
 
 /*
 TODO: Modify the "stop searching for string" trigger. As is stands, it looks for ">", but what happens if that's part of an attribute, like in CSS or something?
