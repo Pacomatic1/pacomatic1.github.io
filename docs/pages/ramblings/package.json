@@ -13,7 +13,6 @@
   "dependencies": {
     "jsdom": "^27.0.1",
     "marked": "^16.4.1",
-    "marked-xhtml": "^1.0.14",
-    "xml2js": "^0.6.2"
+    "marked-xhtml": "^1.0.14"
   }
 }
