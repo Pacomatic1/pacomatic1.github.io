@@ -114,7 +114,7 @@ async function generatePost(postFolderPath) {
 
 
 
-            compiledMarkdown = marchThroughHTMLString(compiledMarkdown, {
+            compiledMarkdown = perTagHTMLParser(compiledMarkdown, {
                 forEveryTagWeHit: function (tagSubstring, index) {
                     if (tagSubstring.startsWith("<wavy")) {
                         var currentTagTimeProperty = getAttributeValueFromTagSubstring(tagSubstring, "time");
@@ -251,6 +251,7 @@ async function generatePost(postFolderPath) {
 
 /** Generic handler for marching through a markup string.
  * Run this function and it will march through your string. When we run through your string, we get to run a few functions along the way. These are contained in your JS Object containing the needed functions.
+ * Note that this thing is blind to everything *outside* the tag. If you want to modify attributes *within* the tag, I'd recommend that you mix this with getTagAttributes(), replaceTagAttribute(), and removeTagAttributes().
  * 
  * @param {string} stringToMarchThrough - The string you're marching through. It had BETTER be well-formed!
  * @param {json} functionsToRun - A JS Object containing some functions that will be run at specific points. Its contents are described above.
@@ -262,16 +263,16 @@ async function generatePost(postFolderPath) {
  * @param {function} functionsToRun.forEveryTagEnderWeHit - Function with 2 args: string containing only the tag (arrows included), and a number denoting the tag's starting index. return value: the string that will replace the tag. Note that the function will then march right through your newly-replaced tag. If you don't want to have a function, do NOT define this as "null" or "undefined", don't define anything. If you don't want to replace anything, return null.
  * 
  */
-function marchThroughHTMLString(stringToMarchThrough, functionsToRun) {
+function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
     var isNextCharacterEscaped = false;
 
     var tagAttributeQuoteType = ""; // This is going to be hella confusing to read, but. " or ' mean that we're in an attribute, and an empty string means we're not.
     
     // The following 2 variables are meant to compliment each other; the same index always returns the relevant data for the same attribute.
     var tagAttributeQuoteStartingIndices = []; // Clear this every time you leave a tag.
-    var tagAttributeQuoteEndingIndices = []; // Clear this every time you leave a tag.    
+    var tagAttributeQuoteEndingIndices = []; // Clear this every time you leave a tag.
     var tagAttributeNameStartingIndices = []; // Clear this every time you leave a tag.
-    var tagAttributeNameEndngIndices = []; // Clear this every time you leave a tag.
+    var tagAttributeNameEndingIndices = []; // Clear this every time you leave a tag.
 
 
     var currentlyInsideTag = false;
@@ -321,13 +322,13 @@ function marchThroughHTMLString(stringToMarchThrough, functionsToRun) {
                 currentTagEndingIndex = i;
 
                 // Alright, time to handle our idiotic custom tag dealings.
-                // We are going to do the replacement *during* the for loop, which also means modifying the for loop's iterator.                
+                // We are going to do the replacement *during* the for loop, which also means modifying the for loop's iterator.
                 var currentTagSubstring = stringToMarchThrough.slice(currentTagStartingIndex, currentTagEndingIndex + 1) ;
                 var isTagEnder = false;
 
                 console.log( currentTagSubstring );
 
-                if (tagAttributeQuoteStartingIndices.length != tagAttributeNameEndngIndices.length) { console.log( `Error: The string marcher failed to correctly grab the starting and ending indices of an attribute! I think something's up. Here's the tag's substring, in case it's just malformed HTML: ${currentTagSubstring}` ); }
+                if (tagAttributeQuoteStartingIndices.length != tagAttributeQuoteEndingIndices.length) { console.log( `Error: The string marcher failed to correctly grab the starting and ending indices of an attribute! I think something's up. Here's the tag's substring, in case it's just malformed HTML: ${currentTagSubstring}` ); }
 
 
                 // We'd like to modify tagAttributeQuoteStartingIndices and tagAttributeQuoteEndingIndices to be based on the tag on its own rather than the full string we were given. 
@@ -337,26 +338,49 @@ function marchThroughHTMLString(stringToMarchThrough, functionsToRun) {
                     tagAttributeQuoteEndingIndices[i] = tagAttributeQuoteEndingIndices[i] - currentTagStartingIndex;
                 }
 
-
-
-                if (currentTagSubstring.startsWith("</")) { isTagEnder = true;  console.log("Oh dear.")} else {console.log("Eh.")}
+                if (currentTagSubstring.startsWith("</")) { isTagEnder = true; }
                 var stringToReplaceCurrentTag = null; // If we do not need any replacement, this will be null.
 
-                if (!isTagEnder) { // Tag enders don't have attributes. If they do, the markup is malformed, not my problem.
-                    // We must find tagAttributeQuoteStartingIndices and tagAttributeQuoteEndingIndices.
+                if (!isTagEnder && tagAttributeQuoteStartingIndices.length > 0) { // Tag enders don't have attributes. If they do, the markup is malformed, not my problem.
+                    // We must find tagAttributeNameStartingIndices and tagAttributeNameEndingIndices.
                     // We will do this by marching through the tag, backwards. And yes, this means 2 mested string marchers.
                     
-                    for (let i = 0; i < tagAttributeQuoteStartingIndices.length; i++) { // For each item in the starting indice array,
-                        for (let j = tagAttributeQuoteStartingIndices[i]; j > 0; j--) { // March backwards through the tag substring.
-                            if 
+
+                    tagAttribLoop: for (let i = 0; i < tagAttributeQuoteStartingIndices.length; i++) { // For each item in the starting indice array,
+                        // Variables for this mini-loop
+                        var nameEndReached = false;
+                        var nameStartReached = false;
+                        var nameEqualsReached = false;
+                        
+                        tagSingleAttribLoop: for (let j = tagAttributeQuoteStartingIndices[i]; j > 0; j--) { // March backwards through the tag substring, starting at the index specified by startingIndices.
+                            let currentCharInTagAttribLoop = currentTagSubstring.charAt(j);
+                            if (currentCharInTagAttribLoop == "=") {
+                                nameEqualsReached = true;
+                                continue tagSingleAttribLoop;
+                            }
+
+                            if (nameEqualsReached && currentCharInTagAttribLoop != " " && !nameEndReached) { // We did it boys, we hit the name. No equals signs here, folks!
+                                nameEndReached = true;
+                                tagAttributeNameEndingIndices.push(j);
+                                continue tagSingleAttribLoop;
+                            }
+
+                            if (nameEndReached && currentCharInTagAttribLoop == " " && !nameStartReached) { // We hi the whitespace right before the attribute name.
+                                nameStartReached = true;
+                                tagAttributeNameStartingIndices.push(j + 1); // We are the *whitespace*, not the actual start. To get the actual start, we need to go up by one.
+                                break tagSingleAttribLoop;
+                            }
+
                         }
                     }
+
+
                 }
 
                 if ( Object.hasOwn(functionsToRun, "forEveryTagWeHit") && !isTagEnder) {
                     stringToReplaceCurrentTag = functionsToRun.forEveryTagWeHit(currentTagSubstring, currentTagStartingIndex, {
                         startingIndicesOfAttributeNames: tagAttributeNameStartingIndices,
-                        endingIndicesOfAttributeNames: tagAttributeNameEndngIndices,
+                        endingIndicesOfAttributeNames: tagAttributeNameEndingIndices,
                         startingIndicesOfAttributeQuotationMarks: tagAttributeQuoteStartingIndices,
                         endingIndicesOfAttributeQuotationMarks: tagAttributeQuoteEndingIndices
                     } );
@@ -366,8 +390,13 @@ function marchThroughHTMLString(stringToMarchThrough, functionsToRun) {
                     console.log(stringToReplaceCurrentTag)
                 }
 
+                /* Debug. If these indice 0 of each array keeps ascending with every line, this was done correctly.
+                console.log(tagAttributeNameStartingIndices);
+                console.log(tagAttributeNameEndingIndices);
+                
                 console.log(tagAttributeQuoteStartingIndices);
                 console.log(tagAttributeQuoteEndingIndices);
+                */
 
                 if (stringToReplaceCurrentTag != null) { // If the tag needs replacement...
                     i = currentTagStartingIndex; // The string marcher will now march right through our new tag ender.
@@ -375,16 +404,12 @@ function marchThroughHTMLString(stringToMarchThrough, functionsToRun) {
                 }
 
 
-
-                // Friendly reminder so you can abide by your own documentation:
-//  *  @param {number[]} functionsToRun.forEveryTagWeHit.param3 - This parameter contains a JS Object. The structure is as follows: { startingIndicesOfAttributeNames: number[], endingIndicesOfAttributeNames: number[], startingIndicesOfAttributeQuotationMarks: number[],  endingIndicesOfAttributeQuotationMarks: number[] }.  
-
-
                 // Oh, yes. We's also like to clear these. We NEED to clear these because we'd like them empty for later.
                 tagAttributeQuoteStartingIndices = [];
                 tagAttributeQuoteEndingIndices = [];
                 tagAttributeNameStartingIndices = [];
-                tagAttributeNameEndngIndices = [];
+                tagAttributeNameEndingIndices = [];
+                // I am now thinking about memory management in C. Soon. Soon.
             }
         }
     }
@@ -392,8 +417,18 @@ function marchThroughHTMLString(stringToMarchThrough, functionsToRun) {
     return stringToMarchThrough;
 }
 
+
+
+// Note that this thing is blind to everything *outside* the tag. If you want to modify attributes *within* the tag, I'd recommend that you mix this with getTagAttributes(), replaceTagAttribute(), and removeTagAttributes().
+
+
+
+
+
+
+
 /**  Give it the substring of a tag, including the name, and give it the name of an attribute. If the desired attribute exists, we'll return its contents. If it does not, we return null. */
-function getAttributeValueFromTagSubstring(substring, attributeName) {
+function getTagAttributes(substring, attributeName) {
 
 }
 
