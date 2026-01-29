@@ -251,7 +251,7 @@ async function generatePost(postFolderPath) {
 
 /** Generic handler for marching through a markup string.
  * Run this function and it will march through your string. When we run through your string, we get to run a few functions along the way. These are contained in your JS Object containing the needed functions.
- * Note that this thing is blind to everything *outside* the tag. If you want to modify attributes *within* the tag, I'd recommend that you mix this with getTagAttributes(), replaceTagAttribute(), and removeTagAttributes().
+ * Note that this thing is blind to everything *outside* the tag. If you want to modify attributes *within* the tag, I'd recommend that you mix this with singleTagMarcher()
  * 
  * @param {string} stringToMarchThrough - The string you're marching through. It had BETTER be well-formed!
  * @param {json} functionsToRun - A JS Object containing some functions that will be run at specific points. Its contents are described above.
@@ -418,19 +418,31 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
 }
 
 
+// Note that this thing is blind to everything *outside* the tag. If you want to modify attributes *within* the tag, I'd recommend that you mix this with singleTagMarcher().
 
-// Note that this thing is blind to everything *outside* the tag. If you want to modify attributes *within* the tag, I'd recommend that you mix this with getTagAttributes(), replaceTagAttribute(), and removeTagAttributes().
-
-
-
-
-
-
-
-/**  Give it the substring of a tag, including the name, and give it the name of an attribute. If the desired attribute exists, we'll return its contents. If it does not, we return null. */
-function getTagAttributes(substring, attributeName) {
+/** Give this function a string containing the contents of one tag.
+ * It will return an array of JS Objects representing the attributes. See below.
+ * 
+ * You can optionally pass in a JS Object that replaces whatever was inside of the tag. The return value will be the tag's new substring.The format of the JS Object will basically 
+ * 
+ * Now, how does the return value look when you do not give it a JS Object to replace the stuff?
+ * As for how the JS Objects in question look:
+ * 
+ * `{`  
+ * 
+ *     `name: String that represents the name of the attribute.`  
+ *     `data: The string that normally comes after the attribute. If there is no data (often the case for boolan attributes), **this will not be made.**`  
+ * `}`
+ * 
+ * The array will be in the same order as how it was before you did anything, 
+ * 
+ * 
+ */
+function singleTagMarcher(substring, newAttributeList = null) {
 
 }
+
+
 
 
 /** Suppose we have a string. We want to replace a substring within it, but there are multiple instances of the substring! Well, that's where this function comes in handy; we can specify an indice for where to start looking, with the first (and only the first!) instance of the substring being replaced. */
