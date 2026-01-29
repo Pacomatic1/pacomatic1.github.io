@@ -117,14 +117,18 @@ async function generatePost(postFolderPath) {
             compiledMarkdown = perTagHTMLParser(compiledMarkdown, {
                 forEveryTagWeHit: function (tagSubstring, index) {
                     if (tagSubstring.startsWith("<wavy")) {
-                        var currentTagTimeProperty = getAttributeValueFromTagSubstring(tagSubstring, "time");
+
+
+/*                        var currentTagTimeProperty = getAttributeValueFromTagSubstring(tagSubstring, "time");
                         if ( currentTagTimeProperty == null) { currentTagTimeProperty = "1s"; }
                         
                         var currentTagDistanceProperty = getAttributeValueFromTagSubstring(tagSubstring, "distance");
-                        if ( currentTagDistanceProperty == null) { currentTagDistanceProperty = "0"; }
+                        if ( currentTagDistanceProperty == null) { currentTagDistanceProperty = "0"; } */
 
                     }
 
+
+                    console.log(singleTagMarcher(tagSubstring));
 
                     return null;
                 },
@@ -435,10 +439,68 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
  * `}`
  * 
  * The array will be in the same order as how it was before you did anything, 
- * 
- * 
  */
-function singleTagMarcher(substring, newAttributeList = null) {
+function singleTagMarcher(tagString, newAttributeList = null) {
+    // Quick edge case check
+    tagString = tagString.trim();
+    if ( !substring.endsWith(">") ) { substring = substring + ">"; }
+    if ( !substring.startsWith("<") ) { substring = "<" + substring; }
+    
+    
+    if (newAttributeList != null) { // The user wants to replace attributes instead.
+        
+
+    } else { // The user wants to get attributes.
+        
+        var isNextCharacterEscaped = false;
+        var tagAttributeQuoteType = ""; // This is going to be hella confusing to read, but. " or ' mean that we're in an attribute, and an empty string means we're not.
+        
+        var doneWithTagName = false; // Made true once we hit our first space. Never touched again.
+
+        overallTextIterator: for (let i = 0; i < tagString.length; i++) {
+                var currentChar = tagString.charAt(i);
+        
+                // First, deal with whether or not the character is escaped. Also keep in mind a "\\", in which case we just want to skip everything here because it's a normal backslash and is totally irrelevant.
+                if ( isNextCharacterEscaped ) {
+                    isNextCharacterEscaped = false;
+                    continue overallTextIterator;
+                }
+                if ( !isNextCharacterEscaped && currentChar == "\\") {
+                    isNextCharacterEscaped = true;
+                    continue overallTextIterator;
+                }
+                // Assuming I did this right, we will never have to worry about escaped characters ever again :)
+                // If I did it wrong... Well, we both know who's gonna be fixing it.
+                
+                // ...it'll be me. I'm the one who will be fixing it. I'm going to have to fix everything here.
+                
+
+                if (!doneWithTagName) { // No attributes just yet. We need a bit more time before we be so hasty.
+                    if (currentChar == " ") {
+                        
+                    }
+                }
+
+
+
+                
+                if ( currentChar == "\"" || currentChar == "'" ) { // We have hit the beginning/end of a tag attribute.
+                    if ( tagAttributeQuoteType == "") { // If we do not already think we are inside an attribute, we have hit the beginning.
+                        tagAttributeQuoteType = currentChar; // Say that we now inside of one.
+                        continue overallTextIterator;
+                    }
+                    if ( tagAttributeQuoteType == currentChar) { // If we were inside an attribute earlier and hit the same ender, we have likely hit the end. Now, we'd best say so.
+                        tagAttributeQuoteType = ""; // Say that we are done, because we have hit the end.
+                        continue overallTextIterator;
+                    }
+        
+                }
+        
+        
+            }
+    }
+    
+
 
 }
 
