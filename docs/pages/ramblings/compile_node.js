@@ -255,14 +255,14 @@ async function generatePost(postFolderPath) {
 
 /** Generic handler for marching through a markup string.
  * Run this function and it will march through your string. When we run through your string, we get to run a few functions along the way. These are contained in your JS Object containing the needed functions.
- * Note that this thing is blind to everything *outside* the tag. If you want to modify attributes *within* the tag, I'd recommend that you mix this with singleTagMarcher()
+ * Note that this thing is blind to everything *outside* the tag. If you want to modify attributes *within* the tag, I'd recommend that you mix this with singleTagMarcher().
  * 
  * @param {string} stringToMarchThrough - The string you're marching through. It had BETTER be well-formed!
  * @param {json} functionsToRun - A JS Object containing some functions that will be run at specific points. Its contents are described above.
  * @param {function} functionsToRun.forEveryTagWeHit - Function with 5 parameters which I will detail below, and a return value being a string that replaces the tag that argument 1 gave you. Note that the function will then march right through your newly-replaced tag. If you don't want to have a function, do NOT define this as "null" or "undefined"; just don't define it. If you don't want to replace anything, return null.
  *  @param {string} functionsToRun.forEveryTagWeHit.param1 - This parameter contains only the tag (arrows included). number denoting the tag's starting index.
  *  @param {number} functionsToRun.forEveryTagWeHit.param2 - This parameter contains a number denoting the tag's starting index.
- *  @param {number[]} functionsToRun.forEveryTagWeHit.param3 - This parameter contains a JS Object. The structure is as follows: { startingIndicesOfAttributeNames: number[], endingIndicesOfAttributeNames: number[], startingIndicesOfAttributeQuotationMarks: number[],  endingIndicesOfAttributeQuotationMarks: number[] }. All the array indices are aligned; index 0 returns the relevant data for the first attribute, regardless of where you look. All the text indices are based on the tag substring from paramater 1.
+ *  @param {json[]} functionsToRun.forEveryTagWeHit.param3 - This parameter contains a JS Object. The structure is as follows: { startingIndicesOfAttributeNames: number[], endingIndicesOfAttributeNames: number[], startingIndicesOfAttributeQuotationMarks: number[],  endingIndicesOfAttributeQuotationMarks: number[] }. All the array indices are aligned; index 0 returns the relevant data for the first attribute, regardless of where you look. All the text indices are based on the tag substring from paramater 1.
  * 
  * @param {function} functionsToRun.forEveryTagEnderWeHit - Function with 2 args: string containing only the tag (arrows included), and a number denoting the tag's starting index. return value: the string that will replace the tag. Note that the function will then march right through your newly-replaced tag. If you don't want to have a function, do NOT define this as "null" or "undefined", don't define anything. If you don't want to replace anything, return null.
  * 
@@ -369,7 +369,7 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
                                 continue tagSingleAttribLoop;
                             }
 
-                            if (nameEndReached && currentCharInTagAttribLoop == " " && !nameStartReached) { // We hi the whitespace right before the attribute name.
+                            if (nameEndReached && currentCharInTagAttribLoop == " " && !nameStartReached) { // We hit the whitespace right before the attribute name.
                                 nameStartReached = true;
                                 tagAttributeNameStartingIndices.push(j + 1); // We are the *whitespace*, not the actual start. To get the actual start, we need to go up by one.
                                 break tagSingleAttribLoop;
@@ -413,7 +413,6 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
                 tagAttributeQuoteEndingIndices = [];
                 tagAttributeNameStartingIndices = [];
                 tagAttributeNameEndingIndices = [];
-                // I am now thinking about memory management in C. Soon. Soon.
             }
         }
     }
@@ -425,7 +424,7 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
 // Note that this thing is blind to everything *outside* the tag. If you want to modify attributes *within* the tag, I'd recommend that you mix this with singleTagMarcher().
 
 /** Give this function a string containing the contents of one tag.
- * It will return an array of JS Objects representing the attributes. See below.
+ * It will return an array, with [0] being the tag's name, and the rest being JS Objects representing the attributes. See below.
  * 
  * You can optionally pass in a JS Object that replaces whatever was inside of the tag. The return value will be the tag's new substring.The format of the JS Object will basically 
  * 
@@ -433,75 +432,152 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
  * As for how the JS Objects in question look:
  * 
  * `{`  
- * 
  *     `name: String that represents the name of the attribute.`  
- *     `data: The string that normally comes after the attribute. If there is no data (often the case for boolan attributes), **this will not be made.**`  
+ *     `data: The string that normally comes after the attribute. If there is no data (often the case for boolean attributes set to true), **this will not be made.**`  
  * `}`
  * 
- * The array will be in the same order as how it was before you did anything, 
+ * The attribute's objects will be in the same order as the actual tag (eg. `<span id="idk" class="naught">` ---> `["span", {name: "id", data: "idk"}, {name:"class", data:"naught"}]`)
  */
 function singleTagMarcher(tagString, newAttributeList = null) {
-    // Quick edge case check
+    // Quick edge case dealings, also removing the starting and ending arrows because it simplifies the rest of the code
     tagString = tagString.trim();
-    if ( !substring.endsWith(">") ) { substring = substring + ">"; }
-    if ( !substring.startsWith("<") ) { substring = "<" + substring; }
-    
-    
+    if ( tagString.endsWith(">") ) { tagString = tagString.substring(0, tagString.length - 1) } // length-1 is the end of the string, and substring() *excludes* the final character (which'd be ">"). 
+    if ( tagString.startsWith("<") ) { tagString = tagString.substring(1); }
+    tagString = tagString.trim();
+    tagString = tagString + ""; // I know this seems antithetical to trim() but it makes dataless tag attributes easier, because cases like "<video controls>" become "video controls "; we can still find the end using the space right after the attribbute name and still be right without worrying about when it's at the very end of the text.
+
     if (newAttributeList != null) { // The user wants to replace attributes instead.
         
 
     } else { // The user wants to get attributes.
         
+        var tagAttributeDataStartingIndices = []; // For attributes that don't have data, their indice will simply be null.
+        var tagAttributeDataEndingIndices = []; // For attributes that don't have data, their indice will simply be null.
+        var tagAttributeNameStartingIndices = [];
+        var tagAttributeNameEndingIndices = [];
+
+
+
         var isNextCharacterEscaped = false;
         var tagAttributeQuoteType = ""; // This is going to be hella confusing to read, but. " or ' mean that we're in an attribute, and an empty string means we're not.
-        
+        var insideTagAttributeName = false;
+
         var doneWithTagName = false; // Made true once we hit our first space. Never touched again.
-
+        var tagName;
+        
         overallTextIterator: for (let i = 0; i < tagString.length; i++) {
-                var currentChar = tagString.charAt(i);
-        
-                // First, deal with whether or not the character is escaped. Also keep in mind a "\\", in which case we just want to skip everything here because it's a normal backslash and is totally irrelevant.
-                if ( isNextCharacterEscaped ) {
-                    isNextCharacterEscaped = false;
-                    continue overallTextIterator;
-                }
-                if ( !isNextCharacterEscaped && currentChar == "\\") {
-                    isNextCharacterEscaped = true;
-                    continue overallTextIterator;
-                }
-                // Assuming I did this right, we will never have to worry about escaped characters ever again :)
-                // If I did it wrong... Well, we both know who's gonna be fixing it.
-                
-                // ...it'll be me. I'm the one who will be fixing it. I'm going to have to fix everything here.
-                
+            var currentChar = tagString.charAt(i);
+            var lastChar = tagString.charAt(i - 1);
 
-                if (!doneWithTagName) { // No attributes just yet. We need a bit more time before we be so hasty.
-                    if (currentChar == " ") {
-                        
-                    }
-                }
+            console.log(`${currentChar}, ${lastChar}`);
 
 
 
-                
-                if ( currentChar == "\"" || currentChar == "'" ) { // We have hit the beginning/end of a tag attribute.
-                    if ( tagAttributeQuoteType == "") { // If we do not already think we are inside an attribute, we have hit the beginning.
-                        tagAttributeQuoteType = currentChar; // Say that we now inside of one.
-                        continue overallTextIterator;
-                    }
-                    if ( tagAttributeQuoteType == currentChar) { // If we were inside an attribute earlier and hit the same ender, we have likely hit the end. Now, we'd best say so.
-                        tagAttributeQuoteType = ""; // Say that we are done, because we have hit the end.
-                        continue overallTextIterator;
-                    }
-        
-                }
-        
-        
+            // First, deal with whether or not the character is escaped. Also keep in mind a "\\", in which case we just want to skip everything here because it's a normal backslash and is totally irrelevant.
+            if ( isNextCharacterEscaped ) {
+                isNextCharacterEscaped = false;
+                continue overallTextIterator;
             }
-    }
+            if ( !isNextCharacterEscaped && currentChar == "\\") {
+                isNextCharacterEscaped = true;
+                continue overallTextIterator;
+            }
+            // Assuming I did this right, we will never have to worry about escaped characters ever again :)
+            // If I did it wrong... Well, we both know who's gonna be fixing it.
+            
+            // ...it'll be me. I'm the one who will be fixing it. I'm going to have to fix everything here.
+            
+            if (!doneWithTagName) { // No attributes just yet. We need a bit more time before we be so hasty.
+                if (currentChar == " ") { // We do not have to worry about the ending arrow, because we made sure the tag ends with a space no matter what.
+                    doneWithTagName = true;
+                    tagName = tagString.substring(0, i);
+                }
+            }
+            
+            
+            if ( currentChar == "\"" || currentChar == "'" ) { // We have hit the beginning/end of a tag attribute's data.
+                if ( tagAttributeQuoteType == "") { // If we do not already think we are inside an attribute, we have hit the beginning.
+                    tagAttributeQuoteType = currentChar; // Say that we now inside of one.
+                    tagAttributeDataStartingIndices.push(i + 1);
+                    continue overallTextIterator;
+                }
+                if ( tagAttributeQuoteType == currentChar) { // If we were inside an attribute earlier and hit the same ender, we have likely hit the end. Now, we'd best say so.
+                    tagAttributeQuoteType = ""; // Say that we are done, because we have hit the end.
+                    tagAttributeDataEndingIndices.push(i - 1);
+                    continue overallTextIterator;
+                }
+            }
+
+
+            if (doneWithTagName && !insideTagAttributeName && tagAttributeQuoteType == "" && (lastChar == " " || lastChar == "\"" || lastChar == "'") && currentChar != " ") {
+                tagAttributeNameStartingIndices.push(i);
+                insideTagAttributeName = true;
+                console.log("Ligma?")
+            }
+            if (insideTagAttributeName && (currentChar == "=" || currentChar == " ")) { // We just hit the end of the attribute's name.
+                tagAttributeNameEndingIndices.push(i-1);
+                insideTagAttributeName = false;
+
+                var hasAttributeData = true;
+
+                for (let j = i; j == tagString.length; j++) { // If we hit anything that's not an =, there is data. 
+                    var currentChar = tagString.charAt(j);
+                    if (currentChar == " ") { continue; } // Whitespace is irrelevant, continue to avoid dealing with it later
+
+                    if ( currentChar != "=") { // We hit something that is not an equals sign. There must not be data. 
+                        hasAttributeData = false;
+                    }
+                }
+                if (!hasAttributeData) { // If there is no attribute data, we fill these things with nulls.
+                    tagAttributeDataStartingIndices.push(null);
+                    tagAttributeDataEndingIndices.push(null);
+                }
+            }
+        }
+
+        console.log(tagAttributeDataStartingIndices);
+        console.log(tagAttributeDataEndingIndices);
+        console.log(tagAttributeNameStartingIndices);
+        console.log(tagAttributeNameEndingIndices);
+
+        if ( !(tagAttributeDataStartingIndices.length == tagAttributeDataEndingIndices.length == tagAttributeNameStartingIndices.length == tagAttributeNameEndingIndices.length) ) {
+            console.log( `Error: The string marcher failed to correctly grab the starting and ending indices of an attribute! I think something's up. Here's the tag's substring, in case it's just malformed HTML, here's the string we're working with: ${tagString}` );
+        }
+
+
+        // Now that we have all the indices a man could ask for without going insane, we can finally construct our array.
+        var finalArray = [];
+        finalArray.push(tagName);
+
+        for (let i = 0; i < tagAttributeNameStartingIndices.length; i++) { // We could use any of the arrays here, but they're all the same length so nobody cares.
+            var hasData = true;
+            if (tagAttributeDataStartingIndices[i] == null) { // Either starting or ending, but must be one of the quotes.
+                hasData = false;
+            }
+
+            var attributeName = tagString.substring(tagAttributeNameStartingIndices[i], tagAttributeNameEndingIndices[i] + 1);
+            console.log(attributeName)
+            var attributeData = "";
+            if (hasData) {
+                attributeData = tagString.substring(tagAttributeDataStartingIndices[i], tagAttributeDataEndingIndices[i] + 1);
+            }        
     
+            if (hasData) {
+                finalArray.push( {name: attributeName, data: attributeData} );
+            } else {
+                finalArray.push( {name: attributeName} );
+            }
+        }
+        
+        return finalArray;
+        
 
 
+
+
+
+
+    }
 }
 
 
