@@ -119,17 +119,33 @@ async function generatePost(postFolderPath) {
                     var tagDetails = getAttributesOfSingleTag(tagSubstring);
                     
                     if (tagDetails[0] == "wavy") { // Wavy tags.
-                        var currentTagTimeProperty = null;
-                            // TODO: Go make the logic for getting this stuff
-
-
-
+                        var currentTagTimeProperty = getSingleTagAttributeDataFromJSONArray(tagDetails, "time");
                         if ( currentTagTimeProperty == null) { currentTagTimeProperty = "1s"; }
-                        
-                        var currentTagDistanceProperty = null;
-                        if ( currentTagDistanceProperty == null) { currentTagDistanceProperty = "0"; }
+                        tagDetails = removeTagAttributeFromJSONArray(tagDetails, "time");
 
-                        console.log(constructTagFromJSONArray(tagDetails))
+                        var currentTagDistanceProperty = getSingleTagAttributeDataFromJSONArray(tagDetails, "distance");
+                        if ( currentTagDistanceProperty == null) { currentTagDistanceProperty = "3px"; }
+                        tagDetails = removeTagAttributeFromJSONArray(tagDetails, "distance");
+
+                        var currentStyleAttritbute = getSingleTagAttributeDataFromJSONArray(tagDetails, "style");
+                        if (currentStyleAttritbute == null) { currentStyleAttritbute = ""; }
+                        currentStyleAttritbute = currentStyleAttritbute + "--wavy-distance:" + currentTagDistanceProperty + "; --wavy-time: " + currentTagTimeProperty + ";";
+
+                        tagDetails = replaceTagAttributeInJSONArray(tagDetails, {name: "style", data: currentStyleAttritbute});
+
+
+
+                        // Add classes
+                        var currentClassAttribute = getSingleTagAttributeDataFromJSONArray(tagDetails, "class");
+                        if (currentClassAttribute == null) { currentClassAttribute = ""; }
+                        currentClassAttribute = currentClassAttribute + " wavyText";
+                        
+                        tagDetails = replaceTagAttributeInJSONArray(tagDetails, {name: "class", data: currentClassAttribute});
+                        tagDetails[0] = "span";
+                        
+                        var finalTag = constructTagFromJSONArray(tagDetails);
+                        console.log(finalTag);
+                        return finalTag;
                     }
 
 
@@ -192,7 +208,7 @@ async function generatePost(postFolderPath) {
             // SWAP ARG 2 WITH compiledPost!!!
 
             // When all is said and done, our generated file shall be written.
-            fs.writeFile(compiledPostPath, compiledMarkdown, (err) => {
+            fs.writeFile(compiledPostPath, compiledPost, (err) => {
                 if (err == null) {
                     console.log(`Ramblings: Wrote post "${postTitle}" successfully!`)
                 } else {
@@ -224,6 +240,7 @@ async function generatePost(postFolderPath) {
  * 
  * @param {function} functionsToRun.forEveryTagEnderWeHit - Function with 2 args: string containing only the tag (arrows included), and a number denoting the tag's starting index. return value: the string that will replace the tag. Note that the function will then march right through your newly-replaced tag. If you don't want to have a function, do NOT define this as "null" or "undefined", don't define anything. If you don't want to replace anything, return null.
  * 
+ * Also, do not make ANY of these functions asynchronous.
  */
 function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
     var isNextCharacterEscaped = false;
@@ -376,9 +393,6 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
     return stringToMarchThrough;
 }
 
-
-// Note that this thing is blind to everything *outside* the tag. If you want to modify attributes *within* the tag, I'd recommend that you mix this with singleTagMarcher().
-
 /** Give this function a string containing the contents of one tag.
  * It will return an array, with [0] being the tag's name, and the rest being JS Objects representing the attributes. They look like:  
  * `{`  
@@ -389,7 +403,7 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
  * The attribute's objects will be in the same order as the actual tag (eg. `<span id="idk" class="naught">` ---> `["span", {name: "id", data: "idk"}, {name:"class", data:"naught"}]`)  
  * Also, there is no real error handling for user error, so be careful, *mmmkay?*  
  * 
- * See also: constructTagFromJSONArray()
+ * See also: constructTagFromJSONArray(), removeTagAttributeFromJSONArray(), replaceTagAttributeInJSONArray(), getSingleTagAttributeDataFromJSONArray()
  */
 function getAttributesOfSingleTag(tagString) {
     // Quick edge case dealings, also removing the starting and ending arrows because it simplifies the rest of the code
@@ -519,8 +533,6 @@ function getAttributesOfSingleTag(tagString) {
     return finalArray;
 }
 
-
-
 /**
  * Constructs a tag using a specially formatted JSON array, and returns the substring.  
  * As for the format in qeustion, see getAttributesOfSingleTag().
@@ -545,6 +557,78 @@ function constructTagFromJSONArray(tagDetails) {
 
     return finalString;
 }
+
+/** Removes specified attribute from tag JSON array. If it is not found, then the tag will be returned unmodified. See also: perTagHTMLParser(). */
+function removeTagAttributeFromJSONArray(tagDetails, attributeName) {
+    for (var i = 1; i < tagDetails.length; i++) {
+        if ( Object.hasOwn(tagDetails[i], "name") ) {
+            if (tagDetails[i].name == attributeName) {
+                tagDetails.splice(i, 1);
+            }
+        }
+    }
+    return tagDetails;
+
+}
+
+/** Takes a tag JSON array, and replaces whatever attribute shares a name with this. If there was never an atrribute in the first place, it will simply append the attribute. The data to add is in the form of one attribute, represented by a JSON object. See also: perTagHTMLParser(). */
+function replaceTagAttributeInJSONArray(tagDetails, attributeObject) {    
+    var alreadyExistingAttirbuteIndex = 0; // 0 is a "null value", because 0 is reserved for the name. 
+
+    for (var i = 1; i < tagDetails.length; i++) {
+        if ( Object.hasOwn(tagDetails[i], "name") ) {
+            if (tagDetails[i].name == attributeObject.name) {
+                alreadyExistingAttirbuteIndex = i;
+            }
+        }
+    }
+    
+    if (alreadyExistingAttirbuteIndex == 0) { // Does not already exist
+        tagDetails.push(attributeObject);
+    } else {
+        tagDetails[i] = attributeObject;
+    }
+
+    return tagDetails;
+}
+
+/** Takes a tag JSON array, and grab one attribute on its own. Just here to save you all those for loops.  
+ * If not found, returns null.  
+ * If found with data, returns the data as a string.  
+ * If found without data, returns empty string.  
+ * See also: perTagHTMLParser(). */
+function getSingleTagAttributeDataFromJSONArray(tagDetails, attributeName) {
+    var wantedIndice = 0; // 0 is null value, because 0 is reserved for the name.
+    
+    for (var i = 1; i < tagDetails.length; i++) {
+        if ( Object.hasOwn(tagDetails[i], "name") ) {
+            if (tagDetails[i].name == attributeName) {
+                wantedIndice = i;
+            }
+        }
+    }
+
+    if ( wantedIndice == 0 ) { // Attribute does not exist :\
+        return null;
+    } else { // Attribute exists
+
+        if ( Object.hasOwn(tagDetails[wantedIndice], "data") ) { // And there is data!!!
+            return tagDetails[wantedIndice].data;
+        } else { // Exists but no data :\
+            return "";
+        }
+    
+    }
+    
+}
+
+
+
+
+
+
+
+
 
 
 

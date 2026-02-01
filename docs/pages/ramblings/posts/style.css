@@ -90,10 +90,8 @@ body {
 
 #articleContainer .wavyText {
     display: inline-block;
-    animation: wavyAnimation var(--time) ease-in-out infinite;
+    animation: wavyAnimation var(--wavy-time) ease-in-out infinite;
 } #articleContainer .wavyText span:nth-child(n) { animation-delay: nd ms }
-
-
 
 @keyframes wavyAnimation {
     /* 0%, 50%, 100% {

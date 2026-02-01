@@ -32,7 +32,10 @@ First of all, the post's title and whatnot is some stuff you must put in post.js
 post.md is a modified version of markdown.
 We parse it through marked, so it carries all the quirks of that. This also means unsanitized HTML, so go wild if you want to.
 All hyperlinks appeneded with an exclamation mark will open in a new tab.
-There is now the <wavy> tag. I'll get there soon~
+
+There are cutsom HTML tags. I went through hell and back for these.
+    - <wavy distance? time?> --> Creates wavy text, like in UNDERTALE. Every single character within a wavy tag is surrounded by a <span>. There are two properties: 'distance', and 'time'. 'time' is how long it takes for one cycle. 'distance' is how far the text in question goes.
+
 
 
 We plan to include raw HTML fragments. As it stands, they are yet to be implemented or documented... but here's the general idea, for later.
