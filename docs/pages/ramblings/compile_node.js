@@ -92,6 +92,7 @@ async function generatePost(postFolderPath) {
 
             // wow, such empty
             
+            console.log(markdownFileAsString);
 
 
             // Compiling the markdown.
@@ -104,7 +105,7 @@ async function generatePost(postFolderPath) {
             
 
 
-            // console.log(compiledMarkdown);
+            console.log(compiledMarkdown);
 
 
 
@@ -113,6 +114,7 @@ async function generatePost(postFolderPath) {
             // First, we are going to store any persistent variables.
 
 
+            var wavyTextCharacter = 0; // Increment this by one every time we hit a <wavy>. Once sibling-index() gets better support, we can remove this variable.
 
             compiledMarkdown = perTagHTMLParser(compiledMarkdown, {
                 forEveryTagWeHit: function (tagSubstring, index) {
@@ -144,7 +146,7 @@ async function generatePost(postFolderPath) {
                         tagDetails[0] = "span";
                         
                         var finalTag = constructTagFromJSONArray(tagDetails);
-                        console.log(finalTag);
+                        // console.log(finalTag);
                         return finalTag;
                     }
 

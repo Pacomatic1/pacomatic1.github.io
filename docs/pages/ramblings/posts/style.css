@@ -90,9 +90,16 @@ body {
 
 #articleContainer .wavyText {
     display: inline-block;
-    animation: wavyAnimation var(--wavy-time) linear infinite;
+
     /* animation-direction: alternate; */
-} #articleContainer .wavyText span:nth-child(n) { animation-delay: nd ms }
+} #articleContainer .wavyText span:nth-child(n) {
+    color: red;
+    position:relative;
+    animation: wavyAnimation var(--wavy-time) linear infinite;
+    /* animation-delay: calc(sibling-index() * 100ms); */
+    animation-delay: calc(var(--wavy-offset) * 100ms);
+
+}
 
 @keyframes wavyAnimation {
     /* I made a curve resembling what I wanted in Blender, and then realized that you can model the movement with math.
