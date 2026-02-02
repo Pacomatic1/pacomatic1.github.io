@@ -120,11 +120,11 @@ async function generatePost(postFolderPath) {
                     
                     if (tagDetails[0] == "wavy") { // Wavy tags.
                         var currentTagTimeProperty = getSingleTagAttributeDataFromJSONArray(tagDetails, "time");
-                        if ( currentTagTimeProperty == null) { currentTagTimeProperty = "1s"; }
+                        if ( currentTagTimeProperty == null) { currentTagTimeProperty = "2s"; }
                         tagDetails = removeTagAttributeFromJSONArray(tagDetails, "time");
 
                         var currentTagDistanceProperty = getSingleTagAttributeDataFromJSONArray(tagDetails, "distance");
-                        if ( currentTagDistanceProperty == null) { currentTagDistanceProperty = "3px"; }
+                        if ( currentTagDistanceProperty == null) { currentTagDistanceProperty = ".12rem"; }
                         tagDetails = removeTagAttributeFromJSONArray(tagDetails, "distance");
 
                         var currentStyleAttritbute = getSingleTagAttributeDataFromJSONArray(tagDetails, "style");
@@ -255,6 +255,10 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
 
 
     var currentlyInsideTag = false;
+
+    var listOfTagParents = []; // List of JS Objects representing what tags are 'parents' of the 'cursor'. The JS Objects in question contain the starting indice as "index" and substring as "substring" of the tag we're currently a 'child' of.
+
+
     var currentTagStartingIndex = -1; // -1 is our "null value". That said, you should be cross-checking this with currentlyInsideTag.
     var currentTagEndingIndex = -1; // -1 is our "null value". That said, you should be cross-checking this with currentlyInsideTag.
 
@@ -307,24 +311,25 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
 
                 // console.log( currentTagSubstring );
 
+                
+                
                 if (tagAttributeQuoteStartingIndices.length != tagAttributeQuoteEndingIndices.length) { console.log( `Error: The string marcher failed to correctly grab the starting and ending indices of an attribute! I think something's up. Here's the tag's substring, in case it's just malformed HTML: ${currentTagSubstring}` ); }
-
-
+                
+                
                 // We'd like to modify tagAttributeQuoteStartingIndices and tagAttributeQuoteEndingIndices to be based on the tag on its own rather than the full string we were given. 
                 for (let i = 0; i < tagAttributeQuoteStartingIndices.length; i++) {
                     // We will do both starting and ending indices here, which should not be a problem if the array's indices are aligned, WHICH THEY SHOULD BE.
                     tagAttributeQuoteStartingIndices[i] = tagAttributeQuoteStartingIndices[i] - currentTagStartingIndex;
                     tagAttributeQuoteEndingIndices[i] = tagAttributeQuoteEndingIndices[i] - currentTagStartingIndex;
                 }
-
+                
                 if (currentTagSubstring.startsWith("</")) { isTagEnder = true; }
                 var stringToReplaceCurrentTag = null; // If we do not need any replacement, this will be null.
-
+                
                 if (!isTagEnder && tagAttributeQuoteStartingIndices.length > 0) { // Tag enders don't have attributes. If they do, the markup is malformed, not my problem.
                     // We must find tagAttributeNameStartingIndices and tagAttributeNameEndingIndices.
                     // We will do this by marching through the tag, backwards. And yes, this means 2 mested string marchers.
                     
-
                     tagAttribLoop: for (let i = 0; i < tagAttributeQuoteStartingIndices.length; i++) { // For each item in the starting indice array,
                         // Variables for this mini-loop
                         var nameEndReached = false;
@@ -337,22 +342,27 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
                                 nameEqualsReached = true;
                                 continue tagSingleAttribLoop;
                             }
-
+                            
                             if (nameEqualsReached && currentCharInTagAttribLoop != " " && !nameEndReached) { // We did it boys, we hit the name. No equals signs here, folks!
                                 nameEndReached = true;
                                 tagAttributeNameEndingIndices.push(j);
                                 continue tagSingleAttribLoop;
                             }
-
+                            
                             if (nameEndReached && currentCharInTagAttribLoop == " " && !nameStartReached) { // We hit the whitespace right before the attribute name.
                                 nameStartReached = true;
                                 tagAttributeNameStartingIndices.push(j + 1); // We are the *whitespace*, not the actual start. To get the actual start, we need to go up by one.
                                 break tagSingleAttribLoop;
                             }
-
+                            
                         }
                     }
                 }
+                
+                // if ( !isTagEnder ) { // Put our tag into the parents list.
+                //     listOfTagParents.push( { index: currentTagStartingIndex, substring: currentTagSubstring });
+                // }
+
 
                 if ( Object.hasOwn(functionsToRun, "forEveryTagWeHit") && !isTagEnder) {
                     stringToReplaceCurrentTag = functionsToRun.forEveryTagWeHit(currentTagSubstring, currentTagStartingIndex, {
