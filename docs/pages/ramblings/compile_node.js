@@ -366,6 +366,8 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
                 // }
 
 
+                
+                
                 if ( Object.hasOwn(functionsToRun, "forEveryTagWeHit") && !isTagEnder) {
                     stringToReplaceCurrentTag = functionsToRun.forEveryTagWeHit(currentTagSubstring, currentTagStartingIndex, {
                         startingIndicesOfAttributeNames: tagAttributeNameStartingIndices,
@@ -378,7 +380,7 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
                     stringToReplaceCurrentTag = functionsToRun.forEveryTagEnderWeHit(currentTagSubstring, currentTagStartingIndex);
                     // console.log(stringToReplaceCurrentTag)
                 }
-
+                
                 /* Debug. If these indice 0 of each array keeps ascending with every line, this was done correctly.
                 console.log(tagAttributeNameStartingIndices);
                 console.log(tagAttributeNameEndingIndices);
@@ -387,11 +389,21 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
                 console.log(tagAttributeQuoteEndingIndices);
                 */
 
+
+               
+               //     var listOfTagParents = []; // List of JS Objects representing what tags are 'parents' of the 'cursor'. The JS Objects in question contain the starting indice as "index" and substring as "substring" of the tag we're currently a 'child' of.
+               
+               var keepTrackOfThisInParentList = true; // The marcher will go right back through the newly-replaced tag. If the tag gets replaced, we will not be putting this in the parent list.
                 if (stringToReplaceCurrentTag != null) { // If the tag needs replacement...
                     i = currentTagStartingIndex; // The string marcher will now march right through our new tag ender.
                     stringToMarchThrough = replaceFirstSubstringInStringAfterACertainPoint(stringToMarchThrough, currentTagSubstring, stringToReplaceCurrentTag, currentTagStartingIndex);
+
+                    keepTrackOfThisInParentList = false;
                 }
 
+
+
+                
 
                 // Oh, yes. We's also like to clear these. We NEED to clear these because we'd like them empty for later.
                 tagAttributeQuoteStartingIndices = [];
@@ -404,6 +416,17 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
 
     return stringToMarchThrough;
 }
+
+
+
+
+
+
+
+
+
+
+
 
 /** Give this function a string containing the contents of one tag.
  * It will return an array, with [0] being the tag's name, and the rest being JS Objects representing the attributes. They look like:  
