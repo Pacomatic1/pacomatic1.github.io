@@ -94,18 +94,25 @@ body {
 } #articleContainer .wavyText span:nth-child(n) { animation-delay: nd ms }
 
 @keyframes wavyAnimation {
-    /* 0%, 50%, 100% {
+    /* 0% {
+        transform: translateY(0px);
+    } */
+    
+    25% {
+        transform: translateY(3px)
+    }
+/* 
+    50% {
         transform: translateY(0px);
     } */
 
     75% {
         transform: translateY(-3px);
-    }
+    } 
 
-    25% {
-        transform: translateY(3px)
-    }
-
+    /* 100% {
+        transform: translateY(0px);
+    } */
 }
 
 
