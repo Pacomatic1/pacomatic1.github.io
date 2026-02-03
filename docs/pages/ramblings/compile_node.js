@@ -7,12 +7,19 @@
 
 
 
-// Using this is done through assciidoctor.convert(content: string).
+
+// TODO:
+//  Add self closing support
+//      Make the JSON array suport self-closing tags
+//      Make [0] go from "name" to "generic non-attribute data". Make it a JSON with {name: cmonDudeUrKiddingMe, selfClosing: false/true}
+//  Continue wth your parent-related dealings.
+
+
 import * as fs from 'node:fs';
 import * as path from 'node:path';
 
 import { marked } from 'marked';
-
+import { markedXhtml } from "marked-xhtml";
 
 // import * as jsdom from "jsdom";
 import { JSDOM } from "jsdom";
@@ -99,7 +106,9 @@ async function generatePost(postFolderPath) {
             marked.use({
                 gfm: true,
                 breaks: true,
+                xhtml: true
             });
+            marked.use(markedXhtml());
 
             var compiledMarkdown = marked.parse(markdownFileAsString);
             
@@ -232,6 +241,7 @@ async function generatePost(postFolderPath) {
 /** Generic handler for marching through a markup string.
  * Run this function and it will march through your string. When we run through your string, we get to run a few functions along the way. These are contained in your JS Object containing the needed functions.
  * Note that this thing is blind to everything *outside* the tag. If you want to modify attributes *within* the tag, I'd recommend that you mix this with singleTagMarcher().
+ * Also, all self-closing tags must end with "/>" or you're doomed.
  * 
  * @param {string} stringToMarchThrough - The string you're marching through. It had BETTER be well-formed!
  * @param {json} functionsToRun - A JS Object containing some functions that will be run at specific points. Its contents are described above.
@@ -310,7 +320,7 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
                 // We are going to do the replacement *during* the for loop, which also means modifying the for loop's iterator.
                 var currentTagSubstring = stringToMarchThrough.slice(currentTagStartingIndex, currentTagEndingIndex + 1) ;
                 var isTagEnder = false;
-
+                var isSelfClosing = false;
                 // console.log( currentTagSubstring );
 
                 
@@ -326,9 +336,11 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
                 }
                 
                 if (currentTagSubstring.startsWith("</")) { isTagEnder = true; }
+                if (currentTagSubstring.endsWith("/>")) { isSelfClosing = true; }
+
                 var stringToReplaceCurrentTag = null; // If we do not need any replacement, this will be null.
                 
-                if (!isTagEnder && tagAttributeQuoteStartingIndices.length > 0) { // Tag enders don't have attributes. If they do, the markup is malformed, not my problem.
+                if ( (!isTagEnder && !isSelfClosing) && tagAttributeQuoteStartingIndices.length > 0) { // Tag enders don't have attributes. If they do, the markup is malformed, not my problem.
                     // We must find tagAttributeNameStartingIndices and tagAttributeNameEndingIndices.
                     // We will do this by marching through the tag, backwards. And yes, this means 2 mested string marchers.
                     
@@ -393,17 +405,29 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
                
                //     var listOfTagParents = []; // List of JS Objects representing what tags are 'parents' of the 'cursor'. The JS Objects in question contain the starting indice as "index" and substring as "substring" of the tag we're currently a 'child' of.
                
-               var keepTrackOfThisInParentList = true; // The marcher will go right back through the newly-replaced tag. If the tag gets replaced, we will not be putting this in the parent list.
+                var keepTrackOfThisTagInParentList = true; // The marcher will go right back through the newly-replaced tag. If the tag gets replaced, we will not be putting this in the parent list.
+
                 if (stringToReplaceCurrentTag != null) { // If the tag needs replacement...
                     i = currentTagStartingIndex; // The string marcher will now march right through our new tag ender.
                     stringToMarchThrough = replaceFirstSubstringInStringAfterACertainPoint(stringToMarchThrough, currentTagSubstring, stringToReplaceCurrentTag, currentTagStartingIndex);
 
-                    keepTrackOfThisInParentList = false;
+                    keepTrackOfThisTagInParentList = false; // We do not want to deal with this tag in the parent list, seeing as the tag is being replaced.
                 }
 
 
+                // Tag parent list handling.
+                // We make sure to never do any of this if the string gets replaced, so we don't need to update any values or anything (, and the marcher will immediately run through the newly-replaced tag, so there should not be any problems there).
+                if (keepTrackOfThisTagInParentList && !isTagEnder) { // Regular tag; add something to the stack.
+                    listOfTagParents.push( {substring: currentTagSubstring, index: currentTagStartingIndex} );
 
-                
+                } else if (keepTrackOfThisTagInParentList && isTagEnder) { // Tags operate in a tree structure, so if you're using a tag ender, the only well-formatted possibility is that we remove the last element from the list.
+                    listOfTagParents.pop();
+                }
+
+
+                console.log(listOfTagParents);
+
+
 
                 // Oh, yes. We's also like to clear these. We NEED to clear these because we'd like them empty for later.
                 tagAttributeQuoteStartingIndices = [];
