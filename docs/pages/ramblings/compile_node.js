@@ -1,18 +1,18 @@
-// Find all files needed, while making sure to read them with the correct encoding.
-// Run all the posts through asciidoctor.
-
 // Use post_base.html, and have them get injected into there. Keep in mind that post_base.html also has some important stuff around dates and titles, so don't forget those.
 // Put the results of each post in index.html, and put them in the same folder that their AsciiDoc file is located.
 // Then, once every post is complete, put everything into the main base.html.
 
 
-
-
 // TODO:
 //  Add self closing support
 //      Make the JSON array suport self-closing tags
-//      Make [0] go from "name" to "generic non-attribute data". Make it a JSON with {name: cmonDudeUrKiddingMe, selfClosing: false/true}
-//  Continue wth your parent-related dealings.
+//      Make [0] go from "name" to "generic non-attribute data". Make it a JSON with {name: string, selfClosing: bool}
+//  Continue with making parentArray
+//  Use all of this to add "for every non-tag character" function to strngMarcher
+//  And **finally** wavy tag support in CSS
+
+
+
 
 
 import * as fs from 'node:fs';
