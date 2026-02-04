@@ -340,7 +340,7 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
 
                 var stringToReplaceCurrentTag = null; // If we do not need any replacement, this will be null.
                 
-                if ( (!isTagEnder && !isSelfClosing) && tagAttributeQuoteStartingIndices.length > 0) { // Tag enders don't have attributes. If they do, the markup is malformed, not my problem.
+                if ( !isTagEnder && tagAttributeQuoteStartingIndices.length > 0) { // Tag enders don't have attributes. If they do, the markup is malformed, not my problem.
                     // We must find tagAttributeNameStartingIndices and tagAttributeNameEndingIndices.
                     // We will do this by marching through the tag, backwards. And yes, this means 2 mested string marchers.
                     
