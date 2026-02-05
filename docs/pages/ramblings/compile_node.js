@@ -453,11 +453,18 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
 
 
 /** Give this function a string containing the contents of one tag.
- * It will return an array, with [0] being the tag's name, and the rest being JS Objects representing the attributes. They look like:  
+ * It will return an array, with [0] being the tag's base data JSON, and the rest being JS Objects representing the attributes.  
+ * The base data's JSON looks like:  
+ * `{`  
+ *     `name: String that represents the name of the tag.`  
+ *     `isSelfClosing: boolean representing whether or not the tag is self-closing.`  
+ * `}`  
+ * 
+ * The attributes look like:  
  * `{`  
  *     `name: String that represents the name of the attribute.`  
  *     `data: The string that normally comes after the attribute. If there is no data (often the case for boolean attributes set to true), **this will not be made.**`  
- * `}`
+ * `}`  
  * 
  * The attribute's objects will be in the same order as the actual tag (eg. `<span id="idk" class="naught">` ---> `["span", {name: "id", data: "idk"}, {name:"class", data:"naught"}]`)  
  * Also, there is no real error handling for user error, so be careful, *mmmkay?*  
@@ -485,6 +492,7 @@ function getAttributesOfSingleTag(tagString) {
 
     var doneWithTagName = false; // Made true once we hit our first space. Never touched again.
     var tagName;
+    var isSelfClosing = false;
     
     overallTextIterator: for (let i = 0; i < tagString.length; i++) {
         var currentChar = tagString.charAt(i);
@@ -568,7 +576,8 @@ function getAttributesOfSingleTag(tagString) {
 
     // Now that we have all the indices a man could ask for without going insane, we can finally construct our array.
     var finalArray = [];
-    finalArray.push(tagName);
+    if (tagString.endsWith("/>")) { isSelfClosing = true; }
+    finalArray.push({name: tagName, isSelfClosing});
 
     for (let i = 0; i < tagAttributeNameStartingIndices.length; i++) { // We could use any of the arrays here, but they're all the same length so nobody cares.
         var hasData = true;
@@ -598,7 +607,8 @@ function getAttributesOfSingleTag(tagString) {
  * Also, there is no handling for user error, so don't make any mistakes because we will not tell you about them. Mostly.
  */
 function constructTagFromJSONArray(tagDetails) {
-    var tagName = tagDetails[0];
+    var tagName = tagDetails[0].name;
+    var isSelfClosing = tagDetails[0].isSelfClosing;
 
     var finalString = "<" + tagName;
 
@@ -611,6 +621,7 @@ function constructTagFromJSONArray(tagDetails) {
             }
         }
     }
+
 
     finalString = finalString + ">";
 
