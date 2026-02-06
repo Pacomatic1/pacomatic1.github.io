@@ -4,9 +4,9 @@
 
 
 // TODO:
-//  Add self closing support
-//      Make the JSON array suport self-closing tags
-//      Make [0] go from "name" to "generic non-attribute data". Make it a JSON with {name: string, selfClosing: bool}
+//  Add self closing support     DONE
+//      Make the JSON array suport self-closing tags    DONE
+//      Make [0] go from "name" to "generic non-attribute data". Make it a JSON with {name: string, selfClosing: bool}      DONE
 //  Continue with making parentArray
 //  Use all of this to add "for every non-tag character" function to strngMarcher
 //  And **finally** wavy tag support in CSS
@@ -126,10 +126,10 @@ async function generatePost(postFolderPath) {
             var wavyTextCharacter = 0; // Increment this by one every time we hit a <wavy>. Once sibling-index() gets better support, we can remove this variable.
 
             compiledMarkdown = perTagHTMLParser(compiledMarkdown, {
-                forEveryTagWeHit: function (tagSubstring, index) {
+                forEveryTagWeHit: function (tagSubstring, indexDetails, isSelfClosing) {
                     var tagDetails = getAttributesOfSingleTag(tagSubstring);
                     
-                    if (tagDetails[0] == "wavy") { // Wavy tags.
+                    if (tagDetails[0].name == "wavy") { // Wavy tags.
                         var currentTagTimeProperty = getSingleTagAttributeDataFromJSONArray(tagDetails, "time");
                         if ( currentTagTimeProperty == null) { currentTagTimeProperty = "2s"; }
                         tagDetails = removeTagAttributeFromJSONArray(tagDetails, "time");
@@ -152,13 +152,14 @@ async function generatePost(postFolderPath) {
                         currentClassAttribute = currentClassAttribute + " wavyText";
                         
                         tagDetails = replaceTagAttributeInJSONArray(tagDetails, {name: "class", data: currentClassAttribute});
-                        tagDetails[0] = "span";
+                        tagDetails[0].name = "span";
                         
                         var finalTag = constructTagFromJSONArray(tagDetails);
-                        // console.log(finalTag);
+
                         return finalTag;
                     }
 
+                    
 
                     return null;
                 },
@@ -168,6 +169,9 @@ async function generatePost(postFolderPath) {
                     } else { return null; }
                 }
             });
+
+
+
 
             // console.log(compiledMarkdown);
 
@@ -249,7 +253,7 @@ async function generatePost(postFolderPath) {
  *  @param {string} functionsToRun.forEveryTagWeHit.param1 - This parameter contains only the tag (arrows included). number denoting the tag's starting index.
  *  @param {number} functionsToRun.forEveryTagWeHit.param2 - This parameter contains a number denoting the tag's starting index.
  *  @param {json[]} functionsToRun.forEveryTagWeHit.param3 - This parameter contains a JS Object. The structure is as follows: { startingIndicesOfAttributeNames: number[], endingIndicesOfAttributeNames: number[], startingIndicesOfAttributeQuotationMarks: number[],  endingIndicesOfAttributeQuotationMarks: number[] }. All the array indices are aligned; index 0 returns the relevant data for the first attribute, regardless of where you look. All the text indices are based on the tag substring from paramater 1.
- * 
+ *  @param {boolean} functionsToRun.forEveryTagWeHit.param4 - This parameter tells you whether or not the tag is self-closing.
  * @param {function} functionsToRun.forEveryTagEnderWeHit - Function with 2 args: string containing only the tag (arrows included), and a number denoting the tag's starting index. return value: the string that will replace the tag. Note that the function will then march right through your newly-replaced tag. If you don't want to have a function, do NOT define this as "null" or "undefined", don't define anything. If you don't want to replace anything, return null.
  * 
  * Also, do not make ANY of these functions asynchronous.
@@ -386,7 +390,7 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
                         endingIndicesOfAttributeNames: tagAttributeNameEndingIndices,
                         startingIndicesOfAttributeQuotationMarks: tagAttributeQuoteStartingIndices,
                         endingIndicesOfAttributeQuotationMarks: tagAttributeQuoteEndingIndices
-                    } );
+                    }, isSelfClosing );
                 }
                 if ( Object.hasOwn(functionsToRun, "forEveryTagEnderWeHit") && isTagEnder) {
                     stringToReplaceCurrentTag = functionsToRun.forEveryTagEnderWeHit(currentTagSubstring, currentTagStartingIndex);
@@ -425,7 +429,7 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
                 }
 
 
-                console.log(listOfTagParents);
+                // console.log(listOfTagParents);
 
 
 
@@ -473,8 +477,18 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
  */
 function getAttributesOfSingleTag(tagString) {
     // Quick edge case dealings, also removing the starting and ending arrows because it simplifies the rest of the code
+    var isSelfClosing = false; // We also do this, because it's easier to do it now.
+    
     tagString = tagString.trim();
-    if ( tagString.endsWith(">") ) { tagString = tagString.substring(0, tagString.length - 1) } // length-1 is the end of the string, and substring() *excludes* the final character (which'd be ">"). 
+    if ( tagString.endsWith(">") ) {
+        tagString = tagString.substring(0, tagString.length - 1)
+
+        if ( tagString.endsWith("/") ) { // If this is true, the original string would've been "<bluh bluh bluh />"
+            tagString = tagString.substring(0, tagString.length - 1);
+            isSelfClosing = true; 
+        }
+    }
+
     if ( tagString.startsWith("<") ) { tagString = tagString.substring(1); }
     tagString = tagString.trim();
     tagString = tagString + " "; // I know this seems antithetical to trim() but it makes dataless tag attributes easier, because cases like "<video controls>" become "video controls "; we can still find the end using the space right after the attribbute name and still be right without worrying about when it's at the very end of the text.
@@ -491,8 +505,7 @@ function getAttributesOfSingleTag(tagString) {
     var insideTagAttributeName = false;
 
     var doneWithTagName = false; // Made true once we hit our first space. Never touched again.
-    var tagName;
-    var isSelfClosing = false;
+    var tagName = "";
     
     overallTextIterator: for (let i = 0; i < tagString.length; i++) {
         var currentChar = tagString.charAt(i);
@@ -601,6 +614,11 @@ function getAttributesOfSingleTag(tagString) {
     return finalArray;
 }
 
+
+
+
+
+
 /**
  * Constructs a tag using a specially formatted JSON array, and returns the substring.  
  * As for the format in qeustion, see getAttributesOfSingleTag().
@@ -622,8 +640,11 @@ function constructTagFromJSONArray(tagDetails) {
         }
     }
 
+    var endOftag;
+    if (isSelfClosing) { endOftag = "/>"}
+    else { endOftag = ">" }
 
-    finalString = finalString + ">";
+    finalString = finalString + endOftag;
 
     return finalString;
 }
@@ -643,7 +664,7 @@ function removeTagAttributeFromJSONArray(tagDetails, attributeName) {
 
 /** Takes a tag JSON array, and replaces whatever attribute shares a name with this. If there was never an atrribute in the first place, it will simply append the attribute. The data to add is in the form of one attribute, represented by a JSON object. See also: perTagHTMLParser(). */
 function replaceTagAttributeInJSONArray(tagDetails, attributeObject) {    
-    var alreadyExistingAttirbuteIndex = 0; // 0 is a "null value", because 0 is reserved for the name. 
+    var alreadyExistingAttirbuteIndex = 0; // 0 is a "null value", because 0 is reserved for non-attributes. 
 
     for (var i = 1; i < tagDetails.length; i++) {
         if ( Object.hasOwn(tagDetails[i], "name") ) {
@@ -668,7 +689,7 @@ function replaceTagAttributeInJSONArray(tagDetails, attributeObject) {
  * If found without data, returns empty string.  
  * See also: perTagHTMLParser(). */
 function getSingleTagAttributeDataFromJSONArray(tagDetails, attributeName) {
-    var wantedIndice = 0; // 0 is null value, because 0 is reserved for the name.
+    var wantedIndice = 0; // 0 is null value, because 0 is reserved for non-attributes.
     
     for (var i = 1; i < tagDetails.length; i++) {
         if ( Object.hasOwn(tagDetails[i], "name") ) {
@@ -681,15 +702,12 @@ function getSingleTagAttributeDataFromJSONArray(tagDetails, attributeName) {
     if ( wantedIndice == 0 ) { // Attribute does not exist :\
         return null;
     } else { // Attribute exists
-
         if ( Object.hasOwn(tagDetails[wantedIndice], "data") ) { // And there is data!!!
             return tagDetails[wantedIndice].data;
         } else { // Exists but no data :\
             return "";
         }
-    
     }
-    
 }
 
 
