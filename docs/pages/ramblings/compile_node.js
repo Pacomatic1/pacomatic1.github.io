@@ -11,7 +11,7 @@
 //  Use all of this to add "for every non-tag character" function to strngMarcher
 //  And **finally** wavy tag support in CSS
 
-
+// TODO: Fully test the tag parent system. I *think* it's stable but I'm not entirely sure on whether or not this is truly the case.
 
 
 
@@ -99,7 +99,7 @@ async function generatePost(postFolderPath) {
 
             // wow, such empty
             
-            console.log(markdownFileAsString);
+            // console.log(markdownFileAsString);
 
 
             // Compiling the markdown.
@@ -108,7 +108,7 @@ async function generatePost(postFolderPath) {
                 breaks: true,
                 xhtml: true
             });
-            marked.use(markedXhtml());
+            marked.use(markedXhtml()); // Use xhtml because it makes my string parser's job *so* much easier.
 
             var compiledMarkdown = marked.parse(markdownFileAsString);
             
@@ -126,7 +126,7 @@ async function generatePost(postFolderPath) {
             var wavyTextCharacter = 0; // Increment this by one every time we hit a <wavy>. Once sibling-index() gets better support, we can remove this variable.
 
             compiledMarkdown = perTagHTMLParser(compiledMarkdown, {
-                forEveryTagWeHit: function (tagSubstring, indexDetails, isSelfClosing) {
+                forEveryTagWeHit: function (tagSubstring, tagIndex, indexDetails, isSelfClosing, parents) {
                     var tagDetails = getAttributesOfSingleTag(tagSubstring);
                     
                     if (tagDetails[0].name == "wavy") { // Wavy tags.
@@ -156,6 +156,8 @@ async function generatePost(postFolderPath) {
                         
                         var finalTag = constructTagFromJSONArray(tagDetails);
 
+                        console.log(parents);
+
                         return finalTag;
                     }
 
@@ -163,10 +165,13 @@ async function generatePost(postFolderPath) {
 
                     return null;
                 },
-                forEveryTagEnderWeHit: function (tagSubstring, index) {
+                forEveryTagEnderWeHit: function (tagSubstring, index, parents) {
                     if ( tagSubstring.includes("wavy") ) {
+                        console.log(parents);
+                        
                         return "</span>"
                     } else { return null; }
+
                 }
             });
 
@@ -249,12 +254,20 @@ async function generatePost(postFolderPath) {
  * 
  * @param {string} stringToMarchThrough - The string you're marching through. It had BETTER be well-formed!
  * @param {json} functionsToRun - A JS Object containing some functions that will be run at specific points. Its contents are described above.
- * @param {function} functionsToRun.forEveryTagWeHit - Function with 5 parameters which I will detail below, and a return value being a string that replaces the tag that argument 1 gave you. Note that the function will then march right through your newly-replaced tag. If you don't want to have a function, do NOT define this as "null" or "undefined"; just don't define it. If you don't want to replace anything, return null.
- *  @param {string} functionsToRun.forEveryTagWeHit.param1 - This parameter contains only the tag (arrows included). number denoting the tag's starting index.
+ * @param {function} functionsToRun.forEveryTagWeHit - Function with 5 parameters which I will detail below, and a return value being a string that replaces the tag that argument 1 gave you. Note that the function will then march right through your newly-replaced tag. If you don't want to have a function, do NOT define this as "null" or "undefined"; just don't make it at all. If you don't want to replace anything, return null.
+ *  @param {string} functionsToRun.forEveryTagWeHit.param1 - This parameter contains only the tag's substring (arrows included).  
  *  @param {number} functionsToRun.forEveryTagWeHit.param2 - This parameter contains a number denoting the tag's starting index.
  *  @param {json[]} functionsToRun.forEveryTagWeHit.param3 - This parameter contains a JS Object. The structure is as follows: { startingIndicesOfAttributeNames: number[], endingIndicesOfAttributeNames: number[], startingIndicesOfAttributeQuotationMarks: number[],  endingIndicesOfAttributeQuotationMarks: number[] }. All the array indices are aligned; index 0 returns the relevant data for the first attribute, regardless of where you look. All the text indices are based on the tag substring from paramater 1.
  *  @param {boolean} functionsToRun.forEveryTagWeHit.param4 - This parameter tells you whether or not the tag is self-closing.
- * @param {function} functionsToRun.forEveryTagEnderWeHit - Function with 2 args: string containing only the tag (arrows included), and a number denoting the tag's starting index. return value: the string that will replace the tag. Note that the function will then march right through your newly-replaced tag. If you don't want to have a function, do NOT define this as "null" or "undefined", don't define anything. If you don't want to replace anything, return null.
+ *  @param {json[]} functionsToRun.forEveryTagWeHit.param5 - This is a list of the tag's current parents. It's an array of JS Objects, containing keys "substring" and "index"; "substring" contains the substring of the parent tag. "index" contains an int corresponding to the tag's starting index.  
+ *   
+ *   
+ * @param {function} functionsToRun.forEveryTagEnderWeHit - Function with 3 parameters which I will detail below, and a return value being a string that replaces the tag that argument 1 gave you. Note that the function will then march right through your newly-replaced tag. If you don't want to have a function, do NOT define this as "null" or "undefined"; just don't make it at all. If you don't want to replace anything, return null.
+ * @param {string} functionsToRun.forEveryTagEnderWeHit.param1 - This parameter contains only the tag's substring (arrows included).  
+ * @param {index} functionsToRun.forEveryTagEnderWeHit.param2 - This parameter contains a number denoting the tag's starting index.
+ * @param {json[]} functionsToRun.forEveryTagEnderWeHit.param3 - This is a list of the tag's current parents. It's an array of JS Objects, containing keys "substring" and "index"; "substring" contains the substring of the parent tag. "index" contains an int corresponding to the tag's starting index.
+ * 
+ * 
  * 
  * Also, do not make ANY of these functions asynchronous.
  */
@@ -322,7 +335,7 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
 
                 // Alright, time to handle our idiotic custom tag dealings.
                 // We are going to do the replacement *during* the for loop, which also means modifying the for loop's iterator.
-                var currentTagSubstring = stringToMarchThrough.slice(currentTagStartingIndex, currentTagEndingIndex + 1) ;
+                var currentTagSubstring = stringToMarchThrough.slice(currentTagStartingIndex, currentTagEndingIndex + 1);
                 var isTagEnder = false;
                 var isSelfClosing = false;
                 // console.log( currentTagSubstring );
@@ -377,11 +390,6 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
                     }
                 }
                 
-                // if ( !isTagEnder ) { // Put our tag into the parents list.
-                //     listOfTagParents.push( { index: currentTagStartingIndex, substring: currentTagSubstring });
-                // }
-
-
                 
                 
                 if ( Object.hasOwn(functionsToRun, "forEveryTagWeHit") && !isTagEnder) {
@@ -390,10 +398,10 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
                         endingIndicesOfAttributeNames: tagAttributeNameEndingIndices,
                         startingIndicesOfAttributeQuotationMarks: tagAttributeQuoteStartingIndices,
                         endingIndicesOfAttributeQuotationMarks: tagAttributeQuoteEndingIndices
-                    }, isSelfClosing );
+                    }, isSelfClosing, listOfTagParents );
                 }
                 if ( Object.hasOwn(functionsToRun, "forEveryTagEnderWeHit") && isTagEnder) {
-                    stringToReplaceCurrentTag = functionsToRun.forEveryTagEnderWeHit(currentTagSubstring, currentTagStartingIndex);
+                    stringToReplaceCurrentTag = functionsToRun.forEveryTagEnderWeHit(currentTagSubstring, currentTagStartingIndex, listOfTagParents);
                     // console.log(stringToReplaceCurrentTag)
                 }
                 
@@ -421,10 +429,10 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
 
                 // Tag parent list handling.
                 // We make sure to never do any of this if the string gets replaced, so we don't need to update any values or anything (, and the marcher will immediately run through the newly-replaced tag, so there should not be any problems there).
-                if (keepTrackOfThisTagInParentList && !isTagEnder) { // Regular tag; add something to the stack.
+                if (keepTrackOfThisTagInParentList && !isTagEnder && !isSelfClosing) { // Regular tag; add something to the stack.
                     listOfTagParents.push( {substring: currentTagSubstring, index: currentTagStartingIndex} );
 
-                } else if (keepTrackOfThisTagInParentList && isTagEnder) { // Tags operate in a tree structure, so if you're using a tag ender, the only well-formatted possibility is that we remove the last element from the list.
+                } else if (keepTrackOfThisTagInParentList && isTagEnder && !isSelfClosing) { // Tags operate in a tree structure, so if you're using a tag ender, the only well-formatted possibility is that we remove the last element from the list.
                     listOfTagParents.pop();
                 }
 
