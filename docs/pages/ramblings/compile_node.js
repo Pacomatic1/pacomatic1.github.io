@@ -126,7 +126,7 @@ async function generatePost(postFolderPath) {
             var wavyTextCharacter = 0; // Increment this by one every time we hit a <wavy>. Once sibling-index() gets better support, we can remove this variable.
 
             compiledMarkdown = perTagHTMLParser(compiledMarkdown, {
-                forEveryTagWeHit: function (tagSubstring, tagIndex, indexDetails, isSelfClosing, parents) {
+                forEveryTagWeHit: function (tagSubstring, tagIndex, isSelfClosing, parents) {
                     var tagDetails = getAttributesOfSingleTag(tagSubstring);
                     
                     if (tagDetails[0].name == "wavy") { // Wavy tags.
@@ -257,9 +257,8 @@ async function generatePost(postFolderPath) {
  * @param {function} functionsToRun.forEveryTagWeHit - Function with 5 parameters which I will detail below, and a return value being a string that replaces the tag that argument 1 gave you. Note that the function will then march right through your newly-replaced tag. If you don't want to have a function, do NOT define this as "null" or "undefined"; just don't make it at all. If you don't want to replace anything, return null.
  *  @param {string} functionsToRun.forEveryTagWeHit.param1 - This parameter contains only the tag's substring (arrows included).  
  *  @param {number} functionsToRun.forEveryTagWeHit.param2 - This parameter contains a number denoting the tag's starting index.
- *  @param {json[]} functionsToRun.forEveryTagWeHit.param3 - This parameter contains a JS Object. The structure is as follows: { startingIndicesOfAttributeNames: number[], endingIndicesOfAttributeNames: number[], startingIndicesOfAttributeQuotationMarks: number[],  endingIndicesOfAttributeQuotationMarks: number[] }. All the array indices are aligned; index 0 returns the relevant data for the first attribute, regardless of where you look. All the text indices are based on the tag substring from paramater 1.
- *  @param {boolean} functionsToRun.forEveryTagWeHit.param4 - This parameter tells you whether or not the tag is self-closing.
- *  @param {json[]} functionsToRun.forEveryTagWeHit.param5 - This is a list of the tag's current parents. It's an array of JS Objects, containing keys "substring" and "index"; "substring" contains the substring of the parent tag. "index" contains an int corresponding to the tag's starting index.  
+ *  @param {boolean} functionsToRun.forEveryTagWeHit.param3 - This parameter tells you whether or not the tag is self-closing.
+ *  @param {json[]} functionsToRun.forEveryTagWeHit.param4 - This is a list of the tag's current parents. It's an array of JS Objects, containing keys "substring" and "index"; "substring" contains the substring of the parent tag. "index" contains an int corresponding to the tag's starting index.  
  *   
  *   
  * @param {function} functionsToRun.forEveryTagEnderWeHit - Function with 3 parameters which I will detail below, and a return value being a string that replaces the tag that argument 1 gave you. Note that the function will then march right through your newly-replaced tag. If you don't want to have a function, do NOT define this as "null" or "undefined"; just don't make it at all. If you don't want to replace anything, return null.
@@ -275,18 +274,10 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
     var isNextCharacterEscaped = false;
 
     var tagAttributeQuoteType = ""; // This is going to be hella confusing to read, but. " or ' mean that we're in an attribute, and an empty string means we're not.
-    
-    // The following 2 variables are meant to compliment each other; the same index always returns the relevant data for the same attribute.
-    var tagAttributeQuoteStartingIndices = []; // Clear this every time you leave a tag.
-    var tagAttributeQuoteEndingIndices = []; // Clear this every time you leave a tag.
-    var tagAttributeNameStartingIndices = []; // Clear this every time you leave a tag.
-    var tagAttributeNameEndingIndices = []; // Clear this every time you leave a tag.
-
 
     var currentlyInsideTag = false;
 
     var listOfTagParents = []; // List of JS Objects representing what tags are 'parents' of the 'cursor'. The JS Objects in question contain the starting indice as "index" and substring as "substring" of the tag we're currently a 'child' of.
-
 
     var currentTagStartingIndex = -1; // -1 is our "null value". That said, you should be cross-checking this with currentlyInsideTag.
     var currentTagEndingIndex = -1; // -1 is our "null value". That said, you should be cross-checking this with currentlyInsideTag.
@@ -318,12 +309,10 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
             if ( currentChar == "\"" || currentChar == "'" ) { // We have hit the beginning/end of a tag attribute.
                 if ( tagAttributeQuoteType == "") { // If we do not already think we are inside an attribute, we have hit the beginning.
                     tagAttributeQuoteType = currentChar; // Say that we now inside of one.
-                    tagAttributeQuoteStartingIndices.push(i);
                     continue overallTextIterator;
                 }
                 if ( tagAttributeQuoteType == currentChar) { // If we were inside an attribute earlier and hit the same ender, we have likely hit the end. Now, we'd best say so.
                     tagAttributeQuoteType = ""; // Say that we are done, because we have hit the end.
-                    tagAttributeQuoteEndingIndices.push(i);
                     continue overallTextIterator;
                 }
 
@@ -339,79 +328,24 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
                 var isTagEnder = false;
                 var isSelfClosing = false;
                 // console.log( currentTagSubstring );
-
-                
-                
-                if (tagAttributeQuoteStartingIndices.length != tagAttributeQuoteEndingIndices.length) { console.log( `Error: The string marcher failed to correctly grab the starting and ending indices of an attribute! I think something's up. Here's the tag's substring, in case it's just malformed HTML: ${currentTagSubstring}` ); }
-                
                 
                 // We'd like to modify tagAttributeQuoteStartingIndices and tagAttributeQuoteEndingIndices to be based on the tag on its own rather than the full string we were given. 
-                for (let i = 0; i < tagAttributeQuoteStartingIndices.length; i++) {
-                    // We will do both starting and ending indices here, which should not be a problem if the array's indices are aligned, WHICH THEY SHOULD BE.
-                    tagAttributeQuoteStartingIndices[i] = tagAttributeQuoteStartingIndices[i] - currentTagStartingIndex;
-                    tagAttributeQuoteEndingIndices[i] = tagAttributeQuoteEndingIndices[i] - currentTagStartingIndex;
-                }
-                
+
                 if (currentTagSubstring.startsWith("</")) { isTagEnder = true; }
                 if (currentTagSubstring.endsWith("/>")) { isSelfClosing = true; }
 
                 var stringToReplaceCurrentTag = null; // If we do not need any replacement, this will be null.
-                
-                if ( !isTagEnder && tagAttributeQuoteStartingIndices.length > 0) { // Tag enders don't have attributes. If they do, the markup is malformed, not my problem.
-                    // We must find tagAttributeNameStartingIndices and tagAttributeNameEndingIndices.
-                    // We will do this by marching through the tag, backwards. And yes, this means 2 mested string marchers.
-                    
-                    tagAttribLoop: for (let i = 0; i < tagAttributeQuoteStartingIndices.length; i++) { // For each item in the starting indice array,
-                        // Variables for this mini-loop
-                        var nameEndReached = false;
-                        var nameStartReached = false;
-                        var nameEqualsReached = false;
-                        
-                        tagSingleAttribLoop: for (let j = tagAttributeQuoteStartingIndices[i]; j > 0; j--) { // March backwards through the tag substring, starting at the index specified by startingIndices.
-                            let currentCharInTagAttribLoop = currentTagSubstring.charAt(j);
-                            if (currentCharInTagAttribLoop == "=") {
-                                nameEqualsReached = true;
-                                continue tagSingleAttribLoop;
-                            }
-                            
-                            if (nameEqualsReached && currentCharInTagAttribLoop != " " && !nameEndReached) { // We did it boys, we hit the name. No equals signs here, folks!
-                                nameEndReached = true;
-                                tagAttributeNameEndingIndices.push(j);
-                                continue tagSingleAttribLoop;
-                            }
-                            
-                            if (nameEndReached && currentCharInTagAttribLoop == " " && !nameStartReached) { // We hit the whitespace right before the attribute name.
-                                nameStartReached = true;
-                                tagAttributeNameStartingIndices.push(j + 1); // We are the *whitespace*, not the actual start. To get the actual start, we need to go up by one.
-                                break tagSingleAttribLoop;
-                            }
-                            
-                        }
-                    }
-                }
+
                 
                 
                 
                 if ( Object.hasOwn(functionsToRun, "forEveryTagWeHit") && !isTagEnder) {
-                    stringToReplaceCurrentTag = functionsToRun.forEveryTagWeHit(currentTagSubstring, currentTagStartingIndex, {
-                        startingIndicesOfAttributeNames: tagAttributeNameStartingIndices,
-                        endingIndicesOfAttributeNames: tagAttributeNameEndingIndices,
-                        startingIndicesOfAttributeQuotationMarks: tagAttributeQuoteStartingIndices,
-                        endingIndicesOfAttributeQuotationMarks: tagAttributeQuoteEndingIndices
-                    }, isSelfClosing, listOfTagParents );
+                    stringToReplaceCurrentTag = functionsToRun.forEveryTagWeHit(currentTagSubstring, currentTagStartingIndex, isSelfClosing, listOfTagParents );
                 }
                 if ( Object.hasOwn(functionsToRun, "forEveryTagEnderWeHit") && isTagEnder) {
                     stringToReplaceCurrentTag = functionsToRun.forEveryTagEnderWeHit(currentTagSubstring, currentTagStartingIndex, listOfTagParents);
                     // console.log(stringToReplaceCurrentTag)
                 }
-                
-                /* Debug. If these indice 0 of each array keeps ascending with every line, this was done correctly.
-                console.log(tagAttributeNameStartingIndices);
-                console.log(tagAttributeNameEndingIndices);
-                
-                console.log(tagAttributeQuoteStartingIndices);
-                console.log(tagAttributeQuoteEndingIndices);
-                */
 
 
                
@@ -431,7 +365,6 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
                 // We make sure to never do any of this if the string gets replaced, so we don't need to update any values or anything (, and the marcher will immediately run through the newly-replaced tag, so there should not be any problems there).
                 if (keepTrackOfThisTagInParentList && !isTagEnder && !isSelfClosing) { // Regular tag; add something to the stack.
                     listOfTagParents.push( {substring: currentTagSubstring, index: currentTagStartingIndex} );
-
                 } else if (keepTrackOfThisTagInParentList && isTagEnder && !isSelfClosing) { // Tags operate in a tree structure, so if you're using a tag ender, the only well-formatted possibility is that we remove the last element from the list.
                     listOfTagParents.pop();
                 }
@@ -439,13 +372,6 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
 
                 // console.log(listOfTagParents);
 
-
-
-                // Oh, yes. We's also like to clear these. We NEED to clear these because we'd like them empty for later.
-                tagAttributeQuoteStartingIndices = [];
-                tagAttributeQuoteEndingIndices = [];
-                tagAttributeNameStartingIndices = [];
-                tagAttributeNameEndingIndices = [];
             }
         }
     }
