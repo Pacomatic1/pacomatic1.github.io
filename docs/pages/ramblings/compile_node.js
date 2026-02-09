@@ -7,12 +7,11 @@
 //  Add self closing support     DONE
 //      Make the JSON array suport self-closing tags    DONE
 //      Make [0] go from "name" to "generic non-attribute data". Make it a JSON with {name: string, selfClosing: bool}      DONE
-//  Continue with making parentArray
-//  Use all of this to add "for every non-tag character" function to strngMarcher
+//  Continue with making parentArray    DONE
+//  Use all of this to add "for every non-tag character" function to stirngMarcher
 //  And **finally** wavy tag support in CSS
 
-// TODO: Fully test the tag parent system. I *think* it's stable but I'm not entirely sure on whether or not this is truly the case.
-
+//  But not yet! Your generic tag marcher has issues revolving <script> and <style> tags; you know, stuff that does not actually contain any HTML at all. You need to go handle those in the generic tag marcher.
 
 
 import * as fs from 'node:fs';
@@ -253,18 +252,24 @@ async function generatePost(postFolderPath) {
  * Also, all self-closing tags must end with "/>" or you're doomed.
  * 
  * @param {string} stringToMarchThrough - The string you're marching through. It had BETTER be well-formed!
- * @param {json} functionsToRun - A JS Object containing some functions that will be run at specific points. Its contents are described above.
- * @param {function} functionsToRun.forEveryTagWeHit - Function with 5 parameters which I will detail below, and a return value being a string that replaces the tag that argument 1 gave you. Note that the function will then march right through your newly-replaced tag. If you don't want to have a function, do NOT define this as "null" or "undefined"; just don't make it at all. If you don't want to replace anything, return null.
+ * @param {json} functionsToRun - A JS Object containing some functions that will be run at specific points. Its contents are described below. If you don't want to have any of these functions, do NOT define them as "null" or "undefined"; just don't make them at all.
+ * @param {function} functionsToRun.forEveryTagWeHit - Function with 5 parameters which I will detail below, and a return value being a string that replaces the tag that argument 1 gave you. Note that the function will then march right through your newly-replaced tag. If you don't want to replace anything, return null.
  *  @param {string} functionsToRun.forEveryTagWeHit.param1 - This parameter contains only the tag's substring (arrows included).  
  *  @param {number} functionsToRun.forEveryTagWeHit.param2 - This parameter contains a number denoting the tag's starting index.
  *  @param {boolean} functionsToRun.forEveryTagWeHit.param3 - This parameter tells you whether or not the tag is self-closing.
  *  @param {json[]} functionsToRun.forEveryTagWeHit.param4 - This is a list of the tag's current parents. It's an array of JS Objects, containing keys "substring" and "index"; "substring" contains the substring of the parent tag. "index" contains an int corresponding to the tag's starting index.  
  *   
  *   
- * @param {function} functionsToRun.forEveryTagEnderWeHit - Function with 3 parameters which I will detail below, and a return value being a string that replaces the tag that argument 1 gave you. Note that the function will then march right through your newly-replaced tag. If you don't want to have a function, do NOT define this as "null" or "undefined"; just don't make it at all. If you don't want to replace anything, return null.
+ * @param {function} functionsToRun.forEveryTagEnderWeHit - Function with 3 parameters which I will detail below, and a return value being a string that replaces the tag that argument 1 gave you. Note that the function will then march right through your newly-replaced tag. If you don't want to replace anything, return null.
  * @param {string} functionsToRun.forEveryTagEnderWeHit.param1 - This parameter contains only the tag's substring (arrows included).  
  * @param {index} functionsToRun.forEveryTagEnderWeHit.param2 - This parameter contains a number denoting the tag's starting index.
  * @param {json[]} functionsToRun.forEveryTagEnderWeHit.param3 - This is a list of the tag's current parents. It's an array of JS Objects, containing keys "substring" and "index"; "substring" contains the substring of the parent tag. "index" contains an int corresponding to the tag's starting index.
+ * 
+ * 
+ * @param {function} functionsToRun.betweenEveryTagPairWeHit - Function with 3 parameters which I will detail below, and a return value being a string that replaces what argument 1 gave you. Note that the function will then march right through your newly-replaced string. If you don't want to replace anything, return null. Now that this is run AFTER forEveryTag(Ender)WeHit(), so using this will make 
+ * @param {string} functionsToRun.forEveryTagEnderWeHit.param1 - This parameter contains the text between the last two tags we hit. If the function is working properly, this parameter will be pure, non-tag text. You may find issues with tags whose contents are non-standard, like <style> and <script> tags. You can go add them into the "exclude from this function" list.   
+ * @param {index} functionsToRun.forEveryTagEnderWeHit.param2 - This parameter contains a number denoting the string's starting index.  
+ * @param {json[]} functionsToRun.forEveryTagEnderWeHit.param3 - This is a list of the tag's current parents. It's an array of JS Objects, containing keys "substring" and "index"; "substring" contains the substring of the parent tag. "index" contains an int corresponding to the tag's starting index.  
  * 
  * 
  * 
