@@ -8,10 +8,10 @@
 //      Make the JSON array suport self-closing tags    DONE
 //      Make [0] go from "name" to "generic non-attribute data". Make it a JSON with {name: string, selfClosing: bool}      DONE
 //  Continue with making parentArray    DONE
-//  Use all of this to add "for every non-tag character" function to stirngMarcher
+//  Use all of this to add "for every non-tag character" function to stringMarcher
 //  And **finally** wavy tag support in CSS
 
-//  But not yet! Your generic tag marcher has issues revolving <script> and <style> tags; you know, stuff that does not actually contain any HTML at all. You need to go handle those in the generic tag marcher.
+//  But not yet! Your generic tag marcher has issues revolving <script> and <style> tags; you know, stuff that does not actually contain any HTML within them at all. You need to go handle those in the generic tag marcher.
 
 
 import * as fs from 'node:fs';
@@ -167,7 +167,7 @@ async function generatePost(postFolderPath) {
                 forEveryTagEnderWeHit: function (tagSubstring, index, parents) {
                     if ( tagSubstring.includes("wavy") ) {
                         console.log(parents);
-                        
+
                         return "</span>"
                     } else { return null; }
 
@@ -266,11 +266,12 @@ async function generatePost(postFolderPath) {
  * @param {json[]} functionsToRun.forEveryTagEnderWeHit.param3 - This is a list of the tag's current parents. It's an array of JS Objects, containing keys "substring" and "index"; "substring" contains the substring of the parent tag. "index" contains an int corresponding to the tag's starting index.
  * 
  * 
- * @param {function} functionsToRun.betweenEveryTagPairWeHit - Function with 3 parameters which I will detail below, and a return value being a string that replaces what argument 1 gave you. Note that the function will then march right through your newly-replaced string. If you don't want to replace anything, return null. Now that this is run AFTER forEveryTag(Ender)WeHit(), so using this will make 
+ * @param {function} functionsToRun.betweenEveryTagPairWeHit - Function with 3 parameters which I will detail below, and a return value being a string that replaces what argument 1 gave you. This thing is kind of confusing to describe, so, use this sample to help you read this documentation. `<b>I love typing!<img alt="Nothing...?">` Note that the function will then march right through your newly-replaced string. If you don't want to replace anything, return null. Note that this is run AFTER forEveryTag(Ender)WeHit() (and you should read param1 before looking at this note);  
+ * what can and does often happen is that you modify the second tag (eg. string becomes `<b>I love typing!<video src="./vid.mp4">`), the 'cursor' goes to start of the second tag (eg. `<video...`), and then you modify the string between them (eg. string becomes `<b>I HATE typing.<video src="./vid.mp4">`), and then the 'cursor' moves to the start of the string between both tags (eg. `I HATE typing.`). What will happen *now* is, the marcher will now walk right back through both the replaced string (eg. `I HATE typing`) *and* the second tag (eg. `<video...`). Keep in mind that it doesn't march through the second tag right after the second tag is replaced but before the string between the tags is (eg. right after string becomes `<b>I love typing!<video src="./vid.mp4">`), so the second tag isn't marched through thrice; only twice, like usual. Confused? Then this probably doesn't apply to you.
+ * 
  * @param {string} functionsToRun.forEveryTagEnderWeHit.param1 - This parameter contains the text between the last two tags we hit. If the function is working properly, this parameter will be pure, non-tag text. You may find issues with tags whose contents are non-standard, like <style> and <script> tags. You can go add them into the "exclude from this function" list.   
  * @param {index} functionsToRun.forEveryTagEnderWeHit.param2 - This parameter contains a number denoting the string's starting index.  
  * @param {json[]} functionsToRun.forEveryTagEnderWeHit.param3 - This is a list of the tag's current parents. It's an array of JS Objects, containing keys "substring" and "index"; "substring" contains the substring of the parent tag. "index" contains an int corresponding to the tag's starting index.  
- * 
  * 
  * 
  * Also, do not make ANY of these functions asynchronous.
@@ -364,6 +365,13 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
 
                     keepTrackOfThisTagInParentList = false; // We do not want to deal with this tag in the parent list, seeing as the tag is being replaced.
                 }
+
+                if ( Object.hasOwn(functionsToRun, "forEveryTagEnderWeHit") && isTagEnder) {
+                    stringToReplaceCurrentTag = functionsToRun.forEveryTagEnderWeHit(currentTagSubstring, currentTagStartingIndex, listOfTagParents);
+                    // console.log(stringToReplaceCurrentTag)
+                }
+
+
 
 
                 // Tag parent list handling.
