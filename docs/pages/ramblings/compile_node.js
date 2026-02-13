@@ -125,13 +125,6 @@ async function generatePost(postFolderPath) {
             var wavyTextCharacter = 0; // Increment this by one every time we hit a <wavy>. Once sibling-index() gets better support, we can remove this variable.
             
             compiledMarkdown = perTagHTMLParser(compiledMarkdown, {
-                betweenEveryTagPairWeHit: function (substring, index, parents) {
-                    console.log(substring);
-                    // console.log(index);
-                    // console.log(parents);
-
-                    return null;
-                },
                 forEveryTagWeHit: function (tagSubstring, tagIndex, isSelfClosing, parents) {
                     var tagDetails = getAttributesOfSingleTag(tagSubstring);
                     
@@ -165,6 +158,15 @@ async function generatePost(postFolderPath) {
                     }
 
                     
+
+                    return null;
+                },
+                betweenEveryTagPairWeHit: function (substring, index, parents) {
+                    
+                    // wavy tags
+                    var wavy
+                    
+
 
                     return null;
                 },
