@@ -126,7 +126,7 @@ async function generatePost(postFolderPath) {
             
             compiledMarkdown = perTagHTMLParser(compiledMarkdown, {
                 forEveryTagWeHit: function (tagSubstring, tagIndex, isSelfClosing, parents) {
-                    var tagDetails = getAttributesOfSingleTag(tagSubstring);
+                    var tagDetails = convertTagIntoJSONArray(tagSubstring);
                     
                     if (tagDetails[0].name == "wavy") { // Wavy tags.
                         var currentTagTimeProperty = getSingleTagAttributeDataFromJSONArray(tagDetails, "time");
@@ -162,10 +162,45 @@ async function generatePost(postFolderPath) {
                     return null;
                 },
                 betweenEveryTagPairWeHit: function (substring, index, parents) {
+                    var listOfTagParentsAsJSONArrays = [];
+                    for (var i = 0; i < parents.length; i++) {
+                        listOfTagParentsAsJSONArrays.push( convertTagIntoJSONArray(parents[i].substring) );
+                    }
+
                     
-                    // wavy tags
-                    var wavy
+                    var containsWavyTag = false; // By this point, all <wavy> tags have turned into <span class="wavyText">s. We work while keeping that in mind.
+
+
+                    for (var i = 0; i < listOfTagParentsAsJSONArrays.length; i++) {
                     
+                    
+                        if ( (listOfTagParentsAsJSONArrays[i][0].name == "span") ) { // This is a <span> tag, deal with their shenanigans.
+                            var classListAsStringOrNull = getSingleTagAttributeDataFromJSONArray(listOfTagParentsAsJSONArrays[i], "class");
+                            
+                            if ( classListAsStringOrNull != null ) { // So we have a class attribute.
+                                if ( classListAsStringOrNull.includes("wavyText") ) { // And there is a wavyText inside!
+                                    containsWavyTag = true;
+                                }
+                            }
+                        }
+                    }
+                    // console.log(parents);
+                    // console.log(substring);
+                    // console.log(containsWavyTag);
+
+                    if (containsWavyTag) { // Wavy text!
+                        var substringAsCharArray = [];
+                        var returnString = "";
+                        for (var i = 0; i < substring.length; i++) { substringAsCharArray.push(substring.charAt(i)); } // Make it an array of single characters.
+                        // console.log(substringAsCharArray);
+                        for (var i = 0; i < substringAsCharArray.length; i++) {
+                            substringAsCharArray[i] = "<span style='--wavy-offset :3;'>" + substringAsCharArray[i] + "</span>";
+                            returnString = returnString + substringAsCharArray[i];
+                        }
+                        // console.log(returnString);
+                        return returnString;
+                    }
+
 
 
                     return null;
@@ -277,7 +312,7 @@ async function generatePost(postFolderPath) {
  * @param {index} functionsToRun.betweenEveryTagPairWeHit.param2 - This parameter contains a number denoting the string's starting index.  
  * @param {json[]} functionsToRun.betweenEveryTagPairWeHit.param3 - This is a list of the tags that are "parents" of this string. It's an array of JS Objects, containing keys "substring" and "index"; "substring" contains the substring of the parent tag. "index" contains an int corresponding to the tag's starting index.  
  * 
- * 
+ * Also, check out convertTagIntoJSONArray().
  * Also, do not make ANY of these functions asynchronous. You WILL break this if you do.
  */
 function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
@@ -365,7 +400,7 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
                 
                 var textBetweenTags = "";
                 if ( Object.hasOwn(functionsToRun, "betweenEveryTagPairWeHit") ) { // If the tag needs replacement...
-                    i = currentTagStartingIndex; // The string marcher will now march right through our new replaced string
+                    i = previousTagEndingIndex; // The string marcher will now march right through our new replaced string
                     textBetweenTags = stringToMarchThrough.slice(previousTagEndingIndex + 1, currentTagStartingIndex);                    
                     
                     stringToReplaceBetweenTags = functionsToRun.betweenEveryTagPairWeHit(textBetweenTags, previousTagEndingIndex + 1, listOfTagParents);
@@ -376,11 +411,16 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
 
                 }
                 
-
                 if (stringToReplaceBetweenTags != null) { // If the tag needs replacement...
-                    i = currentTagStartingIndex; // The string marcher will now march right through our new tag ender.
+                    console.log(i);
+                    i = previousTagEndingIndex + stringToReplaceBetweenTags.length; // The string marcher will now march right through our current tag, and not touch anything before that point.
+                    console.log(i);
+                    console.log( stringToMarchThrough.slice(i-1, i+5) );
                     stringToMarchThrough = replaceFirstSubstringInStringAfterACertainPoint(stringToMarchThrough, textBetweenTags, stringToReplaceBetweenTags, previousTagEndingIndex);
+                    console.log( stringToMarchThrough.slice(i-1, i+5) );
                     
+                    // console.log(stringToMarchThrough);
+
                     // console.log(stringToMarchThrough.charAt(previousTagEndingIndex));
                 }
 
@@ -435,7 +475,7 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
  * 
  * See also: constructTagFromJSONArray(), removeTagAttributeFromJSONArray(), replaceTagAttributeInJSONArray(), getSingleTagAttributeDataFromJSONArray()
  */
-function getAttributesOfSingleTag(tagString) {
+function convertTagIntoJSONArray(tagString) {
     // Quick edge case dealings, also removing the starting and ending arrows because it simplifies the rest of the code
     var isSelfClosing = false; // We also do this, because it's easier to do it now.
     
