@@ -166,17 +166,12 @@ async function generatePost(postFolderPath) {
                     for (var i = 0; i < parents.length; i++) {
                         listOfTagParentsAsJSONArrays.push( convertTagIntoJSONArray(parents[i].substring) );
                     }
-
                     
                     var containsWavyTag = false; // By this point, all <wavy> tags have turned into <span class="wavyText">s. We work while keeping that in mind.
 
-
                     for (var i = 0; i < listOfTagParentsAsJSONArrays.length; i++) {
-                    
-                    
                         if ( (listOfTagParentsAsJSONArrays[i][0].name == "span") ) { // This is a <span> tag, deal with their shenanigans.
                             var classListAsStringOrNull = getSingleTagAttributeDataFromJSONArray(listOfTagParentsAsJSONArrays[i], "class");
-                            
                             if ( classListAsStringOrNull != null ) { // So we have a class attribute.
                                 if ( classListAsStringOrNull.includes("wavyText") ) { // And there is a wavyText inside!
                                     containsWavyTag = true;
@@ -197,6 +192,11 @@ async function generatePost(postFolderPath) {
                             substringAsCharArray[i] = "<span style='--wavy-offset :3;'>" + substringAsCharArray[i] + "</span>";
                             returnString = returnString + substringAsCharArray[i];
                         }
+
+                        // FOR THE TIME BEING.
+                        returnString = "I hate gooning.";
+                        // Just for testing purposes.
+
                         // console.log(returnString);
                         return returnString;
                     }
@@ -394,6 +394,7 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
                 if (stringToReplaceCurrentTag != null) { // If the tag needs replacement...
                     i = currentTagStartingIndex; // The string marcher will now march right through our new tag ender.
                     stringToMarchThrough = replaceFirstSubstringInStringAfterACertainPoint(stringToMarchThrough, currentTagSubstring, stringToReplaceCurrentTag, currentTagStartingIndex);
+                    currentTagEndingIndex = currentTagStartingIndex + stringToReplaceCurrentTag.length - 1; 
                     
                     keepTrackOfThisTagInParentList = false; // We do not want to deal with this tag in the parent list, seeing as the tag is being replaced and we'll just run back through it anyways.
                 }
@@ -403,26 +404,37 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
                     i = previousTagEndingIndex; // The string marcher will now march right through our new replaced string
                     textBetweenTags = stringToMarchThrough.slice(previousTagEndingIndex + 1, currentTagStartingIndex);                    
                     
-                    stringToReplaceBetweenTags = functionsToRun.betweenEveryTagPairWeHit(textBetweenTags, previousTagEndingIndex + 1, listOfTagParents);
-                    
+                    stringToReplaceBetweenTags = functionsToRun.betweenEveryTagPairWeHit(textBetweenTags, previousTagEndingIndex + 1, listOfTagParents);        
+
                     if (previousTagEndingIndex == -1) {
                         stringToReplaceBetweenTags = null; // Just in case we're on the first tag; we don't want to pass in any faulty values, do we now?
                     }
 
+
+                    if (stringToReplaceBetweenTags != null) { // If the string needs replacement...
+                        i = previousTagEndingIndex + stringToReplaceBetweenTags.length; // The string marcher will now march right through our current tag, and not touch anything before that point.
+                        // console.log( stringToMarchThrough.slice(i-1, i+20) );
+                        stringToMarchThrough = replaceFirstSubstringInStringAfterACertainPoint(stringToMarchThrough, textBetweenTags, stringToReplaceBetweenTags, previousTagEndingIndex);
+                        // console.log( stringToMarchThrough.slice(i-1, i+20) );
+                        
+    
+                        // currentlyInsideTag = false;
+                        
+                        // Just to stall so I can go slow
+                        for (var l = 0; l < 999999999; l++) {}
+                        console.log(textBetweenTags);
+                        // If you keep this enabled, then don't you DARE complain about performance
+    
+                        console.log(stringToMarchThrough);
+    
+                        // console.log(stringToMarchThrough.charAt(previousTagEndingIndex));
+                    }
                 }
                 
-                if (stringToReplaceBetweenTags != null) { // If the tag needs replacement...
-                    console.log(i);
-                    i = previousTagEndingIndex + stringToReplaceBetweenTags.length; // The string marcher will now march right through our current tag, and not touch anything before that point.
-                    console.log(i);
-                    console.log( stringToMarchThrough.slice(i-1, i+5) );
-                    stringToMarchThrough = replaceFirstSubstringInStringAfterACertainPoint(stringToMarchThrough, textBetweenTags, stringToReplaceBetweenTags, previousTagEndingIndex);
-                    console.log( stringToMarchThrough.slice(i-1, i+5) );
-                    
-                    // console.log(stringToMarchThrough);
+                // DEBUG
+                // stringToReplaceBetweenTags = null;
 
-                    // console.log(stringToMarchThrough.charAt(previousTagEndingIndex));
-                }
+
 
                 
                 
