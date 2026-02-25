@@ -20,7 +20,7 @@ function onParentSendingMessageToIframe(message) {
     } else if (message == "doesSharedExist") {
         sendMessageToParent(["doesSharedExist", true]);
     }
-    
+
     // If it's not one of these, it's most likely meant for the actual site and not this script. As such, NO ERRORS!
 }
 

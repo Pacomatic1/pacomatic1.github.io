@@ -395,6 +395,7 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
                     i = currentTagStartingIndex; // The string marcher will now march right through our new tag ender.
                     stringToMarchThrough = replaceFirstSubstringInStringAfterACertainPoint(stringToMarchThrough, currentTagSubstring, stringToReplaceCurrentTag, currentTagStartingIndex);
                     currentTagEndingIndex = currentTagStartingIndex + stringToReplaceCurrentTag.length - 1; 
+                    currentTagSubstring = stringToReplaceCurrentTag;
                     
                     keepTrackOfThisTagInParentList = false; // We do not want to deal with this tag in the parent list, seeing as the tag is being replaced and we'll just run back through it anyways.
                 }
@@ -412,14 +413,17 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
 
 
                     if (stringToReplaceBetweenTags != null) { // If the string needs replacement...
-                        i = previousTagEndingIndex + stringToReplaceBetweenTags.length; // The string marcher will now march right through our current tag, and not touch anything before that point.
+                        i = previousTagEndingIndex + 1 + stringToReplaceBetweenTags.length; // The string marcher will now march right through our current tag, and not touch anything before that point.
+                                
                         // console.log( stringToMarchThrough.slice(i-1, i+20) );
                         stringToMarchThrough = replaceFirstSubstringInStringAfterACertainPoint(stringToMarchThrough, textBetweenTags, stringToReplaceBetweenTags, previousTagEndingIndex);
                         // console.log( stringToMarchThrough.slice(i-1, i+20) );
                         
-    
-                        // currentlyInsideTag = false;
-                        
+                        currentTagStartingIndex = i;
+                        currentTagEndingIndex = currentTagStartingIndex + currentTagSubstring;
+                        console.log(listOfTagParents);
+
+
                         // Just to stall so I can go slow
                         for (var l = 0; l < 999999999; l++) {}
                         console.log(textBetweenTags);
@@ -442,7 +446,7 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
                 // We make sure to never do any of this if the string gets replaced, so we don't need to update any values or anything (, and the marcher will immediately run through the newly-replaced tag, so there should not be any problems there).
                 if (keepTrackOfThisTagInParentList && !isTagEnder && !isSelfClosing) { // Regular tag; add something to the stack.
                     listOfTagParents.push( {substring: currentTagSubstring, index: currentTagStartingIndex} );
-                } else if (keepTrackOfThisTagInParentList && isTagEnder && !isSelfClosing) { // Tags operate in a tree structure, so if you're using a tag ender, the only well-formatted possibility is that we remove the last element from the list.
+                } else if (keepTrackOfThisTagInParentList && isTagEnder && !isSelfClosing) { // If you're using a tag ender, the only well-formatted possibility is that we remove the last element from the list.
                     listOfTagParents.pop();
                 }
                 
