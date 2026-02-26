@@ -189,7 +189,7 @@ async function generatePost(postFolderPath) {
                         for (var i = 0; i < substring.length; i++) { substringAsCharArray.push(substring.charAt(i)); } // Make it an array of single characters.
                         // console.log(substringAsCharArray);
                         for (var i = 0; i < substringAsCharArray.length; i++) {
-                            substringAsCharArray[i] = "<span style='--wavy-offset :3;'>" + substringAsCharArray[i] + "</span>";
+                            substringAsCharArray[i] = "<span style=\"--wavy-offset: 3;\">" + substringAsCharArray[i] + "</span>";
                             returnString = returnString + substringAsCharArray[i];
                         }
 
@@ -306,8 +306,6 @@ async function generatePost(postFolderPath) {
  * 
  * 
  * @param {function} functionsToRun.betweenEveryTagPairWeHit - Function with 3 parameters which I will detail below, and a return value being a string that replaces what argument 1 gave you. If you don't want to replace anything, return null.  
- * This thing is kind of confusing to describe, so, use this sample to help you read this documentation. `<b>I love typing!<img alt="Nothing...?">` Note that the function will then march right through your newly-replaced string. If you don't want to replace anything, return null. Note that this is run AFTER forEveryTag(Ender)WeHit() (and you should read param1 before looking at this note);  
- * what can and does often happen is that you modify the second tag (eg. string becomes `<b>I love typing!<video src="./vid.mp4">`), the 'cursor' goes to start of the second tag (eg. `<video...`), and then you modify the string between them (eg. string becomes `<b>I HATE typing.<video src="./vid.mp4">`), and then the 'cursor' moves to the start of the string between both tags (eg. `I HATE typing.`). What will happen *now* is, the marcher will now walk right back through both the replaced string (eg. `I HATE typing`) *and* the second tag (eg. `<video...`). Keep in mind that it doesn't march through the second tag right after the second tag is replaced but before the string between the tags is (eg. right after string becomes `<b>I love typing!<video src="./vid.mp4">`), so the second tag isn't marched through thrice; only twice, like usual. Confused? Then this probably doesn't apply to you.
  * @param {string} functionsToRun.betweenEveryTagPairWeHit.param1 - This parameter contains the text between the last two tags we hit. If the function is working properly, this parameter will be pure, non-tag text. You may find issues with tags whose contents are non-standard, like <style> and <script> tags. You can go add them into the "exclude from this function" list.  
  * @param {index} functionsToRun.betweenEveryTagPairWeHit.param2 - This parameter contains a number denoting the string's starting index.  
  * @param {json[]} functionsToRun.betweenEveryTagPairWeHit.param3 - This is a list of the tags that are "parents" of this string. It's an array of JS Objects, containing keys "substring" and "index"; "substring" contains the substring of the parent tag. "index" contains an int corresponding to the tag's starting index.  
@@ -400,45 +398,47 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
                     keepTrackOfThisTagInParentList = false; // We do not want to deal with this tag in the parent list, seeing as the tag is being replaced and we'll just run back through it anyways.
                 }
                 
+
+
                 var textBetweenTags = "";
-                if ( Object.hasOwn(functionsToRun, "betweenEveryTagPairWeHit") ) { // If the tag needs replacement...
-                    i = previousTagEndingIndex; // The string marcher will now march right through our new replaced string
+                if ( Object.hasOwn(functionsToRun, "betweenEveryTagPairWeHit") && previousTagEndingIndex != -1) { // If the tag needs replacement and we aren't on the first tag...
                     textBetweenTags = stringToMarchThrough.slice(previousTagEndingIndex + 1, currentTagStartingIndex);                    
                     
                     stringToReplaceBetweenTags = functionsToRun.betweenEveryTagPairWeHit(textBetweenTags, previousTagEndingIndex + 1, listOfTagParents);        
+                    
 
-                    if (previousTagEndingIndex == -1) {
-                        stringToReplaceBetweenTags = null; // Just in case we're on the first tag; we don't want to pass in any faulty values, do we now?
-                    }
-
-
-                    if (stringToReplaceBetweenTags != null) { // If the string needs replacement...
-                        i = previousTagEndingIndex + 1 + stringToReplaceBetweenTags.length; // The string marcher will now march right through our current tag, and not touch anything before that point.
-                                
-                        // console.log( stringToMarchThrough.slice(i-1, i+20) );
-                        stringToMarchThrough = replaceFirstSubstringInStringAfterACertainPoint(stringToMarchThrough, textBetweenTags, stringToReplaceBetweenTags, previousTagEndingIndex);
-                        // console.log( stringToMarchThrough.slice(i-1, i+20) );
-                        
-                        currentTagStartingIndex = i;
-                        currentTagEndingIndex = currentTagStartingIndex + currentTagSubstring;
-                        console.log(listOfTagParents);
-
-
-                        // Just to stall so I can go slow
-                        for (var l = 0; l < 999999999; l++) {}
+                    if (previousTagEndingIndex) {
                         console.log(textBetweenTags);
-                        // If you keep this enabled, then don't you DARE complain about performance
-    
+                        console.log(previousTagEndingIndex+1);
+                        console.log(listOfTagParents);
                         console.log(stringToMarchThrough);
-    
-                        // console.log(stringToMarchThrough.charAt(previousTagEndingIndex));
+                        console.log(stringToReplaceBetweenTags);
+                        console.log("Look, I did it. Ok? Happy now?");
+                    }
+                    if (stringToReplaceBetweenTags != null) {
+                        
+                        stringToMarchThrough = replaceFirstSubstringInStringAfterACertainPoint(stringToMarchThrough, textBetweenTags, stringToReplaceBetweenTags, previousTagEndingIndex + 1);
+                        
+                        i = previousTagEndingIndex  + textBetweenTags.length;
+                        
+
+
                     }
                 }
                 
-                // DEBUG
-                // stringToReplaceBetweenTags = null;
 
 
+
+                // THE NEW PROBLEM:
+                // <wavy> Blah Blah
+                // BECOMES
+                // <span class="wavy"> Blah Blah
+                // And then we run the between-tag function.
+                // The parent list SHOULD say "we're inside a span"...
+                // But it does not, because, when <wavy> was updated, we avoided updating the parent list since we'd run through it again and recitfy the parent list anyways.
+                // However, this between-tag replacer prevents us from running back through the parent-related newly-replaced tags, which causes the other problems.
+
+                // So, go figure out to handle parent shenanigans in tandem with the between-tag replacer.
 
                 
                 
