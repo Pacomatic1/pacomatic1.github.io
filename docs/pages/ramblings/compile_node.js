@@ -127,7 +127,10 @@ async function generatePost(postFolderPath) {
             compiledMarkdown = perTagHTMLParser(compiledMarkdown, {
                 forEveryTagWeHit: function (tagSubstring, tagIndex, isSelfClosing, parents) {
                     var tagDetails = convertTagIntoJSONArray(tagSubstring);
-                    
+
+                    console.log("HELP");
+
+
                     if (tagDetails[0].name == "wavy") { // Wavy tags.
                         var currentTagTimeProperty = getSingleTagAttributeDataFromJSONArray(tagDetails, "time");
                         if ( currentTagTimeProperty == null) { currentTagTimeProperty = "2s"; }
@@ -292,14 +295,14 @@ async function generatePost(postFolderPath) {
  * 
  * @param {string} stringToMarchThrough - The string you're marching through. It had BETTER be well-formed!
  * @param {json} functionsToRun - A JS Object containing some functions that will be run at specific points. Its contents are described below. If you don't want to have any of these functions, do NOT define them as "null" or "undefined"; just don't make them at all.
- * @param {function} functionsToRun.forEveryTagWeHit - Function with 5 parameters which I will detail below, and a return value being a string that replaces the tag that argument 1 gave you. Note that the function will then march right through your newly-replaced tag. If you don't want to replace anything, return null.
+ * @param {function} functionsToRun.forEveryTagWeHit - Function with 5 parameters which I will detail below, and a return value being a string that replaces the tag that argument 1 gave you. If you don't want to replace anything, return null.
  *  @param {string} functionsToRun.forEveryTagWeHit.param1 - This parameter contains only the tag's substring (arrows included).  
  *  @param {number} functionsToRun.forEveryTagWeHit.param2 - This parameter contains a number denoting the tag's starting index.
  *  @param {boolean} functionsToRun.forEveryTagWeHit.param3 - This parameter tells you whether or not the tag is self-closing.
  *  @param {json[]} functionsToRun.forEveryTagWeHit.param4 - This is a list of the tag's current parents. It's an array of JS Objects, containing keys "substring" and "index"; "substring" contains the substring of the parent tag. "index" contains an int corresponding to the tag's starting index.  
  *   
  *   
- * @param {function} functionsToRun.forEveryTagEnderWeHit - Function with 3 parameters which I will detail below, and a return value being a string that replaces the tag that argument 1 gave you. Note that the function will then march right through your newly-replaced tag. If you don't want to replace anything, return null.
+ * @param {function} functionsToRun.forEveryTagEnderWeHit - Function with 3 parameters which I will detail below, and a return value being a string that replaces the tag that argument 1 gave you. If you don't want to replace anything, return null.
  * @param {string} functionsToRun.forEveryTagEnderWeHit.param1 - This parameter contains only the tag's substring (arrows included).  
  * @param {index} functionsToRun.forEveryTagEnderWeHit.param2 - This parameter contains a number denoting the tag's starting index.
  * @param {json[]} functionsToRun.forEveryTagEnderWeHit.param3 - This is a list of the tag's current parents. It's an array of JS Objects, containing keys "substring" and "index"; "substring" contains the substring of the parent tag. "index" contains an int corresponding to the tag's starting index.
@@ -379,8 +382,7 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
 
                 var stringToReplaceCurrentTag = null; // If we do not need any replacement, this will be null.
                 var stringToReplaceBetweenTags = null;  // If we do not need any replacement, this will be null.
-                var keepTrackOfThisTagInParentList = true; // The marcher will go right back through the newly-replaced tag. If the tag gets replaced, we will not be putting this in the parent list.
-                
+
                 if ( Object.hasOwn(functionsToRun, "forEveryTagWeHit") && !isTagEnder) {
                     stringToReplaceCurrentTag = functionsToRun.forEveryTagWeHit(currentTagSubstring, currentTagStartingIndex, isSelfClosing, listOfTagParents );
                 }
@@ -390,42 +392,31 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
                 }
                 
                 if (stringToReplaceCurrentTag != null) { // If the tag needs replacement...
-                    i = currentTagStartingIndex; // The string marcher will now march right through our new tag ender.
+                    i = currentTagStartingIndex + stringToReplaceCurrentTag.length; // The string marcher will now march right through our new tag ender.
                     stringToMarchThrough = replaceFirstSubstringInStringAfterACertainPoint(stringToMarchThrough, currentTagSubstring, stringToReplaceCurrentTag, currentTagStartingIndex);
                     currentTagEndingIndex = currentTagStartingIndex + stringToReplaceCurrentTag.length - 1; 
                     currentTagSubstring = stringToReplaceCurrentTag;
                     
-                    keepTrackOfThisTagInParentList = false; // We do not want to deal with this tag in the parent list, seeing as the tag is being replaced and we'll just run back through it anyways.
+                    
                 }
                 
+                console.log(stringToReplaceCurrentTag);
 
 
                 var textBetweenTags = "";
                 if ( Object.hasOwn(functionsToRun, "betweenEveryTagPairWeHit") && previousTagEndingIndex != -1) { // If the tag needs replacement and we aren't on the first tag...
                     textBetweenTags = stringToMarchThrough.slice(previousTagEndingIndex + 1, currentTagStartingIndex);                    
-                    
                     stringToReplaceBetweenTags = functionsToRun.betweenEveryTagPairWeHit(textBetweenTags, previousTagEndingIndex + 1, listOfTagParents);        
                     
-
-                    if (previousTagEndingIndex) {
-                        console.log(textBetweenTags);
-                        console.log(previousTagEndingIndex+1);
-                        console.log(listOfTagParents);
-                        console.log(stringToMarchThrough);
-                        console.log(stringToReplaceBetweenTags);
-                        console.log("Look, I did it. Ok? Happy now?");
-                    }
                     if (stringToReplaceBetweenTags != null) {
-                        
                         stringToMarchThrough = replaceFirstSubstringInStringAfterACertainPoint(stringToMarchThrough, textBetweenTags, stringToReplaceBetweenTags, previousTagEndingIndex + 1);
-                        
-                        i = previousTagEndingIndex  + textBetweenTags.length;
-                        
-
-
+                        i = currentTagEndingIndex + stringToReplaceBetweenTags.length + currentTagSubstring; 
                     }
                 }
                 
+
+
+
 
 
 
@@ -440,18 +431,24 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
 
                 // So, go figure out to handle parent shenanigans in tandem with the between-tag replacer.
 
+
+
+                // So we made it such that we DO NOT run back through any newly-replsaced text after it is, well, replaced.
+                // Now: We need to go refactor the between-tag handler.
+
+
                 
-                
-                // Tag parent list handling.
-                // We make sure to never do any of this if the string gets replaced, so we don't need to update any values or anything (, and the marcher will immediately run through the newly-replaced tag, so there should not be any problems there).
-                if (keepTrackOfThisTagInParentList && !isTagEnder && !isSelfClosing) { // Regular tag; add something to the stack.
+                if (!isTagEnder && !isSelfClosing) { // Regular tag; add something to the stack.
                     listOfTagParents.push( {substring: currentTagSubstring, index: currentTagStartingIndex} );
-                } else if (keepTrackOfThisTagInParentList && isTagEnder && !isSelfClosing) { // If you're using a tag ender, the only well-formatted possibility is that we remove the last element from the list.
+                } else if (isTagEnder && !isSelfClosing) { // If you're using a tag ender, the only well-formatted possibility is that we remove the last element from the list.
                     listOfTagParents.pop();
                 }
-                
-                
-                // console.log(listOfTagParents);
+
+
+                if (!isSelfClosing) {
+                    console.log(listOfTagParents);
+                }
+                console.log(i);
                 
                 previousTagEndingIndex = currentTagEndingIndex;
             }
