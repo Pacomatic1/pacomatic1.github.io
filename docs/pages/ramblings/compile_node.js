@@ -122,14 +122,11 @@ async function generatePost(postFolderPath) {
             // First, we are going to store any persistent variables.
 
             
-            var wavyTextCharacter = 0; // Increment this by one every time we hit a <wavy>. Once sibling-index() gets better support, we can remove this variable.
+            var wavyTextCharacterCounter = 0; // Increment this by one every time we hit a <wavy>. Once sibling-index() gets better support, we can remove this variable.
             
             compiledMarkdown = perTagHTMLParser(compiledMarkdown, {
                 forEveryTagWeHit: function (tagSubstring, tagIndex, isSelfClosing, parents) {
                     var tagDetails = convertTagIntoJSONArray(tagSubstring);
-
-                    console.log("HELP");
-
 
                     if (tagDetails[0].name == "wavy") { // Wavy tags.
                         var currentTagTimeProperty = getSingleTagAttributeDataFromJSONArray(tagDetails, "time");
@@ -182,9 +179,6 @@ async function generatePost(postFolderPath) {
                             }
                         }
                     }
-                    // console.log(parents);
-                    // console.log(substring);
-                    // console.log(containsWavyTag);
 
                     if (containsWavyTag) { // Wavy text!
                         var substringAsCharArray = [];
@@ -192,15 +186,11 @@ async function generatePost(postFolderPath) {
                         for (var i = 0; i < substring.length; i++) { substringAsCharArray.push(substring.charAt(i)); } // Make it an array of single characters.
                         // console.log(substringAsCharArray);
                         for (var i = 0; i < substringAsCharArray.length; i++) {
-                            substringAsCharArray[i] = "<span style=\"--wavy-offset: 3;\">" + substringAsCharArray[i] + "</span>";
+                            substringAsCharArray[i] = "<span style=\"--wavy-offset: "+wavyTextCharacterCounter+";\">" + substringAsCharArray[i] + "</span>";
                             returnString = returnString + substringAsCharArray[i];
+                            wavyTextCharacterCounter++;
                         }
 
-                        // FOR THE TIME BEING.
-                        returnString = "I hate gooning.";
-                        // Just for testing purposes.
-
-                        // console.log(returnString);
                         return returnString;
                     }
 
@@ -396,8 +386,6 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
                     stringToMarchThrough = replaceFirstSubstringInStringAfterACertainPoint(stringToMarchThrough, currentTagSubstring, stringToReplaceCurrentTag, currentTagStartingIndex);
                     currentTagEndingIndex = currentTagStartingIndex + stringToReplaceCurrentTag.length - 1; 
                     currentTagSubstring = stringToReplaceCurrentTag;
-                    
-                    
                 }
                 
                 console.log(stringToReplaceCurrentTag);
@@ -405,12 +393,16 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
 
                 var textBetweenTags = "";
                 if ( Object.hasOwn(functionsToRun, "betweenEveryTagPairWeHit") && previousTagEndingIndex != -1) { // If the tag needs replacement and we aren't on the first tag...
-                    textBetweenTags = stringToMarchThrough.slice(previousTagEndingIndex + 1, currentTagStartingIndex);                    
-                    stringToReplaceBetweenTags = functionsToRun.betweenEveryTagPairWeHit(textBetweenTags, previousTagEndingIndex + 1, listOfTagParents);        
+                    textBetweenTags = stringToMarchThrough.slice(previousTagEndingIndex + 1, currentTagStartingIndex);
+                    stringToReplaceBetweenTags = functionsToRun.betweenEveryTagPairWeHit(textBetweenTags, previousTagEndingIndex + 1, listOfTagParents);
                     
                     if (stringToReplaceBetweenTags != null) {
                         stringToMarchThrough = replaceFirstSubstringInStringAfterACertainPoint(stringToMarchThrough, textBetweenTags, stringToReplaceBetweenTags, previousTagEndingIndex + 1);
-                        i = currentTagEndingIndex + stringToReplaceBetweenTags.length + currentTagSubstring; 
+
+                        currentTagStartingIndex = previousTagEndingIndex + stringToReplaceBetweenTags.length;
+                        currentTagEndingIndex = currentTagStartingIndex + currentTagSubstring.length; 
+
+                        i = currentTagEndingIndex + 1;
                     }
                 }
                 
@@ -422,6 +414,7 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
 
                 // THE NEW PROBLEM:
                 // <wavy> Blah Blah
+
                 // BECOMES
                 // <span class="wavy"> Blah Blah
                 // And then we run the between-tag function.
@@ -432,7 +425,7 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
                 // So, go figure out to handle parent shenanigans in tandem with the between-tag replacer.
 
 
-
+                // --------------------
                 // So we made it such that we DO NOT run back through any newly-replsaced text after it is, well, replaced.
                 // Now: We need to go refactor the between-tag handler.
 
