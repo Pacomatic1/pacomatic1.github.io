@@ -230,7 +230,39 @@ async function generatePost(postFolderPath) {
 
 
 
-            
+            compiledPost = perTagHTMLParser(compiledPost, {
+                forEveryTagWeHit: function (tagSubstring, tagIndex, isSelfClosing, parents) {
+                    var tagAsJSON = convertTagIntoJSONArray(tagSubstring);
+                    
+                    // Make all links that end in '!' open externally
+                    hrefExclamationMarkHandler: if (tagAsJSON[0].name == "a") {
+                        var hrefLink = getSingleTagAttributeDataFromJSONArray(tagAsJSON, "href");
+                        if (hrefLink == null) {hrefLink = "";}
+                        
+                        var sliceAmount = 0;
+                        if (hrefLink.endsWith('!')) {sliceAmount = 1};
+                        if (hrefLink.endsWith('!/')) {sliceAmount = 2};
+
+
+
+                        // tagAsJSON = replaceTagAttributeInJSONArray(tagAsJSON, );
+
+                    // linkTags[i].target = "_blank";
+                    // linkTags[i].href = linkTags[i].href.substring(0, linkTags[i].href.length - sliceAmount);
+
+
+
+
+                    }
+                },
+                betweenEveryTagPairWeHit: function (substring, index, parents) {
+
+                },
+                forEveryTagEnderWeHit: function (tagSubstring, index, parents) {
+
+                }
+            });
+
 /*
 
             // Post processing. -------------------------------
@@ -338,7 +370,7 @@ async function generatePost(postFolderPath) {
  * Also, check out convertTagIntoJSONArray().
  * Also, do not make ANY of these functions asynchronous. You WILL break this if you do.
  */
-function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
+function perTagHTMLParser(stringToMarchThrough, functionsToRun, tagnamesToIgnore = ["script", "!doctype", "!--"]) {
     var isNextCharacterEscaped = false;
 
     var tagAttributeQuoteType = ""; // This is going to be hella confusing to read, but. " or ' mean that we're in an attribute, and an empty string means we're not.
@@ -370,7 +402,7 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
         
         // ...it'll be me. I'm the one who will be fixing it. I'm going to have to fix everything here.
         
-        if (currentChar == "<" && tagAttributeQuoteType == "") { // So. We've hit one of them arrows and we aren't in an attribute? Well golly gosh, looks like a tag (ender) just started! {
+        if (currentChar == "<" && tagAttributeQuoteType == "" && stringToMarchThrough.substring(i, i+5) != "!-- ") { // So. We've hit one of them arrows and we aren't in an attribute? Well golly gosh, looks like a tag (ender) just started! {
             currentlyInsideTag = true;
             currentTagStartingIndex = i;
         }
@@ -450,16 +482,6 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
     
     return stringToMarchThrough;
 }
-
-
-
-
-
-
-
-
-
-
 
 
 /** Give this function a string containing the contents of one tag.
@@ -620,11 +642,6 @@ function convertTagIntoJSONArray(tagString) {
     return finalArray;
 }
 
-
-
-
-
-
 /**
  * Constructs a tag using a specially formatted JSON array, and returns the substring.  
  * As for the format in qeustion, see getAttributesOfSingleTag().
@@ -701,11 +718,6 @@ function getSingleTagAttributeDataFromJSONArray(tagDetails, attributeName) {
         }
     }
 }
-
-
-
-
-
 
 /** Suppose we have a string. We want to replace a substring within it, but there are multiple instances of the substring! Well, that's where this function comes in handy; we can specify an indice for where to start looking, with the first (and only the first!) instance of the substring being replaced. */
 function replaceFirstSubstringInStringAfterACertainPoint(stringToModify, substringToReplace, stringYouAreReplacingItWIth, indiceOfWhereToStartLooking) { 

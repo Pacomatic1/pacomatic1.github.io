@@ -108,38 +108,38 @@ body {
     So, I made a table of values and copied it all here using a Google Sheets and a modified version of the "worst csv parser ever" (from your grade 10 math project :skull:)
     */
 
-    1% { transform: translateY( calc( var(--wavy-distance) *0.06279051953 ) ); } 
-    2% { transform: translateY( calc( var(--wavy-distance) *0.1253332336 ) ); } 
-    3% { transform: translateY( calc( var(--wavy-distance) *0.1873813146 ) ); } 
-    4% { transform: translateY( calc( var(--wavy-distance) *0.2486898872 ) ); } 
-    5% { transform: translateY( calc( var(--wavy-distance) *0.3090169944 ) ); } 
-    6% { transform: translateY( calc( var(--wavy-distance) *0.3681245527 ) ); } 
-    7% { transform: translateY( calc( var(--wavy-distance) *0.4257792916 ) ); } 
-    8% { transform: translateY( calc( var(--wavy-distance) *0.4817536741 ) ); } 
-    9% { transform: translateY( calc( var(--wavy-distance) *0.535826795 ) ); } 
-    10% { transform: translateY( calc( var(--wavy-distance) *0.5877852523 ) ); } 
-    11% { transform: translateY( calc( var(--wavy-distance) *0.6374239897 ) ); } 
-    12% { transform: translateY( calc( var(--wavy-distance) *0.6845471059 ) ); } 
-    13% { transform: translateY( calc( var(--wavy-distance) *0.7289686274 ) ); } 
-    14% { transform: translateY( calc( var(--wavy-distance) *0.7705132428 ) ); } 
-    15% { transform: translateY( calc( var(--wavy-distance) *0.8090169944 ) ); } 
-    16% { transform: translateY( calc( var(--wavy-distance) *0.8443279255 ) ); } 
-    17% { transform: translateY( calc( var(--wavy-distance) *0.87630668 ) ); } 
-    18% { transform: translateY( calc( var(--wavy-distance) *0.9048270525 ) ); } 
-    19% { transform: translateY( calc( var(--wavy-distance) *0.9297764859 ) ); } 
-    20% { transform: translateY( calc( var(--wavy-distance) *0.9510565163 ) ); } 
-    21% { transform: translateY( calc( var(--wavy-distance) *0.9685831611 ) ); } 
-    22% { transform: translateY( calc( var(--wavy-distance) *0.9822872507 ) ); } 
-    23% { transform: translateY( calc( var(--wavy-distance) *0.9921147013 ) ); } 
-    24% { transform: translateY( calc( var(--wavy-distance) *0.9980267284 ) ); } 
-    25% { transform: translateY( calc( var(--wavy-distance) *1 ) ); } 
-    26% { transform: translateY( calc( var(--wavy-distance) *0.9980267284 ) ); } 
-    27% { transform: translateY( calc( var(--wavy-distance) *0.9921147013 ) ); } 
-    28% { transform: translateY( calc( var(--wavy-distance) *0.9822872507 ) ); } 
-    29% { transform: translateY( calc( var(--wavy-distance) *0.9685831611 ) ); } 
-    30% { transform: translateY( calc( var(--wavy-distance) *0.9510565163 ) ); } 
-    31% { transform: translateY( calc( var(--wavy-distance) *0.9297764859 ) ); } 
-    32% { transform: translateY( calc( var(--wavy-distance) *0.9048270525 ) ); } 
+    1% { transform: translateY( calc( var(--wavy-distance) * 0.06279051953 ) ); } 
+    2% { transform: translateY( calc( var(--wavy-distance) * 0.1253332336 ) ); } 
+    3% { transform: translateY( calc( var(--wavy-distance) * 0.1873813146 ) ); } 
+    4% { transform: translateY( calc( var(--wavy-distance) * 0.2486898872 ) ); } 
+    5% { transform: translateY( calc( var(--wavy-distance) * 0.3090169944 ) ); } 
+    6% { transform: translateY( calc( var(--wavy-distance) * 0.3681245527 ) ); } 
+    7% { transform: translateY( calc( var(--wavy-distance) * 0.4257792916 ) ); } 
+    8% { transform: translateY( calc( var(--wavy-distance) * 0.4817536741 ) ); } 
+    9% { transform: translateY( calc( var(--wavy-distance) * 0.535826795 ) ); } 
+    10% { transform: translateY( calc( var(--wavy-distance) * 0.5877852523 ) ); } 
+    11% { transform: translateY( calc( var(--wavy-distance) * 0.6374239897 ) ); } 
+    12% { transform: translateY( calc( var(--wavy-distance) * 0.6845471059 ) ); } 
+    13% { transform: translateY( calc( var(--wavy-distance) * 0.7289686274 ) ); } 
+    14% { transform: translateY( calc( var(--wavy-distance) * 0.7705132428 ) ); } 
+    15% { transform: translateY( calc( var(--wavy-distance) * 0.8090169944 ) ); } 
+    16% { transform: translateY( calc( var(--wavy-distance) * 0.8443279255 ) ); } 
+    17% { transform: translateY( calc( var(--wavy-distance) * 0.87630668 ) ); } 
+    18% { transform: translateY( calc( var(--wavy-distance) * 0.9048270525 ) ); } 
+    19% { transform: translateY( calc( var(--wavy-distance) * 0.9297764859 ) ); } 
+    20% { transform: translateY( calc( var(--wavy-distance) * 0.9510565163 ) ); } 
+    21% { transform: translateY( calc( var(--wavy-distance) * 0.9685831611 ) ); } 
+    22% { transform: translateY( calc( var(--wavy-distance) * 0.9822872507 ) ); } 
+    23% { transform: translateY( calc( var(--wavy-distance) * 0.9921147013 ) ); } 
+    24% { transform: translateY( calc( var(--wavy-distance) *  0.9980267284 ) ); } 
+    25% { transform: translateY( calc( var(--wavy-distance) * 1 ) ); } 
+    26% { transform: translateY( calc( var(--wavy-distance) * 0.9980267284 ) ); } 
+    27% { transform: translateY( calc( var(--wavy-distance) * 0.9921147013 ) ); } 
+    28% { transform: translateY( calc( var(--wavy-distance) * 0.9822872507 ) ); } 
+    29% { transform: translateY( calc( var(--wavy-distance) * 0.9685831611 ) ); } 
+    30% { transform: translateY( calc( var(--wavy-distance) * 0.9510565163 ) ); } 
+    31% { transform: translateY( calc( var(--wavy-distance) * 0.9297764859 ) ); } 
+    32% { transform: translateY( calc( var(--wavy-distance) * 0.9048270525 ) ); } 
     33% { transform: translateY( calc( var(--wavy-distance) *0.87630668 ) ); } 
     34% { transform: translateY( calc( var(--wavy-distance) *0.8443279255 ) ); } 
     35% { transform: translateY( calc( var(--wavy-distance) *0.8090169944 ) ); } 
