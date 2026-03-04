@@ -34,10 +34,9 @@ We parse it through marked, so it carries all the quirks of that. This also mean
 All hyperlinks appeneded with an exclamation mark will open in a new tab.
 
 There are cutsom HTML tags. I went through hell and back for these.
-    - <wavy distance? time?> --> Creates wavy text, like in UNDERTALE. Every single character within a wavy tag is surrounded by a <span>. There are two properties: 'distance', and 'time'. 'time' is how long it takes for one cycle. 'distance' is how far the text in question goes.
+    - <wavy distance? time?> --> Creates wavy text, like in UNDERTALE. Every single character within a wavy tag is surrounded by a <span>. There are two properties: 'distance', and 'time'. 'time' is how long it takes for one cycle. 'distance' is how far the text in question goes. By default, time="1s" and distance=".09rem".
 
 
 
-We plan to include raw HTML fragments. As it stands, they are yet to be implemented or documented... but here's the general idea, for later.
 The .frag is just regular html, injected into the post. It is not an iframe, so there is no <html> or <head> or <body>. in fact, it's actually a <div>. The CSS and JS files are actually just files you can link to in the .frag file, allowing you to have mutliple unique fragments with the same styling. I also want to have some sort of replacement system, so that some of the contents of the fragment can be specified in the AsciiDoc file; this would be useful for something like https://blog.giovanh.com/blog/2025/08/08/uhc-end/, in which they simulate Discord messages through HTML instead of uing screenshots. If I had to guess, it's because this scales better.
 It may also be worth using custom HTML tags, with the fragments in question shared between posts. Maybe.

@@ -130,18 +130,23 @@ async function generatePost(postFolderPath) {
 
                     if (tagDetails[0].name == "wavy") { // Wavy tags.
                         var currentTagTimeProperty = getSingleTagAttributeDataFromJSONArray(tagDetails, "time");
-                        if ( currentTagTimeProperty == null) { currentTagTimeProperty = "2s"; }
+                        if ( currentTagTimeProperty == null) { currentTagTimeProperty = "1s"; }
                         tagDetails = removeTagAttributeFromJSONArray(tagDetails, "time");
 
                         var currentTagDistanceProperty = getSingleTagAttributeDataFromJSONArray(tagDetails, "distance");
-                        if ( currentTagDistanceProperty == null) { currentTagDistanceProperty = ".12rem"; }
+                        if ( currentTagDistanceProperty == null) { currentTagDistanceProperty = ".09rem"; }
                         tagDetails = removeTagAttributeFromJSONArray(tagDetails, "distance");
 
                         var currentStyleAttritbute = getSingleTagAttributeDataFromJSONArray(tagDetails, "style");
                         if (currentStyleAttritbute == null) { currentStyleAttritbute = ""; }
-                        currentStyleAttritbute = currentStyleAttritbute + "--wavy-distance:" + currentTagDistanceProperty + "; --wavy-time: " + currentTagTimeProperty + ";";
+                        
+                        // console.log(currentStyleAttritbute);
 
+                        currentStyleAttritbute = currentStyleAttritbute + "--wavy-distance:" + currentTagDistanceProperty + "; --wavy-time: " + currentTagTimeProperty + ";";
                         tagDetails = replaceTagAttributeInJSONArray(tagDetails, {name: "style", data: currentStyleAttritbute});
+
+                        // console.log(currentStyleAttritbute);
+                        // console.log(getSingleTagAttributeDataFromJSONArray(tagDetails, "style"));
 
 
 
@@ -184,7 +189,6 @@ async function generatePost(postFolderPath) {
                         var substringAsCharArray = [];
                         var returnString = "";
                         for (var i = 0; i < substring.length; i++) { substringAsCharArray.push(substring.charAt(i)); } // Make it an array of single characters.
-                        // console.log(substringAsCharArray);
                         for (var i = 0; i < substringAsCharArray.length; i++) {
                             substringAsCharArray[i] = "<span style=\"--wavy-offset: "+wavyTextCharacterCounter+";\">" + substringAsCharArray[i] + "</span>";
                             returnString = returnString + substringAsCharArray[i];
@@ -209,7 +213,6 @@ async function generatePost(postFolderPath) {
 
 
 
-            // console.log(compiledMarkdown);
 
             // HTML Injection. ------------------------------
             var compiledPost;
@@ -218,6 +221,17 @@ async function generatePost(postFolderPath) {
             compiledPost = compiledPost.replace("NODEJS-UNIQUENESS-5328746329847021", postDetailsLine);
             compiledPost = compiledPost.replace("NODEJS-UNIQUENESS-981273873264", postSubtitle);
 
+
+
+
+
+            // We no longer need the post-processor; we can replace this with the custom tag parser...
+            // soon. Not yet, though.
+
+
+
+            
+/*
 
             // Post processing. -------------------------------
             var postProcessingDOM = new JSDOM(compiledPost, {
@@ -252,11 +266,11 @@ async function generatePost(postFolderPath) {
 
             compiledPost = postProcessingDOM.serialize();
             
+
+
+            */
             console.log("------------------------------------------");
 
-
-            // WE ADRE CURRENTLY USING THE MARKDOWN AND NOT THE ACTUAL POST. BE CAREFUL!!!!!!!!!!!
-            // SWAP ARG 2 WITH compiledPost!!!
 
             // When all is said and done, our generated file shall be written.
             fs.writeFile(compiledPostPath, compiledPost, (err) => {
@@ -271,6 +285,24 @@ async function generatePost(postFolderPath) {
         }
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -388,8 +420,6 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
                     currentTagSubstring = stringToReplaceCurrentTag;
                 }
                 
-                console.log(stringToReplaceCurrentTag);
-
 
                 var textBetweenTags = "";
                 if ( Object.hasOwn(functionsToRun, "betweenEveryTagPairWeHit") && previousTagEndingIndex != -1) { // If the tag needs replacement and we aren't on the first tag...
@@ -405,30 +435,6 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
                         i = currentTagEndingIndex + 1;
                     }
                 }
-                
-
-
-
-
-
-
-                // THE NEW PROBLEM:
-                // <wavy> Blah Blah
-
-                // BECOMES
-                // <span class="wavy"> Blah Blah
-                // And then we run the between-tag function.
-                // The parent list SHOULD say "we're inside a span"...
-                // But it does not, because, when <wavy> was updated, we avoided updating the parent list since we'd run through it again and recitfy the parent list anyways.
-                // However, this between-tag replacer prevents us from running back through the parent-related newly-replaced tags, which causes the other problems.
-
-                // So, go figure out to handle parent shenanigans in tandem with the between-tag replacer.
-
-
-                // --------------------
-                // So we made it such that we DO NOT run back through any newly-replsaced text after it is, well, replaced.
-                // Now: We need to go refactor the between-tag handler.
-
 
                 
                 if (!isTagEnder && !isSelfClosing) { // Regular tag; add something to the stack.
@@ -437,12 +443,6 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
                     listOfTagParents.pop();
                 }
 
-
-                if (!isSelfClosing) {
-                    console.log(listOfTagParents);
-                }
-                console.log(i);
-                
                 previousTagEndingIndex = currentTagEndingIndex;
             }
         }
@@ -609,7 +609,7 @@ function convertTagIntoJSONArray(tagString) {
         var attributeData = "";
         if (hasData) {
             attributeData = tagString.substring(tagAttributeDataStartingIndices[i], tagAttributeDataEndingIndices[i] + 1);
-        }        
+        }
 
         if (hasData) {
             finalArray.push( {name: attributeName, data: attributeData} );
@@ -669,23 +669,9 @@ function removeTagAttributeFromJSONArray(tagDetails, attributeName) {
 }
 
 /** Takes a tag JSON array, and replaces whatever attribute shares a name with this. If there was never an atrribute in the first place, it will simply append the attribute. The data to add is in the form of one attribute, represented by a JSON object. See also: perTagHTMLParser(). */
-function replaceTagAttributeInJSONArray(tagDetails, attributeObject) {    
-    var alreadyExistingAttirbuteIndex = 0; // 0 is a "null value", because 0 is reserved for non-attributes. 
-
-    for (var i = 1; i < tagDetails.length; i++) {
-        if ( Object.hasOwn(tagDetails[i], "name") ) {
-            if (tagDetails[i].name == attributeObject.name) {
-                alreadyExistingAttirbuteIndex = i;
-            }
-        }
-    }
-    
-    if (alreadyExistingAttirbuteIndex == 0) { // Does not already exist
-        tagDetails.push(attributeObject);
-    } else {
-        tagDetails[i] = attributeObject;
-    }
-
+function replaceTagAttributeInJSONArray(tagDetails, attributeObject) { 
+    tagDetails = removeTagAttributeFromJSONArray(tagDetails, attributeObject.name);
+    tagDetails.push(attributeObject);
     return tagDetails;
 }
 
@@ -721,11 +707,6 @@ function getSingleTagAttributeDataFromJSONArray(tagDetails, attributeName) {
 
 
 
-
-
-
-
-
 /** Suppose we have a string. We want to replace a substring within it, but there are multiple instances of the substring! Well, that's where this function comes in handy; we can specify an indice for where to start looking, with the first (and only the first!) instance of the substring being replaced. */
 function replaceFirstSubstringInStringAfterACertainPoint(stringToModify, substringToReplace, stringYouAreReplacingItWIth, indiceOfWhereToStartLooking) { 
         //     Cut the string into two pieces, at our index.
@@ -744,62 +725,6 @@ function splitStringAtIndex(stringToSplit, index) {
     return [ stringToSplit.substring(0, index), stringToSplit.substring(index, stringToSplit.length) ];
 }
 
-/*
-TODO: Modify the "stop searching for string" trigger. As is stands, it looks for ">", but what happens if that's part of an attribute, like in CSS or something?
-So, get on that sometime.
-
-Future me here. Perhaps you could make use of that string marcher? It already handles all the edge cases anyways, may as well use it.
-*/
-
-// https://frontendinterviewquestions.medium.com/how-to-replace-html-tags-from-string-in-javascript-c86e40936eb0
-
-/** Returns an array of strings, containing the insides of the tags. Includes the both the opening and closing arrows, but those should be easy to remove if need be. */
-function getAllContentsOfTags(tagName, stringToSearchIn) { 
-    var startingIndicesOfSearchTags = getStartingIndicesOfTags(tagName, stringToSearchIn);
-    if (startingIndicesOfSearchTags.length > 0) { // startingIndicesOfSearchTags is quite odd, and not just a regular number array lke we want it to be. First, we change that.
-        // Get the ending indices of these wavy tags; these ending indices are going to the indices of the > characters.
-        var endingIndicesOfSearchTags = [];
-        for (let i = 0; i < startingIndicesOfSearchTags.length; i++) {
-            endingIndicesOfSearchTags.push( stringToSearchIn.indexOf( ">", startingIndicesOfSearchTags[i]) )
-        }
-        
-        // Get the contents of the tags into a bunch of strings, and figure out what it is we need to replace from there.
-        var searchTagSubStrings = [];
-        for (let i = 0; i < startingIndicesOfSearchTags.length; i++) {
-            searchTagSubStrings.push( stringToSearchIn.substring(startingIndicesOfSearchTags[i], endingIndicesOfSearchTags[i]) + ">" ); // This pushes them *without* the ending arrows, so we add those in real quick.
-        }
-
-        return searchTagSubStrings;
-    } else { return []; }
-}
-
-// TODO: Avoid a capture if it has a backslash at any point in it. I'm not doing this juuust yet because using a "no-capture group" has caused issues before.
-/** Gets the starting indices of all tags of a specified type; this is the indice of the starting arrow "<", by the way. */
-function getStartingIndicesOfTags(tagName, stringToSearchIn) {
-    var startingIndicesOfSearchTags = [...stringToSearchIn.matchAll( new RegExp(String.raw`<\s  *${tagName}\s*`, "gi") )];
-
-    // console.log(startingIndicesOfSearchTags)
-
-    if (startingIndicesOfSearchTags.length > 0) { 
-        let finalArray = [];
-        for (let i = 0; i < startingIndicesOfSearchTags.length; i++) {
-            finalArray.push(startingIndicesOfSearchTags[i].index);
-            // console.log( charAt(startingIndicesOfSearchTags[i].index));
-        }
-
-        // console.log(finalArray)
-        return finalArray; // This variable contains the index of the < character.
-    } else { return []; }
-}
-
-/** Note that this is 1-indexed; first line is 1, not 0. */
-function getLineNumFromCharIndexOfString(text, index) {
-    let line = 1;
-    for (let i = 0; i < index; i++) {
-        if (text[i] === '\n') { line++; }
-    }
-    return line;
-} // https://stackoverflow.com/a/76855467
 
 /** NOTICE: This is zero-indexed; January is 0, February is 1, March is 2, etc. This is to follow the conventions of the Date() API. Also note that this is a language thing, so if you ever localize the blog, you'll be forced to translate the function.*/
 function convertMonthNumberToYear(month, useThreeLetterVersion = false) {

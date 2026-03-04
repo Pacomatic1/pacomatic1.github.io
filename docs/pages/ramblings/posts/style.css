@@ -94,7 +94,6 @@ body {
     /* animation-direction: alternate; */
 } #articleContainer .wavyText span {
     display: inline-block;
-    color: red;
     animation: wavyAnimation var(--wavy-time) infinite linear;
     animation-delay: calc(var(--wavy-offset) * 100ms);
 
