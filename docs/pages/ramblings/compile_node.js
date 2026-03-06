@@ -330,14 +330,14 @@ async function generatePost(postFolderPath) {
 
 
 
+// TODO: Add support for the rest of HTML.
+// As of now, this means:
+// - Handle the super weird tags (<!doctype>, <meta>)
+// - Comment support
+// - Add overrides for tags whose contents are non-standard (<style>, <script>)
 
-
-
-
-
-
-
-
+// IN SUMMARY.
+// Deal with comments, and add an exclude list.
 
 
 
@@ -349,11 +349,15 @@ async function generatePost(postFolderPath) {
  * 
  * @param {string} stringToMarchThrough - The string you're marching through. It had BETTER be well-formed!
  * @param {json} functionsToRun - A JS Object containing some functions that will be run at specific points. Its contents are described below. If you don't want to have any of these functions, do NOT define them as "null" or "undefined"; just don't make them at all.
+ * @param {json[]} excludeList - This is a list of tags that you can choose to skip over. It is an array of JSONs, and the jsons are as follows: "name" is the name of the tag we're dealing 
+ * 
+ * 
+ * 
  * @param {function} functionsToRun.forEveryTagWeHit - Function with 5 parameters which I will detail below, and a return value being a string that replaces the tag that argument 1 gave you. If you don't want to replace anything, return null.
- *  @param {string} functionsToRun.forEveryTagWeHit.param1 - This parameter contains only the tag's substring (arrows included).  
- *  @param {number} functionsToRun.forEveryTagWeHit.param2 - This parameter contains a number denoting the tag's starting index.
- *  @param {boolean} functionsToRun.forEveryTagWeHit.param3 - This parameter tells you whether or not the tag is self-closing.
- *  @param {json[]} functionsToRun.forEveryTagWeHit.param4 - This is a list of the tag's current parents. It's an array of JS Objects, containing keys "substring" and "index"; "substring" contains the substring of the parent tag. "index" contains an int corresponding to the tag's starting index.  
+ * @param {string} functionsToRun.forEveryTagWeHit.param1 - This parameter contains only the tag's substring (arrows included).  
+ * @param {number} functionsToRun.forEveryTagWeHit.param2 - This parameter contains a number denoting the tag's starting index.
+ * @param {boolean} functionsToRun.forEveryTagWeHit.param3 - This parameter tells you whether or not the tag is self-closing.
+ * @param {json[]} functionsToRun.forEveryTagWeHit.param4 - This is a list of the tag's current parents. It's an array of JS Objects, containing keys "substring" and "index"; "substring" contains the substring of the parent tag. "index" contains an int corresponding to the tag's starting index.  
  *   
  *   
  * @param {function} functionsToRun.forEveryTagEnderWeHit - Function with 3 parameters which I will detail below, and a return value being a string that replaces the tag that argument 1 gave you. If you don't want to replace anything, return null.
@@ -370,7 +374,7 @@ async function generatePost(postFolderPath) {
  * Also, check out convertTagIntoJSONArray().
  * Also, do not make ANY of these functions asynchronous. You WILL break this if you do.
  */
-function perTagHTMLParser(stringToMarchThrough, functionsToRun, tagnamesToIgnore = ["script", "!doctype", "!--"]) {
+function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
     var isNextCharacterEscaped = false;
 
     var tagAttributeQuoteType = ""; // This is going to be hella confusing to read, but. " or ' mean that we're in an attribute, and an empty string means we're not.
