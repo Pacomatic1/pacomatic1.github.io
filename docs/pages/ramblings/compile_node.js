@@ -234,6 +234,12 @@ async function generatePost(postFolderPath) {
                 forEveryTagWeHit: function (tagSubstring, tagIndex, isSelfClosing, parents) {
                     var tagAsJSON = convertTagIntoJSONArray(tagSubstring);
                     
+                    if ( tagAsJSON[0].name == "eviltag" ) {
+                        console.log("forEveryTagWeHit: Seems like our evil tag detection didn't work!");
+                    }
+
+
+
                     // Make all links that end in '!' open externally
                     hrefExclamationMarkHandler: if (tagAsJSON[0].name == "a") {
                         var hrefLink = getSingleTagAttributeDataFromJSONArray(tagAsJSON, "href");
@@ -242,24 +248,30 @@ async function generatePost(postFolderPath) {
                         var sliceAmount = 0;
                         if (hrefLink.endsWith('!')) {sliceAmount = 1};
                         if (hrefLink.endsWith('!/')) {sliceAmount = 2};
-
-
-
                         // tagAsJSON = replaceTagAttributeInJSONArray(tagAsJSON, );
 
                     // linkTags[i].target = "_blank";
                     // linkTags[i].href = linkTags[i].href.substring(0, linkTags[i].href.length - sliceAmount);
-
-
-
-
                     }
+
+                    return null;
                 },
                 betweenEveryTagPairWeHit: function (substring, index, parents) {
+                    if ( convertTagIntoJSONArray(parents[parents.length - 1].substring)[0].name == "eviltag" ) {
+                        console.log("BetweenEveryTagPair: Seems like our evil tag detection didn't work!");
+                    }
+                    return null;
 
                 },
                 forEveryTagEnderWeHit: function (tagSubstring, index, parents) {
+                    var tagAsJSON = convertTagIntoJSONArray(tagSubstring);
 
+                    
+                    if ( tagAsJSON[0].name == "eviltag" ) {
+                        console.log("forEveryTagEnderWeHit: Seems like our evil tag detection didn't work!");
+                    }
+
+                    return null;
                 }
             });
 
@@ -339,17 +351,23 @@ async function generatePost(postFolderPath) {
 // IN SUMMARY.
 // Deal with comments, and add an exclude list.
 
+// REMEMBER:
+// The browser knows when a <script> tag is done by searching for any instances of "</script>"....
+//....but that's it. It doesn't care if it's in a string, or if it has a backslash in front of it, or anything. It just finds string and calls that the end, no questions asked.
+// What in the imagishpere. What. How. Why. Why is their detection for when a </script> tag ends so f🎳king stupid. Why do they not even *begin* to try something smarter??????
+// whatever the case.... YEAHHHH!!!!! IT'S SO MUCH EASIER FOR ME!!!!! YEAAHHHHHH!!!!!!
 
 
 
 /** Generic handler for marching through a markup string.
  * Run this function and it will march through your string. When we run through your string, we get to run a few functions along the way. These are contained in your JS Object containing the needed functions.
- * Note that this thing is blind to everything *outside* the tag. If you want to modify attributes *within* the tag, I'd recommend that you mix this with singleTagMarcher().
- * Also, all self-closing tags must end with "/>" or you're doomed.
+ * Note that this thing is blind to everything *outside* the tag. If you want to modify attributes *within* the tag, I'd recommend that you mix this with convertTagIntoJSONArray().
+ * However! There are a few. Gachas.
+ * - All self-closing tags MUST end with a "/>". It's simply easier to parse, you know?
+ * - All attributes MUST be surrounded by quotation marks.
  * 
  * @param {string} stringToMarchThrough - The string you're marching through. It had BETTER be well-formed!
  * @param {json} functionsToRun - A JS Object containing some functions that will be run at specific points. Its contents are described below. If you don't want to have any of these functions, do NOT define them as "null" or "undefined"; just don't make them at all.
- * @param {json[]} excludeList - This is a list of tags that you can choose to skip over. It is an array of JSONs, and the jsons are as follows: "name" is the name of the tag we're dealing 
  * 
  * 
  * 
@@ -370,9 +388,6 @@ async function generatePost(postFolderPath) {
  * @param {string} functionsToRun.betweenEveryTagPairWeHit.param1 - This parameter contains the text between the last two tags we hit. If the function is working properly, this parameter will be pure, non-tag text. You may find issues with tags whose contents are non-standard, like <style> and <script> tags. You can go add them into the "exclude from this function" list.  
  * @param {index} functionsToRun.betweenEveryTagPairWeHit.param2 - This parameter contains a number denoting the string's starting index.  
  * @param {json[]} functionsToRun.betweenEveryTagPairWeHit.param3 - This is a list of the tags that are "parents" of this string. It's an array of JS Objects, containing keys "substring" and "index"; "substring" contains the substring of the parent tag. "index" contains an int corresponding to the tag's starting index.  
- * 
- * Also, check out convertTagIntoJSONArray().
- * Also, do not make ANY of these functions asynchronous. You WILL break this if you do.
  */
 function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
     var isNextCharacterEscaped = false;
@@ -380,6 +395,7 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
     var tagAttributeQuoteType = ""; // This is going to be hella confusing to read, but. " or ' mean that we're in an attribute, and an empty string means we're not.
 
     var currentlyInsideTag = false;
+    var currentlyInsideScript = false; // For some reason, the detection of </script> is even the *latest* of browsers is extremely stupid and doesn't take into account things like whether or not it's in a string. Hella weird but I'm taking this as an opportunity.
 
     var listOfTagParents = []; // List of JS Objects representing what tags are 'parents' of the 'cursor'. The JS Objects in question contain the starting indice as "index" and substring as "substring" of the tag we're currently a 'child' of.
 
@@ -388,7 +404,7 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
     var previousTagEndingIndex = -1; // -1 is our "null value". That said, you should be cross-checking this with currentlyInsideTag.
     
 
-    // Fun and extremely vital fact: This does NOT cache the string's length; if we make the string longer, the for loop will abide without hesitation. 
+    // Fun and extremely vital fact: This does NOT cache the string's length; if we make the string longer, the for loop will abide without hesitation.
     overallTextIterator: for (let i = 0; i < stringToMarchThrough.length; i++) {
         var currentChar = stringToMarchThrough.charAt(i);
 
@@ -406,7 +422,10 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
         
         // ...it'll be me. I'm the one who will be fixing it. I'm going to have to fix everything here.
         
-        if (currentChar == "<" && tagAttributeQuoteType == "" && stringToMarchThrough.substring(i, i+5) != "!-- ") { // So. We've hit one of them arrows and we aren't in an attribute? Well golly gosh, looks like a tag (ender) just started! {
+
+        
+
+        if (currentChar == "<" && tagAttributeQuoteType == "" && stringToMarchThrough.charAt(i+1) != "!") { // So. We've hit one of them arrows and we aren't in an attribute? Well golly gosh, looks like a tag (ender) just started!
             currentlyInsideTag = true;
             currentTagStartingIndex = i;
         }
@@ -615,7 +634,7 @@ function convertTagIntoJSONArray(tagString) {
     // console.log(tagAttributeNameEndingIndices);
 
     if ( !(tagAttributeDataStartingIndices.length == tagAttributeNameEndingIndices.length || tagAttributeNameEndingIndices.length == tagAttributeDataStartingIndices.length) ) {
-        console.log( `Error: The string marcher failed to correctly grab the starting and ending indices of an attribute! I think something's up. Here's the tag's substring, in case it's just malformed HTML, here's the string we're working with: ${tagString}` );
+        console.log( `Error: The tag-to-JSON machine failed to correctly grab the starting and ending indices of an attribute! I think something's up. Here's the tag's substring, in case it's just malformed HTML, here's the string we're working with: ${tagString}` );
     }
 
 
