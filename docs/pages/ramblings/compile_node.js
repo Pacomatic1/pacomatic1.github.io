@@ -221,6 +221,7 @@ async function generatePost(postFolderPath) {
             compiledPost = compiledPost.replace("NODEJS-UNIQUENESS-5328746329847021", postDetailsLine);
             compiledPost = compiledPost.replace("NODEJS-UNIQUENESS-981273873264", postSubtitle);
 
+            console.log("--------------");
 
 
 
@@ -254,6 +255,9 @@ async function generatePost(postFolderPath) {
                     // linkTags[i].href = linkTags[i].href.substring(0, linkTags[i].href.length - sliceAmount);
                     }
 
+                    console.log(parents);
+                    console.log(tagSubstring);
+                    console.log(tagIndex);
                     return null;
                 },
                 betweenEveryTagPairWeHit: function (substring, index, parents) {
@@ -261,15 +265,18 @@ async function generatePost(postFolderPath) {
                         console.log("BetweenEveryTagPair: Seems like our evil tag detection didn't work!");
                     }
                     return null;
-
+                    
                 },
                 forEveryTagEnderWeHit: function (tagSubstring, index, parents) {
                     var tagAsJSON = convertTagIntoJSONArray(tagSubstring);
-
+                    
                     
                     if ( tagAsJSON[0].name == "eviltag" ) {
                         console.log("forEveryTagEnderWeHit: Seems like our evil tag detection didn't work!");
                     }
+                    console.log(parents);
+                    console.log(tagSubstring);
+                    console.log(tagIndex);
 
                     return null;
                 }
@@ -359,6 +366,9 @@ async function generatePost(postFolderPath) {
 
 
 
+
+
+
 /** Generic handler for marching through a markup string.
  * Run this function and it will march through your string. When we run through your string, we get to run a few functions along the way. These are contained in your JS Object containing the needed functions.
  * Note that this thing is blind to everything *outside* the tag. If you want to modify attributes *within* the tag, I'd recommend that you mix this with convertTagIntoJSONArray().
@@ -403,6 +413,8 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
     var currentTagEndingIndex = -1; // -1 is our "null value". That said, you should be cross-checking this with currentlyInsideTag.
     var previousTagEndingIndex = -1; // -1 is our "null value". That said, you should be cross-checking this with currentlyInsideTag.
     
+    var currentlyInsideScript = false;
+    var currentParentName = null;
 
     // Fun and extremely vital fact: This does NOT cache the string's length; if we make the string longer, the for loop will abide without hesitation.
     overallTextIterator: for (let i = 0; i < stringToMarchThrough.length; i++) {
@@ -423,7 +435,7 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
         // ...it'll be me. I'm the one who will be fixing it. I'm going to have to fix everything here.
         
 
-        
+
 
         if (currentChar == "<" && tagAttributeQuoteType == "" && stringToMarchThrough.charAt(i+1) != "!") { // So. We've hit one of them arrows and we aren't in an attribute? Well golly gosh, looks like a tag (ender) just started!
             currentlyInsideTag = true;
@@ -443,7 +455,7 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
 
             }
 
-            if (currentChar == ">" && tagAttributeQuoteType == "") { // We hit one of them arrows and we are not inside of an attribute? By golly, we must be at the end of the tag (ender)!
+            postTagFinished: if (currentChar == ">" && tagAttributeQuoteType == "") { // We hit one of them arrows and we are not inside of an attribute? By golly, we must be at the end of the tag (ender)!
                 currentlyInsideTag = false;
                 currentTagEndingIndex = i;
 
@@ -454,22 +466,24 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
                 var isSelfClosing = false;
                 // console.log( currentTagSubstring );
 
+                
                 if (currentTagSubstring.startsWith("</")) { isTagEnder = true; }
                 if (currentTagSubstring.endsWith("/>")) { isSelfClosing = true; }
-
+                
                 var stringToReplaceCurrentTag = null; // If we do not need any replacement, this will be null.
                 var stringToReplaceBetweenTags = null;  // If we do not need any replacement, this will be null.
+                
 
-                if ( Object.hasOwn(functionsToRun, "forEveryTagWeHit") && !isTagEnder) {
+                if ( Object.hasOwn(functionsToRun, "forEveryTagWeHit") && !isTagEnder && !currentlyInsideScript) {
                     stringToReplaceCurrentTag = functionsToRun.forEveryTagWeHit(currentTagSubstring, currentTagStartingIndex, isSelfClosing, listOfTagParents );
                 }
-                if ( Object.hasOwn(functionsToRun, "forEveryTagEnderWeHit") && isTagEnder) {
+                if ( Object.hasOwn(functionsToRun, "forEveryTagEnderWeHit") && isTagEnder && !currentlyInsideScript) {
                     stringToReplaceCurrentTag = functionsToRun.forEveryTagEnderWeHit(currentTagSubstring, currentTagStartingIndex, listOfTagParents);
                     // console.log(stringToReplaceCurrentTag)
                 }
                 
                 if (stringToReplaceCurrentTag != null) { // If the tag needs replacement...
-                    i = currentTagStartingIndex + stringToReplaceCurrentTag.length; // The string marcher will now march right through our new tag ender.
+                    i = currentTagStartingIndex + stringToReplaceCurrentTag.length; // The marcher will now be at the end of the newly-replaced skin.
                     stringToMarchThrough = replaceFirstSubstringInStringAfterACertainPoint(stringToMarchThrough, currentTagSubstring, stringToReplaceCurrentTag, currentTagStartingIndex);
                     currentTagEndingIndex = currentTagStartingIndex + stringToReplaceCurrentTag.length - 1; 
                     currentTagSubstring = stringToReplaceCurrentTag;
@@ -477,7 +491,7 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
                 
 
                 var textBetweenTags = "";
-                if ( Object.hasOwn(functionsToRun, "betweenEveryTagPairWeHit") && previousTagEndingIndex != -1) { // If the tag needs replacement and we aren't on the first tag...
+                if ( Object.hasOwn(functionsToRun, "betweenEveryTagPairWeHit") && previousTagEndingIndex != -1 && !currentlyInsideScript) { // If the tag needs replacement and we aren't on the first tag...
                     textBetweenTags = stringToMarchThrough.slice(previousTagEndingIndex + 1, currentTagStartingIndex);
                     stringToReplaceBetweenTags = functionsToRun.betweenEveryTagPairWeHit(textBetweenTags, previousTagEndingIndex + 1, listOfTagParents);
                     
@@ -492,11 +506,18 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
                 }
 
                 
-                if (!isTagEnder && !isSelfClosing) { // Regular tag; add something to the stack.
+                if (!isTagEnder && !isSelfClosing && !currentlyInsideScript) { // Regular tag; add something to the stack.
                     listOfTagParents.push( {substring: currentTagSubstring, index: currentTagStartingIndex} );
+                    currentParentName = convertTagIntoJSONArray(currentTagSubstring)[0].name;
+
                 } else if (isTagEnder && !isSelfClosing) { // If you're using a tag ender, the only well-formatted possibility is that we remove the last element from the list.
                     listOfTagParents.pop();
+                    currentParentName = convertTagIntoJSONArray(currentTagSubstring)[0].name;
                 }
+                
+                if (currentParentName == "script") {currentlyInsideScript = true;}
+                else {currentlyInsideScript = false;}
+
 
                 previousTagEndingIndex = currentTagEndingIndex;
             }
