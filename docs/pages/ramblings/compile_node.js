@@ -1,17 +1,5 @@
-// Use post_base.html, and have them get injected into there. Keep in mind that post_base.html also has some important stuff around dates and titles, so don't forget those.
-// Put the results of each post in index.html, and put them in the same folder that their AsciiDoc file is located.
-// Then, once every post is complete, put everything into the main base.html.
+// TODO: The script tag excluder is broken! In order to update currentlyInsideScript, you need to have another tag within the script tag! We need to go fix that.
 
-
-// TODO:
-//  Add self closing support     DONE
-//      Make the JSON array suport self-closing tags    DONE
-//      Make [0] go from "name" to "generic non-attribute data". Make it a JSON with {name: string, selfClosing: bool}      DONE
-//  Continue with making parentArray    DONE
-//  Use all of this to add "for every non-tag character" function to stringMarcher
-//  And **finally** wavy tag support in CSS
-
-//  But not yet! Your generic tag marcher has issues revolving <script> and <style> tags; you know, stuff that does not actually contain any HTML within them at all. You need to go handle those in the generic tag marcher; I recommend using some form of exclude list (which will obviously be customizable by the user).
 
 
 import * as fs from 'node:fs';
@@ -239,6 +227,8 @@ async function generatePost(postFolderPath) {
                         console.log("forEveryTagWeHit: Seems like our evil tag detection didn't work!");
                     }
 
+                    if (tagAsJSON[0].name == "script") { console.log("I see."); console.log(tagSubstring); }
+
 
 
                     // Make all links that end in '!' open externally
@@ -255,9 +245,9 @@ async function generatePost(postFolderPath) {
                     // linkTags[i].href = linkTags[i].href.substring(0, linkTags[i].href.length - sliceAmount);
                     }
 
-                    console.log(parents);
-                    console.log(tagSubstring);
-                    console.log(tagIndex);
+                    // console.log(parents);
+                    // console.log(tagSubstring);
+                    // console.log(tagIndex);
                     return null;
                 },
                 betweenEveryTagPairWeHit: function (substring, index, parents) {
@@ -271,13 +261,13 @@ async function generatePost(postFolderPath) {
                     var tagAsJSON = convertTagIntoJSONArray(tagSubstring);
                     
                     
-                    if ( tagAsJSON[0].name == "eviltag" ) {
+                    if ( tagAsJSON[0].name == "/eviltag" ) {
                         console.log("forEveryTagEnderWeHit: Seems like our evil tag detection didn't work!");
-                    }
-                    console.log(parents);
-                    console.log(tagSubstring);
-                    console.log(tagIndex);
-
+                    } else if (tagAsJSON[0].name == "/script") { console.log("I see."); console.log(tagSubstring);}
+                    // console.log(parents);
+                    // console.log(tagSubstring);
+                    // console.log(index);
+                    // console.log(tagAsJSON);
                     return null;
                 }
             });
@@ -688,6 +678,7 @@ function convertTagIntoJSONArray(tagString) {
 
 /**
  * Constructs a tag using a specially formatted JSON array, and returns the substring.  
+ * Tag enders can be found by checking the name and seeing if it starts with a slash.
  * As for the format in qeustion, see getAttributesOfSingleTag().
  * Also, there is no handling for user error, so don't make any mistakes because we will not tell you about them. Mostly.
  */
