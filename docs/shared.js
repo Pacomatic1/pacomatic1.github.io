@@ -1,3 +1,18 @@
+/* TODO:
+Holy [[HYPERLINK BLOCKED]]!! This thing is....
+actually, it's not that nasty. But, it is defenitely not clean, and I think we can do better. I want this to be extensible, after all!
+So, on our TODO list: Refactor this thing, kind of.
+
+- Split this into multiple scripts; one handles the iframe, one handles the navbar, and one (this one) binds them together so they can operate together.
+- The lookup tables for our navbar should be JSON arrays. Wayyyy simpler.
+- Replace pageMode with an enum. We really don't need strings here.
+- Replace a bunch of the "pageMode == 'main', else" thingies. We want to be able to support more pageModes later.
+
+
+And then, when all is said and done, new feature:
+- Pages that want to play music should instead delegate the responsibility music to the parent page.
+
+*/
 // Lookup tables forever!
 const navBarItemLookupTable = [
     // This is an array of arrays. The contents of each array are as follows:

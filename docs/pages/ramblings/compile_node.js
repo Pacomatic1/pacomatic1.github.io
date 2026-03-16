@@ -261,15 +261,6 @@ async function generatePost(postFolderPath) {
                     var tagAsJSON = convertTagIntoJSONArray(tagSubstring);
                     
                     
-                    if ( tagAsJSON[0].name == "/eviltag" ) {
-                        console.log("forEveryTagEnderWeHit: Seems like our evil tag detection didn't work!");
-                    } else if (tagAsJSON[0].name == "/script") { console.log("I see."); console.log(tagSubstring);}
-                    // console.log(parents);
-                    // console.log(tagSubstring);
-                    // console.log(index);
-                    // console.log(tagAsJSON);
-                    return null;
-                }
             });
 
 /*
