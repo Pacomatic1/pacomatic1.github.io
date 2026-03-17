@@ -3,13 +3,13 @@
 
 
 import * as fs from 'node:fs';
-import * as path from 'node:path';
+// import * as path from 'node:path';
 
 import { marked } from 'marked';
 import { markedXhtml } from "marked-xhtml";
 
 // import * as jsdom from "jsdom";
-import { JSDOM } from "jsdom";
+// import { JSDOM } from "jsdom";
 
 
 console.log("Ramblings: Started");
@@ -84,9 +84,11 @@ async function generatePost(postFolderPath) {
 
             // Pre-processing ------------------------
 
+
+
             // wow, such empty
-            
-            // console.log(markdownFileAsString);
+
+
 
 
             // Compiling the markdown.
@@ -101,7 +103,6 @@ async function generatePost(postFolderPath) {
             
 
 
-            console.log(compiledMarkdown);
 
 
 
@@ -128,15 +129,9 @@ async function generatePost(postFolderPath) {
                         var currentStyleAttritbute = getSingleTagAttributeDataFromJSONArray(tagDetails, "style");
                         if (currentStyleAttritbute == null) { currentStyleAttritbute = ""; }
                         
-                        // console.log(currentStyleAttritbute);
 
                         currentStyleAttritbute = currentStyleAttritbute + "--wavy-distance:" + currentTagDistanceProperty + "; --wavy-time: " + currentTagTimeProperty + ";";
                         tagDetails = replaceTagAttributeInJSONArray(tagDetails, {name: "style", data: currentStyleAttritbute});
-
-                        // console.log(currentStyleAttritbute);
-                        // console.log(getSingleTagAttributeDataFromJSONArray(tagDetails, "style"));
-
-
 
                         // Add classes
                         var currentClassAttribute = getSingleTagAttributeDataFromJSONArray(tagDetails, "class");
@@ -150,8 +145,13 @@ async function generatePost(postFolderPath) {
                         return finalTag;
                     }
 
+                    if (tagDetails[0].name == "img") {
+                        replaceTagAttributeInJSONArray(tagDetails, {name: "loading", data: "lazy"});
+                        replaceTagAttributeInJSONArray(tagDetails, {name: "decoding", data: "async"});
+                        
+                        return constructTagFromJSONArray(tagDetails);
+                    }
                     
-
                     return null;
                 },
                 betweenEveryTagPairWeHit: function (substring, index, parents) {
@@ -209,25 +209,10 @@ async function generatePost(postFolderPath) {
             compiledPost = compiledPost.replace("NODEJS-UNIQUENESS-5328746329847021", postDetailsLine);
             compiledPost = compiledPost.replace("NODEJS-UNIQUENESS-981273873264", postSubtitle);
 
-            console.log("--------------");
-
-
-
-
-            // We no longer need the post-processor; we can replace this with the custom tag parser...
-            // soon. Not yet, though.
-
-
 
             compiledPost = perTagHTMLParser(compiledPost, {
                 forEveryTagWeHit: function (tagSubstring, tagIndex, isSelfClosing, parents) {
                     var tagAsJSON = convertTagIntoJSONArray(tagSubstring);
-                    
-                    if ( tagAsJSON[0].name == "eviltag" ) {
-                        console.log("forEveryTagWeHit: Seems like our evil tag detection didn't work!");
-                    }
-
-                    if (tagAsJSON[0].name == "script") { console.log("I see."); console.log(tagSubstring); }
 
 
 
@@ -239,68 +224,33 @@ async function generatePost(postFolderPath) {
                         var sliceAmount = 0;
                         if (hrefLink.endsWith('!')) {sliceAmount = 1};
                         if (hrefLink.endsWith('!/')) {sliceAmount = 2};
-                        // tagAsJSON = replaceTagAttributeInJSONArray(tagAsJSON, );
+                        tagAsJSON = replaceTagAttributeInJSONArray(tagAsJSON, {name: "target", data: "_blank" });
+                        
+                        hrefLink = hrefLink.substring(0, hrefLink.length - sliceAmount);
+                        tagAsJSON = replaceTagAttributeInJSONArray(tagAsJSON, {name: "href", data: hrefLink});
 
-                    // linkTags[i].target = "_blank";
-                    // linkTags[i].href = linkTags[i].href.substring(0, linkTags[i].href.length - sliceAmount);
+                        return constructTagFromJSONArray(tagAsJSON);
                     }
 
-                    // console.log(parents);
-                    // console.log(tagSubstring);
-                    // console.log(tagIndex);
                     return null;
                 },
                 betweenEveryTagPairWeHit: function (substring, index, parents) {
-                    if ( convertTagIntoJSONArray(parents[parents.length - 1].substring)[0].name == "eviltag" ) {
-                        console.log("BetweenEveryTagPair: Seems like our evil tag detection didn't work!");
-                    }
+
                     return null;
-                    
                 },
                 forEveryTagEnderWeHit: function (tagSubstring, index, parents) {
                     var tagAsJSON = convertTagIntoJSONArray(tagSubstring);
                     
-                    
-            });
-
-/*
-
-            // Post processing. -------------------------------
-            var postProcessingDOM = new JSDOM(compiledPost, {
-                url: "file://" + path.resolve(compiledPostPath),
-                contentType: "text/html",
-                includeNodeLocations: true,
-                storageQuota: 10000000
-            });
-
-
-            // Links that end with an exclamation mark will be opened in a new tab.
-            var linkTags = postProcessingDOM.window.document.querySelectorAll('a');
-            for (let i = 0; i < linkTags.length; i++) {
-                if (linkTags[i].href.endsWith('!') || linkTags[i].href.endsWith('!/')) {
-                    var sliceAmount = 0;
-                    if (linkTags[i].href.endsWith('!')) {sliceAmount = 1};
-                    if (linkTags[i].href.endsWith('!/')) {sliceAmount = 2};
-
-                    linkTags[i].target = "_blank";
-                    linkTags[i].href = linkTags[i].href.substring(0, linkTags[i].href.length - sliceAmount);
+                    return null;
                 }
-            }
-
-            // Make all images load using async.
-            var imageTags = postProcessingDOM.window.document.querySelectorAll('img');
-            for (let i = 0; i < imageTags.length; i++) { 
-                // They only load when they're on-screen, and they don't lag you when they decode (since there's a million of 'em)
-                imageTags[i].loading = "lazy";
-                imageTags[i].decoding = "async";
-            }
-            
-
-            compiledPost = postProcessingDOM.serialize();
-            
+            });
 
 
-            */
+
+
+
+
+
             console.log("------------------------------------------");
 
 
@@ -317,37 +267,6 @@ async function generatePost(postFolderPath) {
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-// TODO: Add support for the rest of HTML.
-// As of now, this means:
-// - Handle the super weird tags (<!doctype>, <meta>)
-// - Comment support
-// - Add overrides for tags whose contents are non-standard (<style>, <script>)
-
-// IN SUMMARY.
-// Deal with comments, and add an exclude list.
-
-// REMEMBER:
-// The browser knows when a <script> tag is done by searching for any instances of "</script>"....
-//....but that's it. It doesn't care if it's in a string, or if it has a backslash in front of it, or anything. It just finds string and calls that the end, no questions asked.
-// What in the imagishpere. What. How. Why. Why is their detection for when a </script> tag ends so f🎳king stupid. Why do they not even *begin* to try something smarter??????
-// whatever the case.... YEAHHHH!!!!! IT'S SO MUCH EASIER FOR ME!!!!! YEAAHHHHHH!!!!!!
-
-
-
-
 
 
 /** Generic handler for marching through a markup string.
@@ -445,7 +364,6 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
                 var currentTagSubstring = stringToMarchThrough.slice(currentTagStartingIndex, currentTagEndingIndex + 1);
                 var isTagEnder = false;
                 var isSelfClosing = false;
-                // console.log( currentTagSubstring );
 
                 
                 if (currentTagSubstring.startsWith("</")) { isTagEnder = true; }
@@ -460,7 +378,6 @@ function perTagHTMLParser(stringToMarchThrough, functionsToRun) {
                 }
                 if ( Object.hasOwn(functionsToRun, "forEveryTagEnderWeHit") && isTagEnder && !currentlyInsideScript) {
                     stringToReplaceCurrentTag = functionsToRun.forEveryTagEnderWeHit(currentTagSubstring, currentTagStartingIndex, listOfTagParents);
-                    // console.log(stringToReplaceCurrentTag)
                 }
                 
                 if (stringToReplaceCurrentTag != null) { // If the tag needs replacement...
@@ -564,9 +481,6 @@ function convertTagIntoJSONArray(tagString) {
         var currentChar = tagString.charAt(i);
         var lastChar = tagString.charAt(i - 1);
 
-        // console.log(`${currentChar}, ${lastChar}`);
-
-
 
         // First, deal with whether or not the character is escaped. Also keep in mind a "\\", in which case we just want to skip everything here because it's a normal backslash and is totally irrelevant.
         if ( isNextCharacterEscaped ) {
@@ -607,7 +521,6 @@ function convertTagIntoJSONArray(tagString) {
         if (doneWithTagName && !insideTagAttributeName && tagAttributeQuoteType == "" && (lastChar == " " || lastChar == "\"" || lastChar == "'") && currentChar != " " && currentChar != "=") {
             tagAttributeNameStartingIndices.push(i);
             insideTagAttributeName = true;
-            // console.log("Start of a tag attribute name has been hit.");
         }
         if (insideTagAttributeName && (currentChar == "=" || currentChar == " ")) { // We just hit the end of the attribute's name.
             tagAttributeNameEndingIndices.push(i-1);
@@ -630,10 +543,6 @@ function convertTagIntoJSONArray(tagString) {
         }
     }
 
-    // console.log(tagAttributeDataStartingIndices);
-    // console.log(tagAttributeDataEndingIndices);
-    // console.log(tagAttributeNameStartingIndices);
-    // console.log(tagAttributeNameEndingIndices);
 
     if ( !(tagAttributeDataStartingIndices.length == tagAttributeNameEndingIndices.length || tagAttributeNameEndingIndices.length == tagAttributeDataStartingIndices.length) ) {
         console.log( `Error: The tag-to-JSON machine failed to correctly grab the starting and ending indices of an attribute! I think something's up. Here's the tag's substring, in case it's just malformed HTML, here's the string we're working with: ${tagString}` );
@@ -652,7 +561,7 @@ function convertTagIntoJSONArray(tagString) {
         }
 
         var attributeName = tagString.substring(tagAttributeNameStartingIndices[i], tagAttributeNameEndingIndices[i] + 1);
-        // console.log(attributeName)
+
         var attributeData = "";
         if (hasData) {
             attributeData = tagString.substring(tagAttributeDataStartingIndices[i], tagAttributeDataEndingIndices[i] + 1);
@@ -745,6 +654,11 @@ function getSingleTagAttributeDataFromJSONArray(tagDetails, attributeName) {
     }
 }
 
+
+
+
+
+
 /** Suppose we have a string. We want to replace a substring within it, but there are multiple instances of the substring! Well, that's where this function comes in handy; we can specify an indice for where to start looking, with the first (and only the first!) instance of the substring being replaced. */
 function replaceFirstSubstringInStringAfterACertainPoint(stringToModify, substringToReplace, stringYouAreReplacingItWIth, indiceOfWhereToStartLooking) { 
         //     Cut the string into two pieces, at our index.
@@ -752,8 +666,7 @@ function replaceFirstSubstringInStringAfterACertainPoint(stringToModify, substri
         //     Merge the strings back together.
         
         var stringHalves = splitStringAtIndex( stringToModify, indiceOfWhereToStartLooking );
-        // console.log( stringToModify.charAt(indiceOfWhereToStartLooking) )
-        // console.log(stringHalves)
+
         stringHalves[1] = stringHalves[1].replace( substringToReplace, stringYouAreReplacingItWIth);
         return stringHalves[0] + stringHalves[1];
 }
