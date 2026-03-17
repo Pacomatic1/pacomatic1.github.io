@@ -1,15 +1,10 @@
-// TODO: The script tag excluder is broken! In order to update currentlyInsideScript, you need to have another tag within the script tag! We need to go fix that.
-
-
-
 import * as fs from 'node:fs';
-// import * as path from 'node:path';
 
 import { marked } from 'marked';
 import { markedXhtml } from "marked-xhtml";
 
-// import * as jsdom from "jsdom";
-// import { JSDOM } from "jsdom";
+
+
 
 
 console.log("Ramblings: Started");
@@ -224,7 +219,8 @@ async function generatePost(postFolderPath) {
                         var sliceAmount = 0;
                         if (hrefLink.endsWith('!')) {sliceAmount = 1};
                         if (hrefLink.endsWith('!/')) {sliceAmount = 2};
-                        tagAsJSON = replaceTagAttributeInJSONArray(tagAsJSON, {name: "target", data: "_blank" });
+                        
+                        if (sliceAmount > 0) { tagAsJSON = replaceTagAttributeInJSONArray(tagAsJSON, {name: "target", data: "_blank" }); }
                         
                         hrefLink = hrefLink.substring(0, hrefLink.length - sliceAmount);
                         tagAsJSON = replaceTagAttributeInJSONArray(tagAsJSON, {name: "href", data: hrefLink});
