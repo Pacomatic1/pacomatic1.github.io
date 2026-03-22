@@ -1,5 +1,5 @@
 {
-    "postTitle": "This is the title of my thing.",
+    "postTitle": "This is the title of my thing. Look at how short the limit for characters before it begins to overflow is!",
     "postVersion": "0.1.0",
     "postPublishDate": "September 10, 1999",
     "postLastUpdate": "September 10, 1999",

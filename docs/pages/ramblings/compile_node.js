@@ -11,8 +11,9 @@ console.log("Ramblings: Started");
 
 var generatedFilesWithinAPostToDelete = ['index.html']; // Array of file names, stored as strings. If a posts folder has any of these, the file will be deleted. this is intended to be used with generated files. be very careful with this, mm'kay?
 
-var homePagePath = "./base.html";
+var homePagePath = "./base/base.html";
 var postFolderPath = "./posts/";
+var basePostPath = "./base/post_base.html";
 
 // postFolders will, if unmodified, return files too. We do not want this. As such, we gotta get rid of everything that isn't a folder.
 var postFolders = [];
@@ -41,7 +42,7 @@ async function generatePost(postFolderPath) {
     // Remove only the files that get generated. index.html and whatnot.
     // Next, pre-process; deal with custom tags and such.
     // Next, do the thing. you know, run post.md through marked, stuff that in base_template.html.
-    // Use JSDoc for some extras.
+    // Next, post-process. Run it through the parser again. 
     // Place the item and its relevant data in the array of all the posts. Make sure the date of the post as added alongside the post.
 
 
@@ -55,7 +56,6 @@ async function generatePost(postFolderPath) {
         if ( generatedFilesWithinAPostToDelete.includes(currentEntry.name) ) { fs.rmSync(currentEntryPath); }
         if ( currentEntry.name == 'post.md') {
             // File loading --------------------------------
-            var basePostPath = currentEntry.parentPath + "../post_base.html";
             var compiledPostPath = currentEntry.parentPath + "index.html";
 
             var basePostAsString = fs.readFileSync( basePostPath, { encoding: 'utf8' })

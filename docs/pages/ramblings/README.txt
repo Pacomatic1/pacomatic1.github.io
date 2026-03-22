@@ -34,7 +34,7 @@ We parse it through marked, so it carries all the quirks of that. This also mean
 All hyperlinks appeneded with an exclamation mark will open in a new tab.
 
 There are cutsom HTML tags. I went through hell and back for these.
-    - <wavy distance? time?> --> Creates wavy text, like in UNDERTALE. Every single character within a wavy tag is surrounded by a <span>. There are two properties: 'distance', and 'time'. 'time' is how long it takes for one cycle. 'distance' is how far the text in question goes. By default, time="1s" and distance=".09rem".
+    - <wavy distance? time?> --> Creates wavy text, like in UNDERTALE. Every single character within a wavy tag is surrounded by a <span>. There are two properties: 'distance', and 'time'. 'time' is how long it takes for one cycle. 'distance' is how far the text in question goes. By default, time="1s" and distance=".09rem". Other attributes SHOULD be preserved, and if they arent', then パコちゃん has a lot of work to do.
 
 
 
