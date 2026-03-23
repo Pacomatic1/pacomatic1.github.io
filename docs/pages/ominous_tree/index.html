@@ -11,7 +11,6 @@
                 background-size: 100% 100%;
                 background-size:cover; */
                 background-color: #000000;
-
             }
 
             #tree {
@@ -33,7 +32,7 @@
     </body>
 
     <script>
-        import("../shared.js")
+        import("../shared.js");
         document.getElementById('tree').addEventListener('click', mistake);
         window.addEventListener('load', init);
         var getNoise = new Audio('egg.wav');
@@ -49,7 +48,7 @@
         
         function init() {
             if (sharedJS_global_getQueryStringValue("tree_egg") == "true") {
-                            document.getElementById('tree').title = "Well, there is not a man here.";
+                document.getElementById('tree').title = "Well, there is not a man here.";
             }    
         }
     </script>
