@@ -1,20 +1,25 @@
 @import url('../assets/7_scrollbar.css'); /* This only applies to elements with .has-scrollbar. */
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Roboto:ital,wght@0,100..900;1,100..900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans:ital,wght@0,100..900;1,100..900&family=Ubuntu:ital,wght@0,300;0,400;0,500;0,700;1,300;1,400;1,500;1,700&family=Noto+Sans+JP:wght@100..900&display=swap');
+@import url("../assets/dejavu-sans-mono/dejavu-sans-mono.css");
 
 
 /* GENERAL LAYOUT */
 
 :root {
     --default-text-color: #222;
-    --default-font: 9pt "Noto Sans", sans-serif;
+    --default-font: 9pt "Noto Sans", "Noto Sans JP", sans-serif;
     --default-bg-color: #fafafa;
     --default-important-font: 'Ubuntu', 'Arial';
-    --default-sidetop-color: #111111;
     --total-content-max-width: 60em;
     --total-content-min-width: 40em;
-
+    
     --default-articlePiece-margin: 0 .6rem 0;
+    --default-headerPiece-padding: .4rem;
+
+    --default-sidetop-color: #111111;
+    --default-sidetop-border: 1px solid #2d2d2d;
+    --default-sidetop-border-width: 1px; /* Keep in sync with --default-sidetop-border */ 
+    --default-sidetop-border-radius: 16px;
 }
 body {
     margin:0; 
@@ -22,23 +27,26 @@ body {
     background-color: #721c1c;
 }
 #contentContainer {
-    background-color:  var(--default-bg-color);
     min-width: var(--total-content-min-width);
     max-width: var(--total-content-max-width);
     margin-inline: auto;
     font: var(--default-font);
     color: var(--default-text-color);
     min-height: 100vh;
-    box-shadow: 0px 0px 23px 9px rgba(0, 0, 0, 0.36);    
+    filter: drop-shadow(0px 0px 23px rgba(0, 0, 0, .5));
 }
 #headerPiece {
     background: var(--default-sidetop-color);
     color: #FCFCFC;
-    padding-bottom: .5rem;
+    /* padding-bottom: .5rem; */
+    border-left: var(--default-sidetop-border); 
+    border-right: var(--default-sidetop-border); 
+
 }
 
 #sidebarArticlePieceContainer {
     display: flex;
+    background-color: #FF00FF00;
 }
 
 #sidebarPiece {
@@ -46,14 +54,21 @@ body {
     color: #FCFCFC;
     text-align:right;
     margin:0;
+    height: min-content;
+    padding-bottom:3rem;
+    border-right: var(--default-sidetop-border); 
+    border-bottom:var(--default-sidetop-border);
+    border-bottom-right-radius: var(--default-sidetop-border-radius);
+
 }
 #articlePiece {
-    padding: .4rem;
-    padding-right:64px;
-    word-wrap: normal;
-    width: 100%;
+    padding: 0;
     padding-top: 1rem;
-
+    padding-bottom: 2rem;
+    width: 100%;
+    word-wrap: normal;
+    background-color:  var(--default-bg-color);
+    margin: 0;
 }
 
 
@@ -81,32 +96,40 @@ body {
 /* HEADER */
 
 #titlePiece {
-    padding: .4rem;
+    padding: var(--default-headerPiece-padding);
     padding-bottom: 0rem;
     margin-bottom: 0rem;
-    font-size: 2rem;
+    font-size: 1.8rem;
     font-weight: bold;
     text-align: left;
     font-family: 'Ubuntu';
 }
 #subtitlePiece {
     margin-inline: auto;
-    max-width: 92%;
-    text-align: center;
+    max-width: 100%;
+    padding: var(--default-headerPiece-padding);
+    padding-bottom: 0;
+    text-align: left;
 }
 #detailsPiece {
     margin-inline: auto;
     max-width: 92%;
     text-align: center;
 }
-#headerPiece hr {
+#headerPieceBottomGradient {
+    height: .2rem;
+    background-image: linear-gradient(to right, #575757 0%,#575757 45%, #575757df, #CCC0 90%); 
+    margin:0;
+    transform: translateX(calc(-1 * var(--default-sidetop-border-width))); /* The border. */
+}
+#headerPiece hr { /* Unused */
     max-width: 92%;
     background-image: linear-gradient(to right, #CCC 0%,#CCC 60%, #ccccccdf, #CCC0); 
     border: 0px;
     min-width: 10px;
     margin-inline: auto;
     margin-top: 5px;
-    margin-bottom: 5px;
+    margin-bottom: 0;
     height: 1px;
 } 
 
