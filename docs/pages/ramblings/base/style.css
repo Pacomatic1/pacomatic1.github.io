@@ -9,43 +9,52 @@
     --default-text-color: #222;
     --default-font: 9pt "Noto Sans", sans-serif;
     --default-bg-color: #fafafa;
+    --default-important-font: 'Ubuntu', 'Arial';
+    --default-sidetop-color: #111111;
+    --total-content-max-width: 60em;
+    --total-content-min-width: 40em;
+
+    --default-articlePiece-margin: 0 .6rem 0;
 }
 body {
     margin:0; 
     padding:0; 
     background-color: #721c1c;
 }
-#headerPiece {
-    background: #111111;
-    color: #FCFCFC;
-    padding-bottom: .5rem;
-    margin-bottom: 1rem;
-}
 #contentContainer {
     background-color:  var(--default-bg-color);
-    min-width: 30em;
-    max-width: 50em;
+    min-width: var(--total-content-min-width);
+    max-width: var(--total-content-max-width);
     margin-inline: auto;
     font: var(--default-font);
     color: var(--default-text-color);
     min-height: 100vh;
-    box-shadow: 0px 0px 23px 9px rgba(0, 0, 0, 0.36);
-    
+    box-shadow: 0px 0px 23px 9px rgba(0, 0, 0, 0.36);    
 }
-#articleContainer {
+#headerPiece {
+    background: var(--default-sidetop-color);
+    color: #FCFCFC;
+    padding-bottom: .5rem;
+}
+
+#sidebarArticlePieceContainer {
+    display: flex;
+}
+
+#sidebarPiece {
+    background: var(--default-sidetop-color);
+    color: #FCFCFC;
+    text-align:right;
+    margin:0;
+}
+#articlePiece {
     padding: .4rem;
+    padding-right:64px;
+    word-wrap: normal;
+    width: 100%;
+    padding-top: 1rem;
+
 }
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -69,18 +78,6 @@ body {
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
 /* HEADER */
 
 #titlePiece {
@@ -89,7 +86,7 @@ body {
     margin-bottom: 0rem;
     font-size: 2rem;
     font-weight: bold;
-    text-align: center;
+    text-align: left;
     font-family: 'Ubuntu';
 }
 #subtitlePiece {
@@ -104,26 +101,14 @@ body {
 }
 #headerPiece hr {
     max-width: 92%;
-    background-image: linear-gradient(to right, #CCCCCC00, #CCCCCCDf, #CCCCCC 5%,#CCCCCC 95%, #CCCCCCDf, #CCCCCC00);
+    background-image: linear-gradient(to right, #CCC 0%,#CCC 60%, #ccccccdf, #CCC0); 
     border: 0px;
     min-width: 10px;
     margin-inline: auto;
     margin-top: 5px;
     margin-bottom: 5px;
     height: 1px;
-}
-
-
-
-
-
-
-
-
-
-
-
-
+} 
 
 
 
@@ -132,47 +117,49 @@ body {
 
 /* ARTICLE CONTENT */
 
-#articleContainer hr {
-    background-image: linear-gradient(to right, #18181800, #181818Df, #181818 5%,#181818 95%, #181818Df, #18181800);
+#articlePiece hr {
+    background-image: linear-gradient(to right, #181818 0%,#181818 60%, #181818Df, #18181800);
     border: 0px;
     max-width: 100%;
     min-width: 10px;
     height: 2px;
-    margin-inline: auto;
+    margin: var(--default-articlePiece-margin);
     margin-top: 5px;
     margin-bottom: 5px;
     height: 1px;
 }
-#articleContainer h1 {
-    font-family: 'Ubuntu', 'Arial';
+#articlePiece h1 {
+    font-family: var(--default-important-font);
     font-size: 1.7rem;
+    margin: var(--default-articlePiece-margin);
     margin-top: 0.1rem;
     margin-bottom: .1rem;
 }
-#articleContainer h2 {
+#articlePiece h2 {
+    margin: var(--default-articlePiece-margin);
     font-size: 1.2rem;
     margin-top: 0.1rem;
     margin-bottom: .1rem;
     padding-bottom: 0;
 }
-/* #articleContainer h6 {
+/* #articlePiece h6 {
     font-size: .5rem;
     margin-top: 0px;
     margin-bottom: 0;
 } */
-#articleContainer img {
+#articlePiece img {
     max-width: 100%;
 }
-#articleContainer p {
+#articlePiece p {
     font-size: .8rem;
-    margin: 0 0 .6rem 0;
+    margin: var(--default-articlePiece-margin);
     line-height: .94rem;
 }
-#articleContainer .wavyText {
+#articlePiece .wavyText {
     position:relative;
     
     /* animation-direction: alternate; */
-} #articleContainer .wavyText span {
+} #articlePiece .wavyText span {
     display: inline-block;
     animation: wavyAnimation var(--wavy-time) infinite linear;
     animation-delay: calc(var(--wavy-offset) * 100ms);

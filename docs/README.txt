@@ -12,3 +12,17 @@ Here are some things you NEED to know. Don't skip this stuff!
     If you are on Windows, you should use WSL, with the dependencies mentioned above. Just go to the folder using Powershell, enter WSL while there, and run the script like usual.
 
 3. UTF-8, Linux line endings. NOTHING ELSE. Trying to deal with every possible encoding and every possible line ending has caused so many unneeded headaches. 
+
+
+TODO: Self-host these fonts. No, seriously, why the hell are we using Google Fonts? I know it's convenient, but it's *flimsy*!
+
+
+
+CONSIDER: Is it worth modifying the entire site to run through a compiler? It would would make everything less clogged, and allow for much easier implementation of that translation feature you keep thinking about.
+It would also allow for some weirder shenanigans, like C-style #include, even if the practicality of such a thing is.... debatable.
+But! Something like this could be *great* for sharing assets. As it stands, there are several things that you keep having to store over and over again; 7_scrollbar.css is a really, *really* big offender.
+Now that I think on it, it may actually be great to use #include, though it'd be used more like a #define macro that changes based on the file's contents, position, and so on.
+
+But, as it stands, you may be better off not doing that for now, for the simple and exclusive reason of "not every page needs it". No, seriously, 90% of the site would not need this. It might just be you getting excited.
+
+Go finish the blog, make some more content pages (including silly things, don't be afraid), and then come back to ask yourself if this is worth the time.
