@@ -26,6 +26,13 @@ for (const index in fs.readdirSync(postFolderPath, {withFileTypes: true})) {
 // Generate everything, and make an event listener for every post you generate. Store these event listeners in an array, so that we can start doing the home page after all of them are done.
 var postGenerationPromises = [];
 
+marked.use({
+    gfm: true,
+    breaks: true,
+    xhtml: true
+});
+marked.use(markedXhtml()); // Use xhtml because it makes my string parser's job *so* much easier.
+
 for (const index in postFolders) {
     var actualPath = postFolders[index].parentPath + postFolders[index].name + "/";
     // postGenerationPromises.push( generatePost(actualPath) );
@@ -80,19 +87,10 @@ async function generatePost(postFolderPath) {
             // Pre-processing ------------------------
 
 
-
-            // wow, such empty
-
+            // such empty
 
 
 
-            // Compiling the markdown.
-            marked.use({
-                gfm: true,
-                breaks: true,
-                xhtml: true
-            });
-            marked.use(markedXhtml()); // Use xhtml because it makes my string parser's job *so* much easier.
 
             var compiledMarkdown = marked.parse(markdownFileAsString);
             
