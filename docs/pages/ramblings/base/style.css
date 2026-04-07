@@ -20,6 +20,7 @@
     --default-sidetop-border: 1px solid #2d2d2d;
     --default-sidetop-border-width: 1px; /* Keep in sync with --default-sidetop-border */ 
     --default-sidetop-border-radius: 16px;
+    --default-sidebar-width: 12rem;
 }
 body {
     margin:0; 
@@ -47,6 +48,7 @@ body {
 #sidebarArticlePieceContainer {
     display: flex;
     background-color: #FF00FF00;
+    flex-direction: row;
 }
 
 #sidebarPiece {
@@ -59,16 +61,19 @@ body {
     border-right: var(--default-sidetop-border); 
     border-bottom:var(--default-sidetop-border);
     border-bottom-right-radius: var(--default-sidetop-border-radius);
-
+    width: var(--default-sidebar-width);
+    order: 1;
 }
 #articlePiece {
     padding: 0;
     padding-top: 1rem;
     padding-bottom: 2rem;
     width: 100%;
+    flex: 1 1 auto;
     word-wrap: normal;
     background-color:  var(--default-bg-color);
     margin: 0;
+    order: 0;
 }
 
 
@@ -145,11 +150,10 @@ body {
     border: 0px;
     max-width: 100%;
     min-width: 10px;
-    height: 2px;
+    height: 1px;
     margin: var(--default-articlePiece-margin);
     margin-top: 5px;
     margin-bottom: 5px;
-    height: 1px;
 }
 #articlePiece h1 {
     font-family: var(--default-important-font);
