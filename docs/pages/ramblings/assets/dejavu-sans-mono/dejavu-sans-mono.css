@@ -1,4 +1,33 @@
-#font-face {
+@font-face {
+  font-family: 'Dejavu Sans Mono';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 400;
+  src: url("./dejavusans_mono.ttf");
+}
 
 
+@font-face {
+  font-family: 'Dejavu Sans Mono';
+  font-style: oblique;
+  font-display: swap;
+  font-weight: 400;
+  src: url("./dejavusans_mono_oblique.ttf");
+}
+
+
+@font-face {
+  font-family: 'Dejavu Sans Mono';
+  font-style: normal;
+  font-display: swap;
+  font-weight: 900;
+  src: url("./dejavusans_mono_bold.ttf");
+}
+
+@font-face {
+  font-family: 'Dejavu Sans Mono';
+  font-style: oblique;
+  font-display: swap;
+  font-weight: 400;
+  src: url("./dejavusans_mono_bold_oblique.ttf");
 }

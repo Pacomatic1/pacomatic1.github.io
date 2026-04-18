@@ -4,7 +4,9 @@ import { marked } from 'marked';
 import { markedXhtml } from "marked-xhtml";
 
 
-
+// TODO:
+//  - Home page! That seems important!!!
+//  - Kill the inline images. Make your own custom crack-filled image tags instead, because then you get pixelation and inlineing and so on.
 
 
 console.log("Ramblings: Started");
@@ -78,9 +80,9 @@ async function generatePost(postFolderPath) {
             var postPublishMonthName = convertMonthNumberToYear(postPublishDate.getMonth(), true);
             var postLastUpdateMonthName = convertMonthNumberToYear(postLastUpdate.getMonth(), true);
 
-            var postDetailsLine = `/// VERSION ${postVersion}<br/>
-            /// PUBLISHED ${postPublishMonthName} ${postPublishDate.getDay()} ${postPublishDate.getFullYear()}<br/>
-            /// LAST UPDATED ${postLastUpdateMonthName} ${postLastUpdate.getDay()} ${postLastUpdate.getFullYear()}`;
+            var postDetailsLine = `VERSION:<br/>&nbsp;&nbsp;&nbsp;&nbsp;${postVersion}<br/>
+            PUBLISHED:<br/>&nbsp;&nbsp;&nbsp;&nbsp;${postPublishMonthName} ${postPublishDate.getDay()} ${postPublishDate.getFullYear()}<br/>
+            LAST UPDATED:<br/>&nbsp;&nbsp;&nbsp;&nbsp;${postLastUpdateMonthName} ${postLastUpdate.getDay()} ${postLastUpdate.getFullYear()}`;
 
             var markdownFileAsString = fs.readFileSync(currentEntryPath, { encoding: 'utf8' }); 
             const markdownFileLineByLine = () => { var arr = markdownFileAsString.split('\n'); arr.unshift(''); return arr; }; // This is to make reading easier. I find this to be nicer than a standard variable, since you don't have to synchronize it all the time. This array's indices are synchronized with the line numbers, so content actually starts at [1]. [0] can be considered undefined behaviour or something. This also means that, If you want the total linecount, you can use 'markdownFileLineByLine.length - 1'.

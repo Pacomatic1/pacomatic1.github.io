@@ -7,7 +7,9 @@
 
 :root {
     --default-text-color: #222;
+    --default-text-color-greyed: #676767;
     --default-font: 9pt "Noto Sans", "Noto Sans JP", sans-serif;
+    --default-font-mono: 9pt "Dejavu Sans Mono", ui-monospace;
     --default-bg-color: #fafafa;
     --default-important-font: 'Ubuntu', 'Arial';
     --total-content-max-width: 60em;
@@ -17,6 +19,7 @@
     --default-headerPiece-padding: .4rem;
 
     --default-sidetop-color: #111111;
+    --default-sidetop-color-inset: #060606;
     --default-sidetop-border: 1px solid #2d2d2d;
     --default-sidetop-border-width: 1px; /* Keep in sync with --default-sidetop-border */ 
     --default-sidetop-border-radius: 16px;
@@ -116,10 +119,22 @@ body {
     padding-bottom: 0;
     text-align: left;
 }
-#detailsPiece {
+#fillerDogAnnoying {
+    image-rendering: pixelated;
+    display: block;
+    height: 60px;
+    width: 54px;
     margin-inline: auto;
-    max-width: 92%;
-    text-align: center;
+}
+#detailsPiece {
+    max-width: 90%;
+    margin-top:.1rem;
+    margin-inline:  auto;
+    padding: .3rem;
+    border-radius: 7px;
+    text-align: left;
+    background-color:var(--default-sidetop-color-inset);
+    font: var(--default-font-mono);
 }
 #headerPieceBottomGradient {
     height: .2rem;
@@ -175,10 +190,16 @@ body {
     margin-bottom: 0;
 } */
 #articlePiece img {
-    max-width: 100%;
+    display:block;
+    height: 12rem;
+    width: auto;
+    color: var(--default-text-color-greyed);
+    margin-inline: auto;
+    font: var(--default-font-mono);
 }
 #articlePiece p {
     font-size: .8rem;
+
     margin: var(--default-articlePiece-margin);
     line-height: .94rem;
 }

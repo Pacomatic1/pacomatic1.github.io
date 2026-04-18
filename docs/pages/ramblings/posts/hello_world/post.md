@@ -29,6 +29,8 @@ Oh, right. I need some more <<wavy time="1s" distance=".4rem">samples.</wavy>
 \</wavy></wavy\>
 Oh, and some should open [externally](https://example.com!) too. That one was an external site.
 Here's an [internal](../hello_world_copy/index.html) one too.
-![treeeeeee](./tree.gif)<span>
+![treeeeeee](./tree.gif)
+<img src="./tree.gif" alt="A tree, which has NO MEN behind it. Trust." title="See? It's just an ordinary tree!" style="image-rendering:pixelated;"/>
+<span>
 <wavy      > GEH HAH HA HA </wavy   >
 </span>
