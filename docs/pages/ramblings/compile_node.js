@@ -7,6 +7,8 @@ import { markedXhtml } from "marked-xhtml";
 // TODO:
 //  - Home page! That seems important!!!
 //  - Kill the inline images. Make your own custom crack-filled image tags instead, because then you get pixelation and inlineing and so on.
+//      - <ming src="./src.png" nearest/bilinear hover="This replaces the title attribute.">Alt text.</ming>
+
 
 
 console.log("Ramblings: Started");
